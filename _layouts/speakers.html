@@ -1,0 +1,65 @@
+{% include header.html %}
+
+  {% assign speaker = page %}
+
+  <h5>
+    <span class="badge badge-light">SprecherIn</span>
+  </h5>
+
+  <h1>{{ speaker.first_name }} {{ speaker.last_name }}</h1>
+
+  {{ content }}
+
+  &nbsp;
+  <h5>Vorträge an dieser Konferenz:</h5>
+  <ul>
+    {% assign no_talks = true %}
+    {% for talk in site.talks %}
+      {% assign is_speaker = false %}
+      {% for speaker_name in talk.speakers %}
+        {% if speaker_name == speaker.name %}
+          {% assign is_speaker = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+
+      {% if is_speaker %}
+        {% assign no_talks = false %}
+
+        <li>
+          <a href="{{ talk.url | prepend: site.baseurl }}">{{ talk.name }}</a>
+          &nbsp;
+          {% for main_cat in site.main_categories %}
+            {% for cat in talk.categories %}
+              {% if cat == main_cat.name %}
+                {% assign talk_main_cat = main_cat.name %}
+                {% assign talk_color = main_cat.color %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+          <span class="badge badge-{{ talk_color }}">{{ talk_main_cat }}</span>
+          {% for cat in talk.categories %}
+            {% if cat != talk_main_cat %}
+              <span class="badge badge-light">{{ cat }}</span>
+            {% endif %}
+          {% endfor %}
+        </li>
+
+      {% endif %}
+
+    {% endfor %}
+    {% if no_talks %}
+      <li>
+        <em>keine</em>
+      </li>
+    {% endif %}
+
+  </ul>
+
+  &nbsp;
+  <p>
+    <a href="{{ site.baseurl }}{% link speakers/index.html %}">zurück zur Übersicht</a>
+  </p>
+
+{% include footer.html %}

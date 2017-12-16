@@ -1,0 +1,17 @@
+- room: Room A
+  talks:
+    - name: Talk 1
+      time_start: '12:00'
+      time_end: '13:00'
+    - name: Talk 2
+      time_start: '13:00'
+      time_end: '14:00'
+
+- room: Room B
+  talks:
+    - name: Talk 3
+      time_start: '12:00'
+      time_end: '13:30'
+
+- room: Room C
+  talks: []

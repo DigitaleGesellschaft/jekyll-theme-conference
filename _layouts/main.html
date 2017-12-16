@@ -1,0 +1,34 @@
+{% include header.html %}
+
+  <div class="jumbotron">
+    <h1 class="display-3">
+      {{ site.title }}
+    </h1>
+    {% if site.description != none %}
+      <p class="lead">
+        {{ site.description | markdownify | replace: '<p>', '<p class="lead">' }}
+      </p>
+    {% endif %}
+
+    <hr class="my-4">
+
+    {{ content }}
+
+    {% assign navigation = site.navigation | where_exp: 'link', 'link.show_on_start' %}
+    {% if navigation.size > 0 %}
+      <p class="lead">
+      {% for link in navigation %}
+        <a class="btn btn-primary btn-lg" href="{{ site.vaseurl }}{{ link.relative_url }}" role="button">
+          {% if link.show_on_start == true %}
+            {{ link.title }}
+          {% else %}
+            {{ link.show_on_start }}
+          {% endif %}
+        </a>
+      {% endfor %}
+      </p>
+    {% endif %}
+
+  </div>
+
+{% include footer.html %}

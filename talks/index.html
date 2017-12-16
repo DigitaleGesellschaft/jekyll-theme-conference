@@ -1,0 +1,44 @@
+---
+layout: default
+title: Vorträge
+---
+
+<h1>{{ page.title }}</h1>
+
+{% for main_cat in site.main_categories %}
+  <h4><span class="badge badge-{{ main_cat.color }}">{{ main_cat.name }}</span></h4>
+  <p>
+    <ul>
+      {% for talk in site.talks %}
+        {% for cat in talk.categories %}
+          {% if cat == main_cat.name %}
+            <li>
+              <a href="{{ talk.url | prepend: site.baseurl }}">
+                {{ talk.name }}
+              </a>
+
+              {% for cat in talk.categories %}
+                {% if cat != main_cat.name %}
+                  <span class="badge badge-light">{{ cat }}</span>
+                {% endif %}
+              {% endfor %}
+
+              von
+              {% for speaker_name in talk.speakers %}
+                {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
+                <a href="{{ site.url }}{{ speaker.url }}">
+                  {{ speaker.first_name | slice: 0 }}. {{ speaker.last_name }}</a><!--
+                  {% if forloop.last != true %}
+                    -->,
+                  {% else %}
+                    -->
+                  {% endif %}
+              {% endfor %}
+            </li>
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  </p>
+{% endfor %}

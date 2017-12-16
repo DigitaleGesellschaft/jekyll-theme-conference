@@ -1,0 +1,74 @@
+{% include header.html %}
+
+  {% assign room = page %}
+
+  <h1>Örtlichkeit</h1>
+
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.baseurl }}{% link location/index.md %}">Plan</a>
+    </li>
+    {% for r in site.location %}
+      <li class="nav-item">
+        <a class="nav-link {% if room.name == r.name %}active{% endif %}" href="{{ r.url | prepend: site.baseurl }}">{{ r.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {{ content }}
+
+  {% unless page.name contains 'index' %}
+    &nbsp;
+    <h5>Programm in diesem Raum:</h5>
+    <ul>
+      {% for r in site.data.program %}
+        {% if r.room == room.name %}
+          {% if r.talks.size > 0 %}
+            {% for t in r.talks %}
+              {% assign talk = site.talks | where: 'name', t.name | first %}
+
+              {% assign talk_start = t.time_start %}
+              {% assign talk_end = t.time_end %}
+
+              {% assign talk_start_hour = talk_start | split: ':' | first %}
+              {% assign talk_start_min = talk_start | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
+
+              <li>
+                <a href="{{ site.baseurl }}{% link program/index.html %}" class="badge badge-light">{{ talk_start_hour }}:{% if talk_start_min == 0 %}0{%endif %}{{ talk_start_min }}</a>
+                &nbsp;
+                <a href="{{ talk.url | prepend: site.baseurl }}">{{ talk.name }}</a>
+                &nbsp;
+
+                {% for main_cat in site.main_categories %}
+                  {% for cat in talk.categories %}
+                    {% if cat == main_cat.name %}
+                      {% assign talk_main_cat = main_cat.name %}
+                      {% assign talk_color = main_cat.color %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+                <span class="badge badge-{{ talk_color }}">{{ talk_main_cat }}</span>
+                {% for cat in talk.categories %}
+                  {% if cat != talk_main_cat %}
+                    <span class="badge badge-light">{{ cat }}</span>
+                  {% endif %}
+                {% endfor %}
+              </li>
+
+            {% endfor %}
+
+          {% else %}
+            <li>
+              <em>keine Vorträge geplant</em>
+            </li>
+          {% endif %}
+
+          {% break %}
+        {% endif %}
+      {% endfor %}
+
+    </ul>
+  {% endunless %}
+
+{% include footer.html %}

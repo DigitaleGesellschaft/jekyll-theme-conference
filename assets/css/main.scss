@@ -1,0 +1,79 @@
+---
+---
+
+// Program styling
+
+// overflow
+.p-table {
+  display: block;
+  width: 100%;
+  overflow-y: auto;
+
+  margin-top: 1rem;
+}
+
+// outer border settings
+.table {
+  border: 0px none;
+
+  tr:first-of-type th {
+    border-top: 0px none;
+  }
+  tr th:first-of-type {
+    border-left: 0px none;
+  }
+}
+
+// first column width and alignment
+.table tr th:first-of-type {
+  width: 4rem;
+  text-align: center;
+}
+.table tr:first-of-type th {
+  text-align: center;
+}
+
+// minimum row hight
+tbody tr {
+  height: 3rem;
+}
+
+// talk box styling
+.alert {
+  border-radius: 0.8rem;
+
+  *, a {
+    color: #202020;
+  }
+}
+
+// talk styling
+.p-speaker {
+  margin-bottom: 0.5rem;
+}
+
+// speaker styling
+@media (min-width: 576px) {
+  .div-speakerlist {
+    -webkit-column-count: 1;
+            column-count: 1;
+  }
+}
+@media (min-width: 768px) {
+  .div-speakerlist {
+    -webkit-column-count: 2;
+            column-count: 2;
+  }
+}
+@media (min-width: 992px) {
+  .div-speakerlist {
+    -webkit-column-count: 3;
+            column-count: 3;
+  }
+}
+.div-speakergroup {
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid-column;
+  display: table;
+}

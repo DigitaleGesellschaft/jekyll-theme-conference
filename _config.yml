@@ -1,0 +1,68 @@
+title: Congress 2018
+description: >-
+  A short description
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://example.com" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+markdown: kramdown
+
+collections:
+  talks:
+    output: true
+    permalink: /:collection/:title/
+  speakers:
+    output: true
+    permalink: /:collection/:title/
+  location:
+    output: true
+    permalink: /:collection/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talks
+  - scope:
+      path: ""
+      type: speakers
+    values:
+      layout: speakers
+  - scope:
+      path: ""
+      type: location
+    values:
+      layout: location
+
+navigation:
+  - title: Programm
+    relative_url: /program/
+    show_on_start: true
+  - title: Vorträge
+    relative_url: /talks/
+  - title: SprecherInnen
+    relative_url: /speakers/
+  - title: Ort
+    relative_url: /location/
+    show_on_start: Anreise
+  - title: Über uns
+    relative_url: /about/
+  - title: Kontakt
+    relative_url: /contact/
+
+main_categories:
+  - name: Cat A
+    color: primary
+  - name: Cat B
+    color: success
+
+time_steps: 15 # in minutes
+
+# Exclude from processing..
+exclude:
+  - vendor
+  - README.md
+  - LICENSE.md
+  - Gemfile
+  - Gemfile.lock

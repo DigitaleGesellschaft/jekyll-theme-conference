@@ -1,0 +1,193 @@
+---
+layout: default
+title: Programm
+---
+
+{% for room in site.data.program %}
+  {% assign first_talk = room.talks | first %}
+  {% assign cur_start_time = first_talk.time_start %}
+  {% assign cur_start_hour = cur_start_time | split: ':' | first %}
+  {% assign cur_start_min = cur_start_time | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
+
+  {% unless start_hour %}
+    {% assign update_var = 1 %}
+  {% else %}
+    {% if cur_start_hour < start_hour %}
+      {% assign update_var = 1 %}
+    {% elsif cur_start_hour == start_hour and cur_start_min < start_min %}
+      {% assign update_var = 1 %}
+    {% else %}
+      {% assign update_var = 0 %}
+    {% endif %}
+  {% endunless %}
+  {% if update_var == 1 %}
+    {% assign start_hour = cur_start_hour %}
+    {% assign start_min = cur_start_min %}
+  {% endif %}
+
+  {% assign last_talk = room.talks | last %}
+  {% assign cur_end_time = last_talk.time_end %}
+  {% assign cur_end_hour = cur_end_time | split: ':' | first %}
+  {% assign cur_end_min = cur_end_time | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
+
+  {% unless end_hour %}
+    {% assign update_var = 1 %}
+  {% else %}
+    {% if cur_end_hour > end_hour %}
+      {% assign update_var = 1 %}
+    {% elsif cur_end_hour == end_hour and cur_end_min > end_min %}
+      {% assign update_var = 1 %}
+    {% else %}
+      {% assign update_var = 0 %}
+    {% endif %}
+  {% endunless %}
+  {% if update_var == 1 %}
+    {% assign end_hour = cur_end_hour %}
+    {% assign end_min = cur_end_min %}
+  {% endif %}
+{% endfor %}
+
+{% assign total_duration_min = end_hour | minus: start_hour | times: 60 | minus: start_min | plus: end_min %}
+{% assign nbr_steps = total_duration_min | divided_by: site.time_steps %}
+
+  <h1>{{ page.title }}</h1>
+
+  <div class="p-table">
+    <table class="table table-bordered table-responsive-md">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          {% assign nbr_rooms = site.data.program | size %}
+          {% for r in site.data.program %}
+            {% assign room = site.location | where: 'name', r.room | first %}
+            <th scope="col" style="width: {{ 100 | divided_by: nbr_rooms }}%">
+              <a href="{{ site.baseurl }}{{ room.url }}">
+                {{ room.name }}
+              </a>
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in (1..nbr_steps) %}
+          {% assign current_hour = i | minus: 1 | times: site.time_steps | plus: start_min | divided_by: 60 | floor | plus: start_hour | modulo: 24  %}
+          {% assign current_min = i | minus: 1 | times: site.time_steps | plus: start_min | modulo: 60 %}
+
+          <tr>
+            <th scope="row">
+              {% if current_min == 0 %}
+                {{ current_hour }}:00
+              {% endif %}
+            </th>
+            {% for r in site.data.program %}
+              {% assign room = site.location | where: 'name', r.room | first %}
+
+              {% assign active_talk = 0 %}
+              {% for t in r.talks %}
+                {% assign talk = site.talks | where: 'name', t.name | first %}
+
+                {% assign talk_start = t.time_start %}
+                {% assign talk_end = t.time_end %}
+
+                {% assign talk_start_hour = talk_start | split: ':' | first %}
+                {% assign talk_start_min = talk_start | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
+                {% assign talk_end_hour = talk_end | split: ':' | first %}
+                {% assign talk_end_min = talk_end | split: ':' | last | divided_by: site.time_steps | ceil | times: site.time_steps %}
+
+                {% assign d_start_hour = current_hour | minus: talk_start_hour %}
+                {% assign d_start_min = current_min | minus: talk_start_min %}
+                {% assign d_end_hour = current_hour | minus: talk_end_hour %}
+                {% assign d_end_min = current_min | minus: talk_end_min %}
+                {% if d_start_hour == 0 %}
+                  {% if d_start_min == 0 %}
+
+                    {% assign talk_duration_min = talk_end_hour | minus: talk_start_hour | times: 60 | minus: talk_start_min | plus: talk_end_min %}
+                    {% assign talk_nbr_steps = talk_duration_min | divided_by: site.time_steps %}
+
+                    {% for main_cat in site.main_categories %}
+                      {% for cat in talk.categories %}
+                        {% if cat == main_cat.name %}
+                          {% assign talk_main_cat = main_cat.name %}
+                          {% assign talk_color = main_cat.color %}
+                          {% break %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+
+                    <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ talk_color }}">
+                      <strong>
+                        <a href="{{ talk.url | prepend: site.baseurl }}">
+                          {{ talk.name }}
+                        </a>
+                      </strong> <br />
+                      {% for cat in talk.categories %}
+                        {% if cat != talk_main_cat %}
+                          {% assign contained_cat = true %}
+                          <span class="badge badge-light">{{ cat }}</span>
+                        {% endif %}
+                      {% endfor %}
+                      {% if contained_cat %}
+                        <br />
+                      {% endif %}
+                      <em>
+                        {% for speaker_name in talk.speakers %}
+                          {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
+                          <a href="{{ site.url }}{{ speaker.url }}">
+                            {{ speaker.first_name | slice: 0 }}. {{ speaker.last_name }}</a><!--
+                            {% if forloop.last != true %}
+                              -->,
+                            {% else %}
+                              -->
+                            {% endif %}
+                        {% endfor %}
+                      </em>
+                    </td>
+                    {% assign active_talk = 1 %}
+
+                  {% endif %}
+                {% endif %}
+
+                {% assign has_started = 0 %}
+                {% if d_start_hour == 0 and d_start_min > 0 %}
+                  {% assign has_started = 1 %}
+                {% endif %}
+                {% if d_start_hour > 0 %}
+                  {% assign has_started = 1 %}
+                {% endif %}
+
+                {% assign has_ended = 0 %}
+                {% if d_end_hour == 0 and d_end_min >= 0 %}
+                  {% assign has_ended = 1 %}
+                {% endif %}
+                {% if d_end_hour > 0 %}
+                  {% assign has_ended = 1 %}
+                {% endif %}
+
+                {% if has_started == 1 and has_ended == 0 %}
+                  {% assign active_talk = 1 %}
+                {% endif %}
+
+              {% endfor %}
+
+              {% if active_talk == 0 %}
+                <td></td>
+              {% endif %}
+
+            {% endfor %}
+
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if site.main_categories.size > 0 %}
+    &nbsp;
+    <h5>Legende</h5>
+    <p>
+      {% for main_cat in site.main_categories %}
+        <span class="badge badge-{{ main_cat.color }}">{{ main_cat.name }}</span>
+      {% endfor %}
+    </p>
+  {% endif %}
+

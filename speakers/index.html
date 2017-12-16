@@ -1,0 +1,33 @@
+---
+layout: default
+title: Sprecherinnen und Sprecher
+---
+
+<h1>{{ page.title }}</h1>
+
+<div class="div-speakerlist">
+  {% assign cur_letter = false %}
+  {% assign speakers = site.speakers | sort_natural: 'last_name' %}
+  {% for speaker in speakers %}
+    {% assign last_letter = speaker.last_name | slice: 0 | capitalize %}
+    {% if cur_letter != last_letter %}
+      {% if cur_letter %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% assign cur_letter = last_letter %}
+      <div class="div-speakergroup">
+        <h3>{{ cur_letter }}</h3>
+        <ul>
+    {% endif %}
+
+    <li>
+      <a href="{{ site.url }}{{ speaker.url}}">
+        {{ speaker.first_name }} {{ speaker.last_name }}
+      </a>
+    </li>
+  {% endfor %}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+    {% unless page.name contains '.' %}{{ page.name }} - {% else %}{% if page.title %}{{ page.title }} - {% endif %}{% endunless %}{{ site.title }}</title>
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
+
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="{{ site.baseurl }}">{{ site.title }}</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            {% for link in site.navigation %}
+              <li class="nav-item {% if page.url contains link.relative_url %}active{% endif %}">
+                <a class="nav-link" href="{{ sitebase.url }}{{ link.relative_url }}">{{ link.title }}</span></a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+  &nbsp;
+  <main class="container">
