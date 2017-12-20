@@ -10,7 +10,11 @@
     </li>
     {% for r in site.location %}
       <li class="nav-item">
-        <a class="nav-link {% if room.name == r.name %}active{% endif %}" href="{{ r.url | prepend: site.baseurl }}">{{ r.name }}</a>
+        {% if r.hide %}
+          <span class="nav-item nav-link disabled">{{ r.name }}</span>
+        {% else %}
+          <a class="nav-link {% if room.name == r.name %}active{% endif %}" href="{{ r.url | prepend: site.baseurl }}">{{ r.name }}</a>
+        {% endif %}
       </li>
     {% endfor %}
   </ul>
@@ -36,7 +40,8 @@
               <li>
                 <a href="{{ site.baseurl }}{% link program/index.html %}" class="badge badge-light">{{ talk_start_hour }}:{% if talk_start_min == 0 %}0{%endif %}{{ talk_start_min }}</a>
                 &nbsp;
-                <a href="{{ talk.url | prepend: site.baseurl }}">{{ talk.name }}</a>
+
+                {% include talk_list.html %}
                 &nbsp;
 
                 {% for main_cat in site.main_categories %}

@@ -24,16 +24,7 @@
 
   <p class="p-speaker">
     <em>
-      {% for speaker_name in talk.speakers %}
-        {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
-        <a href="{{ site.url }}{{ speaker.url }}">
-          {{ speaker.first_name | slice: 0 }}. {{ speaker.last_name }}</a><!--
-          {% if forloop.last != true %}
-            -->,
-          {% else %}
-            -->
-          {% endif %}
-      {% endfor %}
+      {% include speaker_list.html %}
     </em>
   </p>
 
@@ -61,7 +52,12 @@
           {% assign room = site.location | where: 'name', r.room | first %}
           Beginn um <a href="{{ site.baseurl }}{% link program/index.html %}" class="badge badge-light">{{ talk_start_hour }}:{% if talk_start_min == 0 %}0{%endif %}{{ talk_start_min }}</a> Uhr
 
-          in <a href="{{ site.baseurl }}{{ room.url }}" class="badge badge-light">{{ room.name }}</a>,
+          im Raum
+          {% if room.hide %}
+            <span class="badge badge-light">{{ room.name }}</span>,
+          {% else %}
+            <a href="{{ room.url | prepend: site.baseurl }}" class="badge badge-light">{{ room.name }}</a>,
+          {% endif %}
 
           Dauer: <span class="badge badge-light">{{ talk_duration_min }}min</span>
         {% endif %}

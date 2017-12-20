@@ -13,9 +13,7 @@ title: Vorträge
         {% for cat in talk.categories %}
           {% if cat == main_cat.name %}
             <li>
-              <a href="{{ talk.url | prepend: site.baseurl }}">
-                {{ talk.name }}
-              </a>
+              {% include talk_list.html %}
 
               {% for cat in talk.categories %}
                 {% if cat != main_cat.name %}
@@ -23,17 +21,30 @@ title: Vorträge
                 {% endif %}
               {% endfor %}
 
-              von
-              {% for speaker_name in talk.speakers %}
-                {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
-                <a href="{{ site.url }}{{ speaker.url }}">
-                  {{ speaker.first_name | slice: 0 }}. {{ speaker.last_name }}</a><!--
-                  {% if forloop.last != true %}
-                    -->,
-                  {% else %}
-                    -->
-                  {% endif %}
-              {% endfor %}
+              von {% include speaker_list.html %}
+
+              {% if talk.hide %}
+
+                {% for r in site.data.program %}
+                  {% for t in r.talks %}
+                    {% if talk.name == t.name %}
+                      {% assign talk_start = t.time_start %}
+                      {% assign room = site.location | where: 'name', r.room | first %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+
+                um <a href="{{ site.baseurl }}{% link program/index.html %}" class="badge badge-light">{{ talk_start }}</a> Uhr
+
+                im Raum
+                {% if room.hide %}
+                  <span class="badge badge-light">{{ room.name }}</span>
+                {% else %}
+                  <a href="{{ room.url | prepend: site.baseurl }}" class="badge badge-light">{{ room.name }}</a>
+                {% endif %}
+              {% endif %}
+
             </li>
             {% break %}
           {% endif %}

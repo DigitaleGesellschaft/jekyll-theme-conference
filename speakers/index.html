@@ -23,9 +23,13 @@ title: Sprecherinnen und Sprecher
     {% endif %}
 
     <li>
-      <a href="{{ site.url }}{{ speaker.url}}">
+      {% if speaker.hide %}
         {{ speaker.first_name }} {{ speaker.last_name }}
-      </a>
+      {% else %}
+        <a href="{{ site.url }}{{ speaker.url}}">
+          {{ speaker.first_name }} {{ speaker.last_name }}
+        </a>
+      {% endif %}
     </li>
   {% endfor %}
     </ul>

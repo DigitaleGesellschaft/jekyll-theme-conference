@@ -6,6 +6,7 @@ speakers:
 categories:
   - Cat A
   - Talk
+hide: true
 ---
 
 Talk description goes here

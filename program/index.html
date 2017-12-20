@@ -50,6 +50,10 @@ title: Programm
 {% assign total_duration_min = end_hour | minus: start_hour | times: 60 | minus: start_min | plus: end_min %}
 {% assign nbr_steps = total_duration_min | divided_by: site.time_steps %}
 
+{% if site.hide_links['location'] != true %}
+  ok
+{% endif %}
+
   <h1>{{ page.title }}</h1>
 
   <div class="p-table">
@@ -61,9 +65,11 @@ title: Programm
           {% for r in site.data.program %}
             {% assign room = site.location | where: 'name', r.room | first %}
             <th scope="col" style="width: {{ 100 | divided_by: nbr_rooms }}%">
-              <a href="{{ site.baseurl }}{{ room.url }}">
+              {% if room.hide %}
                 {{ room.name }}
-              </a>
+              {% else %}
+                <a href="{{ room.url | prepend: site.baseurl }}">{{ room.name }}</a>
+              {% endif %}
             </th>
           {% endfor %}
         </tr>
@@ -115,11 +121,11 @@ title: Programm
                     {% endfor %}
 
                     <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ talk_color }}">
-                      <strong>
-                        <a href="{{ talk.url | prepend: site.baseurl }}">
-                          {{ talk.name }}
-                        </a>
-                      </strong> <br />
+
+                      <strong>{% include talk_list.html %}</strong>
+                      <br />
+
+                      {% assign contained_cat = false %}
                       {% for cat in talk.categories %}
                         {% if cat != talk_main_cat %}
                           {% assign contained_cat = true %}
@@ -130,16 +136,7 @@ title: Programm
                         <br />
                       {% endif %}
                       <em>
-                        {% for speaker_name in talk.speakers %}
-                          {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
-                          <a href="{{ site.url }}{{ speaker.url }}">
-                            {{ speaker.first_name | slice: 0 }}. {{ speaker.last_name }}</a><!--
-                            {% if forloop.last != true %}
-                              -->,
-                            {% else %}
-                              -->
-                            {% endif %}
-                        {% endfor %}
+                        {% include speaker_list.html %}
                       </em>
                     </td>
                     {% assign active_talk = 1 %}

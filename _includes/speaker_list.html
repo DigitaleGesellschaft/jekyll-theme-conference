@@ -1,0 +1,28 @@
+{% for speaker_name in talk.speakers %}
+  {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
+  {% assign speaker_short = speaker.first_name | slice: 0 | append : '. ' | append: speaker.last_name %}
+
+  {% assign hide_speaker = false %}
+  {% if site.hide_links['speakers'] != true %}
+    {% for hidden_speaker in site.hide_links['speakers'] %}
+      {% if hidden_speaker == speaker.name %}
+        {% assign hide_speaker = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {% assign hide_speaker = true %}
+  {% endif %}
+
+  {% if speaker.hide %}
+    {{ speaker_short }}<!--
+  {% else %}
+    <a href="{{ site.url }}{{ speaker.url }}">{{ speaker_short }}</a><!--
+  {% endif %}
+  {% if forloop.last != true %}
+    -->,
+  {% else %}
+    -->
+  {% endif %}
+
+{% endfor %}
