@@ -14,16 +14,12 @@
 
     {{ content }}
 
-    {% assign navigation = site.navigation | where_exp: 'link', 'link.show_on_start' %}
+    {% assign navigation = site.navigation | where_exp: 'link', 'link.main_name' %}
     {% if navigation.size > 0 %}
       <p class="lead">
       {% for link in navigation %}
-        <a class="btn btn-primary btn-lg" href="{{ site.vaseurl }}{{ link.relative_url }}" role="button">
-          {% if link.show_on_start == true %}
-            {{ link.title }}
-          {% else %}
-            {{ link.show_on_start }}
-          {% endif %}
+        <a class="btn btn-primary btn-lg" href="{% if link.absolute_url %}{{ link.absolute_url }}{% else %}{{ site.baseurl }}{{ link.relative_url }}{% endif %}" role="button">
+          {{ link.main_name }}
         </a>
       {% endfor %}
       </p>

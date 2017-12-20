@@ -50,10 +50,6 @@ title: Programm
 {% assign total_duration_min = end_hour | minus: start_hour | times: 60 | minus: start_min | plus: end_min %}
 {% assign nbr_steps = total_duration_min | divided_by: site.time_steps %}
 
-{% if site.hide_links['location'] != true %}
-  ok
-{% endif %}
-
   <h1>{{ page.title }}</h1>
 
   <div class="p-table">

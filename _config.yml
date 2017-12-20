@@ -36,20 +36,20 @@ defaults:
       layout: location
 
 navigation:
-  - title: Programm
+  - navbar_name: Program
+    main_name: Program
     relative_url: /program/
-    show_on_start: true
-  - title: Vorträge
+  - navbar_name: Talks
     relative_url: /talks/
-  - title: SprecherInnen
+  - navbar_name: Speakers
     relative_url: /speakers/
-  - title: Ort
+  - navbar_name: Location
+    main_name: How to get there
     relative_url: /location/
-    show_on_start: Anreise
-  - title: Über uns
+  - navbar_name: About
     relative_url: /about/
-  - title: Kontakt
-    relative_url: /contact/
+  - main_name: Tickets
+    absolute_url: 'https://github.com'
 
 main_categories:
   - name: Cat A
