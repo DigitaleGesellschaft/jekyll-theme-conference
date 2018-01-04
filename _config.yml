@@ -66,6 +66,8 @@ hide_links:
   talks:
     - Talk 2
 
+show_firstname: true
+
 # Exclude from processing..
 exclude:
   - vendor
