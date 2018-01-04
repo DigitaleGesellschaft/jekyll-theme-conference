@@ -6,7 +6,18 @@ url: "http://example.com" # the base hostname & protocol for your site, e.g. htt
 
 # Build settings
 markdown: kramdown
+sass:
+  style: compressed
 
+# Exclude from processing
+exclude:
+  - vendor
+  - README.md
+  - LICENSE.md
+  - Gemfile
+  - Gemfile.lock
+
+# Collections and their defaults
 collections:
   talks:
     output: true
@@ -35,6 +46,7 @@ defaults:
     values:
       layout: location
 
+# Custom settings
 navigation:
   - navbar_name: Program
     main_name: Program
@@ -67,11 +79,3 @@ hide_links:
     - Talk 2
 
 show_firstname: true
-
-# Exclude from processing..
-exclude:
-  - vendor
-  - README.md
-  - LICENSE.md
-  - Gemfile
-  - Gemfile.lock

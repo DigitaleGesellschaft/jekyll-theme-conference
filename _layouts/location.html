@@ -31,34 +31,15 @@
             {% for t in r.talks %}
               {% assign talk = site.talks | where: 'name', t.name | first %}
 
-              {% assign talk_start = t.time_start %}
-              {% assign talk_end = t.time_end %}
-
-              {% assign talk_start_hour = talk_start | split: ':' | first %}
-              {% assign talk_start_min = talk_start | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
-
               <li>
-                <a href="{{ site.baseurl }}{% link program/index.html %}" class="badge badge-light">{{ talk_start_hour }}:{% if talk_start_min == 0 %}0{%endif %}{{ talk_start_min }}</a>
+                {% include get_talk_time.html %}
+                {% include show_talk_time.html %}
                 &nbsp;
 
-                {% include talk_list.html %}
+                {% include show_talk.html %}
                 &nbsp;
 
-                {% for main_cat in site.main_categories %}
-                  {% for cat in talk.categories %}
-                    {% if cat == main_cat.name %}
-                      {% assign talk_main_cat = main_cat.name %}
-                      {% assign talk_color = main_cat.color %}
-                      {% break %}
-                    {% endif %}
-                  {% endfor %}
-                {% endfor %}
-                <span class="badge badge-{{ talk_color }}">{{ talk_main_cat }}</span>
-                {% for cat in talk.categories %}
-                  {% if cat != talk_main_cat %}
-                    <span class="badge badge-light">{{ cat }}</span>
-                  {% endif %}
-                {% endfor %}
+                {% include list_categories.html %}
               </li>
 
             {% endfor %}

@@ -9,6 +9,7 @@ title: Sprecherinnen und Sprecher
   {% assign cur_letter = false %}
   {% assign speakers = site.speakers | sort_natural: 'last_name' %}
   {% for speaker in speakers %}
+
     {% assign last_letter = speaker.last_name | slice: 0 | capitalize %}
     {% if cur_letter != last_letter %}
       {% if cur_letter %}
@@ -31,7 +32,9 @@ title: Sprecherinnen und Sprecher
         </a>
       {% endif %}
     </li>
+
   {% endfor %}
+
     </ul>
   </div>
 </div>

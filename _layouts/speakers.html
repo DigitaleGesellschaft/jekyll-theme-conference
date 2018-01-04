@@ -14,6 +14,7 @@
   <h5>Vorträge an dieser Konferenz:</h5>
   <ul>
     {% assign no_talks = true %}
+
     {% for talk in site.talks %}
       {% assign is_speaker = false %}
       {% for speaker_name in talk.speakers %}
@@ -27,30 +28,14 @@
         {% assign no_talks = false %}
 
         <li>
-
-          {% include talk_list.html %}
-
+          {% include show_talk.html %}
           &nbsp;
-          {% for main_cat in site.main_categories %}
-            {% for cat in talk.categories %}
-              {% if cat == main_cat.name %}
-                {% assign talk_main_cat = main_cat.name %}
-                {% assign talk_color = main_cat.color %}
-                {% break %}
-              {% endif %}
-            {% endfor %}
-          {% endfor %}
-          <span class="badge badge-{{ talk_color }}">{{ talk_main_cat }}</span>
-          {% for cat in talk.categories %}
-            {% if cat != talk_main_cat %}
-              <span class="badge badge-light">{{ cat }}</span>
-            {% endif %}
-          {% endfor %}
+          {% include list_categories.html %}
         </li>
 
       {% endif %}
-
     {% endfor %}
+
     {% if no_talks %}
       <li>
         <em>keine</em>

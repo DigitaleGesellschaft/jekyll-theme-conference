@@ -3,28 +3,14 @@
   {% assign talk = page %}
 
   <h5>
-    {% for main_cat in site.main_categories %}
-      {% for cat in talk.categories %}
-        {% if cat == main_cat.name %}
-          {% assign talk_main_cat = main_cat.name %}
-          {% assign talk_color = main_cat.color %}
-          {% break %}
-        {% endif %}
-      {% endfor %}
-    {% endfor %}
-    <span class="badge badge-{{ talk_color }}">{{ talk_main_cat }}</span>
-    {% for cat in talk.categories %}
-      {% if cat != talk_main_cat %}
-        <span class="badge badge-light">{{ cat }}</span>
-      {% endif %}
-    {% endfor %}
+    {% include list_categories.html %}
   </h5>
 
   <h1>{{ talk.name }}</h1>
 
   <p class="p-speaker">
     <em>
-      {% include speaker_list.html %}
+      {% include list_speakers.html %}
     </em>
   </p>
 
@@ -39,25 +25,11 @@
             {% assign first_talk = 0 %}
           {% endif %}
 
-          {% assign talk_start = t.time_start %}
-          {% assign talk_end = t.time_end %}
-
-          {% assign talk_start_hour = talk_start | split: ':' | first %}
-          {% assign talk_start_min = talk_start | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
-          {% assign talk_end_hour = talk_end | split: ':' | first %}
-          {% assign talk_end_min = talk_end | split: ':' | last | divided_by: site.time_steps | ceil | times: site.time_steps %}
-
-          {% assign talk_duration_min = talk_end_hour | minus: talk_start_hour | times: 60 | minus: talk_start_min | plus: talk_end_min %}
+          {% include get_talk_time.html %}
+          Beginn um {% include show_talk_time.html %} Uhr
 
           {% assign room = site.location | where: 'name', r.room | first %}
-          Beginn um <a href="{{ site.baseurl }}{% link program/index.html %}" class="badge badge-light">{{ talk_start_hour }}:{% if talk_start_min == 0 %}0{%endif %}{{ talk_start_min }}</a> Uhr
-
-          im Raum
-          {% if room.hide %}
-            <span class="badge badge-light">{{ room.name }}</span>,
-          {% else %}
-            <a href="{{ room.url | prepend: site.baseurl }}" class="badge badge-light">{{ room.name }}</a>,
-          {% endif %}
+          im Raum {% include show_room.html %},
 
           Dauer: <span class="badge badge-light">{{ talk_duration_min }}min</span>
         {% endif %}

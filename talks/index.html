@@ -5,44 +5,36 @@ title: Vorträge
 
 <h1>{{ page.title }}</h1>
 
-{% for main_cat in site.main_categories %}
-  <h4><span class="badge badge-{{ main_cat.color }}">{{ main_cat.name }}</span></h4>
+{% for main_category in site.main_categories %}
+  <h4><span class="badge badge-{{ main_category.color }}">{{ main_category.name }}</span></h4>
   <p>
     <ul>
       {% for talk in site.talks %}
         {% for cat in talk.categories %}
-          {% if cat == main_cat.name %}
+          {% if cat == main_category.name %}
+            {% assign main_cat = main_category.name %}
             <li>
-              {% include talk_list.html %}
+              {% include show_talk.html %}
 
-              {% for cat in talk.categories %}
-                {% if cat != main_cat.name %}
-                  <span class="badge badge-light">{{ cat }}</span>
-                {% endif %}
-              {% endfor %}
+              {% include list_sub_categories.html %}
 
-              von {% include speaker_list.html %}
+              von {% include list_speakers.html %}
 
               {% if talk.hide %}
 
                 {% for r in site.data.program %}
                   {% for t in r.talks %}
                     {% if talk.name == t.name %}
-                      {% assign talk_start = t.time_start %}
+                      {% include get_talk_time.html %}
                       {% assign room = site.location | where: 'name', r.room | first %}
                       {% break %}
                     {% endif %}
                   {% endfor %}
                 {% endfor %}
 
-                um <a href="{{ site.baseurl }}{% link program/index.html %}" class="badge badge-light">{{ talk_start }}</a> Uhr
+                um {% include show_talk_time.html %} Uhr
 
-                im Raum
-                {% if room.hide %}
-                  <span class="badge badge-light">{{ room.name }}</span>
-                {% else %}
-                  <a href="{{ room.url | prepend: site.baseurl }}" class="badge badge-light">{{ room.name }}</a>
-                {% endif %}
+                im Raum {% include show_room.html %}
               {% endif %}
 
             </li>

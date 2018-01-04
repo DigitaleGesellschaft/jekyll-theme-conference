@@ -4,46 +4,44 @@ title: Programm
 ---
 
 {% for room in site.data.program %}
-  {% assign first_talk = room.talks | first %}
-  {% assign cur_start_time = first_talk.time_start %}
-  {% assign cur_start_hour = cur_start_time | split: ':' | first %}
-  {% assign cur_start_min = cur_start_time | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
+  {% assign t = room.talks | first %}
+  {% include get_talk_time.html %}
+
+  {% assign update_var = false %}
 
   {% unless start_hour %}
-    {% assign update_var = 1 %}
+    {% assign update_var = true %}
   {% else %}
-    {% if cur_start_hour < start_hour %}
-      {% assign update_var = 1 %}
-    {% elsif cur_start_hour == start_hour and cur_start_min < start_min %}
-      {% assign update_var = 1 %}
-    {% else %}
-      {% assign update_var = 0 %}
+    {% if talk_start_hour < start_hour %}
+      {% assign update_var = true %}
+    {% elsif talk_start_hour == start_hour and talk_start_min < start_min %}
+      {% assign update_var = true %}
     {% endif %}
   {% endunless %}
-  {% if update_var == 1 %}
-    {% assign start_hour = cur_start_hour %}
-    {% assign start_min = cur_start_min %}
+
+  {% if update_var %}
+    {% assign start_hour = talk_start_hour %}
+    {% assign start_min = talk_start_min %}
   {% endif %}
 
-  {% assign last_talk = room.talks | last %}
-  {% assign cur_end_time = last_talk.time_end %}
-  {% assign cur_end_hour = cur_end_time | split: ':' | first %}
-  {% assign cur_end_min = cur_end_time | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
+  {% assign t = room.talks | last %}
+  {% include get_talk_time.html %}
+
+  {% assign update_var = false %}
 
   {% unless end_hour %}
-    {% assign update_var = 1 %}
+    {% assign update_var = true %}
   {% else %}
-    {% if cur_end_hour > end_hour %}
-      {% assign update_var = 1 %}
-    {% elsif cur_end_hour == end_hour and cur_end_min > end_min %}
-      {% assign update_var = 1 %}
-    {% else %}
-      {% assign update_var = 0 %}
+    {% if talk_end_hour > end_hour %}
+      {% assign update_var = true %}
+    {% elsif talk_end_hour == end_hour and talk_end_min > end_min %}
+      {% assign update_var = true %}
     {% endif %}
   {% endunless %}
-  {% if update_var == 1 %}
-    {% assign end_hour = cur_end_hour %}
-    {% assign end_min = cur_end_min %}
+
+  {% if update_var %}
+    {% assign end_hour = talk_end_hour %}
+    {% assign end_min = talk_end_min %}
   {% endif %}
 {% endfor %}
 
@@ -84,87 +82,64 @@ title: Programm
             {% for r in site.data.program %}
               {% assign room = site.location | where: 'name', r.room | first %}
 
-              {% assign active_talk = 0 %}
+              {% assign active_talk = false %}
               {% for t in r.talks %}
                 {% assign talk = site.talks | where: 'name', t.name | first %}
 
-                {% assign talk_start = t.time_start %}
-                {% assign talk_end = t.time_end %}
-
-                {% assign talk_start_hour = talk_start | split: ':' | first %}
-                {% assign talk_start_min = talk_start | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
-                {% assign talk_end_hour = talk_end | split: ':' | first %}
-                {% assign talk_end_min = talk_end | split: ':' | last | divided_by: site.time_steps | ceil | times: site.time_steps %}
+                {% include get_talk_time.html %}
 
                 {% assign d_start_hour = current_hour | minus: talk_start_hour %}
                 {% assign d_start_min = current_min | minus: talk_start_min %}
                 {% assign d_end_hour = current_hour | minus: talk_end_hour %}
                 {% assign d_end_min = current_min | minus: talk_end_min %}
-                {% if d_start_hour == 0 %}
-                  {% if d_start_min == 0 %}
 
-                    {% assign talk_duration_min = talk_end_hour | minus: talk_start_hour | times: 60 | minus: talk_start_min | plus: talk_end_min %}
-                    {% assign talk_nbr_steps = talk_duration_min | divided_by: site.time_steps %}
-
-                    {% for main_cat in site.main_categories %}
-                      {% for cat in talk.categories %}
-                        {% if cat == main_cat.name %}
-                          {% assign talk_main_cat = main_cat.name %}
-                          {% assign talk_color = main_cat.color %}
-                          {% break %}
-                        {% endif %}
-                      {% endfor %}
-                    {% endfor %}
-
-                    <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ talk_color }}">
-
-                      <strong>{% include talk_list.html %}</strong>
-                      <br />
-
-                      {% assign contained_cat = false %}
-                      {% for cat in talk.categories %}
-                        {% if cat != talk_main_cat %}
-                          {% assign contained_cat = true %}
-                          <span class="badge badge-light">{{ cat }}</span>
-                        {% endif %}
-                      {% endfor %}
-                      {% if contained_cat %}
-                        <br />
-                      {% endif %}
-                      <em>
-                        {% include speaker_list.html %}
-                      </em>
-                    </td>
-                    {% assign active_talk = 1 %}
-
-                  {% endif %}
-                {% endif %}
-
-                {% assign has_started = 0 %}
+                {% assign has_started = false %}
                 {% if d_start_hour == 0 and d_start_min > 0 %}
-                  {% assign has_started = 1 %}
+                  {% assign has_started = true %}
                 {% endif %}
                 {% if d_start_hour > 0 %}
-                  {% assign has_started = 1 %}
+                  {% assign has_started = true %}
                 {% endif %}
 
-                {% assign has_ended = 0 %}
+                {% assign has_ended = false %}
                 {% if d_end_hour == 0 and d_end_min >= 0 %}
-                  {% assign has_ended = 1 %}
+                  {% assign has_ended = true %}
                 {% endif %}
                 {% if d_end_hour > 0 %}
-                  {% assign has_ended = 1 %}
+                  {% assign has_ended = true %}
                 {% endif %}
 
-                {% if has_started == 1 and has_ended == 0 %}
-                  {% assign active_talk = 1 %}
+                {% if has_started and has_ended == false %}
+                  {% assign active_talk = true %}
+                {% endif %}
+
+                {% if d_start_hour == 0 and d_start_min == 0 %}
+
+                  {% assign talk_nbr_steps = talk_duration_min | divided_by: site.time_steps %}
+                  {% include get_main_category.html %}
+                  <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }}">
+
+                    <strong>{% include show_talk.html %}</strong>
+                    <br />
+
+                    {% include list_sub_categories.html %}
+                    {% if has_sub_categories %}
+                      <br />
+                    {% endif %}
+
+                    <em>
+                      {% include list_speakers.html %}
+                    </em>
+                  </td>
+                  {% assign active_talk = true %}
+
                 {% endif %}
 
               {% endfor %}
 
-              {% if active_talk == 0 %}
+              {% unless active_talk %}
                 <td></td>
-              {% endif %}
+              {% endunless %}
 
             {% endfor %}
 

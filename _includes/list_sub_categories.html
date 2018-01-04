@@ -1,0 +1,9 @@
+{% assign has_sub_categories = false %}
+
+{% for cat in talk.categories %}
+  {% if cat != main_cat %}
+    {% assign has_sub_categories = true %}
+
+    <span class="badge badge-light">{{ cat }}</span>
+  {% endif %}
+{% endfor %}

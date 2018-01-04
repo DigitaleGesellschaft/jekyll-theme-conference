@@ -1,0 +1,9 @@
+{% assign talk_start = t.time_start %}
+{% assign talk_end = t.time_end %}
+
+{% assign talk_start_hour = talk_start | split: ':' | first %}
+{% assign talk_start_min = talk_start | split: ':' | last | divided_by: site.time_steps | floor | times: site.time_steps %}
+{% assign talk_end_hour = talk_end | split: ':' | first %}
+{% assign talk_end_min = talk_end | split: ':' | last | divided_by: site.time_steps | ceil | times: site.time_steps %}
+
+{% assign talk_duration_min = talk_end_hour | minus: talk_start_hour | times: 60 | minus: talk_start_min | plus: talk_end_min %}
