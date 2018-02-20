@@ -61,6 +61,7 @@ navigation:
   - navbar_name: About
     relative_url: /about/
   - main_name: Tickets
+    disabled: true
     absolute_url: 'https://github.com'
 
 main_categories:
