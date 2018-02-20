@@ -42,6 +42,7 @@ The site's configuration is given by the `_config.yaml` file. There one can edit
 - the conference `main_categories` which is used to sort talks, each main category consists of a `name` and a `color` given as a (Bootstrap) class name
 - `time_steps` sets the grid space for the program table in minutes, and
 - `show_firstname` indicates if the speakers' first names are generally shown or abbreviated.
+- `show_alltimes` indicates if the timestamps for all rows in the program grid should be shown.
 
 
 ## Content

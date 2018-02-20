@@ -2,18 +2,18 @@
   talks:
     - name: Talk 1
       time_start: '12:00'
-      time_end: '13:00'
+      time_end: '12:45'
     - name: Talk 2
-      time_start: '13:00'
-      time_end: '14:00'
+      time_start: '12:45'
+      time_end: '13:30'
 
 - room: Room B
   talks:
     - name: Talk 3
       time_start: '12:00'
-      time_end: '13:30'
+      time_end: '13:00'
     - name: Talk 4
-      time_start: '13:40'
+      time_start: '13:30'
       time_end: '14:30'
 
 - room: Room C

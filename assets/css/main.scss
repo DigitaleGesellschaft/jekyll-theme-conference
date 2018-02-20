@@ -31,6 +31,11 @@
 .table tr th:first-of-type {
   width: 4rem;
   text-align: center;
+
+  // talk times
+  &.text-muted {
+    font-weight: normal;
+  }
 }
 .table tr:first-of-type th {
   text-align: center;
@@ -39,6 +44,22 @@
 // minimum row hight
 tbody tr {
   height: 3rem;
+}
+
+// time row
+.table tbody th {
+  // move time closer to grid
+  padding-top: .1rem;
+
+  // smaller font-size for intermediate times
+  &.text-muted {
+    font-size: 0.8rem;
+  }
+
+  // hide hours for intermediate times
+  & > span {
+    visibility: hidden;
+  }
 }
 
 // talk box styling
