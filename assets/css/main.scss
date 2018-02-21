@@ -4,7 +4,7 @@
 @import "bootstrap-custom";
 
 
-// Program styling
+// Program Styling
 
 // overflow
 .p-table {
@@ -71,12 +71,14 @@ tbody tr {
   }
 }
 
-// talk styling
+
+// Talk Styling
 .p-speaker {
   margin-bottom: 0.5rem;
 }
 
-// speaker styling
+
+// Speaker Styling
 @media (min-width: 576px) {
   .div-speakerlist {
     -webkit-column-count: 1;
@@ -100,4 +102,48 @@ tbody tr {
   page-break-inside: avoid;
   break-inside: avoid-column;
   display: table;
+}
+
+
+// Print Styling
+@media print {
+  // remove underline for links
+  .table a {
+    text-decoration: none !important;
+  }
+
+  // show room in program table in regular color
+  .table thead th a {
+    color: #202020;
+  }
+
+  // overwrite bootstrap default white background
+  // works only with Webkit (Chrome, Safari) and Firefox
+  .table td.alert {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+
+    // taken from bootstrap source code
+    //   _alert.scss L47
+    @each $color-name, $value in $theme-colors {
+      &.alert-#{$color-name} {
+        $bg-color: theme-color-level($color-name, $alert-bg-level);
+        background-color: $bg-color !important;
+      }
+    }
+  }
+  .badge {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+
+    border: 0 none white;
+
+    // taken from bootstrap source code
+    //   _badge.scss L43
+    @each $color-name, $value in $theme-colors {
+      .badge-#{$color-name} {
+        background-color: $value !important;
+      }
+    }
+  }
 }

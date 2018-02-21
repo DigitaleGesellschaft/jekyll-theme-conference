@@ -10,6 +10,7 @@
 </head>
 <body>
   <header>
+    <!-- navigation bar (web only): -->
     <nav class="navbar navbar-expand-md navbar-light bg-light">
       <div class="container">
         <a class="navbar-brand" href="{{ site.baseurl }}">{{ site.title }}</a>
@@ -38,6 +39,17 @@
         </button>
       </div>
     </nav>
+
+    {% unless page.url == "/" %}
+      <!-- site title (print only): -->
+      <div class="container d-none d-print-block">
+        &nbsp;
+        <h1 class="display-4">
+          {{ site.title }}
+        </h1>
+      </div>
+    {% endunless %}
+
   </header>
   &nbsp;
   <main class="container">

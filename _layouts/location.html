@@ -2,9 +2,19 @@
 
   {% assign room = page %}
 
-  <h1>Örtlichkeit</h1>
+  <!-- title for print: -->
+  <h1 class="d-none d-print-inline">
+    {% unless room.name contains "index" %}
+      {{ room.name}}
+    {% else %}
+      Örtlichkeit
+    {% endunless %}
+  </h1>
 
-  <ul class="nav nav-pills">
+  <!-- title for web: -->
+  <h1 class="d-print-none">Örtlichkeit</h1>
+
+  <ul class="nav nav-pills d-print-none">
     <li class="nav-item">
       <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.baseurl }}{% link location/index.md %}">Plan</a>
     </li>
