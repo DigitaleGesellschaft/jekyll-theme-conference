@@ -6,7 +6,7 @@ source "https://rubygems.org"
 #
 #     bundle exec jekyll serve
 #
-gem "jekyll", "~> 3.6.2"
+gem "jekyll", "~> 3.8.3"
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
 # uncomment the line below. To upgrade, run `bundle update github-pages`.
@@ -14,7 +14,7 @@ gem "jekyll", "~> 3.6.2"
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-  gem 'bootstrap', '~> 4.0.0.beta3'
+  gem 'bootstrap', '~> 4.1.3'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
