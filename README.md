@@ -19,10 +19,11 @@ Two words of warning:
 ## Setup
 
 1. [Install Bundler](https://bundler.io), a [Ruby](https://www.ruby-lang.org/en/downloads/) package manager.
-2. Clone this repository and browse into it: `cd jekyll-conference/`
-3. Run Bundler to install all build dependencies including [Jekyll](https://jekyllrb.com/docs/installation/): `bundle install --path vendor/bundle`
-4. Build the site with Jekyll: `bundle exec jekyll build`. The generated site will be located in the `_site/` directory (will be overwritten at each new build).
-5. Instead of building you can also serve it locally with automated regeneration (does not contain changes on the site's configuration) with: `bundle exec jekyll serve`
+2. Verify you have [Git LFS](https://git-lfs.github.com) installed (used to store documents).
+3. Clone this repository and browse into it: `cd jekyll-conference/`
+4. Run Bundler to install all build dependencies including [Jekyll](https://jekyllrb.com/docs/installation/): `bundle install --path vendor/bundle`
+5. Build the site with Jekyll: `bundle exec jekyll build`. The generated site will be located in the `_site/` directory (will be overwritten at each new build).
+6. Instead of building you can also serve it locally with automated regeneration (does not contain changes on the site's configuration) with: `bundle exec jekyll serve`
 
 
 ## Configuration
@@ -73,6 +74,7 @@ Each talk is represented by file in the `_talks/` directory. It must begin with 
 - the talk's `name` (used as identifier),
 - one or more existing `speakers` name(s), and
 - optionally one or more `categories` of which one should be a main category as defined in the site's configuration
+- optionally a list of `links` whereby each link element must contain a `name` and either an absolute link `href` or a `file` name (of a file stored under `/documents/`)
 - optionally `hide: true` if the talk and its description should not be shown
 
 ### Speakers
@@ -82,6 +84,7 @@ Each speaker is represented by file in the `_speakers/` directory. It must begin
 - the speaker's `name` (used as identifier), as well as its
 - `first_name`,
 - `last_name`, and
+- optionally a list of `links` whereby each link element must contain a `name` and either an absolute link `href` or a `file` name (of a file stored under `/documents/`)
 - optionally `hide: true` if the speaker and its description should not be shown.
 
 ### Rooms

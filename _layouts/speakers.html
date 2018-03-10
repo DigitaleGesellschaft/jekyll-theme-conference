@@ -10,6 +10,18 @@
 
   {{ content }}
 
+  {% if speaker.links %}
+    &nbsp;
+    <h5>Weiterführende Informationen:</h5>
+    <ul>
+      {% for link in speaker.links %}
+        <li>
+          {% include get_link.html %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   &nbsp;
   <h5>Vorträge an dieser Konferenz:</h5>
   <ul>

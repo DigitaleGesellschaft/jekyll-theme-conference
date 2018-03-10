@@ -1,0 +1,6 @@
+{% if link.file %}
+  {% assign link_href = link.file | prepend: '/documents/' | prepend: site.baseurl %}
+{% else %}
+  {% assign link_href = link.href %}
+{% endif %}
+<a href="{{ link_href }}">{{ link.name }}</a>
