@@ -64,6 +64,20 @@ navigation:
     disabled: true
     absolute_url: 'https://github.com'
 
+info_bars:
+  - title: Important Information
+    color: primary
+    main_only: true
+    text: |
+      We're truly sorry but we are sold out.
+
+      ---
+
+      Try again next year.
+  - text: The content on these pages is outdated!
+    color: warning
+    pages_only: true
+
 main_categories:
   - name: Cat A
     color: primary

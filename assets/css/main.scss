@@ -3,6 +3,13 @@
 
 @import "bootstrap-custom";
 
+// Main Styling
+
+// no bottom margin on info-bar
+#info-bar > p:last-of-type {
+  margin-bottom: 0;
+}
+
 
 // Program Styling
 

@@ -39,7 +39,16 @@ The site's configuration is given by the `_config.yaml` file. There one can edit
 - `navigation` defines the navigational bar's content and is an array containing the ordered links. Each link consists of
   * the text to show (`title`),
   * a relative link address (`relative_url`), and
-  * optionally if it should be shown with a dedicated button on the main site (`show_on_start: true` or `show_on_start: Alternative Title`)
+  * optionally if it should be shown with a dedicated button on the main site (`show_on_start: true` or `show_on_start: Alternative Title`).
+- `main_links` defines links shown on the main landing page in form of buttons. Each link consists of
+  * the text to show (`name`),
+  * a relative (`relative_url`) or absolute link address (`absolute_url`), and
+  * optionally if it is disabled (`disabled: true`).
+- `info_bars` defines optional dismissible boxes below the navigation bar. Consists of
+  * a `title` (optional),
+  * a `color`, given as a (Bootstrap) class name,
+  * the option to show the box only on the main page (`main_only: true`) or the other pages (`pages_only: true`), and
+  * a `text` to be shown.
 - the conference `main_categories` which is used to sort talks, each main category consists of a `name` and a `color` given as a (Bootstrap) class name
 - `time_steps` sets the grid space for the program table in minutes, and
 - `show_firstname` indicates if the speakers' first names are generally shown or abbreviated.

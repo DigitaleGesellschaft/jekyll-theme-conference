@@ -1,0 +1,25 @@
+{% if site.info_bars.size > 0 %}
+  {% for info_bar in site.info_bars %}
+    {% if page.url == "/" and info_bar.pages_only != true %}
+      {% assign show_info_bar = true %}
+    {% endif %}
+    {% if page.url != "/" and info_bar.main_only != true %}
+      {% assign show_info_bar = true %}
+    {% endif %}
+
+    {% if show_info_bar %}
+      <div class="info-bar alert alert-{{ info_bar.color }} alert-dismissible fade show" role="alert">
+        {% if info_bar.title %}
+          <h4 class="alert-heading">{{ info_bar.title }}</h4>
+        {% endif %}
+
+        {{ info_bar.text | markdownify }}
+
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endif %}
+    {% assign show_info_bar = false %}
+  {% endfor %}
+{% endif %}
