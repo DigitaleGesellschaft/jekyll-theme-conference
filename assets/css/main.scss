@@ -2,7 +2,6 @@
 ---
 
 @import "bootstrap-custom";
-
 // Main Styling
 
 // no bottom margin on info-bar
@@ -13,13 +12,28 @@
 
 // Program Styling
 
-// overflow
-.p-table {
-  display: block;
-  width: 100%;
-  overflow-y: auto;
+// cell sizing
+.table {
+  table-layout: fixed;
 
-  margin-top: 1rem;
+  &:not(.sticky-col):not(.sticky-intersect) {
+    min-width: calc(3 * 150px + 4rem);
+  }
+}
+.table thead th:not(:first-of-type) {
+  width: calc(100% / 3 - 4rem);
+}
+@media not all and (min-resolution:.001dpcm) {
+  .table thead th:not(:first-of-type) {
+    width: auto;
+  }
+}
+.table thead th:first-of-type {
+  width: 4rem;
+}
+
+.table th {
+  background-color: white;
 }
 
 // outer border settings
@@ -34,10 +48,16 @@
   }
 }
 
-// first column width and alignment
+// minimum row hight
+.table tbody tr {
+  height: 3rem;
+}
+
+// first column alignment
 .table tr th:first-of-type {
-  width: 4rem;
   text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 
   // talk times
   &.text-muted {
@@ -48,10 +68,6 @@
   text-align: center;
 }
 
-// minimum row hight
-tbody tr {
-  height: 3rem;
-}
 
 // time row
 .table tbody th {
@@ -76,6 +92,39 @@ tbody tr {
   *, a {
     color: #202020;
   }
+}
+
+// jquery.stickyheader
+.sticky-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  width: 100%;
+}
+.sticky-wrap .sticky-thead,
+.sticky-wrap .sticky-col,
+.sticky-wrap .sticky-intersect {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: auto; /* Prevent table from stretching to full size */
+}
+.sticky-wrap .sticky-thead {
+  z-index: 100;
+  width: 100%; /* Force stretch */
+}
+.sticky-wrap .sticky-intersect {
+  opacity: 1;
+  z-index: 150;
+}
+.sticky-wrap .sticky-intersect th {
+  background-color: #f0f0f0;
+}
+.sticky-wrap td,
+.sticky-wrap th {
+  box-sizing: border-box;
 }
 
 
