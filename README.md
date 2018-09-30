@@ -115,3 +115,10 @@ Additional static pages can easily be added as `page_name/index.html`. In the re
 The design is based on the [Bootstrap 4](http://getbootstrap.com). Custom Bootstrap variables such as designed with [Bootstrap Magic](https://pikock.github.io/bootstrap-magic/app/index.html#!/editor) for individual themes can be added in the [bootstrap-custom](_sass/_bootstrap-custom.scss) SASS stylesheet.
 
 Upon site building Jekyll takes care of prefixing and building Bootstrap from source including some minor modifications into a single stylesheet. While the Bootstrap stylsheet is build from source, the (static) Bootstrap JavaScript files used for responsiveness are included in this repository and have their proper licensing terms.
+
+
+## License
+
+This project is licensed under the MIT License. You can view [LICENSE.md](LICENSE.md) for more details.
+
+This project re-distributes other open-source tools and libraries. You can view [REDISTRIBUTED.md](REDISTRIBUTED.md) for third party licenses.
