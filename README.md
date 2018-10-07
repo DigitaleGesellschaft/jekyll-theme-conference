@@ -37,9 +37,9 @@ The site's configuration is given by the `_config.yaml` file. There one can edit
 - a short, general description of the site's content in `description` (optional) and a longer one in `long_description` (optional),
 - the site's `url` and `baseurl`,
 - `navigation` defines the navigational bar's content and is an array containing the ordered links. Each link consists of
-  * the text to show (`title`),
-  * a relative link address (`relative_url`), and
-  * optionally if it should be shown with a dedicated button on the main site (`show_on_start: true` or `show_on_start: Alternative Title`).
+  * the text to show (`name`),
+  * a relative (`relative_url`) or absolute link address (`absolute_url`) or another list of links whereby the current link will be transformed to a dropdown menu (`menu`), and
+  * optionally if it is disabled (`disabled`).
 - `main_links` defines links shown on the main landing page in form of buttons. Each link consists of
   * the text to show (`name`),
   * a relative (`relative_url`) or absolute link address (`absolute_url`), and

@@ -19,12 +19,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            {% assign navigation = site.navigation | where_exp: 'link', 'link.navbar_name' %}
-            {% for link in navigation %}
+            {% for link in site.navigation %}
               {% if link.menu %}
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown{{ forloop.index0 }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ link.navbar_name }}
+                    {{ link.name }}
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbar-dropdown{{ forloop.index0 }}">
                     {% for sublink in link.menu %}
@@ -44,11 +43,11 @@
                 <li class="nav-item {% if page.url contains link.relative_url %}active{% endif %}">
                   {% if link.disabled %}
                     <a class="nav-link disabled" href="#">
-                      {{ link.navbar_name }}
+                      {{ link.name }}
                     </a>
                   {% else %}
                     <a class="nav-link" href="{% if link.absolute_url %}{{ link.absolute_url }}{% else %}{{ link.relative_url | prepend: site.baseurl }}{% endif %}">
-                      {{ link.navbar_name }}
+                      {{ link.name }}
                     </a>
                   {% endif %}
                 </li>

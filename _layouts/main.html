@@ -14,17 +14,16 @@
 
     {{ content }}
 
-    {% assign navigation = site.navigation | where_exp: 'link', 'link.main_name' %}
-    {% if navigation.size > 0 %}
+    {% if site.main_links.size > 0 %}
       <p class="lead">
-      {% for link in navigation %}
+      {% for link in site.main_links %}
         {% if link.disabled %}
-          <a class="btn btn-primary btn-lg disabled" href="#">
-            {{ link.main_name }}
+          <a class="btn btn-primary btn-lg mt-2 disabled" href="#">
+            {{ link.name }}
           </a>
         {% else %}
-          <a class="btn btn-primary btn-lg" href="{% if link.absolute_url %}{{ link.absolute_url }}{% else %}{{ link.relative_url | prepend: site.baseurl }}{% endif %}" role="button">
-            {{ link.main_name }}
+          <a class="btn btn-primary btn-lg mt-2" href="{% if link.absolute_url %}{{ link.absolute_url }}{% else %}{{ link.relative_url | prepend: site.baseurl }}{% endif %}" role="button">
+            {{ link.name }}
           </a>
         {% endif %}
       {% endfor %}
