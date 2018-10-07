@@ -61,6 +61,14 @@ navigation:
     relative_url: /location/
   - navbar_name: About
     relative_url: /about/
+  - navbar_name: Previous Editions
+    menu:
+      - name: 2018 (current)
+        disabled: true
+      - name: 2017
+        relative_url: /2017/
+      - name: 2016
+        relative_url: /2016/
   - main_name: Tickets
     disabled: true
     absolute_url: 'https://github.com'
