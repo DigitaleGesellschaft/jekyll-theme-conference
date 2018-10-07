@@ -13,15 +13,19 @@
 // Program Styling
 
 // cell sizing
+$prgm_first_col_width: '4rem';
+$prgm_cols_min_width: '150px';
+$prgm_nbr_cols: 3;
+
 .table {
   table-layout: fixed;
 
   &:not(.sticky-col):not(.sticky-intersect) {
-    min-width: calc(3 * 150px + 4rem);
+    min-width: calc($prgm_nbr_cols * $prgm_cols_min_width + $prgm_first_col_width);
   }
 }
 .table thead th:not(:first-of-type) {
-  width: calc(100% / 3 - 4rem);
+  width: calc(100% / $prgm_nbr_cols - $prgm_first_col_width);
 }
 @media not all and (min-resolution:.001dpcm) {
   .table thead th:not(:first-of-type) {
@@ -29,7 +33,7 @@
   }
 }
 .table thead th:first-of-type {
-  width: 4rem;
+  width: $prgm_first_col_width;
 }
 
 .table th {
