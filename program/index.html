@@ -141,9 +141,7 @@ title: Programm
                       <br />
                     {% endif %}
 
-                    <em>
-                      {% include list_speakers.html %}
-                    </em>
+                    {% include list_speakers.html %}
                   </td>
                   {% assign active_talk = true %}
 
@@ -169,6 +167,7 @@ title: Programm
     <p>
       {% for main_cat in site.main_categories %}
         <span class="badge badge-{{ main_cat.color }}">{{ main_cat.name }}</span>
+        <br class="br-md" />
       {% endfor %}
     </p>
   {% endif %}

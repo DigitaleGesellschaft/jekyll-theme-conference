@@ -1,0 +1,227 @@
+@import "bootstrap";
+
+
+// Main Styling
+
+// no bottom margin on info-bar
+.info-bar > p:last-of-type {
+  margin-bottom: 0;
+}
+
+// line bbreaks only active on small screens
+@include media-breakpoint-up(lg) {
+  .br-md {
+    display: none;
+  }
+}
+@include media-breakpoint-up(md) {
+  .br-sm {
+    display: none;
+  }
+}
+
+
+// Program Styling
+
+$prgm-first-col-width: 4rem !default;
+$prgm-cols-width: 150px !default;
+$prgm-breakpoint-down: sm !default;
+
+// minimum table container width
+@include media-breakpoint-down($prgm-breakpoint-down) {
+  .page-program .container {
+    max-width: calc(#{$prgm-cols-nbr} * #{$prgm-cols-width} + #{$prgm-first-col-width} + #{$grid-gutter-width});
+  }
+}
+
+// cell sizing
+.table {
+  table-layout: fixed;
+
+  &:not(.sticky-col):not(.sticky-intersect) {
+    min-width: calc(#{$prgm-cols-nbr} * #{$prgm-cols-width} + #{$prgm-first-col-width});
+  }
+}
+.table thead th:not(:first-of-type) {
+  width: calc(100% / #{$prgm-cols-nbr} - #{$prgm-first-col-width});
+}
+@media not all and (min-resolution:.001dpcm) {
+  .table thead th:not(:first-of-type) {
+    width: auto;
+  }
+}
+.table thead th:first-of-type {
+  width: $prgm-first-col-width;
+}
+
+// minimum row hight
+.table tbody tr {
+  height: 3rem;
+}
+
+// first column alignment
+.table tr th:first-of-type {
+  text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  // talk times
+  &.text-muted {
+    font-weight: normal;
+  }
+}
+.table tr:first-of-type th {
+  text-align: center;
+}
+
+// time row
+.table tbody th {
+  // move time closer to grid
+  padding-top: .1rem;
+
+  // smaller font-size for intermediate times
+  &.text-muted {
+    font-size: 0.8rem;
+  }
+
+  // hide hours for intermediate times
+  & > span {
+    visibility: hidden;
+  }
+}
+
+// outer border settings
+.table {
+  border: 0px none;
+
+  tr:first-of-type th {
+    border-top: 0px none;
+  }
+  tr th:first-of-type {
+    border-left: 0px none;
+  }
+}
+
+// talk box styling
+.alert {
+  overflow-x: hidden;
+
+  border-radius: 0.8rem;
+
+  *, a {
+    color: #202020;
+  }
+}
+
+// jquery.stickyheader
+.table th {
+  background-color: white;
+}
+.sticky-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  width: 100%;
+}
+.sticky-wrap .sticky-thead,
+.sticky-wrap .sticky-col,
+.sticky-wrap .sticky-intersect {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: auto; /* Prevent table from stretching to full size */
+}
+.sticky-wrap .sticky-thead {
+  z-index: 100;
+  width: 100%; /* Force stretch */
+}
+.sticky-wrap .sticky-intersect {
+  opacity: 0;
+  z-index: 150;
+}
+.sticky-wrap .sticky-intersect th {
+  background-color: #f0f0f0;
+}
+.sticky-wrap td,
+.sticky-wrap th {
+  box-sizing: border-box;
+}
+
+
+// Talk Styling
+.p-speaker {
+  margin-bottom: 0.5rem;
+}
+
+
+// Speaker Styling
+@media (min-width: 576px) {
+  .div-speakerlist {
+    -webkit-column-count: 1;
+            column-count: 1;
+  }
+}
+@media (min-width: 768px) {
+  .div-speakerlist {
+    -webkit-column-count: 2;
+            column-count: 2;
+  }
+}
+@media (min-width: 992px) {
+  .div-speakerlist {
+    -webkit-column-count: 3;
+            column-count: 3;
+  }
+}
+.div-speakergroup {
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid-column;
+  display: table;
+}
+
+
+// Print Styling
+@media print {
+  // remove underline for links
+  .table a {
+    text-decoration: none !important;
+  }
+
+  // show room in program table in regular color
+  .table thead th a {
+    color: #202020;
+  }
+
+  // overwrite bootstrap default white background
+  // works only with Webkit (Chrome, Safari) and Firefox
+  .table td.alert {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+
+    // taken from bootstrap source code
+    //   _alert.scss L47
+    @each $color-name, $value in $theme-colors {
+      &.alert-#{$color-name} {
+        $bg-color: theme-color-level($color-name, $alert-bg-level);
+        background-color: $bg-color !important;
+      }
+    }
+  }
+  .badge {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+
+    border: 0 none white;
+
+    // taken from bootstrap source code
+    //   _badge.scss L43
+    @each $color-name, $value in $theme-colors {
+      .badge-#{$color-name} {
+        background-color: $value !important;
+      }
+    }
+  }
+}

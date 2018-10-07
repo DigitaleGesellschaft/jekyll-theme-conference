@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
 
 </head>
-<body>
+<body{% if page.url contains "program" %} class="page-program"{% endif %}>
   <header>
     <!-- navigation bar (web only): -->
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <nav class="navbar navbar-expand-md navbar-light bg-light mb-3">
       <div class="container">
-        <a class="navbar-brand" href="{{ site.baseurl }}">{{ site.title }}</a>
+        <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -49,7 +49,6 @@
     {% endunless %}
 
   </header>
-  &nbsp;
   <main class="container">
 
     {% include info_bar.html %}

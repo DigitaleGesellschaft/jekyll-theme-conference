@@ -3,15 +3,17 @@
   {% assign talk = page %}
 
   <h5>
-    {% include list_categories.html %}
+    {% include get_main_category.html %}
+
+    <span class="badge badge-{{ main_cat_color }}">{{ main_cat }}</span>
+    <br class="br-sm" />
+    {% include list_sub_categories.html %}
   </h5>
 
   <h1>{{ talk.name }}</h1>
 
   <p class="p-speaker">
-    <em>
-      {% include list_speakers.html %}
-    </em>
+    {% include list_speakers.html %}
   </p>
 
   <p>
@@ -27,9 +29,11 @@
 
           {% include get_talk_time.html %}
           Beginn um {% include show_talk_time.html %} Uhr
+          <br class="br-sm" />
 
           {% assign room = site.location | where: 'name', r.room | first %}
           im Raum {% include show_room.html %},
+          <br class="br-sm" />
 
           Dauer: <span class="badge badge-light">{{ talk_duration_min }}min</span>
         {% endif %}
