@@ -53,8 +53,8 @@ $(function(){
 						$stickyHead.find('th').eq(i).width($(this).width());
 					})
 					.end()
-					.find('tr').each(function (i) {
-						$stickyCol.find('tr').eq(i).height($(this).height());
+					.find('tbody tr th').each(function (i) {
+						$stickyCol.find('tbody tr th').eq(i).outerHeight($(this).outerHeight());
 					});
 
 					// Set width of sticky table head
