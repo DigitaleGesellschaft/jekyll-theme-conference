@@ -7,13 +7,8 @@ This is a [Jekyll](http://jekyllrb.com) template based on [Bootstrap 4](http://g
 - speaker descriptions
 - room descriptions
 
-All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a yaml file.
-There is no need for databases and once generated the website consists only of static files. If no responsiveness is needed, the site can even be used without any JavaScript dependency
-
-Two words of warning:
-
-- There wasn't a lot of testing performed on the template in its current state and certain configuration might break the design.
-- The code and variable names are all in English, but the example site above contains a few German words as placeholders.
+All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a `yaml` file.
+There is no need for databases and once generated the website consists only of static files. The use of JavaScript is optional and is used only for the navigation bar dropdown menus and the program table's sticky header/first column.
 
 
 ## Setup
@@ -112,9 +107,9 @@ Additional static pages can easily be added as `page_name/index.html`. In the re
 
 ## Design
 
-The design is based on the [Bootstrap 4](http://getbootstrap.com). Custom Bootstrap variables such as designed with [Bootstrap Magic](https://pikock.github.io/bootstrap-magic/app/index.html#!/editor) for individual themes can be added in the [bootstrap-custom](_sass/_bootstrap-custom.scss) SASS stylesheet.
+The design is based on the [Bootstrap 4](http://getbootstrap.com). Custom Bootstrap variables such as designed with [Bootstrap Magic](https://pikock.github.io/bootstrap-magic/app/index.html#!/editor) for individual themes can be added in the [main](assets/css/main.scss) SASS stylesheet.
 
-Upon site building Jekyll takes care of prefixing and building Bootstrap from source including some minor modifications into a single stylesheet. While the Bootstrap stylsheet is build from source, the (static) Bootstrap JavaScript files used for responsiveness are included in this repository and have their proper licensing terms.
+Upon site building Jekyll takes care of prefixing and building Bootstrap from source including some minor modifications into a single stylesheet. While the Bootstrap stylsheet is build from source, the (static) Bootstrap JavaScript files are included in this repository and have their proper licensing terms.
 
 
 ## License

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Vorträge
+title: Talks
 ---
 
 <h1>{{ page.title }}</h1>
@@ -30,12 +30,15 @@ title: Vorträge
                 {% endfor %}
               {% endfor %}
 
-              um {% include show_talk_time.html %} Uhr
+              <!-- language -->
+              starts at {% include show_talk_time.html %}
 
-              im Raum {% include show_room.html %}<br />
+              <!-- language -->
+              in room {% include show_room.html %}<br />
             {% endif %}
 
-            von {% include list_speakers.html %}
+            <!-- language -->
+            by {% include list_speakers.html %}
 
           </li>
           {% break %}

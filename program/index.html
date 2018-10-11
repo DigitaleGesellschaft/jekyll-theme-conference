@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Programm
+title: Program
 ---
 
 {% for room in site.data.program %}
@@ -163,7 +163,8 @@ title: Programm
 
   {% if site.main_categories.size > 0 %}
     &nbsp;
-    <h5>Legende</h5>
+    <!-- language -->
+    <h5>Legend</h5>
     <p>
       {% for main_cat in site.main_categories %}
         <span class="badge badge-{{ main_cat.color }}">{{ main_cat.name }}</span>

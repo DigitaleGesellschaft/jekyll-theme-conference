@@ -1,6 +1,6 @@
 ---
 layout: location
-title: Anreise
+title: Location
 ---
 
 How to get to the congress

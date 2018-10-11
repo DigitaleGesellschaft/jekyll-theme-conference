@@ -28,14 +28,17 @@
           {% endif %}
 
           {% include get_talk_time.html %}
-          Beginn um {% include show_talk_time.html %} Uhr
+          <!-- language -->
+          Starts at {% include show_talk_time.html %}
           <br class="br-sm" />
 
           {% assign room = site.location | where: 'name', r.room | first %}
-          im Raum {% include show_room.html %},
+          <!-- language -->
+          in room {% include show_room.html %},
           <br class="br-sm" />
 
-          Dauer: <span class="badge badge-light">{{ talk_duration_min }}min</span>
+          <!-- language -->
+          duration: <span class="badge badge-light">{{ talk_duration_min }}min</span>
         {% endif %}
       {% endfor %}
     {% endfor %}
@@ -45,7 +48,8 @@
 
   {% if talk.links %}
     &nbsp;
-    <h5>Weiterführende Informationen:</h5>
+    <!-- language -->
+    <h5>More information:</h5>
     <ul>
       {% for link in talk.links %}
         <li>
@@ -57,10 +61,12 @@
 
   &nbsp;
   <p class="d-print-none">
-    <a href="{{ site.baseurl }}{% link talks/index.html %}">zurück zur Übersicht</a>
+    <!-- language -->
+    <a href="{{ site.baseurl }}{% link talks/index.html %}">back to the overview</a>
   </p>
   <p class="d-print-none">
-    <a href="{{ site.baseurl }}{% link program/index.html %}">zurück zum Program</a>
+    <!-- language -->
+    <a href="{{ site.baseurl }}{% link program/index.html %}">back to the program</a>
   </p>
 
 {% include footer.html %}

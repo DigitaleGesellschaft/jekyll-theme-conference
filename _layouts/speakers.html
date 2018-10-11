@@ -3,7 +3,8 @@
   {% assign speaker = page %}
 
   <h5>
-    <span class="badge badge-light">SprecherIn</span>
+    <!-- language -->
+    <span class="badge badge-light">Speaker</span>
   </h5>
 
   <h1>{{ speaker.first_name }} {{ speaker.last_name }}</h1>
@@ -12,7 +13,8 @@
 
   {% if speaker.links %}
     &nbsp;
-    <h5>Weiterführende Informationen:</h5>
+    <!-- language -->
+    <h5>More information:</h5>
     <ul>
       {% for link in speaker.links %}
         <li>
@@ -23,7 +25,8 @@
   {% endif %}
 
   &nbsp;
-  <h5>Vorträge an dieser Konferenz:</h5>
+  <!-- language -->
+  <h5>Talks at this conference:</h5>
   <ul>
     {% assign no_talks = true %}
 
@@ -48,7 +51,8 @@
 
     {% if no_talks %}
       <li>
-        <em>keine</em>
+        <!-- language -->
+        <em>no talks planned</em>
       </li>
     {% endif %}
 
@@ -56,7 +60,8 @@
 
   &nbsp;
   <p class="d-print-none">
-    <a href="{{ site.baseurl }}{% link speakers/index.html %}">zurück zur Übersicht</a>
+    <!-- language -->
+    <a href="{{ site.baseurl }}{% link speakers/index.html %}">back to the overview</a>
   </p>
 
 {% include footer.html %}

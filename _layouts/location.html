@@ -7,12 +7,14 @@
     {% unless room.name contains "index" %}
       {{ room.name}}
     {% else %}
-      Örtlichkeit
+      <!-- language -->
+      Location
     {% endunless %}
   </h1>
 
-  <!-- title for web: -->
-  <h1 class="d-print-none">Örtlichkeit</h1>
+  <!-- title shown in browser: -->
+  <!-- language -->
+  <h1 class="d-print-none">Location</h1>
 
   <ul class="nav nav-pills d-print-none">
     <li class="nav-item">
@@ -33,7 +35,8 @@
 
   {% unless page.name contains 'index' %}
     &nbsp;
-    <h5>Programm in diesem Raum:</h5>
+    <!-- language -->
+    <h5>Talks in this room:</h5>
     <ul>
       {% for r in site.data.program %}
         {% if r.room == room.name %}
@@ -52,7 +55,8 @@
 
           {% else %}
             <li>
-              <em>keine Vorträge geplant</em>
+              <!-- language -->
+              <em>no talks planned</em>
             </li>
           {% endif %}
 
