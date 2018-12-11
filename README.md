@@ -52,6 +52,9 @@ The site's configuration is given by the `_config.yaml` file. There one can edit
 
 ## Content
 
+The congress' content is based on the configuration in the configuration file, the schedule in the `program.yml` file and the talks, speakers and rooms descriptions in the corresponding files and folders.
+There exists a Python file in the root, `create_entries.py`, which can be used to export content from a CSV table and generate the different files based on it automatically.
+
 ### Schedule
 
 The one-day schedule of the conference is defined in the [`data/program.yml`] file. It consists of an array of rooms each consisting of a
@@ -96,7 +99,7 @@ Each speaker is represented by file in the `_speakers/` directory. It must begin
 Each room is represented by file in the `_location/` directory (no ending `s`). It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the room's `name`, and
-- optionally `hide: true` if the speaker and its description should not be shown.
+- optionally `hide: true` if the room and its description should not be shown.
 
 Furthermore, one can edit `location/index.md` to add additional information about the venue's location.
 
