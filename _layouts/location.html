@@ -16,7 +16,7 @@
   <!-- language -->
   <h1 class="d-print-none">Location</h1>
 
-  <ul class="nav nav-pills d-print-none">
+  <ul class="nav nav-pills d-print-none mb-3">
     <li class="nav-item">
       <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.baseurl }}{% link location/index.md %}">Plan</a>
     </li>
@@ -52,7 +52,9 @@
 
   {{ content }}
 
-  {% unless page.name contains 'index' %}
+  {% if page.name contains 'index' %}
+    <div id="map" class="mb-3"></div>
+  {% else %}
     &nbsp;
     <!-- language -->
     <h5>Talks in this room:</h5>
@@ -86,6 +88,6 @@
       {% endunless %}
 
     </ul>
-  {% endunless %}
+  {% endif %}
 
 {% include footer.html %}

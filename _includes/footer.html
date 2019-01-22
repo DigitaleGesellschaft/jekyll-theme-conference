@@ -9,6 +9,13 @@
   {% if page.url contains "program" %}
     <script src="{{ site.baseurl }}/assets/js/jquery.stickyheader.js"></script>
   {% endif %}
+  {% if page.url contains "location" %}
+    <script src="{{ site.baseurl }}/assets/js/leaflet.js"></script>
+    <script src="{{ site.baseurl }}/assets/js/leaflet-providers.js"></script>
+    <script src="{{ site.baseurl }}/assets/js/leaflet-easybutton.js"></script>
+    <script src="{{ site.baseurl }}/assets/js/leaflet-locate.min.js"></script>
+    <script src="{{ site.baseurl }}/assets/js/map.js"></script>
+  {% endif %}
 
 </body>
 </html>

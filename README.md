@@ -102,6 +102,7 @@ Each room is represented by file in the `_location/` directory (no ending `s`). 
 - optionally `hide: true` if the room and its description should not be shown.
 
 Furthermore, one can edit `location/index.md` to add additional information about the venue's location.
+The map shown on the main location page is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/map.js` file.
 
 ### Additional Pages
 
