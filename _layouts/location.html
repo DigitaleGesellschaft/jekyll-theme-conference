@@ -1,11 +1,11 @@
 {% include header.html %}
 
-  {% assign room = page %}
+  {% assign this_room = page %}
 
   <!-- title for print: -->
   <h1 class="d-none d-print-inline">
-    {% unless room.name contains "index" %}
-      {{ room.name}}
+    {% unless this_room.name contains "index" %}
+      {{ this_room.name}}
     {% else %}
       <!-- language -->
       Location
@@ -20,14 +20,33 @@
     <li class="nav-item">
       <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.baseurl }}{% link location/index.md %}">Plan</a>
     </li>
-    {% for r in site.location %}
+    {% for r in site.data.program %}
+      {% assign room = site.location | where: 'name', r.room | first %}
       <li class="nav-item">
-        {% if r.hide %}
-          <span class="nav-item nav-link disabled">{{ r.name }}</span>
+        {% if room.hide %}
+          <span class="nav-item nav-link disabled">{{ room.name }}</span>
         {% else %}
-          <a class="nav-link {% if room.name == r.name %}active{% endif %}" href="{{ r.url | prepend: site.baseurl }}">{{ r.name }}</a>
+          <a class="nav-link {% if this_room.name == room.name %}active{% endif %}" href="{{ room.url | prepend: site.baseurl }}">{{ room.name }}</a>
         {% endif %}
       </li>
+    {% endfor %}
+    {% for room in site.location %}
+      {% assign room_displayed = false %}
+      {% for r in site.data.program %}
+        {% if room.name == r.room %}
+          {% assign room_displayed = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      {% unless room_displayed %}
+        <li class="nav-item">
+          {% if room.hide %}
+            <span class="nav-item nav-link disabled">{{ room.name }}</span>
+          {% else %}
+            <a class="nav-link {% if this_room.name == room.name %}active{% endif %}" href="{{ room.url | prepend: site.baseurl }}">{{ room.name }}</a>
+          {% endif %}
+        </li>
+      {% endunless %}
     {% endfor %}
   </ul>
 
@@ -39,7 +58,8 @@
     <h5>Talks in this room:</h5>
     <ul>
       {% for r in site.data.program %}
-        {% if r.room == room.name %}
+        {% assign room_talks = false %}
+        {% if this_room.name == r.room %}
           {% if r.talks.size > 0 %}
             {% for t in r.talks %}
               {% assign talk = site.talks | where: 'name', t.name | first %}
@@ -52,17 +72,18 @@
               </li>
 
             {% endfor %}
+            {% assign room_talks = true %}
 
-          {% else %}
-            <li>
-              <!-- language -->
-              <em>no talks planned</em>
-            </li>
           {% endif %}
-
           {% break %}
         {% endif %}
       {% endfor %}
+      {% unless room_talks %}
+        <li>
+          <!-- language -->
+          <em>no talks planned</em>
+        </li>
+      {% endunless %}
 
     </ul>
   {% endunless %}

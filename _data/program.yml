@@ -15,6 +15,3 @@
     - name: Talk 4
       time_start: '13:30'
       time_end: '14:30'
-
-- room: Room C
-  talks: []
