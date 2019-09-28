@@ -14,7 +14,7 @@ gem "jekyll", "~> 3.8.3"
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-  gem "bootstrap", "~> 4.1.3"
+  gem "bootstrap", "~> 4.3.1"
   gem "jekyll-tidy"
 end
 
