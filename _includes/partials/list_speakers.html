@@ -19,9 +19,9 @@
   {% endif %}
 
   {% if speaker.hide %}
-    <em>{{ speaker_short }}</em><!--
+    {{ speaker_short }}<!--
   {% else %}
-    <em><a href="{{ speaker.url }}">{{ speaker_short }}</a></em><!--
+    <a class="text-reset" href="{{ speaker.url }}">{{ speaker_short }}</a><!--
   {% endif %}
   {% if forloop.last != true %}
     -->,

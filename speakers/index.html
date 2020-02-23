@@ -3,9 +3,9 @@ layout: default
 title: Speakers
 ---
 
-<h1>{{ page.title }}</h1>
+<h1 class="display-5 mb-4">{{ page.title }}</h1>
 
-<div class="div-speakerlist">
+<div class="speakerlist">
   {% assign cur_letter = false %}
   {% assign speakers = site.speakers | sort_natural: 'last_name' %}
   {% for speaker in speakers %}
@@ -20,10 +20,10 @@ title: Speakers
       {% assign cur_letter = last_letter %}
       <div class="div-speakergroup">
         <h3>{{ cur_letter }}</h3>
-        <ul>
+        <ul class="list-unstyled">
     {% endif %}
 
-    <li>
+    <li class="font-weight-light">
       {% if speaker.hide %}
         {{ speaker.first_name }} {{ speaker.last_name }}
       {% else %}

@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
 </head>
 
-<body{% if page.url contains "program" %} class="page-program"{% endif %}>
+<body class="pb-4">
   <header>
     <!-- navigation bar (web only): -->
     <nav class="navbar navbar-expand-md navbar-light bg-light mb-3">
@@ -65,8 +65,7 @@
 
     {% unless page.url == "/" %}
       <!-- site title (print only): -->
-      <div class="container d-none d-print-block">
-        &nbsp;
+      <div class="container d-none d-print-block mt-4 mb-4">
         <h1 class="display-4">
           {{ site.title }}
         </h1>

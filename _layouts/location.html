@@ -3,7 +3,7 @@
   {% assign this_room = page %}
 
   <!-- title for print: -->
-  <h1 class="d-none d-print-inline">
+  <h1 class="display-5 mb-3 d-none d-print-inline">
     {% unless this_room.name contains "index" %}
       {{ this_room.name}}
     {% else %}
@@ -14,7 +14,7 @@
 
   <!-- title shown in browser: -->
   <!-- language -->
-  <h1 class="d-print-none">Location</h1>
+  <h1 class="display-5 mb-3 d-print-none">Location</h1>
 
   <ul class="nav nav-pills d-print-none mb-3">
     <li class="nav-item">
@@ -55,22 +55,32 @@
   {% if page.name contains 'index' %}
     <div id="map" class="mb-3"></div>
   {% else %}
-    &nbsp;
     <!-- language -->
-    <h5>Talks in this room:</h5>
-    <ul>
+    <h5 class="mt-4 mb-1">
+      Talks in this room:
+    </h5>
+    <ul class="list-unstyled">
       {% for r in site.data.program %}
         {% assign room_talks = false %}
         {% if this_room.name == r.room %}
           {% if r.talks.size > 0 %}
             {% for t in r.talks %}
               {% assign talk = site.talks | where: 'name', t.name | first %}
+              {% include partials/get_main_category.html %}
 
-              <li>
-                {% include partials/get_talk_time.html %}
-                {% include partials/show_talk_time.html %}
-
-                {% include partials/show_talk.html %}
+              <li class="clearfix">
+                <div class="float-left">
+                  {% include partials/get_talk_time.html %}
+                  {% include partials/show_talk_time.html %}
+                </div>
+                <div class="float-left ml-2 pl-1 mb-1 border-soft-{{ main_cat_color }}">
+                  <p class="mb-0">
+                    {% include partials/show_talk.html %}
+                  </p>
+                  <p class="font-weight-light mb-0">
+                    {% include partials/list_speakers.html %}
+                  </p>
+                </div>
               </li>
 
             {% endfor %}
