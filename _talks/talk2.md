@@ -1,12 +1,10 @@
 ---
-name: Talk 2
+name: Condimentum Vitae Sapien Pellentesque
 speakers:
-  - First Name Last Name
-  - Second Name Last Name
+  - Tolga Philip
+  - Alex Rosales
 categories:
   - Cat A
   - Talk
 hide: true
 ---
-
-Talk description goes here

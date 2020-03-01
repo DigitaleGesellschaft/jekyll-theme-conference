@@ -1,17 +1,20 @@
 - room: Room A
   talks:
-    - name: Talk 1
+    - name: Vim Impetus Placerat Cotidieque Ad
       time_start: '12:00'
       time_end: '12:45'
-    - name: Talk 2
+    - name: Condimentum Vitae Sapien Pellentesque
       time_start: '12:45'
       time_end: '13:30'
 
 - room: Room B
   talks:
-    - name: Talk 3
+    - name: Arcu Non Odio
       time_start: '12:00'
       time_end: '13:00'
-    - name: Talk 4
+
+- room: Room C
+  talks:
+    - name: Eu Nisl Nunc Mi Ipsum Faucibus
       time_start: '13:30'
       time_end: '14:30'

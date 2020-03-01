@@ -97,7 +97,7 @@ info_bars:
 # Talk categories
 main_categories:
   - name: Cat A
-    color: primary
+    color: info
   - name: Cat B
     color: success
 
