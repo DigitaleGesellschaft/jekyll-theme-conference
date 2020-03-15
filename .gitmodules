@@ -16,3 +16,6 @@
 [submodule "_includes/plugins/leaflet-providers"]
 	path = _includes/plugins/leaflet-providers
 	url = git@github.com:leaflet-extras/leaflet-providers.git
+[submodule "_includes/plugins/syncscroll"]
+	path = _includes/plugins/syncscroll
+	url = git@github.com:asvd/syncscroll.git

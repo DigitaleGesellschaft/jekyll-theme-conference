@@ -1,6 +1,6 @@
 # jekyll-conference
 
-Copyright 2017-2020 Lorenz Schmid
+Copyright (C) 2017-2020 Lorenz Schmid
 Released under [MIT](LICENSE.md).
 
 ---

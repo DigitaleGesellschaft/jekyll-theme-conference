@@ -6,6 +6,9 @@
 // Icons: FontAwesome
 //   Imported via CSS and webfonts
 
+// Vertical Scroll Sync: Syncscroll
+{% include plugins/syncscroll/syncscroll.js %}
+
 // Map Display Framework: Leaflet
 {% include plugins/leaflet/dist/leaflet.js %}
 {% include plugins/leaflet-easybutton/src/easy-button.js %}

@@ -54,7 +54,9 @@ $fa-font-path: '/assets/webfonts';
     font-size:   .85em;
   }
 }
-
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
 
 // Custom Styling
 
@@ -78,31 +80,20 @@ $fa-font-path: '/assets/webfonts';
     border-top-width: 0px;
   }
 
-  // Sticky positioning
+  // Sticky horizontal positioning
   th {
     position: sticky;
     background-color: $body-bg;
   }
-  thead th {
-    top: 0px;
-    z-index: 2;
-    &:first-of-type {
-
-      left: 0px;
-      z-index: 3;
-    }
-  }
-  tbody th {
+  th:first-of-type {
     left: 0px;
     z-index: 1;
   }
 
-  // Hide border next to sticky header
+  // Hide shadow of table cells next to sticky header
   thead tr > th:last-of-type {
     box-shadow: 10px 0px 0px 0px rgba(255,255,255,1);
   }
-
-  // TODO: Keep content around table in viewport if overflow occurs
 }
 
 //   Column Width
@@ -115,19 +106,18 @@ $prgm-cols-spacing:    10px;
   table-layout: fixed;
 
   // Table width
-  width: calc(#{$prgm-cols-nbr} * #{$prgm-cols-width} + #{$prgm-cols-nbr} * #{$prgm-cols-spacing} + #{$prgm-first-col-width});
   min-width: 100%;
 
   // Column widths
-  thead {
-    th:nth-child(even) {
+  tr {
+    > :nth-child(even) {
       width: $prgm-cols-spacing;
     }
-    th:nth-child(odd) {
+    > :nth-child(odd) {
       width: $prgm-cols-width;
       max-width: calc((100% / $prgm-cols-nbr) - $prgm-first-col-width - $prgm-cols-nbr * $prgm-cols-spacing);
     }
-    th:first-of-type {
+    > :nth-child(1) {
       width: $prgm-first-col-width;
     }
   }
