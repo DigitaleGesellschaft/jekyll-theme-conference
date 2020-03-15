@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <!-- language -->
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-    {% unless page.name contains '.' %}{{ page.name }} - {% else %}{% if page.title %}{{ page.title }} - {% endif %}{% endunless %}{{ site.title }}</title>
-    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
-    {% if page.url contains "location" %}
-      <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/leaflet.css" />
-      <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/fa-all.min.css" />
-      <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/leaflet-easybutton.css" />
-      <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/leaflet-locate.min.css" />
-    {% endif %}
 
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>
+    {% unless page.name contains '.' %}{{ page.name }} - {% else %}{% if page.title %}{{ page.title }} - {% endif %}{% endunless %}{{ site.title }}
+  </title>
+
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
 </head>
+
 <body{% if page.url contains "program" %} class="page-program"{% endif %}>
   <header>
     <!-- navigation bar (web only): -->
@@ -78,4 +76,4 @@
   </header>
   <main class="container">
 
-    {% include info_bar.html %}
+    {% include partials/info_bar.html %}

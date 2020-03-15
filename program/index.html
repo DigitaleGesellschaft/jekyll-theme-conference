@@ -5,7 +5,7 @@ title: Program
 
 {% for room in site.data.program %}
   {% assign t = room.talks | first %}
-  {% include get_talk_time.html %}
+  {% include partials/get_talk_time.html %}
 
   {% assign update_var = false %}
 
@@ -25,7 +25,7 @@ title: Program
   {% endif %}
 
   {% assign t = room.talks | last %}
-  {% include get_talk_time.html %}
+  {% include partials/get_talk_time.html %}
 
   {% assign update_var = false %}
 
@@ -63,7 +63,7 @@ title: Program
               {% if room.hide %}
                 {{ room.name }}
               {% else %}
-                <a href="{{ room.url | prepend: site.baseurl }}">{{ room.name }}</a>
+                <a href="{{ room.url }}">{{ room.name }}</a>
               {% endif %}
             </th>
           {% endfor %}
@@ -100,7 +100,7 @@ title: Program
               {% for t in r.talks %}
                 {% assign talk = site.talks | where: 'name', t.name | first %}
 
-                {% include get_talk_time.html %}
+                {% include partials/get_talk_time.html %}
 
                 {% assign d_start_hour = current_hour | minus: talk_start_hour %}
                 {% assign d_start_min = current_min | minus: talk_start_min %}
@@ -130,18 +130,18 @@ title: Program
                 {% if d_start_hour == 0 and d_start_min == 0 %}
 
                   {% assign talk_nbr_steps = talk_duration_min | divided_by: site.time_steps %}
-                  {% include get_main_category.html %}
-                  <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }}">
+                  {% include partials/get_main_category.html %}
+                  <td rowspan="{{ talk_nbr_steps }}" class="box box-{{ main_cat_color }}">
 
-                    <strong>{% include show_talk.html %}</strong>
+                    <strong>{% include partials/show_talk.html %}</strong>
                     <br />
 
-                    {% include list_sub_categories.html %}
+                    {% include partials/list_sub_categories.html %}
                     {% if has_sub_categories %}
                       <br />
                     {% endif %}
 
-                    {% include list_speakers.html %}
+                    {% include partials/list_speakers.html %}
                   </td>
                   {% assign active_talk = true %}
 

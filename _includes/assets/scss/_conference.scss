@@ -1,4 +1,21 @@
-@import "bootstrap";
+
+// Framework Configuration
+//   FontAwesome
+$fa-font-path: "/assets/webfonts";
+
+
+// Import Sources
+
+//   Style Framework: Bootstrap
+@import 'bootstrap';
+//   Icons: FontAwesome
+@import 'fontawesome';
+@import 'regular';
+@import 'solid';
+//   Map Display Framework: Leaflet
+@import 'leaflet';
+@import 'easy-button';
+@import 'L.Control.Locate.min.css';
 
 
 // Main Styling

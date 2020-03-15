@@ -7,16 +7,20 @@ url: "http://example.com" # the base hostname & protocol for your site, e.g. htt
 # Build settings
 markdown: kramdown
 sass:
+  load_paths:
+    - _includes/plugins/bootstrap/scss/
+    - _includes/plugins/font-awesome/scss/
+    - _includes/plugins/leaflet/dist/
+    - _includes/plugins/leaflet-easybutton/src/
+    - _includes/plugins/leaflet-locatecontrol/dist/
+    - _includes/assets/scss/
   style: compressed
 
 # Exclude from processing
 exclude:
-  - vendor
   - README.md
   - LICENSE.md
   - REDISTRIBUTED.md
-  - Gemfile
-  - Gemfile.lock
   - create_entries.py
 
 # Collections and their defaults

@@ -1,3 +1,8 @@
+---
+---
+
+{% include assets/js/conference.js %}
+
 (function() {
     var home_coord = [47.37808, 8.53935];
     var default_zoom = 17;
@@ -6,7 +11,7 @@
 
     L.tileLayer.provider('Hydda.Full').addTo(map);
 
-    L.easyButton('fa-star', function(){
+    L.easyButton('far fa-star', function(){
         map.setView(home_coord, default_zoom);
     }).addTo(map);
 

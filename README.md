@@ -16,9 +16,9 @@ There is no need for databases and once generated the website consists only of s
 1. [Install Bundler](https://bundler.io), a [Ruby](https://www.ruby-lang.org/en/downloads/) package manager.
 2. Verify you have [Git LFS](https://git-lfs.github.com) installed (used to store documents).
 3. Clone this repository and browse into it: `cd jekyll-conference/`
-4. Run Bundler to install all build dependencies including [Jekyll](https://jekyllrb.com/docs/installation/): `bundle install --path vendor/bundle`
+4. Run Bundler to install all build dependencies including [Jekyll](https://jekyllrb.com/docs/installation/): `bundle install --path vendor/bundle` (_Note:_ If you want to use a different path, you need to adapt the `sass: load_paths` settings in your configuration file too.)
 5. Build the site with Jekyll: `bundle exec jekyll build`. The generated site will be located in the `_site/` directory (will be overwritten at each new build).
-6. Instead of building you can also serve it locally with automated regeneration (does not contain changes on the site's configuration) with: `bundle exec jekyll serve`
+6. Instead of building you can also serve it locally with automated regeneration (does not contain changes on the site's configuration) with: `bundle exec jekyll serve --livereload`
 
 
 ## Configuration

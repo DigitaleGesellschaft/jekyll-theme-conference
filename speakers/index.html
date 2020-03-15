@@ -27,7 +27,7 @@ title: Speakers
       {% if speaker.hide %}
         {{ speaker.first_name }} {{ speaker.last_name }}
       {% else %}
-        <a href="{{ site.url }}{{ speaker.url}}">
+        <a href="{{ speaker.url }}">
           {{ speaker.first_name }} {{ speaker.last_name }}
         </a>
       {% endif %}

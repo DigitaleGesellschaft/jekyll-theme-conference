@@ -3,7 +3,7 @@
 
 $prgm-cols-nbr: {{ site.data.program | size }};
 
-@import "conference";
+@import 'conference';
 
 // Map Styling
 #map {

@@ -1,19 +1,19 @@
-{% include header.html %}
+{% include partials/header.html %}
 
   {% assign talk = page %}
 
   <h5>
-    {% include get_main_category.html %}
+    {% include partials/get_main_category.html %}
 
     <span class="badge badge-{{ main_cat_color }}">{{ main_cat }}</span>
     <br class="br-sm" />
-    {% include list_sub_categories.html %}
+    {% include partials/list_sub_categories.html %}
   </h5>
 
   <h1>{{ talk.name }}</h1>
 
   <p class="p-speaker">
-    {% include list_speakers.html %}
+    {% include partials/list_speakers.html %}
   </p>
 
   <p>
@@ -27,14 +27,14 @@
             {% assign first_talk = 0 %}
           {% endif %}
 
-          {% include get_talk_time.html %}
+          {% include partials/get_talk_time.html %}
           <!-- language -->
-          Starts at {% include show_talk_time.html %}
+          Starts at {% include partials/show_talk_time.html %}
           <br class="br-sm" />
 
           {% assign room = site.location | where: 'name', r.room | first %}
           <!-- language -->
-          in room {% include show_room.html %},
+          in room {% include partials/show_room.html %},
           <br class="br-sm" />
 
           <!-- language -->
@@ -53,7 +53,7 @@
     <ul>
       {% for link in talk.links %}
         <li>
-          {% include get_link.html %}
+          {% include partials/get_link.html %}
         </li>
       {% endfor %}
     </ul>
@@ -62,11 +62,11 @@
   &nbsp;
   <p class="d-print-none">
     <!-- language -->
-    <a href="{{ site.baseurl }}{% link talks/index.html %}">back to the overview</a>
+    <a href="{% link talks/index.html %}">back to the overview</a>
   </p>
   <p class="d-print-none">
     <!-- language -->
-    <a href="{{ site.baseurl }}{% link program/index.html %}">back to the program</a>
+    <a href="{% link program/index.html %}">back to the program</a>
   </p>
 
-{% include footer.html %}
+{% include partials/footer.html %}

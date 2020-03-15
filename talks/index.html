@@ -13,9 +13,9 @@ title: Talks
         {% if cat == main_category.name %}
           {% assign main_cat = main_category.name %}
           <li>
-            <strong>{% include show_talk.html %}</strong><br />
+            <strong>{% include partials/show_talk.html %}</strong><br />
 
-            {% include list_sub_categories.html %}
+            {% include partials/list_sub_categories.html %}
             {% if has_sub_categories %}<br />{% endif %}
 
             {% if talk.hide %}
@@ -23,7 +23,7 @@ title: Talks
               {% for r in site.data.program %}
                 {% for t in r.talks %}
                   {% if talk.name == t.name %}
-                    {% include get_talk_time.html %}
+                    {% include partials/get_talk_time.html %}
                     {% assign room = site.location | where: 'name', r.room | first %}
                     {% break %}
                   {% endif %}
@@ -31,14 +31,14 @@ title: Talks
               {% endfor %}
 
               <!-- language -->
-              starts at {% include show_talk_time.html %}
+              starts at {% include partials/show_talk_time.html %}
 
               <!-- language -->
-              in room {% include show_room.html %}<br />
+              in room {% include partials/show_room.html %}<br />
             {% endif %}
 
             <!-- language -->
-            by {% include list_speakers.html %}
+            by {% include partials/list_speakers.html %}
 
           </li>
           {% break %}

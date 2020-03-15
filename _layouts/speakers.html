@@ -1,4 +1,4 @@
-{% include header.html %}
+{% include partials/header.html %}
 
   {% assign speaker = page %}
 
@@ -18,7 +18,7 @@
     <ul>
       {% for link in speaker.links %}
         <li>
-          {% include get_link.html %}
+          {% include partials/get_link.html %}
         </li>
       {% endfor %}
     </ul>
@@ -43,7 +43,7 @@
         {% assign no_talks = false %}
 
         <li>
-          {% include show_talk.html %}
+          {% include partials/show_talk.html %}
         </li>
 
       {% endif %}
@@ -61,7 +61,7 @@
   &nbsp;
   <p class="d-print-none">
     <!-- language -->
-    <a href="{{ site.baseurl }}{% link speakers/index.html %}">back to the overview</a>
+    <a href="{% link speakers/index.html %}">back to the overview</a>
   </p>
 
-{% include footer.html %}
+{% include partials/footer.html %}
