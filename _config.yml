@@ -52,68 +52,71 @@ defaults:
     values:
       layout: location
 
-# Navigation bar
-navigation:
-  - name: Program
-    relative_url: /program/
-  - name: Talks
-    relative_url: /talks/
-  - name: Speakers
-    relative_url: /speakers/
-  - name: Location
-    relative_url: /location/
-  - name: About
-    relative_url: /about/
-  - name: Previous Editions
-    menu:
-      - name: 2018 (current)
-        disabled: true
-      - name: 2017
-        relative_url: /2017/
-      - name: 2016
-        relative_url: /2016/
 
-# Main landing page links
-main_links:
-  - name: Program
-    relative_url: /program/
-  - name: How to get there
-    relative_url: /location/
-  - name: Tickets
-    disabled: true
-    absolute_url: 'https://github.com'
+conference:
 
-# Information boxes
-info_bars:
-  - title: Important Information
-    color: primary
-    main_only: true
-    text: |
-      We're truly sorry but we are sold out.
+  # Navigation bar
+  navigation:
+    - name: Program
+      relative_url: /program/
+    - name: Talks
+      relative_url: /talks/
+    - name: Speakers
+      relative_url: /speakers/
+    - name: Location
+      relative_url: /location/
+    - name: About
+      relative_url: /about/
+    - name: Previous Editions
+      menu:
+        - name: 2018 (current)
+          disabled: true
+        - name: 2017
+          relative_url: /2017/
+        - name: 2016
+          relative_url: /2016/
 
-      ---
+  # Main landing page links
+  main_links:
+    - name: Program
+      relative_url: /program/
+    - name: How to get there
+      relative_url: /location/
+    - name: Tickets
+      disabled: true
+      absolute_url: 'https://github.com'
 
-      Try again next year.
-  - text: The content on these pages is outdated!
-    color: warning
-    pages_only: true
+  # Information boxes
+  info_bars:
+    - title: Important Information
+      color: primary
+      main_only: true
+      text: |
+        We're truly sorry but we are sold out.
 
-# Talk categories
-main_categories:
-  - name: Cat A
-    color: info
-  - name: Cat B
-    color: success
+        ---
 
-# Program table settings
-time_steps: 15 # in minutes
+        Try again next year.
+    - text: The content on these pages is outdated!
+      color: warning
+      pages_only: true
 
-hide_links:
-  location: false
-  speakers:
-    - The Anonymous
-  talks:
-    - Talk 2
+  # Talk categories
+  main_categories:
+    - name: Cat A
+      color: info
+    - name: Cat B
+      color: success
 
-show_firstname: true
-show_alltimes: true
+  # Program table settings
+  time_steps: 15 # in minutes
+
+  hide_links:
+    location: false
+    speakers:
+      - The Anonymous
+    talks:
+      - Talk 2
+
+  show_firstname: true
+  show_alltimes: true

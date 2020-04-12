@@ -1,14 +1,14 @@
 {% for speaker_name in talk.speakers %}
   {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
-  {% if site.show_firstname %}
+  {% if site.conference.show_firstname %}
     {% assign speaker_short = speaker.first_name | append: ' ' | append: speaker.last_name %}
   {% else %}
     {% assign speaker_short = speaker.first_name | slice: 0 | append : '. ' | append: speaker.last_name %}
   {% endif %}
 
   {% assign hide_speaker = false %}
-  {% if site.hide_links['speakers'] != true %}
-    {% for hidden_speaker in site.hide_links['speakers'] %}
+  {% if site.conference.hide_links['speakers'] != true %}
+    {% for hidden_speaker in site.conference.hide_links['speakers'] %}
       {% if hidden_speaker == speaker.name %}
         {% assign hide_speaker = true %}
         {% break %}

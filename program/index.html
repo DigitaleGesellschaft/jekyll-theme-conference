@@ -46,7 +46,7 @@ title: Program
 {% endfor %}
 
 {% assign total_duration_min = end_hour | minus: start_hour | times: 60 | minus: start_min | plus: end_min %}
-{% assign nbr_steps = total_duration_min | divided_by: site.time_steps %}
+{% assign nbr_steps = total_duration_min | divided_by: site.conference.time_steps %}
 
 
   <h1 class="display-5 mb-4">{{ page.title }}</h1>
@@ -80,8 +80,8 @@ title: Program
     <table class="table">
       <tbody>
         {% for i in (1..nbr_steps) %}
-          {% assign current_hour = i | minus: 1 | times: site.time_steps | plus: start_min | divided_by: 60 | floor | plus: start_hour | modulo: 24  %}
-          {% assign current_min = i | minus: 1 | times: site.time_steps | plus: start_min | modulo: 60 %}
+          {% assign current_hour = i | minus: 1 | times: site.conference.time_steps | plus: start_min | divided_by: 60 | floor | plus: start_hour | modulo: 24  %}
+          {% assign current_min = i | minus: 1 | times: site.conference.time_steps | plus: start_min | modulo: 60 %}
           {% if current_min < 10 %}
             {% assign current_time = current_hour | append: ':0' | append: current_min %}
           {% else %}
@@ -94,7 +94,7 @@ title: Program
               <th scope="row" class="text-center">
                 {{ current_time }}
               </th>
-            {% elsif site.show_alltimes %}
+            {% elsif site.conference.show_alltimes %}
               <th scope="row" class="text-center text-muted">
                 <span class="invisible">{{ current_hour }}</span><span class="font-weight-normal">:{{ current_min }}</span>
               </th>
@@ -139,7 +139,7 @@ title: Program
 
                 {% if d_start_hour == 0 and d_start_min == 0 %}
 
-                  {% assign talk_nbr_steps = talk_duration_min | divided_by: site.time_steps %}
+                  {% assign talk_nbr_steps = talk_duration_min | divided_by: site.conference.time_steps %}
                   {% include partials/get_main_category.html %}
                   <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }} shadow-sm">
 
@@ -175,12 +175,12 @@ title: Program
     </table>
   </div>
 
-  {% if site.main_categories.size > 0 %}
+  {% if site.conference.main_categories.size > 0 %}
     &nbsp;
     <!-- language -->
     <h5>Legend</h5>
     <div class="d-flex flex-lg-row flex-column container-fluid m-n1 p-0">
-      {% for main_cat in site.main_categories %}
+      {% for main_cat in site.conference.main_categories %}
         <div class="m-1 p-1 pl-2 pr-2 border-soft-{{ main_cat.color }} bg-soft-{{ main_cat.color }} font-weight-normal">
           {{ main_cat.name }}
         </div>

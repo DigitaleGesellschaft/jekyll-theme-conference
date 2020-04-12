@@ -1,5 +1,5 @@
-{% if site.info_bars.size > 0 %}
-  {% for info_bar in site.info_bars %}
+{% if site.conference.info_bars.size > 0 %}
+  {% for info_bar in site.conference.info_bars %}
     {% if page.url == "/" and info_bar.pages_only != true %}
       {% assign show_info_bar = true %}
     {% endif %}

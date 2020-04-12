@@ -14,9 +14,9 @@
 
     {{ content }}
 
-    {% if site.main_links.size > 0 %}
+    {% if site.conference.main_links.size > 0 %}
       <p class="lead d-print-none">
-      {% for link in site.main_links %}
+      {% for link in site.conference.main_links %}
         {% if link.disabled %}
           <a class="btn btn-primary btn-lg mt-2 disabled" href="#">
             {{ link.name }}

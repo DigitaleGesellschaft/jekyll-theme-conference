@@ -1,4 +1,4 @@
-{% for main_cat in site.main_categories %}
+{% for main_cat in site.conference.main_categories %}
   {% for cat in talk.categories %}
     {% if cat == main_cat.name %}
       {% assign main_cat = main_cat.name %}
