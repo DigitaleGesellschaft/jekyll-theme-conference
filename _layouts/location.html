@@ -7,14 +7,12 @@
     {% unless this_room.name contains "index" %}
       {{ this_room.name}}
     {% else %}
-      <!-- language -->
-      Location
+      {{ site.data.lang[site.conference.lang].location.title }}
     {% endunless %}
   </h1>
 
   <!-- title shown in browser: -->
-  <!-- language -->
-  <h1 class="display-5 mb-3 d-print-none">Location</h1>
+  <h1 class="display-5 mb-3 d-print-none">{{ site.data.lang[site.conference.lang].location.title }}</h1>
 
   <ul class="nav nav-pills d-print-none mb-3">
     <li class="nav-item">
@@ -55,9 +53,8 @@
   {% if page.name contains 'index' %}
     <div id="map" class="mb-3"></div>
   {% else %}
-    <!-- language -->
     <h5 class="mt-4 mb-1">
-      Talks in this room:
+      {{ site.data.lang[site.conference.lang].location.talks }}:
     </h5>
     <ul class="list-unstyled">
       {% for r in site.data.program %}
@@ -92,8 +89,7 @@
       {% endfor %}
       {% unless room_talks %}
         <li>
-          <!-- language -->
-          <em>no talks planned</em>
+          <em>{{ site.data.lang[site.conference.lang].location.no_talks }}</em>
         </li>
       {% endunless %}
 

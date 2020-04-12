@@ -55,6 +55,9 @@ defaults:
 
 conference:
 
+  # Language
+  lang: en
+
   # Navigation bar
   navigation:
     - name: Program

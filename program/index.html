@@ -177,8 +177,7 @@ title: Program
 
   {% if site.conference.main_categories.size > 0 %}
     &nbsp;
-    <!-- language -->
-    <h5>Legend</h5>
+    <h5>{{ site.data.lang[site.conference.lang].program.legend }}</h5>
     <div class="d-flex flex-lg-row flex-column container-fluid m-n1 p-0">
       {% for main_cat in site.conference.main_categories %}
         <div class="m-1 p-1 pl-2 pr-2 border-soft-{{ main_cat.color }} bg-soft-{{ main_cat.color }} font-weight-normal">

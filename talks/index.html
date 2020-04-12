@@ -35,11 +35,9 @@ title: Talks
                   {% endfor %}
                 {% endfor %}
 
-                <!-- language -->
-                at {% include partials/show_talk_time.html %}
+                {{ site.data.lang[site.conference.lang].pronoun.at }} {% include partials/show_talk_time.html %}
 
-                <!-- language -->
-                in {% include partials/show_room.html %}
+                {{ site.data.lang[site.conference.lang].pronoun.in }} {% include partials/show_room.html %}
               </p>
             {% endif %}
 

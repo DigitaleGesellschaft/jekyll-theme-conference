@@ -32,19 +32,16 @@
 
           <div class="pr-1 font-normal">
             {% include partials/get_talk_time.html %}
-            <!-- language -->
-            at {% include partials/show_talk_time.html %}<br />
+            {{ site.data.lang[site.conference.lang].pronoun.at }} {% include partials/show_talk_time.html %}<br />
           </div>
 
           <div class="pr-1 font-normal">
             {% assign room = site.location | where: 'name', r.room | first %}
-            <!-- language -->
-            in {% include partials/show_room.html %}<br />
+            {{ site.data.lang[site.conference.lang].pronoun.in }} {% include partials/show_room.html %}<br />
           </div>
 
           <div class="pr-1 font-normal">
-            <!-- language -->
-            for <span class="badge badge-light font-weight-normal"><i class="fas fa-stopwatch"></i> {{ talk_duration_min }}min</span>
+            {{ site.data.lang[site.conference.lang].pronoun.for }} <span class="badge badge-light font-weight-normal"><i class="fas fa-stopwatch"></i> {{ talk_duration_min }}min</span>
           </div>
         {% endif %}
       {% endfor %}
@@ -54,8 +51,7 @@
   {{ content }}
 
   {% if talk.links %}
-    <!-- language -->
-    <h5 class="mt-4 mb-1">More information:</h5>
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information }}:</h5>
     <ul class="list-unstyled">
       {% for link in talk.links %}
         <li class="mb-1 ml-2 pl-2 border-soft-primary">
@@ -67,15 +63,13 @@
 
   <p class="d-print-none mt-5">
     <a href="{% link talks/index.html %}" class="btn btn-light">
-      <i class="fas fa-bullhorn"></i>&nbsp;
-      <!-- language -->
-      Overview
+      <i class="fas fa-bullhorn"></i>
+      {{ site.data.lang[site.conference.lang].overview }}
     </a>
 
     <a href="{% link program/index.html %}" class="btn btn-light">
       <i class="far fa-calendar-alt"></i>
-      <!-- language -->
-      Program
+      {{ site.data.lang[site.conference.lang].program.title }}
     </a>
   </p>
 

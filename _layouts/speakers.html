@@ -2,16 +2,14 @@
 
   {% assign speaker = page %}
 
-  <!-- language -->
-  <p class="h5">Speaker</p>
+  <p class="h5">{{ site.data.lang[site.conference.lang].speaker.title }}</p>
 
   <h1 class="display-5 mb-4">{{ speaker.first_name }} {{ speaker.last_name }}</h1>
 
   {{ content }}
 
   {% if speaker.links %}
-    <!-- language -->
-    <h5 class="mt-4 mb-1">More information:</h5>
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information }}:</h5>
     <ul class="list-unstyled">
       {% for link in speaker.links %}
         <li class="mb-1 ml-2 pl-2 border-soft-primary">
@@ -32,8 +30,8 @@
   {% endfor %}
 
   {% if active_speaker %}
-    <!-- language -->
-    <h5 class="mt-4 mb-1">Talks at this conference:</h5>
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].speaker.talks }}:</h5>
+
     <ul class="list-unstyled">
       {% for talk in site.talks %}
         {% for speaker_name in talk.speakers %}
@@ -51,10 +49,9 @@
   {% endif %}
 
   <p class="d-print-none mt-5">
-    <!-- language -->
     <a href="{% link speakers/index.html %}" class="btn btn-light">
       <i class="fas fa-users"></i>
-      Overview
+      {{ site.data.lang[site.conference.lang].overview }}
     </a>
   </p>
 
