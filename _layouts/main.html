@@ -2,7 +2,11 @@
 
   <div class="jumbotron">
     <h1 class="display-3">
-      {{ site.title }}
+      {% if site.conference.main.logo.img %}
+        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75" alt="{{ site.title }}" />
+      {% else %}
+        {{ site.title }}
+      {% endif %}
     </h1>
     {% if site.description != none %}
       <p class="lead">
@@ -14,9 +18,9 @@
 
     {{ content }}
 
-    {% if site.conference.main_links.size > 0 %}
+    {% if site.conference.main.links %}
       <p class="lead d-print-none">
-      {% for link in site.conference.main_links %}
+      {% for link in site.conference.main.links %}
         {% if link.disabled %}
           <a class="btn btn-primary btn-lg mt-2 disabled" href="#">
             {{ link.name }}

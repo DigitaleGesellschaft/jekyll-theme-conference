@@ -1,0 +1,181 @@
+
+// Framework Configuration
+
+//   Bootstrap Theme
+$border-radius:      .1rem !default;
+$alert-border-width: 4px !default;
+
+//   FontAwesome
+$fa-font-path: '/assets/webfonts' !default;
+
+
+// Import Sources
+
+//   Style Framework: Bootstrap
+@import 'bootstrap/bootstrap';
+//   Icons: FontAwesome
+@import 'font-awesome/fontawesome';
+@import 'font-awesome/regular';
+@import 'font-awesome/solid';
+//   Map Display Framework: Leaflet
+@import 'leaflet/leaflet';
+@import 'leaflet/leaflet-easybutton';
+@import 'leaflet/leaflet-locatecontrol';
+
+
+// Adapt Bootstrap Elements
+
+//   Alert
+.alert {
+  //$alert-border-radius
+  border-width: 0px;
+  border-left-width: $alert-border-width;
+}
+
+@each $color, $value in $theme-colors {
+  .border-soft-#{$color} {
+    border-color: theme-color-level($color, $alert-border-level);
+    border-left-width: $alert-border-width;
+    border-left-style: solid;
+  }
+  .bg-soft-#{$color} {
+    @include gradient-bg(theme-color-level($color, $alert-bg-level));
+  }
+}
+
+// Extend Bootstrap Elements
+.display-5 {
+  font-size:   3rem;
+  font-weight: $display4-weight;
+  line-height: $display-line-height;
+}
+.font-normal {
+  .badge {
+    font-size:   .85em;
+  }
+}
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+// Custom Styling
+
+// General
+
+//   No bottom margin on info-bar
+.alert > p:last-of-type {
+  margin-bottom: 0;
+}
+
+// Program
+
+//   Sticky header and first column
+.table {
+  // Avoid sticky cells without border
+  border-collapse: separate;
+
+  // Correct border-width caused by border-collapse
+  border-spacing: 0px;
+  tbody tr:first-of-type > * {
+    border-top-width: 0px;
+  }
+
+  // Sticky horizontal positioning
+  th {
+    position: sticky;
+    background-color: $body-bg;
+  }
+  th:first-of-type {
+    left: 0px;
+    z-index: 1;
+  }
+
+  // Hide shadow of table cells next to sticky header
+  thead tr > th:last-of-type {
+    box-shadow: 10px 0px 0px 0px rgba(255,255,255,1);
+  }
+}
+
+//   Column Width
+$prgm-first-col-width: 4rem;
+$prgm-cols-width:      240px;
+$prgm-cols-spacing:    10px;
+
+.table {
+  // First row defines width for all columns
+  table-layout: fixed;
+
+  // Table width
+  min-width: 100%;
+
+  // Column widths
+  tr {
+    > :nth-child(even) {
+      width: $prgm-cols-spacing;
+    }
+    > :nth-child(odd) {
+      width: $prgm-cols-width;
+      max-width: calc((100% / $prgm-cols-nbr) - $prgm-first-col-width - $prgm-cols-nbr * $prgm-cols-spacing);
+    }
+    > :nth-child(1) {
+      width: $prgm-first-col-width;
+    }
+  }
+}
+
+// Location
+.nav-pills .nav-link.active {
+  background-color: theme-color-level('primary', $alert-bg-level);
+  color: var(--dark);
+}
+
+// Speaker
+.speakergroup {
+  page-break-inside: avoid;
+  break-inside:      avoid-column;
+@include media-breakpoint-up(sm) {
+}
+  .speakerlist {
+    column-count: 1;
+  }
+}
+@include media-breakpoint-up(md) {
+  .speakerlist {
+    column-count: 2;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .speakerlist {
+    column-count: 3;
+  }
+}
+// Print
+
+@media print {
+  // remove underline for links
+  a {
+    text-decoration: none !important;
+  }
+
+  // overwrite bootstrap default white background
+  // works only with Webkit (Chrome, Safari) and Firefox
+  @each $color, $value in $theme-colors {
+    .table td.alert-#{$color} {
+      color-adjust: exact;
+      background-color: theme-color-level($color, $alert-bg-level) !important;
+
+      color: black;
+    }
+  }
+  .badge {
+    color-adjust: exact;
+
+    border: 0 none white;
+    text-decoration: none !important;
+  }
+
+  // Remove sticky position from table to show borders
+  .table  th {
+    position: inherit;
+  }
+}

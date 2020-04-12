@@ -1,19 +1,6 @@
-title: Congress 2018
-description: >-
-  A short description
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://example.com" # the base hostname & protocol for your site, e.g. http://example.com
-
 # Build settings
 markdown: kramdown
 sass:
-  load_paths:
-    - _includes/plugins/bootstrap/scss/
-    - _includes/plugins/font-awesome/scss/
-    - _includes/plugins/leaflet/dist/
-    - _includes/plugins/leaflet-easybutton/src/
-    - _includes/plugins/leaflet-locatecontrol/dist/
-    - _includes/assets/scss/
   style: compressed
 
 # Exclude from processing
@@ -22,6 +9,8 @@ exclude:
   - LICENSE.md
   - REDISTRIBUTED.md
   - create_entries.py
+  - _config.example.yml
+  - screenshot.png
 
 # Collections and their defaults
 collections:
@@ -52,74 +41,13 @@ defaults:
     values:
       layout: location
 
-
+# Theme default values
 conference:
-
-  # Language
   lang: en
 
-  # Navigation bar
-  navigation:
-    - name: Program
-      relative_url: /program/
-    - name: Talks
-      relative_url: /talks/
-    - name: Speakers
-      relative_url: /speakers/
-    - name: Location
-      relative_url: /location/
-    - name: About
-      relative_url: /about/
-    - name: Previous Editions
-      menu:
-        - name: 2018 (current)
-          disabled: true
-        - name: 2017
-          relative_url: /2017/
-        - name: 2016
-          relative_url: /2016/
+  speakers:
+    show_firstname: true
 
-  # Main landing page links
-  main_links:
-    - name: Program
-      relative_url: /program/
-    - name: How to get there
-      relative_url: /location/
-    - name: Tickets
-      disabled: true
-      absolute_url: 'https://github.com'
-
-  # Information boxes
-  info_bars:
-    - title: Important Information
-      color: primary
-      main_only: true
-      text: |
-        We're truly sorry but we are sold out.
-
-        ---
-
-        Try again next year.
-    - text: The content on these pages is outdated!
-      color: warning
-      pages_only: true
-
-  # Talk categories
-  main_categories:
-    - name: Cat A
-      color: info
-    - name: Cat B
-      color: success
-
-  # Program table settings
-  time_steps: 15 # in minutes
-
-  hide_links:
-    location: false
-    speakers:
-      - The Anonymous
-    talks:
-      - Talk 2
-
-  show_firstname: true
-  show_alltimes: true
+  program:
+    time_steps: 15
+    show_alltimes: true

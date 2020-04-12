@@ -1,0 +1,41 @@
+{% include partials/header.html %}
+
+  <h1 class="display-5 mb-4">{{ page.title }}</h1>
+
+  {{ content }}
+
+  <div class="speakerlist">
+    {% assign cur_letter = false %}
+    {% assign speakers = site.speakers | sort_natural: 'last_name' %}
+    {% for speaker in speakers %}
+
+      {% assign last_letter = speaker.last_name | slice: 0 | capitalize %}
+      {% if cur_letter != last_letter %}
+        {% if cur_letter %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% assign cur_letter = last_letter %}
+        <div class="div-speakergroup">
+          <h3>{{ cur_letter }}</h3>
+          <ul class="list-unstyled">
+      {% endif %}
+
+      <li class="font-weight-light">
+        {% if speaker.hide %}
+          {{ speaker.first_name }} {{ speaker.last_name }}
+        {% else %}
+          <a href="{{ speaker.url | prepend: site.baseurl }}">
+            {{ speaker.first_name }} {{ speaker.last_name }}
+          </a>
+        {% endif %}
+      </li>
+
+    {% endfor %}
+
+      </ul>
+    </div>
+  </div>
+
+{% include partials/footer.html %}

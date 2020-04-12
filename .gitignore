@@ -1,7 +1,3 @@
-### Ruby ###
-.bundle/
-vendor/
-
 ### Jekyll ###
 _site/
 .sass-cache/
@@ -10,7 +6,7 @@ _site/
 
 ### Bundler ###
 .bundle/
-vendor/
+vendor/bundle/
 
 ### MacOS ###
 .DS_Store

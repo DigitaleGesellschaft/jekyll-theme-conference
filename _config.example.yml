@@ -1,0 +1,129 @@
+title: Congress 2020
+description: >-
+  A short description
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://example.com" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+markdown: kramdown
+sass:
+  style: compressed
+
+# Additional exclude from processing
+exclude:
+  - README.md
+  - LICENSE.md
+  - REDISTRIBUTED.md
+  - create_entries.py
+
+# Collections and their defaults
+collections:
+  talks:
+    output: true
+    permalink: /:collection/:title/
+  speakers:
+    output: true
+    permalink: /:collection/:title/
+  location:
+    output: true
+    permalink: /:collection/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talks
+  - scope:
+      path: ""
+      type: speakers
+    values:
+      layout: speakers
+  - scope:
+      path: ""
+      type: location
+    values:
+      layout: location
+
+
+conference:
+
+  # Language
+  lang: en
+
+  # Navigation bar
+  navigation:
+    logo:
+      name: Magic Organisation
+      # img: ''
+      url: 'https://github.com'
+    links:
+      - name: Program
+        relative_url: /program/
+      - name: Talks
+        relative_url: /talks/
+      - name: Speakers
+        relative_url: /speakers/
+      - name: Location
+        relative_url: /location/
+      - name: About
+        relative_url: /about/
+      - name: Previous Editions
+        menu:
+          - name: 2018 (current)
+            disabled: true
+          - name: 2017
+            relative_url: /2017/
+          - name: 2016
+            relative_url: /2016/
+
+  # Main landing page
+  main:
+    logo:
+      img: ''
+    links:
+      - name: Program
+        relative_url: /program/
+      - name: How to get there
+        relative_url: /location/
+      - name: Tickets
+        disabled: true
+        absolute_url: ''
+
+  # Information boxes
+  info_bars:
+    - title: Important Information
+      color: primary
+      main_only: true
+      text: |
+        We're truly sorry but we are sold out.
+
+        ---
+
+        Try again next year.
+    - text: The content on these pages is outdated!
+      color: warning
+      pages_only: true
+
+  talks:
+    # Talk categories
+    main_categories:
+      - name: Cat A
+        color: info
+      - name: Cat B
+        color: success
+
+  speakers:
+    # Show first and last name
+    show_firstname: true
+
+  location:
+    # Disable links to locations
+    hide: false
+
+  program:
+    # Time steps in program table
+    time_steps: 15 # in minutes
+
+    # Show intermediary time steps (next to full hours)
+    show_alltimes: true
