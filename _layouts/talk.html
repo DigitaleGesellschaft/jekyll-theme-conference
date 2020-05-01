@@ -3,46 +3,52 @@
   {% assign talk = page %}
 
   <div class="d-flex flex-lg-row flex-column container-fluid mb-2 p-0">
-    <div class="h5 mb-0 pr-1 pb-1">
+    <div class="h6 mt-2 mb-0 mr-1 pr-1 pb-1">
       {% include partials/get_main_category.html %}
       <span class="p-1 pl-2 pr-2 border-soft-{{ main_cat_color }} bg-soft-{{ main_cat_color }} font-weight-normal">
         {{ main_cat }}
       </span>
     </div>
 
-    <div class="h5 mb-0 pr-1 pb-1">
-      {% for cat in talk.categories %}
-        {% if cat != main_cat %}
-          <span class="ml-2">{{ cat }}</span>
-        {% endif %}
-      {% endfor %}
-    </div>
+    {% if talk.categories.size > 1 %}
+      <div class="h6 mt-2 mb-0 ml-1 pr-1 pb-1">
+        {% for cat in talk.categories %}
+          {% if cat != main_cat %}
+            <span class="mr-2">{{ cat }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 
-  <h1 class="display-5">{{ talk.name }}</h1>
+  <h1 class="font-weight-light">{{ talk.name }}</h1>
 
   <p class="mb-3 font-weight-light">
     {% include partials/list_speakers.html %}
   </p>
 
-  <div class="d-flex flex-lg-row flex-column container-fluid mb-3 p-0">
+  <div class="mb-3 p-0">
     {% for r in site.data.program %}
       {% for t in r.talks %}
         {% if talk.name == t.name %}
 
-          <div class="pr-1 font-normal">
-            {% include partials/get_talk_time.html %}
-            {{ site.data.lang[site.conference.lang].pronoun.at }} {% include partials/show_talk_time.html %}<br />
-          </div>
+          {% include partials/get_talk_time.html %}
+          <span class="d-none d-sm-inline">
+            {{ site.data.lang[site.conference.lang].pronoun.at }}
+          </span>
+          {% include partials/show_talk_time.html %}
 
-          <div class="pr-1 font-normal">
-            {% assign room = site.location | where: 'name', r.room | first %}
-            {{ site.data.lang[site.conference.lang].pronoun.in }} {% include partials/show_room.html %}<br />
-          </div>
+          {% assign room = site.rooms | where: 'name', r.room | first %}
+          <span class="d-none d-sm-inline ml-1">
+            {{ site.data.lang[site.conference.lang].pronoun.in }}
+          </span>
+          {% include partials/show_room.html %}
 
-          <div class="pr-1 font-normal">
-            {{ site.data.lang[site.conference.lang].pronoun.for }} <span class="badge badge-light font-weight-normal"><i class="fas fa-stopwatch"></i> {{ talk_duration_min }}min</span>
-          </div>
+          <span class="d-none d-sm-inline ml-1">
+            {{ site.data.lang[site.conference.lang].pronoun.for }}
+          </span>
+          {% include partials/show_talk_duration.html %}
+
         {% endif %}
       {% endfor %}
     {% endfor %}

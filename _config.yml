@@ -1,3 +1,9 @@
+title: Congress 2020
+description: >-
+  A short description
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://example.com" # the base hostname & protocol for your site, e.g. https://example.com
+
 # Build settings
 markdown: kramdown
 sass:
@@ -20,7 +26,7 @@ collections:
   speakers:
     output: true
     permalink: /:collection/:title/
-  location:
+  rooms:
     output: true
     permalink: /:collection/:title/
 
@@ -29,17 +35,17 @@ defaults:
       path: ""
       type: talks
     values:
-      layout: talks
+      layout: talk
   - scope:
       path: ""
       type: speakers
     values:
-      layout: speakers
+      layout: speaker
   - scope:
       path: ""
-      type: location
+      type: rooms
     values:
-      layout: location
+      layout: room
 
 # Theme default values
 conference:
@@ -47,6 +53,9 @@ conference:
 
   speakers:
     show_firstname: true
+
+  location:
+    map: true
 
   program:
     time_steps: 15

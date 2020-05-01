@@ -2,8 +2,12 @@
 // Framework Configuration
 
 //   Bootstrap Theme
-$border-radius:      .1rem !default;
-$alert-border-width: 4px !default;
+$border-radius:                .1rem !default;
+$alert-border-width:           4px !default;
+$alert-color-level:            9 !default;
+$enable-responsive-font-sizes: true !default;
+//     Set different default as Bootstrap's choice is a very flashy blue
+$primary:                      #074 !default;
 
 //   FontAwesome
 $fa-font-path: '/assets/webfonts' !default;
@@ -54,8 +58,8 @@ $fa-font-path: '/assets/webfonts' !default;
     font-size:   .85em;
   }
 }
-.overflow-y-scroll {
-  overflow-y: scroll;
+.overflow-y-hidden {
+  overflow-y: hidden;
 }
 
 // Custom Styling
@@ -97,10 +101,6 @@ $fa-font-path: '/assets/webfonts' !default;
 }
 
 //   Column Width
-$prgm-first-col-width: 4rem;
-$prgm-cols-width:      240px;
-$prgm-cols-spacing:    10px;
-
 .table {
   // First row defines width for all columns
   table-layout: fixed;
@@ -110,15 +110,17 @@ $prgm-cols-spacing:    10px;
 
   // Column widths
   tr {
+    // Spacing between columns
     > :nth-child(even) {
-      width: $prgm-cols-spacing;
+      width: 10px;
     }
+    // Width of columns with content
     > :nth-child(odd) {
-      width: $prgm-cols-width;
-      max-width: calc((100% / $prgm-cols-nbr) - $prgm-first-col-width - $prgm-cols-nbr * $prgm-cols-spacing);
+      width: 180px;
     }
+    // Width of first column containing timestamps
     > :nth-child(1) {
-      width: $prgm-first-col-width;
+      width: 4rem;
     }
   }
 }
@@ -128,13 +130,18 @@ $prgm-cols-spacing:    10px;
   background-color: theme-color-level('primary', $alert-bg-level);
   color: var(--dark);
 }
+#map {
+  height: 50vh;
+  min-height: 400px;
+  width: 100%;
+}
 
 // Speaker
 .speakergroup {
   page-break-inside: avoid;
   break-inside:      avoid-column;
-@include media-breakpoint-up(sm) {
 }
+@include media-breakpoint-up(sm) {
   .speakerlist {
     column-count: 1;
   }
@@ -149,8 +156,8 @@ $prgm-cols-spacing:    10px;
     column-count: 3;
   }
 }
-// Print
 
+// Print
 @media print {
   // remove underline for links
   a {

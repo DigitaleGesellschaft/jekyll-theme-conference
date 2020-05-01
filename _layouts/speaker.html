@@ -2,9 +2,13 @@
 
   {% assign speaker = page %}
 
-  <p class="h5">{{ site.data.lang[site.conference.lang].speaker.title }}</p>
+  <p class="h6">
+    {{ site.data.lang[site.conference.lang].speaker.title }}
+  </p>
 
-  <h1 class="display-5 mb-4">{{ speaker.first_name }} {{ speaker.last_name }}</h1>
+  <h1 class="font-weight-light mb-4">
+    {{ speaker.first_name }} {{ speaker.last_name }}
+  </h1>
 
   {{ content }}
 

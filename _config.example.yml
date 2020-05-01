@@ -1,8 +1,10 @@
-title: Congress 2020
+title: Conference 2020
 description: >-
-  A short description
+  Conference of a random organization on January 1st in Zurich, Switzerland
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://example.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://example.com" # the base hostname & protocol for your site, e.g. https://example.com
+
+theme: jekyll-theme-conference
 
 # Build settings
 markdown: kramdown
@@ -24,7 +26,7 @@ collections:
   speakers:
     output: true
     permalink: /:collection/:title/
-  location:
+  rooms:
     output: true
     permalink: /:collection/:title/
 
@@ -33,17 +35,17 @@ defaults:
       path: ""
       type: talks
     values:
-      layout: talks
+      layout: talk
   - scope:
       path: ""
       type: speakers
     values:
-      layout: speakers
+      layout: speaker
   - scope:
       path: ""
-      type: location
+      type: rooms
     values:
-      layout: location
+      layout: room
 
 
 conference:
@@ -54,9 +56,9 @@ conference:
   # Navigation bar
   navigation:
     logo:
-      name: Magic Organisation
+      name: Digital Society Switzerland
       # img: ''
-      url: 'https://github.com'
+      url: 'https://digitale-gesellschaft.ch/'
     links:
       - name: Program
         relative_url: /program/
@@ -66,21 +68,19 @@ conference:
         relative_url: /speakers/
       - name: Location
         relative_url: /location/
-      - name: About
-        relative_url: /about/
       - name: Previous Editions
         menu:
-          - name: 2018 (current)
+          - name: 2020 (current)
             disabled: true
-          - name: 2017
-            relative_url: /2017/
-          - name: 2016
-            relative_url: /2016/
+          - name: 2019
+            relative_url: /2019/
+          - name: 2018
+            relative_url: /2018/
 
   # Main landing page
   main:
-    logo:
-      img: ''
+    # logo:
+    #   img: ''
     links:
       - name: Program
         relative_url: /program/
@@ -92,16 +92,16 @@ conference:
 
   # Information boxes
   info_bars:
-    - title: Important Information
+    - title: Welcome to the Conference Theme for Jekyll!
       color: primary
       main_only: true
       text: |
-        We're truly sorry but we are sold out.
+        The Theme was originally made for the [Winterkongress](https://www.digitale-gesellschaft.ch/kongress/), a yearly conference of the [Digital Society Switzerland](https://digitale-gesellschaft.ch/).
 
         ---
 
-        Try again next year.
-    - text: The content on these pages is outdated!
+        See the [README](github.com/DigitaleGesellschaft/jekyll-conference/) on the project's GitHub repository for further information on how to configure and adapt it to your needs.
+    - text: This is just some random content for demonstration purposes.
       color: warning
       pages_only: true
 
@@ -120,6 +120,8 @@ conference:
   location:
     # Disable links to locations
     hide: false
+    # Disable map container
+    map: true
 
   program:
     # Time steps in program table

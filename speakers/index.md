@@ -1,4 +1,3 @@
 ---
-layout: overview_speakers
-title: Speakers
+layout: speaker-overview
 ---

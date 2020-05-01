@@ -1,0 +1,60 @@
+{% include partials/header.html %}
+
+  <!-- title for print: -->
+  <h1 class="display-5 mb-3 d-none d-print-inline">
+    {{ this_room.name }}
+  </h1>
+
+  <!-- title shown in browser: -->
+  <h1 class="display-5 mb-3 d-print-none">
+    {{ site.data.lang[site.conference.lang].location.title }}
+  </h1>
+
+  {% assign this_room = page %}
+  {% include partials/navbar_rooms.html %}
+
+  {{ content }}
+
+  <h5 class="mt-4 mb-1">
+    {{ site.data.lang[site.conference.lang].location.talks }}:
+  </h5>
+  <ul class="list-unstyled">
+    {% for r in site.data.program %}
+      {% assign room_talks = false %}
+      {% if this_room.name == r.room %}
+        {% if r.talks.size > 0 %}
+          {% for t in r.talks %}
+            {% assign talk = site.talks | where: 'name', t.name | first %}
+            {% include partials/get_main_category.html %}
+
+            <li class="d-flex flex-row">
+              <div class="flex-column">
+                {% include partials/get_talk_time.html %}
+                {% include partials/show_talk_time.html %}
+              </div>
+              <div class="flex-column ml-2 pl-2 mb-2 border-soft-{{ main_cat_color }}">
+                <p class="mb-0">
+                  {% include partials/show_talk.html %}
+                </p>
+                <p class="font-weight-light mb-0">
+                  {% include partials/list_speakers.html %}
+                </p>
+              </div>
+            </li>
+
+          {% endfor %}
+          {% assign room_talks = true %}
+
+        {% endif %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    {% unless room_talks %}
+      <li>
+        <em>{{ site.data.lang[site.conference.lang].location.no_talks }}</em>
+      </li>
+    {% endunless %}
+
+  </ul>
+
+{% include partials/footer.html %}

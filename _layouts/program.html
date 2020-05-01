@@ -46,19 +46,25 @@
   {% assign nbr_steps = total_duration_min | divided_by: site.conference.program.time_steps %}
 
 
-  <h1 class="display-5 mb-4">{{ page.title }}</h1>
+  <h1 class="display-5 mb-4">
+    {% if page.title %}
+      {{ page.title }}
+    {% else %}
+      {{ site.data.lang[site.conference.lang].program.title }}
+    {% endif %}
+  </h1>
 
   {{ content }}
 
-  <div class="sticky-top overflow-hidden syncscroll" name="sync-table">
+  <div class="sticky-top syncscroll overflow-hidden" name="sync-table">
     <table class="table">
       <thead>
         <tr>
           <th scope="col" class="text-center">#</th>
-          <th scope="col"></th>
+          <th class="p-0" scope="col"></th>
           {% assign nbr_rooms = site.data.program | size %}
           {% for r in site.data.program %}
-            {% assign room = site.location | where: 'name', r.room | first %}
+            {% assign room = site.rooms | where: 'name', r.room | first %}
             <th scope="col" class="text-center">
               {% if room.hide %}
                 {{ room.name }}
@@ -67,7 +73,7 @@
               {% endif %}
             </th>
             {% if forloop.last != true %}
-              <th scope="col"></th>
+              <th class="p-0" scope="col"></th>
             {% endif %}
           {% endfor %}
         </tr>
@@ -75,9 +81,18 @@
     </table>
   </div>
 
-  <div class="syncscroll" style="overflow-y: scroll" name="sync-table">
+  <div class="syncscroll overflow-y-hidden" name="sync-table">
     <table class="table">
       <tbody>
+        <!--
+        The shadow of a previous program block should be above a later program block, thus
+        the earlier a program block the higher its z-index (opposite to the actual rendering).
+
+        Bootstrap uses as lowest z-index for its overlapping elements a z-index of 1000 (for
+        $zindex-dropdown).
+        -->
+        {% assign z-index-max = 999 %}
+
         {% for i in (1..nbr_steps) %}
           {% assign current_hour = i | minus: 1 | times: site.conference.program.time_steps | plus: start_min | divided_by: 60 | floor | plus: start_hour | modulo: 24  %}
           {% assign current_min = i | minus: 1 | times: site.conference.program.time_steps | plus: start_min | modulo: 60 %}
@@ -90,20 +105,20 @@
           <tr>
 
             {% if current_min == 0 %}
-              <th scope="row" class="text-center">
+              <th scope="row" class="text-center" style="z-index: {{ z-index-max }}">
                 {{ current_time }}
               </th>
             {% elsif site.conference.program.show_alltimes %}
-              <th scope="row" class="text-center text-muted">
+              <th scope="row" class="text-center text-muted" style="z-index: {{ z-index-max }}">
                 <span class="invisible">{{ current_hour }}</span><span class="font-weight-normal">:{{ current_min }}</span>
               </th>
             {% else %}
-              <th scope="row"></th>
+              <th scope="row" style="z-index: {{ z-index-max }}"></th>
             {% endif %}
-            <td></td>
+            <td class="p-0"></td>
 
             {% for r in site.data.program %}
-              {% assign room = site.location | where: 'name', r.room | first %}
+              {% assign room = site.rooms | where: 'name', r.room | first %}
 
               {% assign active_talk = false %}
               {% for t in r.talks %}
@@ -140,12 +155,12 @@
 
                   {% assign talk_nbr_steps = talk_duration_min | divided_by: site.conference.program.time_steps %}
                   {% include partials/get_main_category.html %}
-                  <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }} shadow-sm">
+                  <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }} shadow-sm" style="z-index: {{ z-index-max | minus: i }}">
 
-                    <p class="h5">
+                    <p class="mb-2">
                       {% include partials/show_talk.html %}
                     </p>
-                    <p class="font-weight-light mb-1">
+                    <p class="font-weight-light mb-2">
                       {% include partials/list_speakers.html %}
                     </p>
                     <p class="mb-1">
@@ -159,11 +174,11 @@
               {% endfor %}
 
               {% unless active_talk %}
-                <td></td>
+                <td class="p-0"></td>
               {% endunless %}
 
               {% if forloop.last != true %}
-                <td></td>
+                <td class="p-0"></td>
               {% endif %}
 
             {% endfor %}
@@ -175,15 +190,12 @@
   </div>
 
   {% if site.conference.talks.main_categories %}
-    &nbsp;
-    <h5>{{ site.data.lang[site.conference.lang].talks.legend }}</h5>
-    <div class="d-flex flex-lg-row flex-column container-fluid m-n1 p-0">
+    <h5 class="mt-4">{{ site.data.lang[site.conference.lang].talks.legend }}</h5>
       {% for main_cat in site.conference.talks.main_categories %}
-        <div class="m-1 p-1 pl-2 pr-2 border-soft-{{ main_cat.color }} bg-soft-{{ main_cat.color }} font-weight-normal">
+        <div class="d-block d-sm-inline-block m-1 p-1 pl-2 pr-2 border-soft-{{ main_cat.color }} bg-soft-{{ main_cat.color }} font-weight-normal">
           {{ main_cat.name }}
         </div>
       {% endfor %}
-    </div>
   {% endif %}
 
 {% include partials/footer.html %}

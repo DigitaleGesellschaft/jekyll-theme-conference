@@ -3,7 +3,10 @@
   <div class="jumbotron">
     <h1 class="display-3">
       {% if site.conference.main.logo.img %}
-        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75" alt="{{ site.title }}" />
+        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+      {% elsif page.title %}
+        {{ page.title }}
       {% else %}
         {{ site.title }}
       {% endif %}
@@ -22,11 +25,11 @@
       <p class="lead d-print-none">
       {% for link in site.conference.main.links %}
         {% if link.disabled %}
-          <a class="btn btn-primary btn-lg mt-2 disabled" href="#">
+          <a class="btn btn-outline-primary btn-lg mt-2 disabled" href="#">
             {{ link.name }}
           </a>
         {% else %}
-          <a class="btn btn-primary btn-lg mt-2" href="{% if link.absolute_url %}{{ link.absolute_url }}{% else %}{{ link.relative_url | prepend: site.baseurl }}{% endif %}" role="button">
+          <a class="btn btn-outline-primary btn-lg mt-2" href="{% if link.absolute_url %}{{ link.absolute_url }}{% else %}{{ link.relative_url | prepend: site.baseurl }}{% endif %}" role="button">
             {{ link.name }}
           </a>
         {% endif %}

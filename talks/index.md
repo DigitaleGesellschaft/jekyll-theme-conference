@@ -1,4 +1,3 @@
 ---
-layout: overview_talks
-title: Talks
+layout: talk-overview
 ---

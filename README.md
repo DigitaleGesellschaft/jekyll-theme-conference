@@ -8,10 +8,10 @@ This is a [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 4](http://getb
 - talk and speaker descriptions
 - map for directions
 
-All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a `yaml` file. There is no need for databases and once generated the website consists only of static files.
+All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files.
 The design is easily modifiable and is adapted for mobile uses and printing.
 
-The theme was originally created for the yearly Winterkongress conference of th [Digital Society Switzerland](https://digitale-gesellschaft.ch/). Thus, you can see this theme in action here:
+The theme was originally created for the yearly Winterkongress conference of the [Digital Society Switzerland](https://digitale-gesellschaft.ch/). You can see this theme in action here:
 
 - [Demo: Winterkongress](https://digitale-gesellschaft.ch/kongress/)
 
@@ -31,10 +31,10 @@ Currently, the theme is not uploaded on [RubyGems](https://rubygems.org/), which
 4. Fetch and update bundled gems by running the following [Bundler](http://bundler.io/) command:
 
    ```bash
-   bundle
+   bundle install
    ```
 
-5. Set the `theme` in your project's Jekyll `_config.yml` file:
+5. Set the `theme` in your project's Jekyll `_config.yml` file (and replace any existing definition):
 
    ```yaml
    theme: jekyll-theme-conference
@@ -48,88 +48,66 @@ To update the theme simply download this repository again and overwrite your loc
 
 ## Setup
 
-The different talks, speakers and rooms are stored as a collection of file. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) which is used to store additional information beside a description. Their exact use and meaning is decribed further below in the section _Individual Pages_. For now, the only important FrontMatter property is the `name` property, used across the theme to identify the talk/spear/room in question.
+The different talks, speakers and rooms are stored as a collection of file. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) which is used to store additional information beside a description. Their exact use and meaning is described further below in the section _Content_. Additional configuration options can be found in the section _Configuration_.
 
-The actual schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/).
+The actual schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/) under `_data/program.yml`. For further details about it see below in the section _Content_.
 
-1. Open the Jekyll configuration file (`_config.yml`) and add the following lines. The first block defines three new collections (`talks`, `speakers` and `rooms`) and the URL under which they will later be accessed. The second block defines the default layout for each of the collection.
+In order to be up and running simply use the default content of this repository as an initial base for your new website. After having setup a new Jekyll website copy the following files and folders into the website's folder:
 
-   ```yaml
-   collections:
-     talks:
-       output: true
-       permalink: /:collection/:title/
-     speakers:
-       output: true
-       permalink: /:collection/:title/
-     location:
-       output: true
-       permalink: /:collection/:title/
-
-   defaults:
-     - scope:
-         path: ""
-         type: talks
-       values:
-         layout: talks
-     - scope:
-         path: ""
-         type: speakers
-       values:
-         layout: speakers
-     - scope:
-         path: ""
-         type: location
-       values:
-         layout: location
-   ```
-
-2. Create a folder for each collection starting with an underscore (their names must match the names given in the `collections` property above), i.e. `_talks/`, `_speakers` and `_location`.
-3. Add files to each of them, each must contain a `name` property. For a start you can copy the files of the respective folders of this repository.
-4. Link the different files via a schedule which should be stored in the `_data/program.yml` file (again you can start with the example provided in this repository). It consists of an array of rooms each consisting of a
-
-   - `room` name (must correspond to one of the room identifier), and
-   - an array of `talks` which also can be empty `[]`.
-
-   The order of the room in the file defines the order of the rooms on the website (program and room listings). Each talk in the array consists of
-
-   - a `name` (must correspond to one of the talk identifier),
-   - a starting time `time_start` given as `H:M` ([`strftime`](http://www.strfti.me) formated), and
-   - an end time `time_end`.
-
-   The array should (manually) be ordered by time. Currently talks can only take place on the same day and multi-day conferences are not supported.
-
-   Example:
-
-   ```yaml
-   - room: Room A
-     talks:
-       - name: Vim Impetus Placerat Cotidieque Ad
-         time_start: '12:00'
-         time_end: '12:45'
-       - name: Condimentum Vitae Sapien Pellentesque
-         time_start: '12:45'
-         time_end: '13:30'
-   - room: Room B
-     talks:
-       ...
-   ```
-
-5. Create a landing page for each of the collections under:
-
-   - `talks/index.md` with `layout: overview_talks`
-   - `speakers/index.md` with `layout: overview_speaker`
-   - `location/index.md` with `layout: location`
-
-   They can be empty but should contain the `layout` property in the FrontMatter header.
+- `_config.example.yml` -> `_config.yml`
+- `_data/`
+- `_rooms/`
+- `_speakers/`
+- `_talks/`
+- `index.md`
+- `location/`
+- `program/`
+- `speakers/`
+- `talks/`
 
 There exists a Python file in this repository, `create_entries.py`, which can be used to import content from a CSV table and generate the different talk, speakers and room files automatically based on it. Just open your terminal and type `python create_entries.py --help` to show the help and get started.
 
-For additional properties and customization of the talk, speaker and location files see the following section _Configuration_. In particular you might want to adapt the `talks: main_categories` property to (color) group your different talks into several main categories.
 
 ## Configuration
 
 All configurations and customization for this theme are stored under the `conference` property in the `_config.yml` file. You can find an example configuration containing most of the here discussed parameters under `_config.example.yml` in this repository.
+
+### Collection URLs
+
+The three required collections containing the files for the talks, speakers and rooms have to be specified in the `_config.yml` file. The first block declares them and sets the URL under which they will later be accessed. The second block defines the default layout for each of the collection.
+
+```yaml
+collections:
+  talks:
+    output: true
+    permalink: /:collection/:title/
+  speakers:
+    output: true
+    permalink: /:collection/:title/
+  rooms:
+    output: true
+    permalink: /:collection/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talk
+  - scope:
+      path: ""
+      type: speakers
+    values:
+      layout: speaker
+  - scope:
+      path: ""
+      type: rooms
+    values:
+      layout: room
+```
+
+_Note:_ While you might want to change the URLs, the name of the three collections (`talks`, `speakers` and `rooms`) is fixed and cannot be changed.
+
 
 ### Language
 
@@ -286,9 +264,9 @@ conference:
         color: success
 ```
 
-### Speaker Settings: Firstname
+### Speaker Settings: First name
 
-In the program as well as the speaker's overview the speaker's first name can be abbreviated to its first letter. Of course, you also have the option to not specify a first name for each speaker in the first place. In order to shorten the firstname add the `show_firstname: true` setting (default: `false`) to the `speakers` property.
+In the program as well as the speaker's overview the speaker's first name can be abbreviated to its first letter. Of course, you also have the option to not specify a first name for each speaker in the first place. In order to shorten the first name add the `show_firstname: true` setting (default: `false`) to the `speakers` property.
 
 Example:
 
@@ -298,9 +276,12 @@ conference:
     show_firstname: false
 ```
 
-### Location Settings: Hide
+### Location Settings: Hide all and disable map
 
-In case the location of your rooms is obvious (e.g. on a campus) you can decide to disable the location page and links to all the rooms. You still need to create the different rooms as files in the `_rooms/` directory (or the one you specified during configuration), since they are needed as a reference. But there will not be any link pointing to it (effectively hiding them). In order to hide all rooms add the `hide: true` setting (default: `false`) to the `location` property:
+In case the location of your rooms is obvious (e.g. on a campus) you can decide to disable the location page and links to all the rooms. You still need to create the different rooms as files in the `_rooms/` directory, since they are needed as a reference. But there will not be any link pointing to it (effectively hiding them).
+In order to hide all rooms add the `hide: true` setting (default: `false`) to the `location` property.
+
+Alternatively, you can show the rooms as usual but hide the map container on the room overview page. In order to hide only the map add the `map: false` setting (default: `true`) to the `location` property.
 
 Example:
 
@@ -308,6 +289,7 @@ Example:
 conference:
   location:
     hide: true
+    map: false
 ```
 
 ### Program Settings
@@ -326,13 +308,45 @@ conference:
     show_alltimes: true
 ```
 
-## Individual Pages
+## Content
 
-Besides the overall website, the individual files containing the description for the talks, the speakers and the rooms can also be adapted.
+The different talks, speakers and rooms are stored as a collection of file. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) which is used to store additional information beside a description.
+The actual schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/).
+
+### Schedule / Program
+
+The schedule of the conference linking the talks with the rooms and indicating when each talk talks place and how long it goes is set in the `_data/program.yml` file. It consists of an array of rooms each consisting of a
+
+- `room` name (must correspond to one of the room identifier), and
+- an array of `talks` which also can be empty `[]`.
+
+The order of the room in the file defines the order of the rooms on the website (program and room listings). Each talk in the array consists of
+
+- a `name` (must correspond to one of the talk identifier),
+- a starting time `time_start` given as `H:M` ([`strftime`](http://www.strfti.me) formated), and
+- an end time `time_end`.
+
+The array should (manually) be ordered by time. Currently talks can only take place on the same day and multi-day conferences are not supported.
+
+Example:
+
+```yaml
+- room: Room A
+  talks:
+    - name: Vim Impetus Placerat Cotidieque Ad
+      time_start: '12:00'
+      time_end: '12:45'
+    - name: Condimentum Vitae Sapien Pellentesque
+      time_start: '12:45'
+      time_end: '13:30'
+- room: Room B
+  talks:
+    ...
+```
 
 ### Talks
 
-Each talk is represented by file in the `_talks/` directory (or the one you specified during configuration). It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
+Each talk is represented by file in the `_talks/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the talk's `name` (used as identifier),
 - one or more existing `speakers` name(s), and
@@ -344,7 +358,7 @@ Each talk is represented by file in the `_talks/` directory (or the one you spec
 
 ### Speakers
 
-Each speaker is represented by file in the `_speakers/` directory (or the one you specified during configuration). It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
+Each speaker is represented by file in the `_speakers/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the speaker's `name` (used as identifier), as well as its
 - `first_name`,
@@ -354,14 +368,28 @@ Each speaker is represented by file in the `_speakers/` directory (or the one yo
   - either an absolute link `href` or a `file` name (of a file stored under `/documents/`)
 - optionally `hide: true` if the speaker's page should not be linked to.
 
-### Location & Rooms
+### Rooms
 
-Each room is represented by file in the `_location/` directory (no ending `s`, or the one you specified during configuration). It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
+Each room is represented by file in the `_rooms/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the room's `name`, and
 - optionally `hide: true` if the room's page should not be linked to.
 
-Furthermore, one can add a main location page under `location/index.md`.  Its layout should be set to `layou: location`. This layout consists of a small navigation bar containing a link to each room (which is not set to be hidden), the content of the file using the layout, and a map. The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/map.js` file (copy it from this repository).
+
+## Overview Pages
+
+For each of the three collections there exist a dedicated layout giving an overview among all items of the collection. Furthermore, there exists a layout to show the program as a time schedule. Simply create an empty page and associate the corresponding layout with it:
+
+- `talks/index.md` with `layout: talk-overview`
+- `speakers/index.md` with `layout: speaker-overview`
+- `location/index.md` with `layout: location`
+- `program/index.md` with `layout: program`
+
+They can be empty but should contain the `layout` property in the FrontMatter header.
+
+### Location / Room Overview
+
+The `location` layout contains a map container (if not disabled, see section _Location Settings: Hide all and disable map_ above) which can be adapted. The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/map.js` file (copy it from this repository).
 
 ### Additional Pages
 
@@ -386,7 +414,7 @@ Custom Bootstrap themes or simple color schemes such as designed with [Bootstrap
 
    Do not skip the `$fa-font-path` variable or modify it as otherwise, the FontAwesome icons will not be able to load.
 
-2. Add your Bootstrap variables in front of the `@import 'conference'` line.
+2. Add your Bootstrap variables in front of the `@import 'conference'` line, e.g. currently the primary color is set internally to green (instead of Bootstrap's default blue): `$primary: #074 !default;`
 3. Add any additional CSS styles after it.
 
 

@@ -7,14 +7,18 @@ en:
   more_information: More Information
   location:
     title: Location
+    directions: Directions
     talks: Talks in this room
     no_talks: no talks planned
   program:
     title: Program
     legend: Caption
   speaker:
+    overview: Speakers
     title: Speaker
     talks: Talks at this conference
+  talk:
+    overview: Talks
 
 de:
   pronoun:
@@ -25,14 +29,18 @@ de:
   more_information: Weitere Informationen
   location:
     title: Örtlichkeit
+    directions: Anfahrt
     talks: Vorträge in diesem Raum
     no_talks: keine Vorträge geplant
   program:
     title: Programm
     legend: Legende
   speaker:
+    overview: Vortragende
     title: Vortragende
     talks: Vorträge an dieser Konferenz
+  talk:
+    overview: Vorträge
 
 fr:
   pronoun:
@@ -43,14 +51,18 @@ fr:
   more_information: Plus d'informations
   location:
     title: Lieu
+    directions: Indications
     talks: Présentations dans cette salle
     no_talks: pas des présentations prévues
   program:
     title: Programme
     legend: Légende
   speaker:
+    overview: Intervenants
     title: Intervenant
     talks: Présentations lors de cette conférence
+  talk:
+    overview: Présentations
 
 pt:
   pronoun:
@@ -61,11 +73,15 @@ pt:
   more_information: Mais informações
   location:
     title: Localização
+    directions: Indicações
     talks: Apresentações nesta sala
     no_talks: não estão previstas apresentações
   program:
     title: Programa
     legend: Legenda
   speaker:
+    overview: Palestrantes
     title: Palestrante
     talks: Apresentações nesta conferência
+  talk:
+    overview: Apresentações

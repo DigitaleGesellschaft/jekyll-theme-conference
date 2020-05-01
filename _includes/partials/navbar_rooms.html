@@ -1,0 +1,43 @@
+<ul class="nav nav-pills d-print-none mb-3">
+  <li class="nav-item">
+    <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{% link location/index.md %}">
+      {{ site.data.lang[site.conference.lang].location.directions }}
+    </a>
+  </li>
+  {% for r in site.data.program %}
+    {% assign room = site.rooms | where: 'name', r.room | first %}
+    <li class="nav-item">
+      {% if room.hide %}
+        <span class="nav-item nav-link disabled">
+          {{ room.name }}
+        </span>
+      {% else %}
+        <a class="nav-link {% if this_room.name == room.name %}active{% endif %}" href="{{ room.url | prepend: site.baseurl }}">
+          {{ room.name }}
+        </a>
+      {% endif %}
+    </li>
+  {% endfor %}
+  {% for room in site.rooms %}
+    {% assign room_displayed = false %}
+    {% for r in site.data.program %}
+      {% if room.name == r.room %}
+        {% assign room_displayed = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    {% unless room_displayed %}
+      <li class="nav-item">
+        {% if room.hide %}
+          <span class="nav-item nav-link disabled">
+            {{ room.name }}
+          </span>
+        {% else %}
+          <a class="nav-link {% if this_room.name == room.name %}active{% endif %}" href="{{ room.url | prepend: site.baseurl }}">
+            {{ room.name }}
+          </a>
+        {% endif %}
+      </li>
+    {% endunless %}
+  {% endfor %}
+</ul>
