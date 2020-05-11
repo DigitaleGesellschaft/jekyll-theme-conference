@@ -48,7 +48,7 @@ To update the theme simply download this repository again and overwrite your loc
 
 ## Setup
 
-The different talks, speakers and rooms are stored as a collection of file. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) which is used to store additional information beside a description. Their exact use and meaning is described further below in the section _Content_. Additional configuration options can be found in the section _Configuration_.
+The different talks, speakers and rooms are stored as a collection of files. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) which is used to store additional information beside a description. Their exact use and meaning is described further below in the section _Content_. Additional configuration options can be found in the section _Configuration_.
 
 The actual schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/) under `_data/program.yml`. For further details about it see below in the section _Content_.
 
@@ -351,7 +351,7 @@ Example:
 
 ### Talks
 
-Each talk is represented by file in the `_talks/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
+Each talk is represented by a file in the `_talks/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the talk's `name` (used as identifier),
 - one or more existing `speakers` name(s), and
@@ -363,7 +363,7 @@ Each talk is represented by file in the `_talks/` directory. It must begin with 
 
 ### Speakers
 
-Each speaker is represented by file in the `_speakers/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
+Each speaker is represented by a file in the `_speakers/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the speaker's `name` (used as identifier), as well as its
 - `first_name`,
@@ -375,7 +375,7 @@ Each speaker is represented by file in the `_speakers/` directory. It must begin
 
 ### Rooms
 
-Each room is represented by file in the `_rooms/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
+Each room is represented by a file in the `_rooms/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the room's `name`, and
 - optionally `hide: true` if the room's page should not be linked to.
@@ -408,7 +408,7 @@ Additional static pages can easily be added as files and linked to via navigatio
 
 ## Design
 
-The design is based on the [Bootstrap 4](http://getbootstrap.com) and thus easily expendable. Furthermore, it makes use of the [FontAwesome Icons](fontawesome.com/) across the theme.
+The design is based on the [Bootstrap 4](http://getbootstrap.com) and thus easily expandable. Furthermore, it makes use of the [FontAwesome Icons](fontawesome.com/) across the theme.
 Custom Bootstrap themes or simple color schemes such as designed with [Bootstrap Magic](https://pikock.github.io/bootstrap-magic/) can be added in the [main](assets/css/main.scss) SASS stylesheet:
 
 1. Create a new file under `assets/css/main.scss` with the following content (or copy the one of this repository):
