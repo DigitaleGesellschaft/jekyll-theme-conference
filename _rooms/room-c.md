@@ -2,4 +2,4 @@
 name: Room C
 ---
 
-A short way description on how to find the room
+A different way description on how to find this room

@@ -103,7 +103,7 @@ conference:
 
         ---
 
-        See the [README](github.com/DigitaleGesellschaft/jekyll-conference/) on the project's GitHub repository for further information on how to configure and adapt it to your needs.
+        See the [README](github.com/DigitaleGesellschaft/jekyll-theme-conference/) on the project's GitHub repository for further information on how to configure and adapt it to your needs.
     - text: This is just some random content for demonstration purposes.
       color: warning
       pages_only: true

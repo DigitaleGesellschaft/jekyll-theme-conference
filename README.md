@@ -1,4 +1,4 @@
-# jekyll-conference
+# jekyll-theme-conference
 
 ![Screenshot](screenshot.png)
 

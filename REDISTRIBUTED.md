@@ -1,4 +1,4 @@
-# jekyll-conference
+# jekyll-theme-conference
 
 Copyright (C) 2017-2020 Lorenz Schmid
 Released under [MIT](LICENSE.md).
