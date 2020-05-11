@@ -18,32 +18,69 @@ The theme was originally created for the yearly Winterkongress conference of the
 
 ## Installation
 
-Currently, the theme is not uploaded on [RubyGems](https://rubygems.org/), which is normally used to retrieve Gem-based Jekyll themes. But you can download/clone this repository and reference to it locally:
+There are three ways to install: As a [Gem-based theme](https://jekyllrb.com/docs/themes/#understanding-gem-based-themes), as a [remote theme](https://github.blog/2017-11-29-use-any-theme-with-github-pages/) (GitHub Pages compatible), or by cloning/forking this repository and reference to it directly.
 
-1. Install Jekyll and Bundler and create a new Jekyll site as described in the [Jekyll documentation](https://jekyllrb.com/docs/)
-2. Download this repository and store it somewhere close to the folder containing your new website
-3. Change into the newly created folder containing your website and [add the following to the `Gemfile`](https://jekyllrb.com/docs/themes/#installing-a-theme), the `path` section should point to the folder containing the downloaded source of this theme:
+### Gem-based Method
+
+With Gem-based themes, directories such as the `assets`, `_layouts`, `_includes`, and `_sass` are stored in the theme’s gem, hidden from your immediate view. Yet all of the necessary directories will be read and processed during Jekyll’s build process.
+
+This allows for easier installation and updating as you don't have to manage any of the theme files. To install:
+
+1. Add the following to your `Gemfile`:
 
    ```ruby
-   gem "jekyll-theme-conference", "~> 2.0.0", path: "../jekyll-conference"
+   gem "jekyll-theme-conference"
    ```
 
-4. Fetch and update bundled gems by running the following [Bundler](http://bundler.io/) command:
+2. Fetch and update bundled gems by running the following [Bundler](http://bundler.io/) command:
 
    ```bash
-   bundle install
+   bundle
    ```
 
-5. Set the `theme` in your project's Jekyll `_config.yml` file (and replace any existing definition):
+3. Set the `theme` in your project's Jekyll `_config.yml` file:
 
    ```yaml
    theme: jekyll-theme-conference
    ```
 
-6. Copy the internationalization file containing the different language strings for this theme to your website. It is located under `_data/lang.yml`
-7. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
+4. Copy the internationalization file containing the different language strings for this repository to your Jekyll folder:
 
-To update the theme simply download this repository again and overwrite your local version of it.
+   - `_data/lang.yml`
+
+5. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
+
+To update the theme run `bundle update`.
+
+### Remote Theme Method
+
+Remote themes are similar to Gem-based themes, but do not require `Gemfile` changes or whitelisting making them ideal for sites hosted with GitHub Pages.
+
+To install:
+
+1. Create/replace the contents of your `Gemfile` with the following:
+
+   ```ruby
+   source "https://rubygems.org"
+
+   gem "github-pages", group: :jekyll_plugins
+   ```
+
+2. Add `jekyll-include-cache` to the `plugins` array of your `_config.yml`.
+
+3. Fetch and update bundled gems by running the following [Bundler](http://bundler.io/) command:
+
+   ```bash
+   bundle
+   ```
+
+4. Add `remote_theme: "DigitaleGesellschaft/jekyll-conference@2.0.0"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
+
+5. Copy the internationalization file containing the different language strings for this repository to your Jekyll folder:
+
+   - `_data/lang.yml`
+
+6. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
 
 
 ## Setup
@@ -66,6 +103,10 @@ In order to be up and running simply use the default content of this repository 
 - `talks/`
 
 There exists a Python file in this repository, `create_entries.py`, which can be used to import content from a CSV table and generate the different talk, speakers and room files automatically based on it. Just open your terminal and type `python create_entries.py --help` to show the help and get started.
+
+In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains an example Github Action configuration file which automatically builds the website upon adding a new tag. It then attaches the generated website as package to a release for easy downloading. Simply copy the following file to your repository and adapt it to your needs:
+
+- `workflows.example.yml` -> `.github/workflows.main.yml`
 
 
 ## Configuration

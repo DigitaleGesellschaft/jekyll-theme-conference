@@ -14,9 +14,12 @@ exclude:
   - README.md
   - LICENSE.md
   - REDISTRIBUTED.md
-  - create_entries.py
-  - _config.example.yml
   - screenshot.png
+  - .github/
+  - create_entries.py
+  - update_assets.py
+  - _config.example.yml
+  - workflows.example.yml
 
 # Collections and their defaults
 collections:
