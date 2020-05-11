@@ -53,6 +53,9 @@ conference:
   # Language
   lang: en
 
+  # Show theme errors:
+  show_errors: True
+
   # Navigation bar
   navigation:
     logo:
@@ -118,12 +121,19 @@ conference:
     show_firstname: true
 
   location:
+    # URL of location / room overview page
+    url: '/location'
+
     # Disable links to locations
     hide: false
+
     # Disable map container
     map: true
 
   program:
+    # URL of program page
+    url: '/program'
+
     # Time steps in program table
     time_steps: 15 # in minutes
 

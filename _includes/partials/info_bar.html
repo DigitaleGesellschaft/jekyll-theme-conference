@@ -1,3 +1,16 @@
+{% if site.conference.show_errors %}
+  {% include partials/checks.html %}
+  {% if errors.size > 0 %}
+    {% for error in errors %}
+      <div class="alert alert-danger fade show" role="alert">
+        <h5 class="alert-heading">There was an error when generating when generating the site!</h5>
+
+        {{ error | markdownify }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endif %}
+
 {% if site.conference.info_bars.size > 0 %}
   {% for info_bar in site.conference.info_bars %}
     {% if page.url == "/" and info_bar.pages_only != true %}

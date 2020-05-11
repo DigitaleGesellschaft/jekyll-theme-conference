@@ -1,6 +1,6 @@
 <ul class="nav nav-pills d-print-none mb-3">
   <li class="nav-item">
-    <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{% link location/index.md %}">
+    <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.conference.location.url | prepend: site.baseurl }}">
       {{ site.data.lang[site.conference.lang].location.directions }}
     </a>
   </li>

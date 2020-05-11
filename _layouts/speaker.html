@@ -53,7 +53,7 @@
   {% endif %}
 
   <p class="d-print-none mt-5">
-    <a href="{% link speakers/index.md %}" class="btn btn-light">
+    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-light">
       <i class="fas fa-users"></i>
       {{ site.data.lang[site.conference.lang].overview }}
     </a>

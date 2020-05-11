@@ -50,13 +50,16 @@ defaults:
 # Theme default values
 conference:
   lang: en
+  show_errors: True
 
   speakers:
     show_firstname: true
 
   location:
+    url: '/location'
     map: true
 
   program:
+    url: '/program'
     time_steps: 15
     show_alltimes: true

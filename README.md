@@ -106,6 +106,8 @@ defaults:
       layout: room
 ```
 
+In order to change the URL of the collection, simply edit the `permalink` property and replace the `:collection` tag (which translates to `talks`, `speakers` and `rooms`) with your desired value. Please note that the talk and speaker overview pages should residue in a folder of the same name.
+
 _Note:_ While you might want to change the URLs, the name of the three collections (`talks`, `speakers` and `rooms`) is fixed and cannot be changed.
 
 
@@ -283,6 +285,8 @@ In order to hide all rooms add the `hide: true` setting (default: `false`) to th
 
 Alternatively, you can show the rooms as usual but hide the map container on the room overview page. In order to hide only the map add the `map: false` setting (default: `true`) to the `location` property.
 
+If your `location` overview file is not located under `/location` you can indicate an alternative path by setting the `url` property (default: `/location`) under the `location` property.
+
 Example:
 
 ```yaml
@@ -299,6 +303,7 @@ The schedule shown as program can be slightly customized:
 - The time steps shown with a new line can be adapted with the `time_steps` setting given in minute (default: `15` minutes)
 - Besides the full hour the individual time steps can be hidden by setting `show_alltimes: false` (default: `true`)
 
+If your `program` file is not located under `/program` you can indicate an alternative path by setting the `url` property (default: `/program`) under the `program` property.
 Example:
 
 ```yaml
@@ -386,6 +391,11 @@ For each of the three collections there exist a dedicated layout giving an overv
 - `program/index.md` with `layout: program`
 
 They can be empty but should contain the `layout` property in the FrontMatter header.
+
+If you choose a different location for the overview pages you must:
+
+- in case of the `talks` and `speaker` overview file, adapt the URL of the two collections as described further above in the section _Collection URLs_, and
+- in case of the `location` and `program` file, adapt the corresponding `url` parameter as described further above in the sections _Location Settings_ and _Program Settings_.
 
 ### Location / Room Overview
 
