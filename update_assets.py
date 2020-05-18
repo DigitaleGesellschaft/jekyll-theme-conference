@@ -85,6 +85,23 @@ ASSETS = {
             }
         ]
     },
+    'leaflet-awesome-markers': {
+        'repo': 'lvoogdt/Leaflet.awesome-markers',
+        'files': [
+            {
+                'src': 'dist/leaflet.awesome-markers.min.js',
+                'dest': '_includes/js/leaflet-awesome-markers.min.js'
+            },
+            {
+                'src': 'dist/leaflet.awesome-markers.css',
+                'dest': '_sass/leaflet/leaflet.awesome-markers.css',
+            },
+            {
+                'src': 'dist/images',
+                'dest': 'assets/css/images'
+            }
+        ]
+    },
     'syncscroll': {
         'repo': 'asvd/syncscroll',
         'files': [

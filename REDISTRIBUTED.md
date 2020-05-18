@@ -46,6 +46,12 @@ This project redistributes the following third-party software. We have decided t
     Copyright (c) 2013 Leaflet Providers contributors.
     All rights reserved.
     [BSD 2-Clause "Simplified" License](https://github.com/leaflet-extras/leaflet-providers/blob/master/license.md)
+ 
+ - [Leaflet-awesome-markers](https://github.com/lvoogdt/Leaflet.awesome-markers)
+
+    Copyright (c) 2013 Leaflet Awesome Markers contributors.
+    All rights reserved.
+    [MIT License](https://github.com/popperjs/popper-core/blob/master/LICENSE.md).
 
  - [Popper.js](https://popper.js.org)
 
