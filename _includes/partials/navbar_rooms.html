@@ -28,7 +28,7 @@
     {% endfor %}
     {% unless room_displayed %}
       <li class="nav-item">
-        {% if room.hide %}
+        {% if room.hide or site.conference.location.hide %}
           <span class="nav-item nav-link disabled">
             {{ room.name }}
           </span>

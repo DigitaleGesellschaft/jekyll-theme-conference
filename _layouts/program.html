@@ -66,7 +66,7 @@
           {% for r in site.data.program %}
             {% assign room = site.rooms | where: 'name', r.room | first %}
             <th scope="col" class="text-center">
-              {% if room.hide %}
+              {% if room.hide or site.conference.location.hide %}
                 {{ room.name }}
               {% else %}
                 <a class="text-reset" href="{{ room.url | prepend: site.baseurl }}">{{ room.name }}</a>

@@ -1,4 +1,4 @@
-{% if room.hide %}
+{% if room.hide or site.conference.location.hide %}
   <span class="badge badge-light font-weight-normal"><i class="far fa-square"></i> {{ room.name }}</span><!--
 {% else %}
   <a href="{{ room.url | prepend: site.baseurl }}" class="badge badge-light font-weight-normal"><i class="far fa-square"></i> {{ room.name }}</a><!--
