@@ -319,23 +319,30 @@ conference:
     show_firstname: false
 ```
 
-### Location Settings: Hide all and disable map
+### Location Settings: Hide all and configure map
 
 In case the location of your rooms is obvious (e.g. on a campus) you can decide to disable the location page and links to all the rooms. You still need to create the different rooms as files in the `_rooms/` directory, since they are needed as a reference. But there will not be any link pointing to it (effectively hiding them).
 In order to hide all rooms add the `hide: true` setting (default: `false`) to the `location` property.
 
-Alternatively, you can show the rooms as usual but hide the map container on the room overview page. In order to hide only the map add the `map: false` setting (default: `true`) to the `location` property.
-
 If your `location` overview file is not located under `/location` you can indicate an alternative path by setting the `url` property (default: `/location`) under the `location` property.
+
+The `location` layout automatically includes an [OpenStreetMap](https://www.openstreetmap.org/) container to point to your venue. If you want to hide it add the `enable: false` setting (default: `true`) to the `map` property under the `location` property. Otherwise, you can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
+The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitors current location (has to be manually activated and granted by the visitor).
 
 Example:
 
 ```yaml
 conference:
   location:
-    hide: true
-    map: false
+    hide: false
+    map:
+      enable: true
+      default_zoom: 17
+      home_coord: 47.37808, 8.53935
+      map_provider: "OpenStreetMap.Mapnik"
 ```
+
+The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/map.js` file, e.g. adding additional layers with markers, text, or shapes to the map. To start, copy simply the file from this repository. Please not that editing the `assets/js/map.js` file might break the map configuration as set in your `_config.yml` file.
 
 ### Program Settings
 
@@ -440,7 +447,7 @@ If you choose a different location for the overview pages you must:
 
 ### Location / Room Overview
 
-The `location` layout contains a map container (if not disabled, see section _Location Settings: Hide all and disable map_ above) which can be adapted. The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/map.js` file (copy it from this repository).
+The `location` layout contains a map container (if not disabled, see section _Location Settings_ above) which can be customized. See the section above for further details.
 
 ### Additional Pages
 

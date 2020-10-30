@@ -60,7 +60,11 @@ conference:
 
   location:
     url: '/location'
-    map: true
+    map:
+      enable: true
+      default_zoom: 17
+      home_coord: 47.37808, 8.53935
+      map_provider: "OpenStreetMap.Mapnik"
 
   program:
     url: '/program'
