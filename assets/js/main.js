@@ -18,5 +18,21 @@
         }).addTo(map);
 
         L.control.locate().addTo(map);
+
+        {% for m in site.conference.location.map.markers %}
+          var coord = [{{ m.coord }}];
+          var icon = L.AwesomeMarkers.icon({
+              {%- if m.icon %}
+              icon: "{{ m.icon }}",
+              prefix: 'fa',
+              {%- endif %}
+              iconColor: '{{ m.icon_color | default: "white" }}',
+              markerColor: '{{ m.marker_color | default: "red" }}'
+          });
+          var marker = L.marker(coord, {icon: icon}).addTo(map);
+          {% if m.description %}
+          marker.bindPopup("{{ m.description }}").openPopup();
+          {%- endif %}
+        {% endfor %}
     }
 })();

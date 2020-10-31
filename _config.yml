@@ -65,6 +65,13 @@ conference:
       default_zoom: 17
       home_coord: 47.37808, 8.53935
       map_provider: "OpenStreetMap.Mapnik"
+      markers:
+        - icon: "comments"  # https://fontawesome.com/icons?from=io
+          coord: 47.37808, 8.53935
+          marker_color: "red"
+          icon_color: "white"
+          description: >-
+            A short description
 
   program:
     url: '/program'

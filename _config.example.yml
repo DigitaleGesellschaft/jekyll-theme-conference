@@ -139,6 +139,18 @@ conference:
       #   - Esri.WorldTopoMap
       map_provider: "OpenStreetMap.Mapnik"
       default_zoom: 17
+      # markers for points of interest. As a minimum, each needs a coordinate
+      markers:
+        - coord: 47.37808, 8.53935
+          marker_color: "red"
+          # symbol on the marker
+          # use any fontawesome symbol name https://fontawesome.com/icons?from=io
+          icon: "comments"
+          icon_color: "white"
+          # (html) description shown above the marker
+          description: >-
+            <b>HBF</b>
+            A short description
 
   program:
     # URL of program page

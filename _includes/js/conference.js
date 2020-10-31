@@ -14,3 +14,4 @@
 {% include js/leaflet-easybutton.js %}
 {% include js/leaflet-locatecontrol.js %}
 {% include js/leaflet-providers.js %}
+{% include js/leaflet-awesome-markers.min.js %}
