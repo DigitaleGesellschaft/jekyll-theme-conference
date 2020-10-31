@@ -15,10 +15,10 @@
 
   {{ content }}
 
-  <h5 class="mt-4 mb-1">
+  <h5 class="mt-4 mb-2">
     {{ site.data.lang[site.conference.lang].location.talks }}:
   </h5>
-  <ul class="list-unstyled">
+  <ul class="list-program list-unstyled">
     {% for r in site.data.program %}
       {% assign room_talks = false %}
       {% if this_room.name == r.room %}

@@ -74,7 +74,7 @@ To install:
    bundle
    ```
 
-4. Add `remote_theme: "DigitaleGesellschaft/jekyll-conference@2.0.0"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
+4. Add `remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@2.0.0"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
 
 5. Copy the internationalization file containing the different language strings for this repository to your Jekyll folder:
 
@@ -112,6 +112,17 @@ In case you do not want to install the entire Ruby/Jekyll toolchain on your mach
 ## Configuration
 
 All configurations and customization for this theme are stored under the `conference` property in the `_config.yml` file. You can find an example configuration containing most of the here discussed parameters under `_config.example.yml` in this repository.
+
+### Theme Verifications
+
+Upon building the theme runs some basic verification to check if all necessary files and configurations are in place. If it encounters an error it shows so in adding an information bar on all your sites. You can disable this, e.g. in a production environment, by setting `show_errors` to `false` (default: `true`).
+
+Example:
+
+```yaml
+conference:
+  show_errors: false
+```
 
 ### Collection URLs
 

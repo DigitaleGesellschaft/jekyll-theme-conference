@@ -38,8 +38,8 @@ de:
     title: Programm
     legend: Legende
   speaker:
-    overview: Vortragende
-    title: Vortragende
+    overview: Redner
+    title: Redner:in
     talks: Vorträge an dieser Konferenz
   talk:
     overview: Vorträge

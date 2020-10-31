@@ -5,6 +5,7 @@
 $border-radius:                .1rem !default;
 $alert-border-width:           4px !default;
 $alert-color-level:            9 !default;
+$badge-font-size:              .85em !default;
 $enable-responsive-font-sizes: true !default;
 //     Set different default as Bootstrap's choice is a very flashy blue
 $primary:                      #074 !default;
@@ -134,6 +135,11 @@ $fa-font-path: '/assets/webfonts' !default;
   height: 50vh;
   min-height: 400px;
   width: 100%;
+}
+
+//   Program per Room
+.list-program li > div.flex-column:first-of-type {
+  width: 4em;
 }
 
 // Speaker

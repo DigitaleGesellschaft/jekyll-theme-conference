@@ -6,7 +6,7 @@
     {{ site.data.lang[site.conference.lang].speaker.title }}
   </p>
 
-  <h1 class="font-weight-light mb-4">
+  <h1 class="font-weight-light mb-3">
     {{ speaker.first_name }} {{ speaker.last_name }}
   </h1>
 
@@ -36,18 +36,33 @@
   {% if active_speaker %}
     <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].speaker.talks }}:</h5>
 
-    <ul class="list-unstyled">
-      {% for talk in site.talks %}
-        {% for speaker_name in talk.speakers %}
-          {% if speaker_name == speaker.name %}
+    <ul class="list-program list-unstyled">
+      {% for r in site.data.program %}
+        {% if r.talks.size > 0 %}
+          {% for t in r.talks %}
+            {% assign talk = site.talks | where: 'name', t.name | first %}
 
-            {% include partials/get_main_category.html %}
-            <li class="mb-1 ml-2 pl-2 border-soft-{{ main_cat_color }}">
-              {% include partials/show_talk.html %}
-            </li>
+            {% for speaker_name in talk.speakers %}
+              {% if speaker_name == speaker.name %}
 
-          {% endif %}
-        {% endfor %}
+                {% include partials/get_main_category.html %}
+
+                <li class="d-flex flex-row">
+                  <div class="flex-column">
+                    {% include partials/get_talk_time.html %}
+                    {% include partials/show_talk_time.html %}
+                  </div>
+                  <div class="flex-column ml-2 pl-2 mb-2 border-soft-{{ main_cat_color }}">
+                    <p class="mb-0">
+                      {% include partials/show_talk.html %}
+                    </p>
+                  </div>
+                </li>
+
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
       {% endfor %}
     </ul>
   {% endif %}

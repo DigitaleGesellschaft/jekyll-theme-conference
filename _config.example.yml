@@ -17,6 +17,7 @@ exclude:
   - LICENSE.md
   - REDISTRIBUTED.md
   - create_entries.py
+  - update_assets.py
 
 # Collections and their defaults
 collections:
