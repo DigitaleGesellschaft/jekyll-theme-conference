@@ -6,6 +6,9 @@ categories:
   - Cat A
   - Talk
 links:
+  - name: Recodring
+    icon: video
+    href: https://media.ccc.de/
   - name: Wikipedia
     href: https://en.wikipedia.org
 ---

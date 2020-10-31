@@ -418,6 +418,7 @@ Each talk is represented by a file in the `_talks/` directory. It must begin wit
 - optionally a list of `links` whereby each link element consist of
   - a `name`, and
   - either an absolute link `href` or a `file` name (of a file stored under `/documents/`)
+  - optionally a `icon` property indicating the name of a [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon to be shown in front of the link name (links with icons are shown separately and above regular links without icons)
 - optionally `hide: true` if the talk's page should not be linked to.
 
 ### Speakers

@@ -17,7 +17,10 @@
     <ul class="list-unstyled">
       {% for link in speaker.links %}
         <li class="mb-1 ml-2 pl-2 border-soft-primary">
-          {% include partials/get_link.html %}
+          {% include partials/get_link_href.html %}
+          <a class="text-reset" href="{{ link_href }}">
+            {{ link.name }}
+          </a>
         </li>
       {% endfor %}
     </ul>
