@@ -163,6 +163,29 @@ $fa-font-path: '/assets/webfonts' !default;
   }
 }
 
+// Modal Iframe
+//   Adapt iframe size to window while preserving video ratio
+.modal-body {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+
+  iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+}
+
+//   Add pointer cursor to links opening modals
+.cursor-pointer {
+  cursor: pointer;
+}
+
+
 // Print
 @media print {
   // remove underline for links

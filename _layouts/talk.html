@@ -58,6 +58,7 @@
 
   {% assign has_icon_links = false %}
   {% assign has_regular_links = false %}
+  {% assign has_iframe_links = false %}
   {% for link in talk.links %}
     {% if link.icon %}
       {% assign has_icon_links = true %}
@@ -72,7 +73,11 @@
         {% if link.icon %}
           <li class="mb-1 ml-2">
             {% include partials/get_link_href.html %}
-            <a href="{{ link_href }}">
+            {% if link.iframe %}
+              <a class="cursor-pointer" data-toggle="modal" data-target="#link-modal" data-title="{{ link.name }}" data-href="{{ link_href }}">
+            {% else %}
+              <a href="{{ link_href }}">
+            {% endif %}
               <i class="fas fa-{{ link.icon }} pr-1"></i>
               {{ link.name }}
             </a>
@@ -90,7 +95,11 @@
         {% unless link.icon %}
           <li class="mb-1 ml-2 pl-2 border-soft-primary">
             {% include partials/get_link_href.html %}
-            <a class="text-reset" href="{{ link_href }}">
+            {% if link.iframe %}
+              <a class="cursor-pointer text-reset" data-toggle="modal" data-target="#link-modal" data-title="{{ link.name }}" data-href="{{ link_href }}">
+            {% else %}
+              <a class="text-reset" href="{{ link_href }}">
+            {% endif %}
               {{ link.name }}
             </a>
           </li>
@@ -98,6 +107,25 @@
       {% endfor %}
     </ul>
   {% endif %}
+
+  <div class="modal fade" id="link-modal" tabindex="-1" role="dialog" aria-labelledby="link-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="link-modal-label"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <iframe src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="modal-footer">
+          <p class="modal-description"></p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <p class="d-print-none mt-5">
     <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-light">

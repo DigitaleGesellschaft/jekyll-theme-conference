@@ -419,6 +419,7 @@ Each talk is represented by a file in the `_talks/` directory. It must begin wit
   - a `name`, and
   - either an absolute link `href` or a `file` name (of a file stored under `/documents/`)
   - optionally a `icon` property indicating the name of a [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon to be shown in front of the link name (links with icons are shown separately and above regular links without icons)
+  - optionally a `iframe` property which if set to `true` opens a modal instead where the link's source is embedded in a iframe (e.g. for embedding videos thus having a default iframe ratio of 24:11)
 - optionally `hide: true` if the talk's page should not be linked to.
 
 ### Speakers
