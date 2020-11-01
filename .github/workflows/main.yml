@@ -8,6 +8,7 @@ on:
 #   - Sets the environment up
 #   - Builds the gem
 #   - Uploads the gem to RubyGem
+#   - Creates a GitHub release and attaches the gem to it
 jobs:
   build:
     name: Build + Publish
@@ -15,14 +16,17 @@ jobs:
 
     steps:
     - name: Checkout code
+      id: checkout_code
       uses: actions/checkout@v2
 
     - name: Set up Ruby 2.6
+      id: setup_ruby
       uses: actions/setup-ruby@v1
       with:
         version: 2.6.x
 
     - name: Publish to RubyGems
+      id: publish_rubygems
       run: |
         mkdir -p $HOME/.gem
         touch $HOME/.gem/credentials
@@ -30,11 +34,13 @@ jobs:
         printf -- "---\n:rubygems_api_key: ${RUBYGEMS_API_KEY}\n" > $HOME/.gem/credentials
         gem build *.gemspec
         gem push *.gem
+        mv *.gem jekyll-theme-conference.gem
       env:
         RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
 
     - name: Create Release
-      uses: actions/create-release@v1.0.0
+      id: create_release
+      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -44,7 +50,8 @@ jobs:
         prerelease: false
 
     - name: Upload Gem as Release Asset
-      uses: actions/upload-release-asset@v1.0.1
+      id: upload_asset_release
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -55,4 +62,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./*.gem
         asset_name: jekyll-theme-conference.gem
-        asset_content_type: application/zip
+        asset_content_type: application/x-tar
