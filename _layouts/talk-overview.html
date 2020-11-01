@@ -38,7 +38,7 @@
                   {% endif %}
                 {% endfor %}
 
-                {% if has_icon_links %}
+                {% if has_icon_links and site.conference.talks.hide_icons != true %}
                   <span class="{% if has_sub_categories %}ml-1{% endif %}">
                     {% for link in talk.links %}
                       {% if link.icon %}

@@ -290,7 +290,7 @@ conference:
         Try again next year.
 ```
 
-### Talk Settings: Main Categories
+### Talk Settings: Main Categories and Icons
 
 Each talk can have one or multiple categories associated via FrontMatter (see the _Individual Pages: Talks_ section below for more details). Some of these categories can be elevated to so called main categories". These are used to color group the talks across the entire website, particularly in the program. In order to do so add the `main_categories` property under the `talks` property. It consists of a list of all main categories. Each main category consists of:
 
@@ -305,6 +305,8 @@ Each talk can have one or multiple categories associated via FrontMatter (see th
   - `light` (white)
   - `dark` (dark grey)
 
+Each talk can have associated links listed at the end of its content. If these links have an icon associated (see _Content_ > _Talks_ below), they are also shown on the talk overview page (e.g. to show in the overview which talk has a video recording and which not). To disable the showing of icon links on the overviw page, set the `hide_icons` property to `true`.
+
 Example:
 
 ```yaml
@@ -316,6 +318,8 @@ conference:
         color: info
       - name: Cat B
         color: success
+    # Hide icons on talk overview page
+    hide_icons: false
 ```
 
 ### Speaker Settings: First name
