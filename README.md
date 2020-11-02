@@ -353,7 +353,29 @@ conference:
       map_provider: "OpenStreetMap.Mapnik"
 ```
 
-The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/map.js` file, e.g. adding additional layers with markers, text, or shapes to the map. To start, copy simply the file from this repository. Please not that editing the `assets/js/map.js` file might break the map configuration as set in your `_config.yml` file.
+The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/main.js` file, e.g. adding additional layers with markers, text, or shapes to the map. To start, copy simply the file from this repository and make use of the initialized global variable `map` pointing to the Leaflet container.
+
+Example:
+
+```javascript
+---
+---
+
+{% include js/conference.js %}
+
+(function() {
+    if (typeof map !== 'undefined') {
+        var main_station = L.marker([47.37785, 8.54035], {
+            icon: L.divIcon({
+                className: '',
+                html: '<span class="fas fa-train"></span> Bahnhof Zürich',
+                iconSize: [120, 56]
+            })
+        }).addTo(map);
+    }
+})();
+
+```
 
 ### Program Settings
 
