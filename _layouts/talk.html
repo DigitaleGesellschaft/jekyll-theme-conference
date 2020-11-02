@@ -56,28 +56,18 @@
 
   {{ content }}
 
-  {% assign has_icon_links = false %}
-  {% assign has_regular_links = false %}
-  {% for link in talk.links %}
-    {% if link.icon %}
-      {% assign has_icon_links = true %}
-    {% else %}
-      {% assign has_regular_links = true %}
-    {% endif %}
-  {% endfor %}
+  {% include partials/get_link_types.html %}
 
   {% if has_icon_links %}
     <ul class="list-unstyled">
       {% for link in talk.links %}
-        {% if link.icon %}
+        {% assign link_styleclass = "" %}
+        {% include partials/get_link.html %}
+
+        {% if link_icon %}
           <li class="mb-1 ml-2">
-            {% include partials/get_link_href.html %}
-            {% if link.iframe %}
-              <a class="cursor-pointer" data-toggle="modal" data-target="#link-modal" data-title="{{ link.name }}" data-href="{{ link_href }}">
-            {% else %}
-              <a href="{{ link_href }}">
-            {% endif %}
-              <i class="fas fa-{{ link.icon }} pr-1"></i>
+            {{ link_tag }}
+              <i class="fas fa-{{ link_icon }} pr-1"></i>
               {{ link.name }}
             </a>
           </li>
@@ -91,14 +81,12 @@
 
     <ul class="list-unstyled">
       {% for link in talk.links %}
-        {% unless link.icon %}
+        {% assign link_styleclass = "text-reset" %}
+        {% include partials/get_link.html %}
+
+        {% unless link_icon %}
           <li class="mb-1 ml-2 pl-2 border-soft-primary">
-            {% include partials/get_link_href.html %}
-            {% if link.iframe %}
-              <a class="cursor-pointer text-reset" data-toggle="modal" data-target="#link-modal" data-title="{{ link.name }}" data-href="{{ link_href }}">
-            {% else %}
-              <a class="text-reset" href="{{ link_href }}">
-            {% endif %}
+            {{ link_tag }}
               {{ link.name }}
             </a>
           </li>

@@ -12,16 +12,41 @@
 
   {{ content }}
 
-  {% if speaker.links %}
-    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information }}:</h5>
+  {% include partials/get_link_types.html %}
+
+  {% if has_icon_links %}
     <ul class="list-unstyled">
       {% for link in speaker.links %}
-        <li class="mb-1 ml-2 pl-2 border-soft-primary">
-          {% include partials/get_link_href.html %}
-          <a class="text-reset" href="{{ link_href }}">
-            {{ link.name }}
-          </a>
-        </li>
+        {% assign link_styleclass = "" %}
+        {% include partials/get_link.html %}
+
+        {% if link_icon %}
+          <li class="mb-1 ml-2">
+            {{ link_tag }}
+              <i class="fas fa-{{ link_icon }} pr-1"></i>
+              {{ link.name }}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if has_regular_links %}
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information }}:</h5>
+
+    <ul class="list-unstyled">
+      {% for link in speaker.links %}
+        {% assign link_styleclass = "text-reset" %}
+        {% include partials/get_link.html %}
+
+        {% unless link_icon %}
+          <li class="mb-1 ml-2 pl-2 border-soft-primary">
+            {{ link_tag }}
+              {{ link.name }}
+            </a>
+          </li>
+        {% endunless %}
       {% endfor %}
     </ul>
   {% endif %}

@@ -24,15 +24,11 @@
     {% if site.conference.main.links %}
       <p class="lead d-print-none">
       {% for link in site.conference.main.links %}
-        {% if link.disabled %}
-          <a class="btn btn-outline-primary btn-lg mt-2 disabled" href="#">
-            {{ link.name }}
-          </a>
-        {% else %}
-          <a class="btn btn-outline-primary btn-lg mt-2" href="{% if link.absolute_url %}{{ link.absolute_url }}{% else %}{{ link.relative_url | prepend: site.baseurl }}{% endif %}" role="button">
-            {{ link.name }}
-          </a>
-        {% endif %}
+        {% assign link_styleclass = "btn btn-outline-primary btn-lg mt-2" %}
+        {% include partials/get_link.html %}
+        {{ link_tag }}
+          {{ link.name }}
+        </a>
       {% endfor %}
       </p>
     {% endif %}

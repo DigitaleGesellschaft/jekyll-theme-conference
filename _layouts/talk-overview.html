@@ -31,24 +31,15 @@
               <p class="mb-0">
                 {% include partials/list_sub_categories.html %}
 
-                {% assign has_icon_links = false %}
-                {% for link in talk.links %}
-                  {% if link.icon %}
-                    {% assign has_icon_links = true %}
-                  {% endif %}
-                {% endfor %}
-
+                {% include partials/get_link_types.html %}
                 {% if has_icon_links and site.conference.talks.hide_icons != true %}
                   <span class="{% if has_sub_categories %}ml-1{% endif %}">
                     {% for link in talk.links %}
-                      {% if link.icon %}
-                        {% include partials/get_link_href.html %}
-                        {%- if link.iframe -%}
-                          <a class="text-secondary ml-1 cursor-pointer" data-toggle="modal" data-target="#link-modal" data-title="{{ link.name }}" data-href="{{ link_href }}" title="{{ link.name }}">
-                        {%- else -%}
-                          <a class="text-secondary ml-1" href="{{ link_href }}" title="{{ link.name }}">
-                        {%- endif -%}
-                          <i class="fas fa-{{ link.icon }} pr-1"></i></a>
+                      {% assign link_styleclass = "" %}
+                      {% include partials/get_link.html %}
+                      {% if link_icon %}
+                        {{ link_tag -}}
+                          <i class="fas fa-{{ link_icon }} pr-1"></i></a>
                       {% endif %}
                     {% endfor %}
                   </span>

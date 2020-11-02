@@ -1,0 +1,73 @@
+
+{% assign link_icon = link.icon %}
+{% assign link_iframe = link.iframe %}
+
+{% if link.absolute_url %}
+  {% assign link_href = link.absolute_url %}
+
+{% elsif link.relative_url %}
+  {% assign link_href = link.relative_url | prepend: site.baseurl %}
+
+{% elsif link.file %}
+  {% assign link_icon = "file-alt" %}
+
+  {% if talk %}
+    {% assign link_href = link.file | prepend: '/documents/slides/' | prepend: site.baseurl %}
+
+  {% elsif speaker %}
+    {% assign link_href = link.file | prepend: '/documents/bio/' | prepend: site.baseurl %}
+
+  {% else %}
+    {% assign link_href = link.file | prepend: '/documents/' | prepend: site.baseurl %}
+
+  {% endif %}
+
+{% elsif link.video %}
+  {% assign link_href = link.video %}
+  {% assign link_icon = "video" %}
+  {% assign link_iframe = true %}
+
+  {% if talk %}
+    {% capture modal_header %}
+      <h3 class="font-weight-light">{{ talk.name }}</h3>
+      <p class="mb-0 font-weight-light">
+        {% include partials/list_speakers.html %}
+      </p>
+    {% endcapture %}
+
+  {% elsif speaker %}
+    {% capture modal_header %}
+      <h3 class="mb-0 font-weight-light">
+        {{ speaker.first_name }} {{ speaker.last_name }}
+      </h3>
+    {% endcapture %}
+    {% assign modal_desc = link.name %}
+
+  {% endif %}
+
+{% endif %}
+
+{% capture link_tag -%}
+  {%- if link.disabled -%}
+    <a class="disabled{% if link_styleclass %} {{ link_styleclass }}{% endif %}">
+
+  {%- elsif link_iframe -%}
+    <a class="cursor-pointer{% if link_styleclass %} {{ link_styleclass }}{% endif %}" title="{{ link.name }}" data-toggle="modal" data-target="#link-modal" data-href="{{ link_href }}" {% if modal_header -%}
+      data-header="{{ modal_header | strip_newlines | escape }}"
+    {%- elsif modal_title -%}
+      data-title="{{ modal_title }}"
+    {%- elsif link.name -%}
+      data-title="{{ link.name }}"
+    {%- endif %} {% if modal_footer -%}
+      data-footer="{{ modal_footer | strip_newlines | escape }}"
+    {%- elsif modal_desc -%}
+      data-desc="{{ modal_desc }}"
+    {%- elsif link.description -%}
+      data-desc="{{ link.description }}"
+    {%- endif %}>
+
+  {%- else -%}
+    <a{% if link_styleclass %} class="{{ link_styleclass }}"{% endif %} href="{{ link_href }}" title="{{ link.name }}">
+
+  {%- endif -%}
+{%- endcapture %}

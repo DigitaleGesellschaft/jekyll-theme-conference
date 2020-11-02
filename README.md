@@ -113,7 +113,7 @@ In case you do not want to install the entire Ruby/Jekyll toolchain on your mach
 
 All configurations and customization for this theme are stored under the `conference` property in the `_config.yml` file. You can find an example configuration containing most of the here discussed parameters under `_config.example.yml` in this repository.
 
-### Theme Verifications
+### Theme Verification
 
 Upon building the theme runs some basic verification to check if all necessary files and configurations are in place. If it encounters an error it shows so in adding an information bar on all your sites. You can disable this, e.g. in a production environment, by setting `show_errors` to `false` (default: `true`).
 
@@ -181,11 +181,11 @@ conference:
 
 ### Navigation Bar
 
-The navigation bar is located at the top and visible on every site. On the right it show the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property.  Each link consists of
+The navigation bar is located at the top and visible on every site. On the right it show the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the _Content_ > _Links_ section below for the available properties per link.
 
-- the text to show (`name`),
-- a relative (`relative_url`) or absolute link address (`absolute_url`) or a collapsed menu listing additional sublinks (`menu`), and
-- optionally if it is disabled (`disabled: true`).
+Additionally, a navigation bar link can also have the following properties:
+
+- `menu` containing another list of links. This creates a dropdown menu of multiple sublinks. The sublinks have the same properties as regular links (see the _Content_ > _Links_ section).
 
 Example:
 
@@ -237,11 +237,7 @@ conference:
       img: 'main_logo.png'
 ```
 
-The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of links in the form of buttons. Each link consists of
-
-- the text to show (`name`),
-- a relative (`relative_url`) or absolute link address (`absolute_url`) or a collapsed menu listing additional sublinks (`menu`), and
-- optionally if it is disabled (`disabled: true`).
+The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of links in the form of buttons. See the _Content_ > _Links_ section below for the available properties per link.
 
 Example:
 
@@ -305,7 +301,7 @@ Each talk can have one or multiple categories associated via FrontMatter (see th
   - `light` (white)
   - `dark` (dark grey)
 
-Each talk can have associated links listed at the end of its content. If these links have an icon associated (see _Content_ > _Talks_ below), they are also shown on the talk overview page (e.g. to show in the overview which talk has a video recording and which not). To disable the showing of icon links on the overviw page, set the `hide_icons` property to `true`.
+Each talk can have associated links listed at the end of its content. If these links have an icon associated (see _Content_ > _Talks_ below), they are also shown on the talk overview page (e.g. to show in the overview which talk has a video recording and which not). To disable the showing of icon links on the overview page, set the `hide_icons` property to `true` (default: `false`).
 
 Example:
 
@@ -417,13 +413,9 @@ Example:
 Each talk is represented by a file in the `_talks/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the talk's `name` (used as identifier),
-- one or more existing `speakers` name(s), and
-- optionally one or more `categories` of which one should be a main category as defined in the site's configuration
-- optionally a list of `links` whereby each link element consist of
-  - a `name`, and
-  - either an absolute link `href` or a `file` name (of a file stored under `/documents/`)
-  - optionally a `icon` property indicating the name of a [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon to be shown in front of the link name (links with icons are shown separately and above regular links without icons)
-  - optionally a `iframe` property which if set to `true` opens a modal instead where the link's source is embedded in a iframe (e.g. for embedding videos thus having a default iframe ratio of 24:11)
+- one or more existing `speakers` name(s),
+- optionally one or more `categories` of which one should be a main category as defined in the site's configuration,
+- optionally a list of `links` (see the _Links_ subsection below for the available properties per link; links with icons are treated separately and are also included on the talk overview page), and
 - optionally `hide: true` if the talk's page should not be linked to.
 
 ### Speakers
@@ -433,9 +425,7 @@ Each speaker is represented by a file in the `_speakers/` directory. It must beg
 - the speaker's `name` (used as identifier), as well as its
 - `first_name`,
 - `last_name`,
-- optionally a list of `links` whereby each link element consist of
-  - a `name`, and
-  - either an absolute link `href` or a `file` name (of a file stored under `/documents/`)
+- optionally a list of `links` (see the _Links_ subsection below for the available properties per link; links with icons are treated separately), and
 - optionally `hide: true` if the speaker's page should not be linked to.
 
 ### Rooms
@@ -444,6 +434,32 @@ Each room is represented by a file in the `_rooms/` directory. It must begin wit
 
 - the room's `name`, and
 - optionally `hide: true` if the room's page should not be linked to.
+
+### Links
+
+Links are used at different location throughout the theme: They can either be used in the configuration file (for the landing page or the navigation bar), or in talks and for speakers. A link can thereby have the following properties:
+
+- the text to show (`name`),
+- optionally if it is disabled (`disabled: true`),
+- optionally if it should open in a iframe embedded in a popup-like modal in the site it self (`iframe: true`, e.g. for embedding videos thus having a default iframe ratio of 24:11)
+- optionally an icon to show (indicating the name of a [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon to be shown if supported at the given location)
+- the actual link address:
+  + given relatively to the site's base address: `relative_url:`,
+  + given absolute: `absolute_url:`,
+  + pointing to a file uploaded to the `/documents` folder (for talks `/documents/slides`, for speakers `/documents/bio`): `file:`
+  + pointing to an external video: `video:`
+
+Using the `file:` indicator, the relative address is automatically set as well as the icon. Using the `video:` indicator, the link is automatically configured to open in an iframe with a corresponding title and the icon is set.
+
+Example:
+
+```yaml
+  links:
+    - name: Slides
+      file: slides.pdf
+    - name: Recording
+      video: https://media.ccc.de/
+```
 
 
 ## Overview Pages
