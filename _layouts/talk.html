@@ -61,13 +61,13 @@
   {% if has_icon_links %}
     <ul class="list-unstyled">
       {% for link in talk.links %}
-        {% assign link_styleclass = "" %}
+        {% assign link_styleclass = "text-reset" %}
         {% include partials/get_link.html %}
 
         {% if link_icon %}
           <li class="mb-1 ml-2">
             {{ link_tag }}
-              <i class="fas fa-{{ link_icon }} pr-1"></i>
+              <i class="fas fa-{{ link_icon }} pr-1 text-{{ main_cat_color }}"></i>
               {{ link.name }}
             </a>
           </li>
@@ -85,7 +85,7 @@
         {% include partials/get_link.html %}
 
         {% unless link_icon %}
-          <li class="mb-1 ml-2 pl-2 border-soft-primary">
+          <li class="mb-1 ml-2 pl-2 border-soft-{{ main_cat_color }}">
             {{ link_tag }}
               {{ link.name }}
             </a>

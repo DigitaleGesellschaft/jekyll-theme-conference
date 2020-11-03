@@ -29,7 +29,15 @@
 
   {% if talk %}
     {% capture modal_header %}
-      <h3 class="font-weight-light">{{ talk.name }}</h3>
+      <h3 class="font-weight-light">
+        {% if talk.hide %}
+          {{ talk.name }}
+        {% else %}
+          <a class="text-reset" href="{{ talk.url | prepend: site.baseurl }}">
+            {{ talk.name }}
+          </a>
+        {% endif %}
+      </h3>
       <p class="mb-0 font-weight-light">
         {% include partials/list_speakers.html %}
       </p>
@@ -38,7 +46,13 @@
   {% elsif speaker %}
     {% capture modal_header %}
       <h3 class="mb-0 font-weight-light">
-        {{ speaker.first_name }} {{ speaker.last_name }}
+        {% if speaker.hide %}
+          {{ speaker.first_name }} {{ speaker.last_name }}
+        {% else %}
+          <a class="text-reset" href="{{ speaker.url | prepend: site.baseurl }}">
+            {{ speaker.first_name }} {{ speaker.last_name }}
+          </a>
+        {% endif %}
       </h3>
     {% endcapture %}
     {% assign modal_desc = link.name %}

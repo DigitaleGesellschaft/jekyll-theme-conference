@@ -33,9 +33,9 @@
 
                 {% include partials/get_link_types.html %}
                 {% if has_icon_links and site.conference.talks.hide_icons != true %}
-                  <span class="{% if has_sub_categories %}ml-1{% endif %}">
+                  <span class="ml-1">
                     {% for link in talk.links %}
-                      {% assign link_styleclass = "" %}
+                      {% assign link_styleclass = "text-secondary" %}
                       {% include partials/get_link.html %}
                       {% if link_icon %}
                         {{ link_tag -}}
