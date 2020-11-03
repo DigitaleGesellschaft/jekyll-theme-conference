@@ -60,6 +60,6 @@ jobs:
         # blog post for more info:
         # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./*.gem
+        asset_path: ./jekyll-theme-conference.gem
         asset_name: jekyll-theme-conference.gem
         asset_content_type: application/x-tar
