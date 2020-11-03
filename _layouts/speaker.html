@@ -3,7 +3,7 @@
   {% assign speaker = page %}
 
   <p class="h6">
-    {{ site.data.lang[site.conference.lang].speaker.title }}
+    {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
   </p>
 
   <h1 class="font-weight-light mb-3">
@@ -33,7 +33,7 @@
   {% endif %}
 
   {% if has_regular_links %}
-    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information }}:</h5>
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information | default: "More Information" }}:</h5>
 
     <ul class="list-unstyled">
       {% for link in speaker.links %}
@@ -62,7 +62,7 @@
   {% endfor %}
 
   {% if active_speaker %}
-    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].speaker.talks }}:</h5>
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
 
     <ul class="list-program list-unstyled">
       {% for r in site.data.program %}
@@ -98,7 +98,7 @@
   <p class="d-print-none mt-5">
     <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-light">
       <i class="fas fa-users"></i>
-      {{ site.data.lang[site.conference.lang].overview }}
+      {{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
   </p>
 

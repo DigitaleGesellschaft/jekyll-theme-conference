@@ -6,7 +6,7 @@
     {% if page.title %}
       {{ page.title }}
     {% else %}
-      {{ site.data.lang[site.conference.lang].location.title }}
+      {{ site.data.lang[site.conference.lang].location.title | default: "Location" }}
     {% endif %}
   </h1>
 

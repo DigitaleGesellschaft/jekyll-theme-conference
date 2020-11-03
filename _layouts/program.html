@@ -50,7 +50,7 @@
     {% if page.title %}
       {{ page.title }}
     {% else %}
-      {{ site.data.lang[site.conference.lang].program.title }}
+      {{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
     {% endif %}
   </h1>
 
@@ -190,7 +190,7 @@
   </div>
 
   {% if site.conference.talks.main_categories %}
-    <h5 class="mt-4">{{ site.data.lang[site.conference.lang].talks.legend }}</h5>
+    <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
       {% for main_cat in site.conference.talks.main_categories %}
         <div class="d-block d-sm-inline-block m-1 p-1 pl-2 pr-2 border-soft-{{ main_cat.color }} bg-soft-{{ main_cat.color }} font-weight-normal">
           {{ main_cat.name }}

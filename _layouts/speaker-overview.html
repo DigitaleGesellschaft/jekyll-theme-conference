@@ -4,7 +4,7 @@
     {% if page.title %}
       {{ page.title }}
     {% else %}
-      {{ site.data.lang[site.conference.lang].speaker.overview }}
+      {{ site.data.lang[site.conference.lang].speaker.overview | default: "Speakers" }}
     {% endif %}
   </h1>
 

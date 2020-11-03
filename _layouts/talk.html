@@ -34,18 +34,18 @@
 
           {% include partials/get_talk_time.html %}
           <span class="d-none d-sm-inline">
-            {{ site.data.lang[site.conference.lang].pronoun.at }}
+            {{ site.data.lang[site.conference.lang].pronoun.at | default: "at" }}
           </span>
           {% include partials/show_talk_time.html %}
 
           {% assign room = site.rooms | where: 'name', r.room | first %}
           <span class="d-none d-sm-inline ml-1">
-            {{ site.data.lang[site.conference.lang].pronoun.in }}
+            {{ site.data.lang[site.conference.lang].pronoun.in | default: "in" }}
           </span>
           {% include partials/show_room.html %}
 
           <span class="d-none d-sm-inline ml-1">
-            {{ site.data.lang[site.conference.lang].pronoun.for }}
+            {{ site.data.lang[site.conference.lang].pronoun.for | default: "for" }}
           </span>
           {% include partials/show_talk_duration.html %}
 
@@ -77,7 +77,7 @@
   {% endif %}
 
   {% if has_regular_links %}
-    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information }}:</h5>
+    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information | default: "More information" }}:</h5>
 
     <ul class="list-unstyled">
       {% for link in talk.links %}
@@ -98,12 +98,12 @@
   <p class="d-print-none mt-5">
     <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-light">
       <i class="fas fa-bullhorn"></i>
-      {{ site.data.lang[site.conference.lang].overview }}
+      {{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
 
     <a href="{{ site.conference.program.url | prepend: site.baseurl }}" class="btn btn-light">
       <i class="far fa-calendar-alt"></i>
-      {{ site.data.lang[site.conference.lang].program.title }}
+      {{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
     </a>
   </p>
 

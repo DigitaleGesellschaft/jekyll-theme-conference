@@ -7,7 +7,7 @@
 
   <!-- title shown in browser: -->
   <h1 class="display-5 mb-3 d-print-none">
-    {{ site.data.lang[site.conference.lang].location.title }}
+    {{ site.data.lang[site.conference.lang].location.title | default: "Location" }}
   </h1>
 
   {% assign this_room = page %}
@@ -16,7 +16,7 @@
   {{ content }}
 
   <h5 class="mt-4 mb-2">
-    {{ site.data.lang[site.conference.lang].location.talks }}:
+    {{ site.data.lang[site.conference.lang].location.talks | default: "Talks in this room" }}:
   </h5>
   <ul class="list-program list-unstyled">
     {% for r in site.data.program %}
@@ -51,7 +51,7 @@
     {% endfor %}
     {% unless room_talks %}
       <li>
-        <em>{{ site.data.lang[site.conference.lang].location.no_talks }}</em>
+        <em>{{ site.data.lang[site.conference.lang].location.no_talks | default: "no talks planned" }}</em>
       </li>
     {% endunless %}
 

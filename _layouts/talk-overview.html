@@ -4,7 +4,7 @@
     {% if page.title %}
       {{ page.title }}
     {% else %}
-      {{ site.data.lang[site.conference.lang].talk.overview }}
+      {{ site.data.lang[site.conference.lang].talk.overview | default: "Talks" }}
     {% endif %}
   </h1>
 
@@ -58,9 +58,9 @@
                     {% endfor %}
                   {% endfor %}
 
-                  {{ site.data.lang[site.conference.lang].pronoun.at }} {% include partials/show_talk_time.html %}
+                  {{ site.data.lang[site.conference.lang].pronoun.at | default: "at" }} {% include partials/show_talk_time.html %}
 
-                  {{ site.data.lang[site.conference.lang].pronoun.in }} {% include partials/show_room.html %}
+                  {{ site.data.lang[site.conference.lang].pronoun.in | default: "in"  }} {% include partials/show_room.html %}
                 </p>
               {% endif %}
 

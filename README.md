@@ -165,7 +165,7 @@ _Note:_ While you might want to change the URLs, the name of the three collectio
 
 ### Language
 
-In order to adapt the language of the theme set the `lang` property. Make sure you have copied the internationalization file from this repository to `_data/lang.yml`. Currently the following languages are supported:
+In order to adapt the language of the theme set the `lang` property. If you change it from its default, make sure you have copied the internationalization file from this repository to `_data/lang.yml`. Currently the following languages are included:
 
 - English: `en` (Default)
 - German: `de`

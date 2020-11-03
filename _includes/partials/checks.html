@@ -1,9 +1,14 @@
 {% assign errors = '' | split: ',' %}
 
 {% unless site.data.lang.version %}
-  {% assign errors = errors | push : "The internationalization file containing different strings for this template seems to be missing. Have you copied the `_data/lang.yml` file from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/master/_data/lang.yml) to you local website folder?" %}
+  {% unless site.conference.lang == "en" %}
+    {% assign errors = errors | push : "The internationalization file containing different strings for this template seems to be missing. Have you copied the `_data/lang.yml` file from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/master/_data/lang.yml) to you local website folder?" %}
+  {% endunless %}
 {% elsif site.data.lang.version < 1 %}
   {% assign errors = errors | push : "The internationalization file in `_data/lang.yml` seems to be outdated and does not correspond to the current version of the theme. Grab the current version from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/master/_data/lang.yml)." %}
+{% endunless %}
+{% unless site.conference.lang == "en" or site.conference.lang == "de" or site.conference.lang == "fr" or site.conference.lang == "pt" %}
+  {% assign errors = errors | push : "Unknown language selected for `site.conference.lang` parameter. Supported are `en`, `de`, `fr`, and `pt`." %}
 {% endunless %}
 
 {% assign program_size = site.data.program | size %}
@@ -25,5 +30,5 @@
 
 {% assign main_category_size = site.conference.talks.main_categories | size %}
 {% if main_category_size == 0 %}
-  {% assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings-main-categories) section in the theme's README file." %}
+  {% assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings-main-categories-and-icons) section in the theme's README file." %}
 {% endif %}
