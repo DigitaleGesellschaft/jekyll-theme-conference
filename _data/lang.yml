@@ -1,4 +1,4 @@
-version: 1
+version: 2
 
 en:
   pronoun:
@@ -12,6 +12,8 @@ en:
     directions: Directions
     talks: Talks in this room
     no_talks: no talks planned
+    focus_conf: Center map on conference location
+    focus_me: Show my current location
   program:
     title: Program
     legend: Caption
@@ -34,6 +36,8 @@ de:
     directions: Anfahrt
     talks: Vorträge in diesem Raum
     no_talks: keine Vorträge geplant
+    focus_conf: Karte auf den Konferenz-Ort zentrieren
+    focus_me: Meinen aktuellen Standort anzeigen
   program:
     title: Programm
     legend: Legende
@@ -56,6 +60,8 @@ fr:
     directions: Indications
     talks: Présentations dans cette salle
     no_talks: pas des présentations prévues
+    focus_conf: Centrer la carte sur le lieu de la conférence
+    focus_me: Afficher ma localisation actuelle
   program:
     title: Programme
     legend: Légende
@@ -78,6 +84,8 @@ pt:
     directions: Indicações
     talks: Apresentações nesta sala
     no_talks: não estão previstas apresentações
+    focus_conf: Centralizar o mapa para o local da conferência
+    focus_me: Mostrar minha localização atual
   program:
     title: Programa
     legend: Legenda

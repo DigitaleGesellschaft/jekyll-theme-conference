@@ -12,8 +12,13 @@ var map;
 
         L.easyButton('far fa-star', function(){
             map.setView(home_coord, default_zoom);
-        }).addTo(map);
+        }, '{{ site.data.lang[site.conference.lang].location.focus_conf | default: "Center map on conference location" }}').addTo(map);
 
-        L.control.locate().addTo(map);
+        L.control.locate({
+            flyTo: true,
+            strings: {
+                title: '{{ site.data.lang[site.conference.lang].location.focus_me | default: "Show me where I am" }}'
+            }
+        }).addTo(map);
     }
 })();

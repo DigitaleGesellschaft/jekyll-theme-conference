@@ -4,7 +4,7 @@
   {% unless site.conference.lang == "en" %}
     {% assign errors = errors | push : "The internationalization file containing different strings for this template seems to be missing. Have you copied the `_data/lang.yml` file from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/master/_data/lang.yml) to you local website folder?" %}
   {% endunless %}
-{% elsif site.data.lang.version < 1 %}
+{% elsif site.data.lang.version < 2 %}
   {% assign errors = errors | push : "The internationalization file in `_data/lang.yml` seems to be outdated and does not correspond to the current version of the theme. Grab the current version from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/master/_data/lang.yml)." %}
 {% endunless %}
 {% unless site.conference.lang == "en" or site.conference.lang == "de" or site.conference.lang == "fr" or site.conference.lang == "pt" %}
