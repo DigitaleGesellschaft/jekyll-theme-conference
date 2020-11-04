@@ -72,6 +72,13 @@ $fa-font-path: '/assets/webfonts' !default;
   margin-bottom: 0;
 }
 
+//   Live button icon
+.live-button > object {
+  width: 0.85em;
+  height: 0.85em;
+  color: white;
+}
+
 // Program
 
 //   Sticky header and first column
@@ -140,6 +147,10 @@ $fa-font-path: '/assets/webfonts' !default;
 //   Program per Room
 .list-program li > div.flex-column:first-of-type {
   width: 4em;
+
+  & > * {
+    width: 4.6em;
+  }
 }
 
 // Speaker
@@ -213,5 +224,13 @@ $fa-font-path: '/assets/webfonts' !default;
   // Remove sticky position from table to show borders
   .table  th {
     position: inherit;
+  }
+
+  // Remove live buttons
+  .live-show {
+    display: none;
+  }
+  .live-hide {
+    display: inline-block !important;
   }
 }

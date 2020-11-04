@@ -9,8 +9,8 @@
 // Vertical Scroll Sync: Syncscroll
 {% include js/syncscroll.js %}
 
+// Map Display Framework: Leaflet
 {% if site.conference.location.hide != true and site.conference.location.map.enable %}
-    // Map Display Framework: Leaflet
     {% include js/leaflet.js %}
     {% include js/leaflet-easybutton.js %}
     {% include js/leaflet-locatecontrol.js %}
@@ -21,3 +21,8 @@
 
 // Bootstrap Extension: Modals
 {% include js/conference-modal.js %}
+
+// Live
+{% if site.conference.live %}
+    {% include js/conference-live.js %}
+{% endif %}

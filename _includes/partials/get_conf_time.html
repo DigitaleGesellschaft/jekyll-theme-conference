@@ -1,0 +1,54 @@
+{% for room in site.data.program %}
+  {% assign t = room.talks | first %}
+  {% include partials/get_talk_time.html %}
+
+  {% assign update_var = false %}
+
+  {% unless conf_start_hour %}
+    {% assign update_var = true %}
+  {% else %}
+    {% if talk_start_hour < conf_start_hour %}
+      {% assign update_var = true %}
+    {% elsif talk_start_hour == conf_start_hour and talk_start_min < conf_start_min %}
+      {% assign update_var = true %}
+    {% endif %}
+  {% endunless %}
+
+  {% if update_var %}
+    {% assign conf_start_hour = talk_start_hour %}
+    {% assign conf_start_min = talk_start_min %}
+  {% endif %}
+
+  {% assign t = room.talks | last %}
+  {% include partials/get_talk_time.html %}
+
+  {% assign update_var = false %}
+
+  {% unless conf_end_hour %}
+    {% assign update_var = true %}
+  {% else %}
+    {% if talk_end_hour > conf_end_hour %}
+      {% assign update_var = true %}
+    {% elsif talk_end_hour == conf_end_hour and talk_end_min > conf_end_min %}
+      {% assign update_var = true %}
+    {% endif %}
+  {% endunless %}
+
+  {% if update_var %}
+    {% assign conf_end_hour = talk_end_hour %}
+    {% assign conf_end_min = talk_end_min %}
+  {% endif %}
+{% endfor %}
+
+{% if conf_start_min < 10 %}
+  {% assign conf_start = conf_start_hour | append: ":0" | append: conf_start_min %}
+{% else %}
+  {% assign conf_start = conf_start_hour | append: ":" | append: conf_start_min %}
+{% endif %}
+{% if conf_end_min < 10 %}
+  {% assign conf_end = conf_end_hour | append: ":0" | append: conf_end_min %}
+{% else %}
+  {% assign conf_end = conf_end_hour | append: ":" | append: conf_end_min %}
+{% endif %}
+
+{% assign conf_duration_min = conf_end_hour | minus: conf_start_hour | times: 60 | minus: conf_start_min | plus: conf_end_min %}

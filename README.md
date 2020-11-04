@@ -224,7 +224,7 @@ conference:
 
 The main landing page is shown at the root of the website to greet new visitors. In order to show it you need to create a `index.md` file in the root of your website's folder and specify its layout as `layout: main`. The remaining customizations are specified in the `_config.yml` file.
 
-The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `logo` property under the `main` property containing:
+The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `logo` property under the `main` property containing
 
 - a `img` property specifying the path to the image file relative to the `/assets/images/` folder.
 
@@ -286,6 +286,22 @@ conference:
         Try again next year.
 ```
 
+### Live Indications
+
+In order to help users navigating the program during the congress, a _Live_ indication can be shown next to talks which are currently taking place. A small JavaScript functions keeps the site automatically up-to-date (without the need to refresh) showing the indication as soon as the talk has started and hiding it once it is over (according to the timetable indicated in the `_data/program.yml` file). In order to activate the functionality the `live` property has to be set containing
+
+- the date of the day at which the conference takes place (`date`),
+- the timezone in which the conference takes place (`timezone`), and
+- optionally a demo mode setting, whereby the JavaScript function cycles through the entire program in five minutes for demonstration purposes (`demo: true`, default: `false`).
+
+```yaml
+conference:
+  live:
+    date: 01.01.2020
+    timezone: GMT+1
+    demo: false
+```
+
 ### Talk Settings: Main Categories and Icons
 
 Each talk can have one or multiple categories associated via FrontMatter (see the _Individual Pages: Talks_ section below for more details). Some of these categories can be elevated to so called main categories". These are used to color group the talks across the entire website, particularly in the program. In order to do so add the `main_categories` property under the `talks` property. It consists of a list of all main categories. Each main category consists of:
@@ -314,6 +330,7 @@ conference:
         color: info
       - name: Cat B
         color: success
+
     # Hide icons on talk overview page
     hide_icons: false
 ```

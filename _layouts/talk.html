@@ -32,11 +32,23 @@
       {% for t in r.talks %}
         {% if talk.name == t.name %}
 
+          {% if site.conference.live %}
+            {% assign time_start = t.time_start %}
+            {% assign time_end = t.time_end %}
+            {% include partials/get_timestamp.html %}
+            <span class="live-hide" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+          {% endif %}
+
           {% include partials/get_talk_time.html %}
           <span class="d-none d-sm-inline">
             {{ site.data.lang[site.conference.lang].pronoun.at | default: "at" }}
           </span>
           {% include partials/show_talk_time.html %}
+
+          {% if site.conference.live %}
+            </span>
+            {% include partials/live_button.html %}
+          {% endif %}
 
           {% assign room = site.rooms | where: 'name', r.room | first %}
           <span class="d-none d-sm-inline ml-1">

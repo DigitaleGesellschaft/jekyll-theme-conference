@@ -1,0 +1,10 @@
+{% if site.conference.live %}
+  {% assign time_start = t.time_start %}
+  {% assign time_end = t.time_end %}
+  {% include partials/get_timestamp.html %}
+  <span class="live-show live-button badge badge-dark font-weight-normal text-left d-none {{ live_button_styleclass }}" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+    <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml"></object>
+    {{ site.data.lang[site.conference.lang].live | default: "Live" }}
+  </span>
+  {% assign live_button_styleclass = "" %}
+{% endif %}

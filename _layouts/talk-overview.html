@@ -29,6 +29,13 @@
                 {% include partials/list_speakers.html %}
               </p>
               <p class="mb-0">
+                {% for r in site.data.program %}
+                  {% for t in r.talks %}
+                    {% if talk.name == t.name %}
+                      {% include partials/live_button.html %}
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
                 {% include partials/list_sub_categories.html %}
 
                 {% include partials/get_link_types.html %}

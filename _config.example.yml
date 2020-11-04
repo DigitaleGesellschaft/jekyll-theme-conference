@@ -109,6 +109,12 @@ conference:
       color: warning
       pages_only: true
 
+  # Live indications
+  live:
+    date: 01.01.2020
+    timezone: GMT+1
+    demo: false
+
   talks:
     # Talk categories
     main_categories:
@@ -116,6 +122,7 @@ conference:
         color: info
       - name: Cat B
         color: success
+
     # Hide icons on talk overview page
     hide_icons: false
 

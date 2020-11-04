@@ -1,4 +1,4 @@
-version: 2
+version: 3
 
 en:
   pronoun:
@@ -7,6 +7,7 @@ en:
     for: for
   overview: Overview
   more_information: More Information
+  live: Live
   location:
     title: Location
     directions: Directions
@@ -31,6 +32,7 @@ de:
     for: für
   overview: Übersicht
   more_information: Weitere Informationen
+  live: Live
   location:
     title: Örtlichkeit
     directions: Anfahrt
@@ -55,6 +57,7 @@ fr:
     for: pour
   overview: Aperçu
   more_information: Plus d'informations
+  live: En direct
   location:
     title: Lieu
     directions: Indications
@@ -79,6 +82,7 @@ pt:
     for: por
   overview: Visão geral
   more_information: Mais informações
+  live: Ao vivo
   location:
     title: Localização
     directions: Indicações

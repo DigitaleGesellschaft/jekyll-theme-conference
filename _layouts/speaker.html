@@ -17,7 +17,6 @@
   {% if has_icon_links %}
     <ul class="list-unstyled">
       {% for link in speaker.links %}
-        {% assign link_styleclass = "" %}
         {% include partials/get_link.html %}
 
         {% if link_icon %}
@@ -83,6 +82,9 @@
                   <div class="flex-column ml-2 pl-2 mb-2 border-soft-{{ main_cat_color }}">
                     <p class="mb-0">
                       {% include partials/show_talk.html %}
+
+                      {% assign live_button_styleclass = "ml-2" %}
+                      {% include partials/live_button.html %}
                     </p>
                   </div>
                 </li>
