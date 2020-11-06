@@ -302,7 +302,7 @@ conference:
     demo: false
 ```
 
-### Talk Settings: Main Categories and Icons
+### Talk Settings
 
 Each talk can have one or multiple categories associated via FrontMatter (see the _Individual Pages: Talks_ section below for more details). Some of these categories can be elevated to so called main categories". These are used to color group the talks across the entire website, particularly in the program. In order to do so add the `main_categories` property under the `talks` property. It consists of a list of all main categories. Each main category consists of:
 
@@ -335,7 +335,7 @@ conference:
     hide_icons: false
 ```
 
-### Speaker Settings: First name
+### Speaker Settings
 
 In the program as well as the speaker's overview the speaker's first name can be abbreviated to its first letter. Of course, you also have the option to not specify a first name for each speaker in the first place. In order to shorten the first name add the `show_firstname: true` setting (default: `false`) to the `speakers` property.
 
@@ -347,7 +347,7 @@ conference:
     show_firstname: false
 ```
 
-### Location Settings: Hide all and configure map
+### Location Settings
 
 In case the location of your rooms is obvious (e.g. on a campus) you can decide to disable the location page and links to all the rooms. You still need to create the different rooms as files in the `_rooms/` directory, since they are needed as a reference. But there will not be any link pointing to it (effectively hiding them).
 In order to hide all rooms add the `hide: true` setting (default: `false`) to the `location` property.
@@ -370,7 +370,7 @@ conference:
       map_provider: "OpenStreetMap.Mapnik"
 ```
 
-The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/main.js` file, e.g. adding additional layers with markers, text, or shapes to the map. To start, copy simply the file from this repository and make use of the initialized global variable `map` pointing to the Leaflet container.
+The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/main.js` file, e.g. adding additional layers with markers, text, or shapes to the map. To start, copy simply the file from this repository and make use of the initialized global variable `window.conference.map` pointing to the Leaflet container.
 
 Example:
 
@@ -381,11 +381,13 @@ Example:
 {% include js/conference.js %}
 
 (function() {
+    let map = window.conference.map;
+
     if (typeof map !== 'undefined') {
         var main_station = L.marker([47.37785, 8.54035], {
             icon: L.divIcon({
                 className: '',
-                html: '<span class="fas fa-train"></span> Bahnhof Zürich',
+                html: '<span class="fas fa-train"></span> Main Station',
                 iconSize: [120, 56]
             })
         }).addTo(map);

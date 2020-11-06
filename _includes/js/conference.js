@@ -9,6 +9,9 @@
 // Vertical Scroll Sync: Syncscroll
 {% include js/syncscroll.js %}
 
+// Global app variable
+window.conference = {};
+
 // Map Display Framework: Leaflet
 {% if site.conference.location.hide != true and site.conference.location.map.enable %}
     {% include js/leaflet.js %}

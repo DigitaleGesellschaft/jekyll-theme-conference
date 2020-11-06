@@ -1,17 +1,18 @@
-var map;
+window.conference.mapConfig = (function() {
 
-(function() {
-    var map_provider = "{{ site.conference.location.map.map_provider | default: 'OpenStreetMap.Mapnik' }}";
-    var home_coord = [{{ site.conference.location.map.home_coord }}];
-    var default_zoom = {{ site.conference.location.map.default_zoom | default: 17 }};
+    let map;
 
-    if (document.getElementById('map')) {
-        map = L.map('map').setView(home_coord, default_zoom);
+    let mapProvider = "{{ site.conference.location.map.map_provider | default: 'OpenStreetMap.Mapnik' }}";
+    let homeCoord = [{{ site.conference.location.map.home_coord }}];
+    let zoomLevel = {{ site.conference.location.map.default_zoom | default: 17 }};
 
-        L.tileLayer.provider(map_provider).addTo(map);
+    let setup = function (elId) {
+        map = L.map(elId).setView(homeCoord, zoomLevel);
+
+        L.tileLayer.provider(mapProvider).addTo(map);
 
         L.easyButton('far fa-star', function(){
-            map.setView(home_coord, default_zoom);
+            map.flyTo(homeCoord, zoomLevel);
         }, '{{ site.data.lang[site.conference.lang].location.focus_conf | default: "Center map on conference location" }}').addTo(map);
 
         L.control.locate({
@@ -20,5 +21,25 @@ var map;
                 title: '{{ site.data.lang[site.conference.lang].location.focus_me | default: "Show me where I am" }}'
             }
         }).addTo(map);
-    }
+    };
+
+    let init = function () {
+        elId = 'map';
+
+        if (document.getElementById(elId)) {
+            setup(elId);
+            window.conference.map = map;
+        }
+    };
+
+    return {
+        init: init,
+        default: {
+            mapProvider: mapProvider,
+            homeCoord: homeCoord,
+            zoomLevel: zoomLevel
+        }
+    };
 })();
+
+window.conference.mapConfig.init();

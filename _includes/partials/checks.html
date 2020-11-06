@@ -30,5 +30,5 @@
 
 {% assign main_category_size = site.conference.talks.main_categories | size %}
 {% if main_category_size == 0 %}
-  {% assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings-main-categories-and-icons) section in the theme's README file." %}
+  {% assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README file." %}
 {% endif %}
