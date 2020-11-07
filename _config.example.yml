@@ -113,6 +113,9 @@ conference:
   live:
     date: 01.01.2020
     timezone: GMT+1
+    streaming:
+      start_early: 15  # in minutes
+      end_late:     0  # in minutes
     demo: false
 
   talks:

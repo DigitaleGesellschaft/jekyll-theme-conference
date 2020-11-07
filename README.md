@@ -185,7 +185,8 @@ The navigation bar is located at the top and visible on every site. On the right
 
 Additionally, a navigation bar link can also have the following properties:
 
-- `menu` containing another list of links. This creates a dropdown menu of multiple sublinks. The sublinks have the same properties as regular links (see the _Content_ > _Links_ section).
+- `menu` containing another list of links. This creates a dropdown menu of multiple sublinks. The sublinks have the same properties as regular links (see the _Content_ > _Links_ section), or
+- `live` making the link only visible during the conference and adds a live indication. The `name` property can be omitted. If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ below).
 
 Example:
 
@@ -195,6 +196,7 @@ conference:
     links:
       - name: Program
         relative_url: /program/
+      - live: true
       - name: Previous Editions
         menu:
           - name: 2020 (current)
@@ -286,12 +288,17 @@ conference:
         Try again next year.
 ```
 
-### Live Indications
+### Live Indications & Streaming
 
-In order to help users navigating the program during the congress, a _Live_ indication can be shown next to talks which are currently taking place. A small JavaScript functions keeps the site automatically up-to-date (without the need to refresh) showing the indication as soon as the talk has started and hiding it once it is over (according to the timetable indicated in the `_data/program.yml` file). In order to activate the functionality the `live` property has to be set containing
+In order to help users navigating the program during the congress, a _Live_ indication can be shown next to talks which are currently taking place. A small JavaScript functions keeps the site automatically up-to-date (without the need to refresh) showing the indication as soon as the talk has started and hiding it once it is over (according to the timetable indicated in the `_data/program.yml` file).
+
+This can be further extended if some of the talks have an associated live stream: Upon clicking one of the live indications a modal will open containing the corresponding live stream embedded. The URL to the live stream has to be set via `live` property in each room (see the _Content_ > _Room_ section below).
+
+In order to activate the functionality the `live` property has to be set containing
 
 - the date of the day at which the conference takes place (`date`),
-- the timezone in which the conference takes place (`timezone`), and
+- the timezone in which the conference takes place (`timezone`),
+- optionally if streaming is enabled (`streaming`) with indications how many minutes early the stream will begin and end, and
 - optionally a demo mode setting, whereby the JavaScript function cycles through the entire program in five minutes for demonstration purposes (`demo: true`, default: `false`).
 
 ```yaml
@@ -299,6 +306,9 @@ conference:
   live:
     date: 01.01.2020
     timezone: GMT+1
+    streaming:
+      start_early: 15  # in minutes
+      end_late:     0  # in minutes
     demo: false
 ```
 
@@ -473,8 +483,9 @@ Each speaker is represented by a file in the `_speakers/` directory. It must beg
 
 Each room is represented by a file in the `_rooms/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
-- the room's `name`, and
-- optionally `hide: true` if the room's page should not be linked to.
+- the room's `name`
+- optionally `hide: true` if the room's page should not be linked to, and
+- optionally a URL pointing to a live stream for the given room during the conference (`live`, see the section _Live Indications & Streaming_ above).
 
 ### Links
 

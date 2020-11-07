@@ -4,84 +4,80 @@ window.conference.live = (function() {
     {%- assign time_end = conf_end -%}
     {%- include partials/get_timestamp.html -%}
 
-    {%- unless site.conference.live.demo -%}
+    let confStart = {{ timestamp_start }};
+    let confEnd = {{ timestamp_end }};
 
-        let confStart = {{ timestamp_start }};
-        let confEnd = {{ timestamp_end }};
+    let freezeTime = false;
+    let timeFrozen = 0;
+    let timeOffset = 0;
 
-        let timer;
+    let demo = {{ site.conference.live.demo | default: "false" }};
+    let durDemo  = 5*60; // in seconds
+    let durPause =   10; // in seconds
 
-        let timeNow = function () {
-            // Return UNIX timestamp in seconds
-            return Math.floor(Date.now() / 1000);
-        };
+    let timer;
 
-        let timeStart = function () {
-            let tNow = timeNow();
-            if (confStart - 60 > tNow) {
-                // Start when conference start (-60s)
-                return confStart - 60 - tNow;
-            }
-            else {
-                // Start on the minute
-                return (60 - (tNow % 60));
-            }
-        };
+    let timeNowReal = function () {
+        // Return UNIX timestamp in seconds
+        return Math.floor(Date.now() / 1000);
+    };
 
-    {%- else -%}
+    let timeNowCycle = function() {
+        // Cycle time over program for a fixed duration
+        let relTime = (Math.floor(Date.now() / 1000) % durDemo - durPause) / (durDemo - 2*durPause);
+        let cycleTime = (confEnd - confStart) * relTime + confStart;
+        return cycleTime;
+    };
 
-        let durDemo  = 5*60; // in seconds
-        let durPause =   10; // in seconds
+    let timeNow = function() {
+        if (freezeTime) {
+            return timeFrozen;
+        }
+        else if (demo) {
+            return timeNowCycle() - timeOffset;
+        }
+        else {
+            return timeNowReal() - timeOffset;
+        }
+    };
 
-        let pauseDemo = false;
-        let timeFrozen = 0;
-        let timeOffset = 0;
+    let pauseTime = function () {
+        timeFrozen = timeNow();
+        freezeTime = true;
+    };
 
-        let timeNowCycle = function() {
-            // Cycle time over program for a fixed duration
-            let relTime = (Math.floor(Date.now() / 1000) % durDemo - durPause) / (durDemo - 2*durPause);
-            let altTime = ({{ timestamp_end }} - {{ timestamp_start }}) * relTime + {{ timestamp_start }};
-            return altTime;
-        };
-
-        let timeNow = function() {
-            if (pauseDemo) {
-                return timeFrozen;
-            }
-            else {
-                return timeNowCycle() - timeOffset;
-            }
-        };
-
-        let pauseTime = function () {
-            timeFrozen = timeNowCycle();
-            pauseDemo = true;
-        };
-
-        let continueTime = function () {
+    let continueTime = function () {
+        if (demo) {
             timeOffset = timeNowCycle() - timeFrozen;
-            pauseDemo = false;
-        };
+        }
+        else {
+            timeOffset = timeNow() - timeFrozen;
+        }
+        freezeTime = false;
+    };
 
-        let setTime = function (timeStr) {
-            pauseTime();
+    let resetTime = function (timeStr) {
+        continueTime();
+        timeOffset = 0;
+    };
 
-            let d = new Date(timeNow() * 1000);
-            time = timeStr.split(':');
-            d.setHours(time[0], time[1]);
+    let setTime = function (timeStr) {
+        pauseTime();
 
-            timeFrozen = Math.floor(d.getTime() / 1000);
-        };
+        let d = new Date(timeNow() * 1000);
+        time = timeStr.split(':');
+        d.setHours(time[0], time[1]);
 
-        let getTime = function () {
-            let d = new Date(timeNow() * 1000);
-            let h = d.getHours();
-            let m = d.getMinutes();
+        timeFrozen = Math.floor(d.getTime() / 1000);
+    };
 
-            return h + ":" + (m < 10 ? "0" : "") + m;
-        };
+    let getTime = function () {
+        let d = new Date(timeNow() * 1000);
+        let h = d.getHours();
+        let m = d.getMinutes();
 
-    {%- endunless %}
+        return h + ":" + (m < 10 ? "0" : "") + m;
+    };
 
     let updateLiveButtons = function() {
         let tNow = timeNow();
@@ -118,54 +114,129 @@ window.conference.live = (function() {
             }
         }
 
-        verifyEnd();
+        if (timeNow() > confEnd) {
+            // Cancel timer after program is over
+            clearInterval(timer);
+        }
     };
 
-    {%- unless site.conference.live.demo -%}
+    let timeStart = function () {
+        let tNow = timeNow();
+        if (confStart - 60 > tNow) {
+            // Start when conference start (-60s)
+            return confStart - 60 - tNow;
+        }
+        else {
+            // Start on the minute
+            return (60 - (tNow % 60));
+        }
+    };
 
-        let init = function () {
-            updateLiveButtons();
+    let startUpdate = function () {
+        if(typeof timer !== "undefined") {
+            clearInterval(timer);
+        }
+        updateLiveButtons();
+
+        if (demo) {
+            timer = setInterval(updateLiveButtons, 100);
+        }
+        else {
             setTimeout(function() {
                 timer = setInterval(updateLiveButtons, 60*1000);
                 updateLiveButtons();
             }, timeStart() * 1000);
+        }
+    };
+
+    let toggleDemo = function () {
+        demo = !demo;
+        timeOffset = 0;
+        startUpdate();
+    };
+
+    {% if site.conference.live.streaming -%}
+
+        let rooms = {
+            {% for r in site.data.program %}
+                {% assign room = site.rooms | where: 'name', r.room | first %}
+                {% if room.live %}
+                    "{{ room.name }}": {
+                        "id": {{ forloop.index }},
+                        "href": "{{ room.live }}"
+                    },
+                {% endif %}
+            {% endfor %}
         };
 
-        let verifyEnd = function () {
-            if (timeNow() > confEnd) {
-                // Cancel timer after program is over
-                clearInterval(timer);
+        let switchStream = function (modal, roomName) {
+            if (roomName in rooms) {
+                room = rooms[roomName];
             }
+            else {
+                room = rooms[Object.keys(rooms)[0]];
+            }
+
+            modal.find('.modal-footer .btn').removeClass('active');
+            modal.find('iframe').attr('src', room.href);
+            modal.find('#stream-button' + room.id).addClass('active');
         };
 
-        return {
-            init: init,
-            confStart: confStart,
-            confEnd: confEnd
+        let hideModal = function (el, event) {
+            let modal = $(el);
+
+            modal.find('iframe').attr('src', '');
+            modal.find('.modal-footer .btn').removeClass('active');
+        };
+
+        let initStream = function() {
+            elSel = '#stream-modal';
+
+            $(elSel).on('show.bs.modal', function (event) {
+                let modal = $(this);
+                let button = $(event.relatedTarget);
+                let roomName = button.data('room');
+
+                switchStream(modal, roomName);
+            });
+            $(elSel).on('hide.bs.modal', function (event) {
+                hideModal(this, event);
+            });
+
+            $(elSel + ' .modal-footer .btn').on('click', function(event) {
+                event.preventDefault();
+
+                let modal = $(elSel);
+                let roomName = $(this).data('room')
+
+                switchStream(modal, roomName);
+            });
         };
 
     {%- else -%}
 
-        let init = function () {
-            updateLiveButtons();
-            setInterval(updateLiveButtons, 100);
-        };
+        let initStream = function() {};
 
-        let verifyEnd = function () {};
+    {%- endif %}
 
-        return {
-            init: init,
+    let init = function () {
+        startUpdate();
+        initStream();
+    };
 
-            pauseTime: pauseTime,
-            continueTime: continueTime,
-            setTime: setTime,
-            getTime: getTime,
+    return {
+        init: init,
 
-            durDemo: durDemo,
-            durPause: durPause
-        };
+        pauseTime: pauseTime,
+        continueTime: continueTime,
+        resetTime: resetTime,
+        setTime: setTime,
+        getTime: getTime,
 
-    {%- endunless %}
+        toggleDemo: toggleDemo,
+        durDemo: durDemo,
+        durPause: durPause
+    };
 
 })();
 

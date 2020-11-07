@@ -26,6 +26,36 @@
                 {% endfor %}
               </div>
             </li>
+
+          {% elsif link.live %}
+            {% include partials/get_conf_time.html %}
+            {% assign time_start = conf_start %}
+            {% assign time_end = conf_end %}
+            {% include partials/get_timestamp.html %}
+
+            {% assign offset_start = site.conference.live.streaming.start_early | default: 0 %}
+            {% assign offset_end = site.conference.live.streaming.end_late | default: 0 %}
+            {% assign timestamp_start = offset_start | times: -60 | plus: timestamp_start %}
+            {% assign timestamp_end = offset_end | times: 60 | plus: timestamp_end %}
+
+            <li class="nav-item live-show d-none" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+              {% if site.conference.live.streaming %}
+                <a class="cursor-pointer nav-link" title="{% if link.name %}{{ link.name }}{% else %}{{ site.data.lang[site.conference.lang].streaming | default: "Streaming" }}{% endif %}" data-toggle="modal" data-target="#stream-modal" data-room="">
+              {% else %}
+                {% assign link_styleclass = "nav-link" %}
+                {% include partials/get_link.html %}
+                {{ link_tag }}
+              {% endif %}
+
+                {{ link.name | default: "" }}
+
+                <span class="live-button badge badge-dark font-weight-normal text-left">
+                  <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml"></object>
+                  {{ site.data.lang[site.conference.lang].live | default: "Live" }}
+                </span>
+              </a>
+            </li>
+
           {% else %}
             <li class="nav-item {% if page.url contains link.relative_url %}active{% endif %}">
               {% assign link_styleclass = "nav-link" %}

@@ -1,4 +1,5 @@
 
+{% assign link_disabled = link.disabled %}
 {% assign link_icon = link.icon %}
 {% assign link_iframe = link.iframe %}
 
@@ -58,6 +59,9 @@
     {% assign modal_desc = link.name %}
 
   {% endif %}
+
+{% else %}
+  {% assign link_disabled = true %}
 
 {% endif %}
 
