@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ site.data.lang[site.conference.lang].streaming | default: "Streaming" }}
+          {{ site.data.lang[site.conference.lang].live.streaming | default: "Live Stream" }}
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -11,6 +11,9 @@
       </div>
       <div class="modal-body embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" src="" allowfullscreen></iframe>
+        <div id="stream-placeholder" class="embed-responsive-item d-none justify-content-center align-items-center">
+          <div></div>
+        </div>
       </div>
       <div class="modal-footer justify-content-around">
         {% for r in site.data.program %}

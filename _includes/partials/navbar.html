@@ -40,7 +40,7 @@
 
             <li class="nav-item live-show d-none" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
               {% if site.conference.live.streaming %}
-                <a class="cursor-pointer nav-link" title="{% if link.name %}{{ link.name }}{% else %}{{ site.data.lang[site.conference.lang].streaming | default: "Streaming" }}{% endif %}" data-toggle="modal" data-target="#stream-modal" data-room="">
+                <a class="cursor-pointer nav-link" title="{% if link.name %}{{ link.name }}{% else %}{{ site.data.lang[site.conference.lang].live.streaming | default: "Live Stream" }}{% endif %}" data-toggle="modal" data-target="#stream-modal" data-room="">
               {% else %}
                 {% assign link_styleclass = "nav-link" %}
                 {% include partials/get_link.html %}
@@ -51,7 +51,7 @@
 
                 <span class="live-button badge badge-dark font-weight-normal text-left">
                   <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml"></object>
-                  {{ site.data.lang[site.conference.lang].live | default: "Live" }}
+                  {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
                 </span>
               </a>
             </li>

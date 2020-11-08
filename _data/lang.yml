@@ -7,8 +7,11 @@ en:
     for: for
   overview: Overview
   more_information: More Information
-  live: Live
-  streaming: Streaming
+  live:
+    live: Live
+    streaming: Live Stream
+    pre_stream: Live stream has not started yet.
+    post_stream: Live stream has ended.
   location:
     title: Location
     directions: Directions
@@ -33,7 +36,11 @@ de:
     for: für
   overview: Übersicht
   more_information: Weitere Informationen
-  live: Live
+  live:
+    live: Live
+    streaming: Live Stream
+    pre_stream: Der Live Stream hat noch nicht begonnen.
+    post_stream: Der Live Stream ist beendet.
   location:
     title: Örtlichkeit
     directions: Anfahrt
@@ -58,7 +65,11 @@ fr:
     for: pour
   overview: Aperçu
   more_information: Plus d'informations
-  live: En direct
+  live:
+    live: En direct
+    streaming: Diffusion en direct
+    pre_stream: La diffusion en direct n'a pas encore commencé.
+    post_stream: La diffusion en direct est terminée.
   location:
     title: Lieu
     directions: Indications
@@ -83,7 +94,11 @@ pt:
     for: por
   overview: Visão geral
   more_information: Mais informações
-  live: Ao vivo
+  live:
+    live: Ao vivo
+    streaming: Transmissão ao vivo
+    pre_stream: A transmissão ao vivo ainda não começou.
+    post_stream: A transmissão ao vivo terminou.
   location:
     title: Localização
     directions: Indicações

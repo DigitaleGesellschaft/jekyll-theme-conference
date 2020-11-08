@@ -15,7 +15,8 @@ window.conference.live = (function() {
     let durDemo  = 5*60; // in seconds
     let durPause =   10; // in seconds
 
-    let timer;
+    let liveTimer;
+    let liveTimerCorr;
 
     let timeNowReal = function () {
         // Return UNIX timestamp in seconds
@@ -79,6 +80,18 @@ window.conference.live = (function() {
         return h + ":" + (m < 10 ? "0" : "") + m;
     };
 
+    let timeStart = function () {
+        let tNow = timeNow();
+        if (confStart - 60 > tNow) {
+            // Start when conference start (-60s)
+            return confStart - 60 - tNow;
+        }
+        else {
+            // Start on the minute
+            return (60 - (tNow % 60));
+        }
+    };
+
     let updateLiveButtons = function() {
         let tNow = timeNow();
         let liveShow = document.getElementsByClassName('live-show');
@@ -114,36 +127,26 @@ window.conference.live = (function() {
             }
         }
 
-        if (timeNow() > confEnd) {
+        if (timeNow() > confEnd && !demo) {
             // Cancel timer after program is over
-            clearInterval(timer);
-        }
-    };
-
-    let timeStart = function () {
-        let tNow = timeNow();
-        if (confStart - 60 > tNow) {
-            // Start when conference start (-60s)
-            return confStart - 60 - tNow;
-        }
-        else {
-            // Start on the minute
-            return (60 - (tNow % 60));
+            clearInterval(liveTimer);
         }
     };
 
     let startUpdate = function () {
-        if(typeof timer !== "undefined") {
-            clearInterval(timer);
+        if(typeof liveTimer !== "undefined") {
+            clearInterval(liveTimer);
         }
         updateLiveButtons();
 
         if (demo) {
-            timer = setInterval(updateLiveButtons, 100);
+            liveTimerCorr = (confEnd - confStart) / (durDemo - 2*durPause);
+            liveTimer = setInterval(updateLiveButtons, 100);
         }
         else {
+            liveTimerCorr = 1;
             setTimeout(function() {
-                timer = setInterval(updateLiveButtons, 60*1000);
+                liveTimer = setInterval(updateLiveButtons, 60*1000);
                 updateLiveButtons();
             }, timeStart() * 1000);
         }
@@ -155,21 +158,79 @@ window.conference.live = (function() {
         startUpdate();
     };
 
+    let demoOn = function() {
+        return demo;
+    };
+
     {% if site.conference.live.streaming -%}
 
         let rooms = {
-            {% for r in site.data.program %}
-                {% assign room = site.rooms | where: 'name', r.room | first %}
-                {% if room.live %}
+            {%- for r in site.data.program -%}
+                {%- assign room = site.rooms | where: 'name', r.room | first -%}
+                {%- if room.live -%}
+
+                    {%- assign t = r.talks | first -%}
+                    {%- include partials/get_talk_time.html -%}
+                    {%- assign time_start = talk_start -%}
+                    {%- assign time_end = talk_end -%}
+                    {%- include partials/get_timestamp.html -%}
+
+                    {%- assign offset_start = site.conference.live.streaming.start_early | default: 0 -%}
+                    {%- assign room_ts_start = offset_start | times: -60 | plus: timestamp_start -%}
+
+                    {%- assign t = r.talks | last -%}
+                    {%- include partials/get_talk_time.html -%}
+                    {%- assign time_start = talk_start -%}
+                    {%- assign time_end = talk_end -%}
+                    {%- include partials/get_timestamp.html -%}
+
+                    {%- assign offset_end = site.conference.live.streaming.end_late | default: 0 -%}
+                    {%- assign room_ts_end = offset_end | times: 60 | plus: timestamp_end -%}
+
                     "{{ room.name }}": {
                         "id": {{ forloop.index }},
-                        "href": "{{ room.live }}"
+                        "href": "{{ room.live }}",
+                        "start": {{ room_ts_start }},
+                        "end": {{ room_ts_end }}
                     },
-                {% endif %}
-            {% endfor %}
+                {%- endif -%}
+            {%- endfor -%}
         };
 
-        let switchStream = function (modal, roomName) {
+        let streamModal;
+        let streamTimer;
+
+        let preStartStream = function(href, startTime, endTime) {
+            streamModal.find('iframe').attr('src', '');
+            streamModal.find('iframe').addClass('d-none');
+            streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
+            streamModal.find('#stream-placeholder').addClass('d-flex');
+
+            if(typeof streamTimer !== "undefined") {
+                clearTimeout(streamTimer);
+            }
+            streamTimer = setTimeout(activeStream, (startTime - timeNow())/liveTimerCorr*1000, href, endTime);
+        }
+
+        let activeStream = function(href, endTime) {
+            streamModal.find('iframe').attr('src', href);
+            streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
+            streamModal.find('iframe').removeClass('d-none');
+
+            if(typeof streamTimer !== "undefined") {
+                clearTimeout(streamTimer);
+            }
+            streamTimer = setTimeout(postEndStream, (endTime - timeNow())/liveTimerCorr*1000);
+        }
+
+        let postEndStream = function() {
+            streamModal.find('iframe').attr('src', '');
+            streamModal.find('iframe').addClass('d-none');
+            streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
+            streamModal.find('#stream-placeholder').addClass('d-flex');
+        }
+
+        let setStream = function (roomName) {
             if (roomName in rooms) {
                 room = rooms[roomName];
             }
@@ -177,51 +238,53 @@ window.conference.live = (function() {
                 room = rooms[Object.keys(rooms)[0]];
             }
 
-            modal.find('.modal-footer .btn').removeClass('active');
-            modal.find('iframe').attr('src', room.href);
-            modal.find('#stream-button' + room.id).addClass('active');
+            streamModal.find('.modal-footer .btn').removeClass('active');
+            if (timeNow() < room.start) {
+                preStartStream(room.href, room.start, room.end);
+            }
+            else if (timeNow() > room.end) {
+                postEndStream();
+            }
+            else {
+                activeStream(room.href, room.end);
+            }
+            streamModal.find('#stream-button' + room.id).addClass('active');
         };
 
-        let hideModal = function (el, event) {
-            let modal = $(el);
-
-            modal.find('iframe').attr('src', '');
-            modal.find('.modal-footer .btn').removeClass('active');
+        let hideModal = function (event) {
+            streamModal.find('iframe').attr('src', '');
+            streamModal.find('.modal-footer .btn').removeClass('active');
         };
 
-        let initStream = function() {
-            elSel = '#stream-modal';
+        let startStream = function() {
+            streamModal = $('#stream-modal');
 
-            $(elSel).on('show.bs.modal', function (event) {
-                let modal = $(this);
+            streamModal.on('show.bs.modal', function (event) {
                 let button = $(event.relatedTarget);
                 let roomName = button.data('room');
-
-                switchStream(modal, roomName);
+                setStream(roomName);
             });
-            $(elSel).on('hide.bs.modal', function (event) {
-                hideModal(this, event);
+            streamModal.on('hide.bs.modal', function (event) {
+                hideModal(event);
             });
 
-            $(elSel + ' .modal-footer .btn').on('click', function(event) {
+            streamModal.find('.modal-footer .btn').on('click', function(event) {
                 event.preventDefault();
 
-                let modal = $(elSel);
                 let roomName = $(this).data('room')
-
-                switchStream(modal, roomName);
+                setStream(roomName);
             });
         };
 
     {%- else -%}
 
-        let initStream = function() {};
+        let startStream = function() {};
 
     {%- endif %}
 
     let init = function () {
         startUpdate();
-        initStream();
+        startStream();
     };
 
     return {
@@ -234,6 +297,7 @@ window.conference.live = (function() {
         getTime: getTime,
 
         toggleDemo: toggleDemo,
+        demoOn: demoOn,
         durDemo: durDemo,
         durPause: durPause
     };
