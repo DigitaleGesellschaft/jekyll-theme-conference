@@ -40,14 +40,23 @@ jobs:
         run: |
           bundle exec jekyll build -d _site/
 
+      - name: Install Minify
+        run: |
+          sudo apt-get update
+          sudo apt-get install minify
+
+      - name: Compress website
+        run: |
+          minify --all --html-keep-document-tags --html-keep-end-tags -r -o _site_compressed/ _site/
+
       - name: Package generated website
         run: |
-          cd _site/
+          cd _site_compressed/
           zip -r ../website.zip *
           cd ../
 
       - name: Create Release
-        uses: actions/create-release@v1.0.0
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -57,7 +66,7 @@ jobs:
           prerelease: false
 
       - name: Upload zipped Website as Release Asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

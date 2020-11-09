@@ -10,6 +10,18 @@
   </title>
 
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
+
+  {%- if site.conference.live -%}
+    <link rel="prefetch" href="{{ site.baseurl }}/assets/icons/live.svg" />
+  {%- endif -%}
+
+  {%- if site.conference.live.streaming -%}
+    {%- for room in site.rooms -%}
+      {%- if room.live -%}
+        <link rel="preconnect" href="{{ room.live }}" />
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
 </head>
 
 <body class="pb-4">

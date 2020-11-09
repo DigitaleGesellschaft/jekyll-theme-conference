@@ -89,6 +89,8 @@ The different talks, speakers and rooms are stored as a collection of files. Eac
 
 The actual schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/) under `_data/program.yml`. For further details about it see below in the section _Content_.
 
+:warning: Please note that the generated website can be quite large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g. with [minify](https://github.com/tdewolff/minify)).
+
 In order to be up and running simply use the default content of this repository as an initial base for your new website. After having setup a new Jekyll website copy the following files and folders into the website's folder:
 
 - `_config.example.yml` -> `_config.yml`
@@ -104,9 +106,9 @@ In order to be up and running simply use the default content of this repository 
 
 There exists a Python file in this repository, `create_entries.py`, which can be used to import content from a CSV table and generate the different talk, speakers and room files automatically based on it. Just open your terminal and type `python create_entries.py --help` to show the help and get started.
 
-In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains an example Github Action configuration file which automatically builds the website upon adding a new tag. It then attaches the generated website as package to a release for easy downloading. Simply copy the following file to your repository and adapt it to your needs:
+In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains an example Github Action configuration file which automatically builds and minimizes the website upon adding a new tag. It then attaches the generated website as package to a release for easy downloading. Simply copy the following file to your repository and adapt it to your needs:
 
-- `workflows.example.yml` -> `.github/workflows.main.yml`
+- `workflow-example.yml` -> `.github/workflows/main.yml`
 
 
 ## Configuration
@@ -123,6 +125,8 @@ Example:
 conference:
   show_errors: false
 ```
+
+:warning: Please be sure to disable this parameter for your production system.
 
 ### Collection URLs
 
