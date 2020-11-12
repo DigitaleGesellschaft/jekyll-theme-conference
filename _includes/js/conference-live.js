@@ -1,4 +1,4 @@
-window.conference.live = (function() {
+    window.conference.live = (function() {
     {%- include partials/get_conf_time.html -%}
     {%- assign time_start = conf_start -%}
     {%- assign time_end = conf_end -%}
@@ -6,6 +6,7 @@ window.conference.live = (function() {
 
     let confStart = {{ timestamp_start }};
     let confEnd = {{ timestamp_end }};
+    let confDur = confEnd - confStart;
 
     let freezeTime = false;
     let timeFrozen = 0;
@@ -15,85 +16,126 @@ window.conference.live = (function() {
     let durDemo  = 5*60; // in seconds
     let durPause =   10; // in seconds
 
-    let liveTimer;
-    let liveTimerCorr;
+    let demoStart = confStart - confDur/durDemo*durPause;
+    let demoEnd = confEnd + confDur/durDemo*durPause;
 
-    let timeNowReal = function () {
-        // Return UNIX timestamp in seconds
+    let liveTimer;
+    let streamTimer;
+
+    let mod = function (n, m) {
+        return ((n % m) + m) % m;
+    };
+
+    let timeNow = function () {
         return Math.floor(Date.now() / 1000);
     };
 
-    let timeNowCycle = function() {
-        // Cycle time over program for a fixed duration
-        let relTime = (Math.floor(Date.now() / 1000) % durDemo - durPause) / (durDemo - 2*durPause);
-        let cycleTime = (confEnd - confStart) * relTime + confStart;
+    let timeCont = function () {
+        return timeNow() - timeOffset;
+    };
+
+    let timeCycle = function () {
+        let actTime = timeNow();
+        let relTime = mod(actTime, durDemo + 2*durPause) / durDemo;
+        let cycleTime = mod((demoEnd - demoStart) * relTime - timeOffset, (demoEnd - demoStart)) + demoStart;
         return cycleTime;
     };
 
-    let timeNow = function() {
+    let time = function () {
         if (freezeTime) {
             return timeFrozen;
         }
         else if (demo) {
-            return timeNowCycle() - timeOffset;
+            return timeCycle();
         }
         else {
-            return timeNowReal() - timeOffset;
+            return timeCont();
         }
     };
 
     let pauseTime = function () {
-        timeFrozen = timeNow();
-        freezeTime = true;
+        if (!freezeTime) {
+            timeFrozen = time();
+            freezeTime = true;
+
+            stopUpdate();
+        }
     };
 
     let continueTime = function () {
-        if (demo) {
-            timeOffset = timeNowCycle() - timeFrozen;
+        if (freezeTime) {
+            freezeTime = false;
+            timeOffset += time() - timeFrozen;
+            startUpdate();
         }
-        else {
-            timeOffset = timeNow() - timeFrozen;
-        }
-        freezeTime = false;
     };
 
     let resetTime = function (timeStr) {
-        continueTime();
         timeOffset = 0;
+        freezeTime = false;
+
+        startUpdate();
     };
 
-    let setTime = function (timeStr) {
+    let setTime = function (newTime) {
         pauseTime();
 
-        let d = new Date(timeNow() * 1000);
-        time = timeStr.split(':');
-        d.setHours(time[0], time[1]);
+        let d = new Date(confStart * 1000);
+        newTime = newTime.split(':');
+        d.setHours(newTime[0], newTime[1]);
 
         timeFrozen = Math.floor(d.getTime() / 1000);
+
+        update();
     };
 
-    let getTime = function () {
-        let d = new Date(timeNow() * 1000);
+    let getTime = function (tConvert = time()) {
+        let d = new Date(tConvert * 1000);
         let h = d.getHours();
         let m = d.getMinutes();
 
         return h + ":" + (m < 10 ? "0" : "") + m;
     };
 
-    let timeStart = function () {
-        let tNow = timeNow();
-        if (confStart - 60 > tNow) {
-            // Start when conference start (-60s)
-            return confStart - 60 - tNow;
+    let timeUnit = function () {
+        if (demo) {
+            return 0.1;
         }
         else {
-            // Start on the minute
-            return (60 - (tNow % 60));
+            return 60;
         }
     };
 
-    let updateLiveButtons = function() {
-        let tNow = timeNow();
+    let delayStart = function (startTime) {
+        let tNow = time();
+        let tUnit = timeUnit();
+
+        if (demo) {
+            // Convert virtual duration to real duration
+            return mod(startTime - tNow, demoEnd - demoStart) / (demoEnd - demoStart) * (durDemo + 2*durPause);
+        }
+        else {
+            if (startTime > tNow) {
+                return startTime - tNow;
+            }
+            else {
+                // Start on the unit
+                return (tUnit - (tNow % tUnit));
+            }
+        }
+    };
+
+    let toggleDemo = function () {
+        demo = !demo;
+        resetTime();
+    };
+
+    let demoOn = function () {
+        return demo;
+    };
+
+    let updateLive = function () {
+        let tNow = time();
         let liveShow = document.getElementsByClassName('live-show');
         let liveHide = document.getElementsByClassName('live-hide');
 
@@ -127,39 +169,32 @@ window.conference.live = (function() {
             }
         }
 
-        if (timeNow() > confEnd && !demo) {
+        if (tNow > confEnd && !demo) {
             // Cancel timer after program is over
-            clearInterval(liveTimer);
+            stopUpdateLive();
         }
     };
 
-    let startUpdate = function () {
-        if(typeof liveTimer !== "undefined") {
-            clearInterval(liveTimer);
-        }
-        updateLiveButtons();
+    let startUpdateLive = function () {
+        stopUpdateLive();
+        updateLive();
 
         if (demo) {
-            liveTimerCorr = (confEnd - confStart) / (durDemo - 2*durPause);
-            liveTimer = setInterval(updateLiveButtons, 100);
+            // Immediate start required since delayStart would wait for next wrap around
+            liveTimer = setInterval(updateLive, timeUnit() * 1000);
         }
         else {
-            liveTimerCorr = 1;
             setTimeout(function() {
-                liveTimer = setInterval(updateLiveButtons, 60*1000);
-                updateLiveButtons();
-            }, timeStart() * 1000);
+                liveTimer = setInterval(updateLive, timeUnit() * 1000);
+                updateLive();
+            }, delayStart(confStart) * 1000);
         }
     };
 
-    let toggleDemo = function () {
-        demo = !demo;
-        timeOffset = 0;
-        startUpdate();
-    };
-
-    let demoOn = function() {
-        return demo;
+    let stopUpdateLive = function () {
+        if (typeof liveTimer !== "undefined") {
+            clearInterval(liveTimer);
+        }
     };
 
     {% if site.conference.live.streaming -%}
@@ -198,57 +233,91 @@ window.conference.live = (function() {
         };
 
         let streamModal;
-        let streamTimer;
 
-        let preStartStream = function(href, startTime, endTime) {
+        let getRoom = function (roomName) {
+            if (roomName in rooms) {
+                return rooms[roomName];
+            }
+            else {
+                return rooms[Object.keys(rooms)[0]];
+            }
+        };
+
+        let preStartStream = function (roomName) {
+            let room = getRoom(roomName);
+
             streamModal.find('iframe').attr('src', '');
             streamModal.find('iframe').addClass('d-none');
             streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
             streamModal.find('#stream-placeholder').addClass('d-flex');
 
-            if(typeof streamTimer !== "undefined") {
-                clearTimeout(streamTimer);
+            stopUpdateStream();
+            if (!freezeTime) {
+                streamTimer = setTimeout(activeStream, delayStart(room.start) * 1000, roomName);
             }
-            streamTimer = setTimeout(activeStream, (startTime - timeNow())/liveTimerCorr*1000, href, endTime);
-        }
+        };
 
-        let activeStream = function(href, endTime) {
-            streamModal.find('iframe').attr('src', href);
+        let activeStream = function (roomName) {
+            let room = getRoom(roomName);
+
+            streamModal.find('iframe').attr('src', room.href);
             streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
             streamModal.find('iframe').removeClass('d-none');
 
-            if(typeof streamTimer !== "undefined") {
-                clearTimeout(streamTimer);
+            stopUpdateStream();
+            if (!freezeTime) {
+                streamTimer = setTimeout(postEndStream, delayStart(room.end) * 1000, roomName);
             }
-            streamTimer = setTimeout(postEndStream, (endTime - timeNow())/liveTimerCorr*1000);
-        }
+        };
 
-        let postEndStream = function() {
+        let postEndStream = function (roomName) {
+            let room = getRoom(roomName);
+
             streamModal.find('iframe').attr('src', '');
             streamModal.find('iframe').addClass('d-none');
             streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
             streamModal.find('#stream-placeholder').addClass('d-flex');
-        }
+
+            stopUpdateStream();
+            if (!freezeTime && demo) {
+                streamTimer = setTimeout(preStartStream, delayStart(demoStart) * 1000, roomName);
+            }
+        };
 
         let setStream = function (roomName) {
-            if (roomName in rooms) {
-                room = rooms[roomName];
+            streamModal.find('.modal-footer .btn').removeClass('active');
+
+            let room = getRoom(roomName);
+            let tNow = time();
+
+            if (tNow < room.start) {
+                preStartStream(roomName);
+            }
+            else if (tNow > room.end) {
+                postEndStream(roomName);
             }
             else {
-                room = rooms[Object.keys(rooms)[0]];
+                activeStream(roomName);
             }
 
-            streamModal.find('.modal-footer .btn').removeClass('active');
-            if (timeNow() < room.start) {
-                preStartStream(room.href, room.start, room.end);
-            }
-            else if (timeNow() > room.end) {
-                postEndStream();
-            }
-            else {
-                activeStream(room.href, room.end);
-            }
             streamModal.find('#stream-button' + room.id).addClass('active');
+        };
+
+        let updateStream = function () {
+            if (streamModal.hasClass('show')) {
+                let activeButton = streamModal.find('.modal-footer .btn.active');
+                let roomName = activeButton.data('room');
+
+                if (typeof roomName !== "undefined") {
+                    setStream(roomName);
+                }
+            }
+        };
+
+        let stopUpdateStream = function () {
+            if (typeof streamTimer !== "undefined") {
+                clearInterval(streamTimer);
+            }
         };
 
         let hideModal = function (event) {
@@ -256,7 +325,7 @@ window.conference.live = (function() {
             streamModal.find('.modal-footer .btn').removeClass('active');
         };
 
-        let startStream = function() {
+        let setupStream = function () {
             streamModal = $('#stream-modal');
 
             streamModal.on('show.bs.modal', function (event) {
@@ -276,19 +345,48 @@ window.conference.live = (function() {
             });
         };
 
+        let setup = function () {
+            startUpdateLive();
+            setupStream();
+        };
+
+        let update = function () {
+            updateLive();
+            updateStream();
+        };
+
+        let startUpdate = function () {
+            startUpdateLive();
+            updateStream();
+        };
+
+        let stopUpdate = function () {
+            stopUpdateLive();
+            stopUpdateStream();
+        };
+
     {%- else -%}
 
-        let startStream = function() {};
+        let setup = function () {
+            startUpdateLive();
+        };
+
+        let update = function () {
+            updateLive();
+        };
+
+        let startUpdate = function () {
+            startUpdateLive();
+        };
+
+        let stopUpdate = function () {
+            stopUpdateLive();
+        };
 
     {%- endif %}
 
-    let init = function () {
-        startUpdate();
-        startStream();
-    };
-
     return {
-        init: init,
+        init: setup,
 
         pauseTime: pauseTime,
         continueTime: continueTime,
@@ -297,7 +395,7 @@ window.conference.live = (function() {
         getTime: getTime,
 
         toggleDemo: toggleDemo,
-        demoOn: demoOn,
+        demo: demoOn,
         durDemo: durDemo,
         durPause: durPause
     };
