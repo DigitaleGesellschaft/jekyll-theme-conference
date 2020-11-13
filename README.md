@@ -104,7 +104,7 @@ In order to be up and running simply use the default content of this repository 
 - `speakers/`
 - `talks/`
 
-There exists a Python file in this repository, `create_entries.py`, which can be used to import content from a CSV table and generate the different talk, speakers and room files automatically based on it. Just open your terminal and type `python create_entries.py --help` to show the help and get started.
+There exists a Python file in this repository, `create_entries.py`, which can be used to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible JSON file or a CSV table and generate the different talk, speakers and room files automatically based on it. Just open your terminal and type `python create_entries.py --help` to show the help and get started.
 
 In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains an example Github Action configuration file which automatically builds and minimizes the website upon adding a new tag. It then attaches the generated website as package to a release for easy downloading. Simply copy the following file to your repository and adapt it to your needs:
 

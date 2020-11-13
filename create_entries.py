@@ -3,6 +3,7 @@
 import os
 import csv
 import yaml
+import json
 import re
 from unicodedata import normalize
 
@@ -59,6 +60,71 @@ def parse_csv(file_path):
         return content
 
 
+def parse_frab(file_path):
+    with open(file_path, 'r', encoding='utf-8') as frab_file:
+        data = json.load(frab_file)
+        rooms = data['schedule']['conference']['days'][0]['rooms']
+
+        content = {
+            'talks': [],
+            'speakers': [],
+            'rooms': [],
+            'program': []
+        }
+
+        for room, talks in rooms.items():
+            if room not in [r['name'] for r in content['rooms']]:
+                content['rooms'].append({
+                    'name': room,
+                    'description': ''
+                    })
+
+            for talk in sorted(talks, key=lambda t: t['start']):
+
+                for speaker in talk['persons']:
+                    speaker_name = speaker['public_name']
+
+                    if speaker_name not in \
+                       [s['name'] for s in content['speakers']]:
+                        speaker_names = speaker_name.rsplit(' ', 1)
+                        content['speakers'].append({
+                            'name': speaker_name,
+                            'first_name': speaker_names[0],
+                            'bio': speaker['biography']
+                            })
+
+                        if len(speaker_names) > 1:
+                            content['speakers'][-1]['last_name'] = \
+                                speaker_names[1]
+                        else:
+                            content['speakers'][-1]['last_name'] = ''
+
+                content['talks'].append({
+                    'name': talk['title'],
+                    'speakers': [s['public_name'] for s in talk['persons']],
+                    'categories': [talk['track'], talk['type']],
+                    'description': talk['description']
+                    })
+
+                # Calculate talk end time
+                talk_start = (talk['start']).split(':')
+                talk_duration = (talk['duration']).split(':')
+                talk_end = [int(talk_start[0]) + int(talk_duration[0]),
+                            int(talk_start[1]) + int(talk_duration[1])]
+                talk_end[0] = (talk_end[0] + talk_end[1] // 60) % 24
+                talk_end[1] = talk_end[1] % 60
+                talk_end = "{}:{:02d}".format(talk_end[0], talk_end[1])
+
+                content['program'].append({
+                    'name': talk['title'],
+                    'time_start': talk['start'],
+                    'time_end': talk_end,
+                    'room': room
+                    })
+
+        return content
+
+
 default_file_structure = {
     'talks': {
         'folder_name': '_talks',
@@ -81,8 +147,7 @@ default_file_structure = {
 }
 
 
-def create_files(content, folder_name,
-                 file_name, file_vars, file_content):
+def create_files(content, folder_name, file_name, file_vars, file_content):
     # verify if folder exists, otherwise create it
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
@@ -98,8 +163,17 @@ def create_files(content, folder_name,
             if file_var in entry:
                 file_data[file_var] = entry[file_var]
 
+        if file_content in entry and entry[file_content]:
+            # escape markdown text
+            text = escape_markdown(entry[file_content])
+        else:
+            # if no content add hide variable
+            text = None
+            file_data['hide'] = True
+
         # write to file
         with open(file_path, 'w', encoding='utf-8') as f:
+
             # Write Header
             f.write('---\n')
             yaml.dump(file_data, f,
@@ -108,10 +182,7 @@ def create_files(content, folder_name,
             f.write('---\n')
 
             # Write Body
-            if file_content in entry:
-                # escape markdown text
-                text = escape_markdown(entry[file_content])
-
+            if text:
                 f.write(text)
 
 
@@ -127,6 +198,10 @@ default_list_structure = {
 
 def create_list(content, file_path,
                 list_sorting, sublist_name, sublist_categories):
+    # verify if folder exists, otherwise create it
+    if not os.path.exists(os.path.dirname(file_path)):
+        os.makedirs(os.path.dirname(file_path))
+
     # collect all possible entries from content
     list_titles = []
     for entry in content:
@@ -162,11 +237,17 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         description='Generate Markdown and YAML files for Jekyll based on ' +
-                    'a CSV table.')
+                    'a CSV table or a JSON file (frab compatible).')
     parser.add_argument('file', metavar='FILE',
                         help='CSV file to read from')
 
     default_group = parser.add_argument_group('default options')
+
+    default_group.add_argument('-f', '--frab',
+                               action='store_const', const=True,
+                               help='Create Markdown files from frab ' +
+                                    'compatible schedule (overwrites ' +
+                                    'remaining arguments)')
 
     default_group.add_argument('-t', '--talks',
                                action='store_const', const=True,
@@ -215,56 +296,53 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.talks or args.speakers or args.rooms or args.create_files:
+    if args.frab:
+        content = parse_frab(args.file)
+        create_files(content['talks'], **default_file_structure['talks'])
+        create_files(content['speakers'], **default_file_structure['speakers'])
+        create_files(content['rooms'], **default_file_structure['rooms'])
+        create_list(content['program'], **default_list_structure['program'])
+
+    elif args.talks or args.speakers or args.rooms or args.create_files:
         # get default settings
         if args.talks:
-            folder_name = default_file_structure['talks']['folder_name']
-            file_name = default_file_structure['talks']['file_name']
-            file_vars = default_file_structure['talks']['file_vars']
-            file_content = default_file_structure['talks']['file_content']
+            file_args = default_file_structure['talks']
         elif args.speakers:
-            folder_name = default_file_structure['speakers']['folder_name']
-            file_name = default_file_structure['speakers']['file_name']
-            file_vars = default_file_structure['speakers']['file_vars']
-            file_content = default_file_structure['speakers']['file_content']
+            file_args = default_file_structure['speakers']
         elif args.rooms:
-            folder_name = default_file_structure['rooms']['folder_name']
-            file_name = default_file_structure['rooms']['file_name']
-            file_vars = default_file_structure['rooms']['file_vars']
-            file_content = default_file_structure['rooms']['file_content']
+            file_args = default_file_structure['rooms']
+        else:
+            file_args = {}
 
         # overwrite default settings and/or define remaining settings
         if args.folder_name:
-            folder_name = args.folder_name
+            file_args['folder_name'] = args.folder_name
         if args.file_name:
-            file_name = args.file_name
+            file_args['file_name'] = args.file_name
         if args.file_vars:
-            file_vars = args.file_vars
+            file_args['file_vars'] = args.file_vars
         if args.file_content:
-            file_content = args.file_content
+            file_args['file_content'] = args.file_content
 
         content = parse_csv(args.file)
-        create_files(content, folder_name, file_name, file_vars, file_content)
+        create_files(content, **file_args)
 
     elif args.program or args.create_list:
         # get default settings
         if args.program:
-            file_path = default_list_structure['program']['file_path']
-            list_sorting = default_list_structure['program']['list_sorting']
-            sublist_name = default_list_structure['program']['sublist_name']
-            sublist_categories = \
-                default_list_structure['program']['sublist_categories']
+            list_args = default_list_structure['program']
+        else:
+            list_args = {}
 
         # overwrite default settings and/or define remaining settings
         if args.file_path:
-            file_path = args.file_path
+            list_args['file_path'] = args.file_path
         if args.list_sorting:
-            list_sorting = args.list_sorting
+            list_args['list_sorting'] = args.list_sorting
         if args.sublist_name:
-            sublist_name = args.sublist_name
+            list_args['sublist_name'] = args.sublist_name
         if args.sublist_categories:
-            sublist_categories = args.sublist_categories
+            list_args['sublist_categories'] = args.sublist_categories
 
         content = parse_csv(args.file)
-        create_list(content, file_path, list_sorting, sublist_name,
-                    sublist_categories)
+        create_list(content, **list_args)
