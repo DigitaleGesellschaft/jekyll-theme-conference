@@ -286,6 +286,7 @@
 
         let setStream = function (roomName) {
             streamModal.find('.modal-footer .btn').removeClass('active');
+            streamModal.find('#stream-select').selectedIndex = -1;
 
             let room = getRoom(roomName);
             let tNow = time();
@@ -301,6 +302,7 @@
             }
 
             streamModal.find('#stream-button' + room.id).addClass('active');
+            streamModal.find('#stream-select').selectedIndex = room.id;
         };
 
         let updateStream = function () {
@@ -323,6 +325,7 @@
         let hideModal = function (event) {
             streamModal.find('iframe').attr('src', '');
             streamModal.find('.modal-footer .btn').removeClass('active');
+            streamModal.find('#stream-select').selectedIndex = -1;
         };
 
         let setupStream = function () {
@@ -340,7 +343,14 @@
             streamModal.find('.modal-footer .btn').on('click', function(event) {
                 event.preventDefault();
 
-                let roomName = $(this).data('room')
+                let roomName = $(this).data('room');
+                setStream(roomName);
+            });
+
+            streamModal.find('#stream-select').on('change', function(event) {
+                event.preventDefault();
+
+                let roomName = $(this).children('option:selected').text();
                 setStream(roomName);
             });
         };

@@ -19,10 +19,18 @@
         {% for r in site.data.program %}
           {% assign room = site.rooms | where: 'name', r.room | first %}
 
-          <a id="stream-button{{ forloop.index }}" href="#" class="btn btn-outline-primary {% unless room.live %}disabled{% endunless %}" role="button" data-room="{{ room.name }}">
+          <a id="stream-button{{ forloop.index }}" href="#" class="btn btn-outline-primary d-none d-sm-inline {% unless room.live %}disabled{% endunless %}" role="button" data-room="{{ room.name }}">
             {{ room.name }}
           </a>
         {% endfor %}
+        <div class="form-group w-100 d-block d-sm-none">
+          <select class="form-control" id="stream-select">
+            {% for r in site.data.program %}
+              {% assign room = site.rooms | where: 'name', r.room | first %}
+              <option {% unless room.live %}disabled{% endunless %}>{{ room.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
     </div>
   </div>
