@@ -201,11 +201,6 @@ conference:
 
 The navigation bar is located at the top and visible on every site. On the right it show the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the _Content_ > _Links_ section below for the available properties per link.
 
-Additionally, a navigation bar link can also have the following properties:
-
-- `menu` containing another list of links. This creates a dropdown menu of multiple sublinks. The sublinks have the same properties as regular links (see the _Content_ > _Links_ section), or
-- `live` making the link only visible during the conference and adds a live indication. The `name` property can be omitted. If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ below).
-
 Example:
 
 ```yaml
@@ -518,6 +513,11 @@ Links are used at different location throughout the theme: They can either be us
   + given absolute: `absolute_url:`,
   + pointing to a file uploaded to the `/documents` folder (for talks `/documents/slides`, for speakers `/documents/bio`): `file:`
   + pointing to an external video: `video:`
+
+Additionally, a navigation bar or main landing page link can also have the following properties:
+
+- `menu` containing another list of links. This creates a dropdown menu of multiple sublinks. The sublinks have the same properties as regular links, or
+- `live` making the link only visible during the conference and adds a live indication. The `name` property can be omitted. If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ above).
 
 Using the `file:` indicator, the relative address is automatically set as well as the icon. Using the `video:` indicator, the link is automatically configured to open in an iframe with a corresponding title and the icon is set.
 
