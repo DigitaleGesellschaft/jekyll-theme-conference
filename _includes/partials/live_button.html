@@ -4,11 +4,11 @@
   {% include partials/get_timestamp.html %}
 
   {%- if site.conference.live.streaming -%}
-    <a title="{{ link.name }}" data-toggle="modal" data-target="#stream-modal" data-room="{{ r.room }}" class="cursor-pointer
+    <a title="{{ link.name }}" data-toggle="modal" data-target="#stream-modal" data-room="{{ r.room }}" href="#"
   {%- else -%}
-    <span class="
-  {%- endif %} live-show live-button badge badge-dark font-weight-normal text-left d-none {{ live_button_styleclass }}" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
-    <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml"></object>
+    <span
+  {%- endif %} class="live-show live-button badge badge-dark font-weight-normal text-left d-none {{ live_button_styleclass }}" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+    <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml">!</object>
     {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
   {%- if site.conference.live.streaming -%}
     </a>

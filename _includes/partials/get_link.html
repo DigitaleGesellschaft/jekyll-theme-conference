@@ -67,10 +67,10 @@
 
 {% capture link_tag -%}
   {%- if link.disabled -%}
-    <a class="disabled{% if link_styleclass %} {{ link_styleclass }}{% endif %}">
+    <a class="disabled{% if link_styleclass %} {{ link_styleclass }}{% endif %}" href="#">
 
   {%- elsif link_iframe -%}
-    <a class="cursor-pointer{% if link_styleclass %} {{ link_styleclass }}{% endif %}" title="{{ link.name }}" data-toggle="modal" data-target="#link-modal" data-href="{{ link_href }}" {% if modal_header -%}
+    <a {% if link_styleclass %}class="{{ link_styleclass }}"{% endif %} title="{{ link.name }}" data-toggle="modal" data-target="#link-modal" data-href="{{ link_href }}" href="#" {% if modal_header -%}
       data-header="{{ modal_header | strip_newlines | escape }}"
     {%- elsif modal_title -%}
       data-title="{{ modal_title }}"

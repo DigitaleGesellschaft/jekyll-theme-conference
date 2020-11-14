@@ -25,7 +25,7 @@
        attributeName="opacity"
        from="0"
        to="0"
-       dur="0.5s"
+       dur="500ms"
        begin="0s;dot_animate.end+7.35s" />
     <animate
        id="dot_animate"
@@ -33,7 +33,7 @@
        attributeName="opacity"
        from="0"
        to="1"
-       dur="0.15s"
+       dur="150ms"
        begin="dot_hide.end" />
      </path>
   <path
@@ -46,7 +46,7 @@
        attributeName="opacity"
        from="0"
        to="0"
-       dur="0.65s"
+       dur="650ms"
        begin="dot_hide.begin" />
     <animate
        id="arc_small_animate"
@@ -54,7 +54,7 @@
        attributeName="opacity"
        from="0"
        to="1"
-       dur="0.2s"
+       dur="200ms"
        begin="arc_small_hide.end" />
      </path>
   <path
@@ -67,7 +67,7 @@
        attributeName="opacity"
        from="0"
        to="0"
-       dur="0.85s"
+       dur="850ms"
        begin="dot_hide.begin" />
     <animate
        id="arc_large_animate"
@@ -75,7 +75,7 @@
        attributeName="opacity"
        from="0"
        to="1"
-       dur="0.25s"
+       dur="250ms"
        begin="arc_large_hide.end" />
      </path>
 </svg>
