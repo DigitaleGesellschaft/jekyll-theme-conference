@@ -1,6 +1,7 @@
-{% include partials/header.html %}
+{%- assign talk = page -%}
 
-  {% assign talk = page %}
+{%- unless talk.hide -%}
+  {%- include partials/header.html -%}
 
   <div class="d-flex flex-lg-row flex-column container-fluid mb-2 p-0">
     <div class="h6 mt-2 mb-0 mr-1 pr-1 pb-1">
@@ -119,4 +120,5 @@
     </a>
   </p>
 
-{% include partials/footer.html %}
+  {%- include partials/footer.html -%}
+{%- endunless -%}

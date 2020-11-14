@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+{% if site.conference.location.hide -%}
+rm -r rooms
+rm -r {{ site.conference.location.url | default: "location" }}
+{% else -%}
+{%- for room in site.rooms -%}
+{%- if room.hide -%}
+rm -r {{ room.url | slice: 1, room.url.size }}
+{% endif -%}
+{%- endfor -%}
+{%- endif -%}
+
+{%- for speaker in site.speakers -%}
+{%- if speaker.hide -%}
+rm -r {{ speaker.url | slice: 1, speaker.url.size }}
+{% endif -%}
+{%- endfor -%}
+
+{%- for talk in site.talks -%}
+{%- if talk.hide -%}
+rm -r {{ talk.url | slice: 1, talk.url.size }}
+{% endif -%}
+{%- endfor %}
+rm delete_hidden.sh

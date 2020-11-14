@@ -40,6 +40,10 @@ jobs:
         run: |
           bundle exec jekyll build -d _site/
 
+      - name: Remove empty files
+        run: |
+          [ -f _site/delete_hidden.sh ] || /bin/bash _site/delete_hidden.sh
+
       - name: Install Minify
         run: |
           sudo apt-get update

@@ -1,6 +1,7 @@
-{% include partials/header.html %}
+{%- assign speaker = page -%}
 
-  {% assign speaker = page %}
+{%- unless speaker.hide -%}
+  {%- include partials/header.html -%}
 
   <p class="h6">
     {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
@@ -104,4 +105,5 @@
     </a>
   </p>
 
-{% include partials/footer.html %}
+  {%- include partials/footer.html -%}
+{%- endunless -%}

@@ -91,6 +91,8 @@ The actual schedule defining when and in which room a talk takes place is stored
 
 :warning: Please note that the generated website can be quite large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g. with [minify](https://github.com/tdewolff/minify)).
 
+### Jump Start
+
 In order to be up and running simply use the default content of this repository as an initial base for your new website. After having setup a new Jekyll website copy the following files and folders into the website's folder:
 
 - `_config.example.yml` -> `_config.yml`
@@ -104,11 +106,23 @@ In order to be up and running simply use the default content of this repository 
 - `speakers/`
 - `talks/`
 
+### Automatic Import
+
 There exists a Python file in this repository, `create_entries.py`, which can be used to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible JSON file or a CSV table and generate the different talk, speakers and room files automatically based on it. Just open your terminal and type `python create_entries.py --help` to show the help and get started.
+
+### Automatic Build
 
 In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains an example Github Action configuration file which automatically builds and minimizes the website upon adding a new tag. It then attaches the generated website as package to a release for easy downloading. Simply copy the following file to your repository and adapt it to your needs:
 
 - `workflow-example.yml` -> `.github/workflows/main.yml`
+
+Hidden rooms, speakers, or talks are automatically generated in way containing no content. In order to remove these empty files simply add a file called `delete_hidden.sh` to the root with the following content. It will automatically called by the Github Action workflow to delete the files.
+
+```markdown
+---
+layout: delete_hidden
+---
+```
 
 
 ## Configuration

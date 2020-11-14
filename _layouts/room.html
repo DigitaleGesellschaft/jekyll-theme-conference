@@ -1,4 +1,7 @@
-{% include partials/header.html %}
+{%- assign this_room = page -%}
+
+{%- unless this_room.hide or site.conference.location.hide -%}
+  {%- include partials/header.html -%}
 
   <!-- title for print: -->
   <h1 class="display-5 mb-3 d-none d-print-inline">
@@ -10,7 +13,6 @@
     {{ site.data.lang[site.conference.lang].location.title | default: "Location" }}
   </h1>
 
-  {% assign this_room = page %}
   {% include partials/navbar_rooms.html %}
 
   {{ content }}
@@ -60,4 +62,5 @@
 
   </ul>
 
-{% include partials/footer.html %}
+  {%- include partials/footer.html -%}
+{%- endunless -%}
