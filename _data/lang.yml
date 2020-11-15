@@ -1,4 +1,4 @@
-version: 3
+version: 4
 
 en:
   pronoun:
@@ -12,6 +12,19 @@ en:
     streaming: Live Stream
     pre_stream: Live stream has not started yet.
     post_stream: Live stream has ended.
+    time:
+      in: in
+      since: since
+      weeks: weeks
+      week: week
+      days: days
+      day: day
+      hours: hours
+      hour: hour
+      minutes: minutes
+      minute: minute
+      soon: soon
+      now: now
   location:
     title: Location
     directions: Directions
@@ -41,6 +54,19 @@ de:
     streaming: Live Stream
     pre_stream: Der Live Stream hat noch nicht begonnen.
     post_stream: Der Live Stream ist beendet.
+    time:
+      in: in
+      since: seit
+      weeks: Wochen
+      week: Woche
+      days: Tagen
+      day: Tag
+      hours: Stunden
+      hour: Stunde
+      minutes: Minuten
+      minute: Minute
+      soon: demnächst
+      now: jetzt
   location:
     title: Örtlichkeit
     directions: Anfahrt
@@ -70,6 +96,19 @@ fr:
     streaming: Diffusion en direct
     pre_stream: La diffusion en direct n'a pas encore commencé.
     post_stream: La diffusion en direct est terminée.
+    time:
+      in: dans
+      since: depuis
+      weeks: semaines
+      week: semaine
+      days: jours
+      day: jour
+      hours: heures
+      hour: heure
+      minutes: minutes
+      minute: minute
+      soon: à venir
+      now: maintenant
   location:
     title: Lieu
     directions: Indications
@@ -99,6 +138,19 @@ pt:
     streaming: Transmissão ao vivo
     pre_stream: A transmissão ao vivo ainda não começou.
     post_stream: A transmissão ao vivo terminou.
+    time:
+      in: em
+      since: hà
+      weeks: semanas
+      week: semana
+      days: dias
+      day: dia
+      hours: horas
+      hour: hora
+      minutes: minutos
+      minute: minuto
+      soon: em breve
+      now: agora
   location:
     title: Localização
     directions: Indicações

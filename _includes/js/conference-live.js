@@ -8,6 +8,8 @@
     let confEnd = {{ timestamp_end }};
     let confDur = confEnd - confStart;
 
+    let talkAnnounce = 120;  // in minutes
+
     let freezeTime = false;
     let timeFrozen = 0;
     let timeOffset = 0;
@@ -21,6 +23,7 @@
 
     let liveTimer;
     let streamTimer;
+    let streamInfoTimer;
 
     let mod = function (n, m) {
         return ((n % m) + m) % m;
@@ -138,6 +141,8 @@
         let tNow = time();
         let liveShow = document.getElementsByClassName('live-show');
         let liveHide = document.getElementsByClassName('live-hide');
+        let liveTime = document.getElementsByClassName('live-time');
+        let livePast = document.getElementsByClassName('live-past');
 
         for (let i = 0; i < liveShow.length; i++) {
             let tStart = liveShow[i].dataset.start;
@@ -166,6 +171,84 @@
             else {
                 // Show otherwise
                 liveHide[i].classList.remove('d-none');
+            }
+        }
+
+        for (let i = 0; i < liveTime.length; i++) {
+            let t = liveTime[i].dataset.time;
+            if (typeof t == "undefined") {
+                break;
+            }
+            let tRel = tNow - t;
+
+            let tStr;
+            if (tRel >= -60 && tRel < 0) {
+                tStr = '{{ site.data.lang[site.conference.lang].live.time.soon | default: "soon" }}';
+            }
+            else if (tRel >= 0 && tRel < 60) {
+                tStr = '{{ site.data.lang[site.conference.lang].live.time.now | default: "now" }}';
+            }
+            else {
+                if (tRel < 0) {
+                    tStr = '{{ site.data.lang[site.conference.lang].live.time.in | default: "in" }} ';
+                }
+                else {
+                    tStr = '{{ site.data.lang[site.conference.lang].live.time.since | default: "since" }} ';
+                }
+                tRel = Math.abs(tRel);
+
+                let dWeeks = Math.floor(tRel / (7*24*60*60));
+                let dDays  = Math.floor(tRel / (24*60*60));
+                let dHours = Math.floor(tRel / (60*60));
+                let dMins  = Math.floor(tRel / (60));
+                if (dWeeks > 4) {
+                    break;
+                }
+                else if (dWeeks > 1) {
+                    tStr += dWeeks +' {{ site.data.lang[site.conference.lang].live.time.weeks | default: "weeks" }}';
+                }
+                else if (dWeeks == 1) {
+                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.week | default: "week" }}';
+                }
+                else if (dDays > 1) {
+                    tStr += dDays +' {{ site.data.lang[site.conference.lang].live.time.days | default: "days" }}';
+                }
+                else if (dDays == 1) {
+                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.day | default: "day" }}';
+                }
+                else if (dHours > 1) {
+                    tStr += dHours +' {{ site.data.lang[site.conference.lang].live.time.hours | default: "hours" }}';
+                }
+                else if (dHours == 1) {
+                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.hour | default: "hour" }}';
+                }
+                else if (dMins > 1) {
+                    tStr += dMins +' {{ site.data.lang[site.conference.lang].live.time.minutes | default: "minutes" }}';
+                }
+                else {
+                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.minute | default: "minute" }}';
+                }
+            }
+
+            liveTime[i].innerHTML = tStr;
+        }
+
+        for (let i = 0; i < livePast.length; i++) {
+            let t = livePast[i].dataset.time;
+            if (typeof t == "undefined") {
+                break;
+            }
+            let tRel = tNow - t;
+
+            if (tRel < 0) {
+                // Grey out when in past
+                if (!livePast[i].classList.contains('text-secondary')) {
+                    livePast[i].classList.add('text-secondary');
+                }
+            }
+            else {
+                // Show normal otherwise
+                livePast[i].classList.remove('text-secondary');
             }
         }
 
@@ -198,39 +281,7 @@
     };
 
     {% if site.conference.live.streaming -%}
-
-        let rooms = {
-            {%- for r in site.data.program -%}
-                {%- assign room = site.rooms | where: 'name', r.room | first -%}
-                {%- if room.live -%}
-
-                    {%- assign t = r.talks | first -%}
-                    {%- include partials/get_talk_time.html -%}
-                    {%- assign time_start = talk_start -%}
-                    {%- assign time_end = talk_end -%}
-                    {%- include partials/get_timestamp.html -%}
-
-                    {%- assign offset_start = site.conference.live.streaming.start_early | default: 0 -%}
-                    {%- assign room_ts_start = offset_start | times: -60 | plus: timestamp_start -%}
-
-                    {%- assign t = r.talks | last -%}
-                    {%- include partials/get_talk_time.html -%}
-                    {%- assign time_start = talk_start -%}
-                    {%- assign time_end = talk_end -%}
-                    {%- include partials/get_timestamp.html -%}
-
-                    {%- assign offset_end = site.conference.live.streaming.end_late | default: 0 -%}
-                    {%- assign room_ts_end = offset_end | times: 60 | plus: timestamp_end -%}
-
-                    "{{ room.name }}": {
-                        "id": {{ forloop.index }},
-                        "href": "{{ room.live }}",
-                        "start": {{ room_ts_start }},
-                        "end": {{ room_ts_end }}
-                    },
-                {%- endif -%}
-            {%- endfor -%}
-        };
+        {% include js/conference-data.js %}
 
         let streamModal;
 
@@ -251,7 +302,9 @@
             streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
             streamModal.find('#stream-placeholder').addClass('d-flex');
 
-            stopUpdateStream();
+            if (typeof streamTimer !== "undefined") {
+                clearInterval(streamTimer);
+            }
             if (!freezeTime) {
                 streamTimer = setTimeout(activeStream, delayStart(room.start) * 1000, roomName);
             }
@@ -264,7 +317,9 @@
             streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
             streamModal.find('iframe').removeClass('d-none');
 
-            stopUpdateStream();
+            if (typeof streamTimer !== "undefined") {
+                clearInterval(streamTimer);
+            }
             if (!freezeTime) {
                 streamTimer = setTimeout(postEndStream, delayStart(room.end) * 1000, roomName);
             }
@@ -278,9 +333,64 @@
             streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
             streamModal.find('#stream-placeholder').addClass('d-flex');
 
-            stopUpdateStream();
+            if (typeof streamTimer !== "undefined") {
+                clearInterval(streamTimer);
+            }
             if (!freezeTime && demo) {
                 streamTimer = setTimeout(preStartStream, delayStart(demoStart) * 1000, roomName);
+            }
+        };
+
+        let setStreamInfo = function (roomName) {
+            let timeNow = time();
+            let talksHere = talks[roomName];
+            let talkNow;
+
+            if (typeof streamInfoTimer !== "undefined") {
+                clearInterval(streamInfoTimer);
+            }
+
+            if (typeof talksHere !== "undefined") {
+                if (timeNow < talksHere[talksHere.length-1].end) {
+                    for (var i = 0; i < talksHere.length; i++) {
+                        if (timeNow < talksHere[i].end && timeNow >= talksHere[i].start - talkAnnounce*60) {
+                            talkNow = talksHere[i];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (typeof talkNow !== "undefined") {
+                document.getElementById('stream-info').dataset.time = talkNow.start;
+                document.getElementById('stream-info-time').dataset.time = talkNow.start;
+                updateLive();
+
+                streamModal.find('#stream-info-color').addClass('border-soft-' + talkNow.color);
+
+                streamModal.find('#stream-info-talk').text(talkNow.name).attr('href', talkNow.href);
+
+                let speakerStr = '';
+                for (var i = 0; i < talkNow.speakers.length; i++) {
+                    let speaker = speakers[talkNow.speakers[i]];
+                    if (speaker.href == '') {
+                        speakerStr += speaker.name +', '
+                    }
+                    else {
+                        speakerStr += '<a class="text-reset" href="'+ speaker.href +'">'+ speaker.name +'</a>, ';
+                    }
+                }
+                speakerStr = speakerStr.slice(0, -2);
+                streamModal.find('#stream-info-speakers').html(speakerStr);
+
+                streamModal.find('#stream-info').removeClass('d-none');
+
+                if (!freezeTime) {
+                    streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNow.end) * 1000, roomName);
+                }
+            }
+            else {
+                streamModal.find('#stream-info').addClass('d-none');
             }
         };
 
@@ -289,6 +399,7 @@
             streamModal.find('#stream-select').selectedIndex = -1;
 
             let room = getRoom(roomName);
+            roomName = room.name;
             let tNow = time();
 
             if (tNow < room.start) {
@@ -300,6 +411,7 @@
             else {
                 activeStream(roomName);
             }
+            setStreamInfo(roomName);
 
             streamModal.find('#stream-button' + room.id).addClass('active');
             streamModal.find('#stream-select').selectedIndex = room.id;
@@ -319,6 +431,9 @@
         let stopUpdateStream = function () {
             if (typeof streamTimer !== "undefined") {
                 clearInterval(streamTimer);
+            }
+            if (typeof streamInfoTimer !== "undefined") {
+                clearInterval(streamInfoTimer);
             }
         };
 

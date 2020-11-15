@@ -51,7 +51,7 @@ jobs:
 
       - name: Compress website
         run: |
-          minify --all --html-keep-document-tags --html-keep-end-tags -r -o _site_compressed/ _site/
+          minify --all --html-keep-document-tags --html-keep-end-tags --js-keep-var-names -r -o _site_compressed/ _site/
 
       - name: Package generated website
         run: |
