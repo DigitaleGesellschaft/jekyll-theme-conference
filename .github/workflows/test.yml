@@ -1,0 +1,37 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+name: Test Jekyll Build
+
+jobs:
+  build:
+    name: Generate Website
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Setup Ruby for use with actions
+        uses: actions/setup-ruby@v1
+
+      - name: Cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gem-
+
+      - name: Install Bundler and Jekyll
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          gem install bundler
+          bundle install --path vendor/bundle
+
+      - name: Build website
+        run: |
+          bundle exec jekyll build -d _site/
