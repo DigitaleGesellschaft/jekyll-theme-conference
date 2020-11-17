@@ -366,6 +366,9 @@
                 document.getElementById('stream-info-time').dataset.time = talkNow.start;
                 updateLive();
 
+                streamModal.find('#stream-info-color').removeClass(function (index, className) {
+                    return (className.match(/(^|\s)border-soft-\S+/g) || []).join(' ');
+                });
                 streamModal.find('#stream-info-color').addClass('border-soft-' + talkNow.color);
 
                 streamModal.find('#stream-info-talk').text(talkNow.name).attr('href', talkNow.href);

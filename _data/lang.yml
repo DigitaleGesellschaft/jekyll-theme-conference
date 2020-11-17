@@ -69,7 +69,7 @@ de:
       now: jetzt
   location:
     title: Örtlichkeit
-    directions: Anfahrt
+    directions: Anreise
     talks: Vorträge in diesem Raum
     no_talks: keine Vorträge geplant
     focus_conf: Karte auf den Konferenz-Ort zentrieren

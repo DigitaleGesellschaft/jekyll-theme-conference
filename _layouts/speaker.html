@@ -23,8 +23,7 @@
         {% if link_icon %}
           <li class="mb-1 ml-2">
             {{ link_tag }}
-              <i class="fas fa-{{ link_icon }} pr-1"></i>
-              {{ link.name }}
+              <i class="fas fa-{{ link_icon }} pr-1"></i>&nbsp;{{ link.name }}
             </a>
           </li>
         {% endif %}
@@ -100,8 +99,7 @@
 
   <p class="d-print-none mt-5">
     <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-light">
-      <i class="fas fa-users"></i>
-      {{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
+      <i class="fas fa-users"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
   </p>
 
