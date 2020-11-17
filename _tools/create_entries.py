@@ -147,10 +147,17 @@ default_file_structure = {
 }
 
 
-def create_files(content, folder_name, file_name, file_vars, file_content):
+def create_files(content, folder_name, file_name, file_vars, file_content,
+                 clean=False):
     # verify if folder exists, otherwise create it
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
+
+    # otherwise, delete if requested
+    elif clean:
+        for root, dirs, files in os.walk(folder_name):
+            for f in files:
+                os.unlink(os.path.join(root, f))
 
     for entry in content:
         # create file title
@@ -247,7 +254,8 @@ if __name__ == "__main__":
                                action='store_const', const=True,
                                help='Create Markdown files from frab ' +
                                     'compatible schedule (overwrites ' +
-                                    'remaining arguments)')
+                                    'remaining arguments and deletes ' +
+                                    'existing files)')
 
     default_group.add_argument('-t', '--talks',
                                action='store_const', const=True,
@@ -294,13 +302,21 @@ if __name__ == "__main__":
                               help='Categories which are added to list ' +
                                    'per entry')
 
+    manual_group.add_argument('-c', '--clean',
+                              action='store_const', const=True,
+                              help='Delete all existing files (removes ' +
+                                   'files not existing in new dataset)')
+
     args = parser.parse_args()
 
     if args.frab:
         content = parse_frab(args.file)
-        create_files(content['talks'], **default_file_structure['talks'])
-        create_files(content['speakers'], **default_file_structure['speakers'])
-        create_files(content['rooms'], **default_file_structure['rooms'])
+        create_files(content['talks'], **default_file_structure['talks'],
+                     clean=True)
+        create_files(content['speakers'], **default_file_structure['speakers'],
+                     clean=True)
+        create_files(content['rooms'], **default_file_structure['rooms'],
+                     clean=True)
         create_list(content['program'], **default_list_structure['program'])
 
     elif args.talks or args.speakers or args.rooms or args.create_files:
@@ -323,6 +339,10 @@ if __name__ == "__main__":
             file_args['file_vars'] = args.file_vars
         if args.file_content:
             file_args['file_content'] = args.file_content
+
+        # delete files if requested
+        if args.clean:
+            file_args['clean'] = args.clean
 
         content = parse_csv(args.file)
         create_files(content, **file_args)

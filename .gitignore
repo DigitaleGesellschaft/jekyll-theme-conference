@@ -8,5 +8,8 @@ _site/
 .bundle/
 vendor/bundle/
 
+### Python ###
+venv/
+
 ### MacOS ###
 .DS_Store

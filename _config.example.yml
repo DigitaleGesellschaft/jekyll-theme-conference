@@ -13,11 +13,11 @@ sass:
 
 # Additional exclude from processing
 exclude:
+  - .github/
+  - venv/
   - README.md
   - LICENSE.md
   - REDISTRIBUTED.md
-  - create_entries.py
-  - update_assets.py
 
 # Collections and their defaults
 collections:

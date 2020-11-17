@@ -4,11 +4,14 @@
 
 This is a [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 4](http://getbootstrap.com) which can be used to make a simple, responsive website for a one-day conference or workshop with parallel tracks containing:
 
-- program / schedule
-- talk and speaker descriptions
-- map for directions
+- program / schedule,
+- talk and speaker descriptions with
+  + links to slides, and
+  + embedded recordings,
+- map for directions,
+- live indication and embedded video streaming.
 
-All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files.
+All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files. A script and workflows are available for easy import, e.g. [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible schedules.
 The design is easily modifiable and is adapted for mobile uses and printing.
 
 The theme was originally created for the yearly Winterkongress conference of the [Digital Society Switzerland](https://digitale-gesellschaft.ch/). You can see this theme in action here:
@@ -44,11 +47,7 @@ This allows for easier installation and updating as you don't have to manage any
    theme: jekyll-theme-conference
    ```
 
-4. Copy the internationalization file containing the different language strings for this repository to your Jekyll folder:
-
-   - `_data/lang.yml`
-
-5. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
+4. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
 
 To update the theme run `bundle update`.
 
@@ -76,11 +75,7 @@ To install:
 
 4. Add `remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@2.0.0"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
 
-5. Copy the internationalization file containing the different language strings for this repository to your Jekyll folder:
-
-   - `_data/lang.yml`
-
-6. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
+5. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
 
 
 ## Setup
@@ -108,15 +103,43 @@ In order to be up and running simply use the default content of this repository 
 
 ### Automatic Import
 
-There exists a Python file in this repository, `create_entries.py`, which can be used to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible JSON file or a CSV table and generate the different talk, speakers and room files automatically based on it. Just open your terminal and type `python create_entries.py --help` to show the help and get started.
+There exists a Python file in this repository, `_tools/create_entries.py`, which can be used to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible JSON file (e.g. from [pretalx.com](https://pretalx.com/p/about/)) or a CSV table and generate the different talk, speakers and room files automatically. It has as only dependency [PyYAML](https://pypi.org/project/PyYAML/):
+
+1. Copy the file `_tools/create_entries.py` from this repository
+
+2. Create a virtual environment and activate it
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install PyYAML
+
+   ```bash
+   pip install pyyaml
+   ```
+
+4. Execute the script, e.g. to show the help type
+
+   ```bash
+   python _tools/create_entries.py --help
+   ```
+
 
 ### Automatic Build
 
-In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains an example Github Action configuration file which automatically builds and minimizes the website upon adding a new tag. It then attaches the generated website as package to a release for easy downloading. Simply copy the following file to your repository and adapt it to your needs:
+In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains multiple example Github Action configuration files in the `_tools/` folder:
 
-- `workflow-example.yml` -> `.github/workflows/main.yml`
+- `build.yml`: automatically builds and minimizes the website upon adding a new tag starting with a `v` (e.g. `v2020.01.01`). It then attaches the generated website as an archive to a release for easy downloading.
+- `test.yml`: automatically tries to build the website upon a new pull request. It can thus be used as status check before merging.
+- `schedule.yml`: automatically generates the schedule and content files when a new pull request contains a `schedule.json` file (see the _Automatic Import_subsection above). Thus, it allows quick updates of the site's content from [pretalx.com](https://pretalx.com/p/about/) exports.
 
-Hidden rooms, speakers, or talks are automatically generated in way containing no content. In order to remove these empty files simply add a file called `delete_hidden.sh` to the root with the following content. It will automatically called by the Github Action workflow to delete the files.
+To get started, simply copy the desired workflow file to your repository and adapt it to your needs:
+
+- `_tools/build.yml` -> `.github/workflows/build.yml`
+
+Hidden rooms, speakers, or talks are automatically generated in way containing no content. In order to remove these empty files simply add a file called `delete_hidden.sh` to the root with the following content. It will automatically called by the `build` workflow (if available) to delete the files.
 
 ```markdown
 ---
