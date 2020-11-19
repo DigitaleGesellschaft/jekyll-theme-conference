@@ -29,19 +29,18 @@
       </div>
 
       <div class="modal-footer justify-content-around">
-        {% for r in site.data.program %}
-          {% assign room = site.rooms | where: 'name', r.room | first %}
-
+        {%- for r in site.data.program -%}
+          {%- assign room = site.rooms | where: 'name', r.room | first %}
           <a id="stream-button{{ forloop.index }}" href="#" class="btn btn-outline-primary d-none d-sm-inline {% unless room.live %}disabled{% endunless %}" role="button" data-room="{{ room.name }}">
             {{ room.name }}
           </a>
-        {% endfor %}
+        {%- endfor %}
         <div class="form-group w-100 d-block d-sm-none">
           <select class="form-control" id="stream-select">
-            {% for r in site.data.program %}
-              {% assign room = site.rooms | where: 'name', r.room | first %}
+            {%- for r in site.data.program -%}
+              {%- assign room = site.rooms | where: 'name', r.room | first %}
               <option {% unless room.live %}disabled{% endunless %}>{{ room.name }}</option>
-            {% endfor %}
+            {%- endfor %}
           </select>
         </div>
       </div>

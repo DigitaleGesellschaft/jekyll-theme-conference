@@ -1,15 +1,15 @@
-{% if talk %}
-  {% assign links = talk.links%}
-{% else if speaker %}
-  {% assign links = speaker.links%}
-{% endif %}
+{%- if talk -%}
+  {%- assign links = talk.links -%}
+{%- else if speaker -%}
+  {%- assign links = speaker.links -%}
+{%- endif -%}
 
-{% assign has_icon_links = false %}
-{% assign has_regular_links = false %}
-{% for link in links %}
-  {% if link.icon or link.file or link.video %}
-    {% assign has_icon_links = true %}
-  {% else %}
-    {% assign has_regular_links = true %}
-  {% endif %}
-{% endfor %}
+{%- assign has_icon_links = false -%}
+{%- assign has_regular_links = false -%}
+{%- for link in links -%}
+  {%- if link.icon or link.file or link.video -%}
+    {%- assign has_icon_links = true -%}
+  {%- else -%}
+    {%- assign has_regular_links = true -%}
+  {%- endif -%}
+{%- endfor -%}

@@ -9,44 +9,44 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        {% for link in site.conference.navigation.links %}
+        {%- for link in site.conference.navigation.links -%}
 
-          {% if link.menu %}
+          {%- if link.menu %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown{{ forloop.index0 }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ link.name }}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbar-dropdown{{ forloop.index0 }}">
-                {% assign parent_link = link %}
-                {% for link in parent_link.menu %}
-                  {% assign link_styleclass = "dropdown-item" %}
-                  {% include partials/get_link.html %}
+                {%- assign parent_link = link -%}
+                {%- for link in parent_link.menu -%}
+                  {%- assign link_styleclass = "dropdown-item" -%}
+                  {%- include partials/get_link.html %}
                   {{ link_tag }}
                     {{ link.name }}
                   </a>
-                {% endfor %}
+                {%- endfor %}
               </div>
             </li>
 
-          {% elsif link.live %}
-            {% include partials/get_conf_time.html %}
-            {% assign time_start = conf_start %}
-            {% assign time_end = conf_end %}
-            {% include partials/get_timestamp.html %}
+          {%- elsif link.live -%}
+            {%- include partials/get_conf_time.html -%}
+            {%- assign time_start = conf_start -%}
+            {%- assign time_end = conf_end -%}
+            {%- include partials/get_timestamp.html -%}
 
-            {% assign offset_start = site.conference.live.streaming.start_early | default: 0 %}
-            {% assign offset_end = site.conference.live.streaming.end_late | default: 0 %}
-            {% assign timestamp_start = offset_start | times: -60 | plus: timestamp_start %}
-            {% assign timestamp_end = offset_end | times: 60 | plus: timestamp_end %}
+            {%- assign offset_start = site.conference.live.streaming.start_early | default: 0 -%}
+            {%- assign offset_end = site.conference.live.streaming.end_late | default: 0 -%}
+            {%- assign timestamp_start = offset_start | times: -60 | plus: timestamp_start -%}
+            {%- assign timestamp_end = offset_end | times: 60 | plus: timestamp_end %}
 
             <li class="nav-item live-show d-none" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
-              {% if site.conference.live.streaming %}
+              {%- if site.conference.live.streaming %}
                 <a class="nav-link" title="{% if link.name %}{{ link.name }}{% else %}{{ site.data.lang[site.conference.lang].live.streaming | default: "Live Stream" }}{% endif %}" data-toggle="modal" data-target="#stream-modal" data-room="" href="#">
-              {% else %}
-                {% assign link_styleclass = "nav-link" %}
-                {% include partials/get_link.html %}
+              {%- else %}
+                {%- assign link_styleclass = "nav-link" -%}
+                {%- include partials/get_link.html %}
                 {{ link_tag }}
-              {% endif %}
+              {%- endif %}
 
                 {{ link.name | default: "" }}
 
@@ -57,30 +57,30 @@
               </a>
             </li>
 
-          {% else %}
+          {%- else %}
             <li class="nav-item {% if page.url contains link.relative_url %}active{% endif %}">
-              {% assign link_styleclass = "nav-link" %}
-              {% include partials/get_link.html %}
+              {%- assign link_styleclass = "nav-link" -%}
+              {%- include partials/get_link.html -%}
               {{ link_tag }}
                 {{ link.name }}
               </a>
             </li>
-          {% endif %}
-        {% endfor %}
+          {%- endif -%}
+        {%- endfor %}
       </ul>
     </div>
 
-    {% if site.conference.navigation.logo %}
+    {%- if site.conference.navigation.logo %}
       <div class="navbar-brand navbar-logo mr-0 w-25 text-right overflow-hidden">
         <a href="{{ site.conference.navigation.logo.url }}">
-          {% if site.conference.navigation.logo.img %}
+          {%- if site.conference.navigation.logo.img %}
             <img src="{{ site.conference.navigation.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="align-middle" alt="{{ site.conference.navigation.logo.name }}" />
-          {% else %}
+          {%- else %}
             {{ site.conference.navigation.logo.name }}
-          {% endif %}
+          {%- endif %}
         </a>
       </div>
-    {% endif %}
+    {%- endif %}
 
   </div>
 </nav>

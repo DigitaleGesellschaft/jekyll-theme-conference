@@ -1,30 +1,30 @@
-{% if site.conference.show_errors %}
-  {% include partials/checks.html %}
-  {% if errors.size > 0 %}
-    {% for error in errors %}
+{%- if site.conference.show_errors -%}
+  {%- include partials/checks.html -%}
+  {%- if errors.size > 0 -%}
+    {%- for error in errors %}
       <div class="alert alert-danger fade show" role="alert">
         <h5 class="alert-heading">There was an error when generating when generating the site!</h5>
 
         {{ error | markdownify }}
       </div>
-    {% endfor %}
-  {% endif %}
-{% endif %}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
 
-{% if site.conference.info_bars.size > 0 %}
-  {% for info_bar in site.conference.info_bars %}
-    {% if page.url == "/" and info_bar.pages_only != true %}
-      {% assign show_info_bar = true %}
-    {% endif %}
-    {% if page.url != "/" and info_bar.main_only != true %}
-      {% assign show_info_bar = true %}
-    {% endif %}
+{%- if site.conference.info_bars.size > 0 -%}
+  {%- for info_bar in site.conference.info_bars -%}
+    {%- if page.url == "/" and info_bar.pages_only != true -%}
+      {%- assign show_info_bar = true -%}
+    {%- endif -%}
+    {%- if page.url != "/" and info_bar.main_only != true -%}
+      {%- assign show_info_bar = true -%}
+    {%- endif -%}
 
-    {% if show_info_bar %}
+    {%- if show_info_bar %}
       <div class="alert alert-{{ info_bar.color }} alert-dismissible fade show" role="alert">
-        {% if info_bar.title %}
+        {%- if info_bar.title %}
           <h4 class="alert-heading">{{ info_bar.title }}</h4>
-        {% endif %}
+        {%- endif %}
 
         {{ info_bar.text | markdownify }}
 
@@ -32,7 +32,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    {% endif %}
-    {% assign show_info_bar = false %}
-  {% endfor %}
-{% endif %}
+    {%- endif -%}
+    {%- assign show_info_bar = false -%}
+  {%- endfor -%}
+{%- endif -%}

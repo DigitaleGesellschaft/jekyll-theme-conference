@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ site.conference.lang }}">
+<html lang="{{ site.conference.lang | default: 'en' }}">
 
 <head>
   <meta charset="utf-8" />
@@ -28,18 +28,18 @@
 <body class="pb-4">
   <header>
     <!-- navigation bar (web only): -->
-    {% include partials/navbar.html %}
+    {%- include partials/navbar.html -%}
 
-    {% unless page.url == "/" %}
+    {%- unless page.url == "/" -%}
       <!-- site title (print only): -->
       <div class="container d-none d-print-block mt-4 mb-4">
         <h1 class="display-4">
           {{ site.title }}
         </h1>
       </div>
-    {% endunless %}
+    {%- endunless -%}
 
   </header>
   <main class="container">
 
-    {% include partials/info_bar.html %}
+    {%- include partials/info_bar.html -%}

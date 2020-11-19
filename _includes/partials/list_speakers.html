@@ -1,20 +1,16 @@
-{% for speaker_name in talk.speakers %}
-  {% assign speaker = site.speakers | where: 'name', speaker_name | first %}
-  {% if site.conference.speakers.show_firstname %}
-    {% assign speaker_short = speaker.first_name | append: ' ' | append: speaker.last_name %}
-  {% else %}
-    {% assign speaker_short = speaker.first_name | slice: 0 | append : '. ' | append: speaker.last_name %}
-  {% endif %}
+{%- for speaker_name in talk.speakers -%}
+  {%- assign speaker = site.speakers | where: 'name', speaker_name | first -%}
+  {%- if site.conference.speakers.show_firstname -%}
+    {%- assign speaker_short = speaker.first_name | append: ' ' | append: speaker.last_name -%}
+  {%- else -%}
+    {%- assign speaker_short = speaker.first_name | slice: 0 | append : '. ' | append: speaker.last_name -%}
+  {%- endif -%}
 
-  {% if speaker.hide %}
-    {{ speaker_short }}<!--
-  {% else %}
-    <a class="text-reset" href="{{ speaker.url | prepend: site.baseurl }}">{{ speaker_short }}</a><!--
-  {% endif %}
-  {% if forloop.last != true %}
-    -->,
-  {% else %}
-    -->
-  {% endif %}
+  {%- if speaker.hide -%}
+    {{ speaker_short }}
+  {%- else -%}
+    <a class="text-reset" href="{{ speaker.url | prepend: site.baseurl }}">{{ speaker_short }}</a>
+  {%- endif -%}
+  {%- if forloop.last != true %}, {% endif -%}
 
-{% endfor %}
+{%- endfor -%}

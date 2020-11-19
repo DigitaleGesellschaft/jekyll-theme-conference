@@ -7,6 +7,7 @@ on:
 # Performs the following steps:
 #   - Install all dependencies (and caches them for future runs)
 #   - Builds the website
+#   - Compresses the generated website
 #   - Packages the generated website
 #   - Creates a release based on the originating tag
 #   - Attaches the package to the release
@@ -19,11 +20,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Ruby for use with actions
+      - name: Setup Ruby
         uses: actions/setup-ruby@v1
 
-      - name: Cache
-        uses: actions/cache@v1
+      - name: Ruby Cache
+        uses: actions/cache@v2
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
@@ -44,14 +45,41 @@ jobs:
         run: |
           [ -f _site/delete_hidden.sh ] && /bin/bash _site/delete_hidden.sh
 
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+
+      - name: NPM Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install PurgeCSS and Terser
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm install -g purgecss
+          npm install -g terser
+
       - name: Install Minify
         run: |
           sudo apt-get update
           sudo apt-get install minify
 
-      - name: Compress website
+      - name: Compress CSS with PurgeCSS
         run: |
-          minify --all --html-keep-document-tags --html-keep-end-tags --js-keep-var-names -r -o _site_compressed/ _site/
+          purgecss --css _site/assets/css/main.css --content _site/**/*.html _site/assets/js/main.js
+
+      - name: Compress JavaScript with Terser
+        run: |
+          terser --compress --mangle --output _site/assets/js/main_ugly.js -- _site/assets/js/main.js
+
+      - name: Compress entire website
+        run: |
+          minify --all --html-keep-document-tags --html-keep-end-tags -r -o _site_compressed/ _site/
 
       - name: Package generated website
         run: |
