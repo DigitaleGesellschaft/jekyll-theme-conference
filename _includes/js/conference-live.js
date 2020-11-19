@@ -281,16 +281,15 @@
     };
 
     {% if site.conference.live.streaming -%}
-        {% include js/conference-data.js %}
-
         let streamModal;
+        let data;
 
         let getRoom = function (roomName) {
-            if (roomName in rooms) {
-                return rooms[roomName];
+            if (roomName in data.rooms) {
+                return data.rooms[roomName];
             }
             else {
-                return rooms[Object.keys(rooms)[0]];
+                return data.rooms[Object.keys(data.rooms)[0]];
             }
         };
 
@@ -343,7 +342,7 @@
 
         let setStreamInfo = function (roomName) {
             let timeNow = time();
-            let talksHere = talks[roomName];
+            let talksHere = data.talks[roomName];
             let talkNow;
 
             if (typeof streamInfoTimer !== "undefined") {
@@ -375,7 +374,7 @@
 
                 let speakerStr = '';
                 for (var i = 0; i < talkNow.speakers.length; i++) {
-                    let speaker = speakers[talkNow.speakers[i]];
+                    let speaker = data.speakers[talkNow.speakers[i]];
                     if (speaker.href == '') {
                         speakerStr += speaker.name +', '
                     }
@@ -449,6 +448,7 @@
         let setupStream = function () {
             streamModal = $('#stream-modal');
 
+            // configure modal opening buttons
             streamModal.on('show.bs.modal', function (event) {
                 let button = $(event.relatedTarget);
                 let roomName = button.data('room');
@@ -458,6 +458,7 @@
                 hideModal(event);
             });
 
+            // configure room selection buttons in modal
             streamModal.find('.modal-footer .btn').on('click', function(event) {
                 event.preventDefault();
 
@@ -465,11 +466,17 @@
                 setStream(roomName);
             });
 
+            // configure room selection menu in modal
             streamModal.find('#stream-select').on('change', function(event) {
                 event.preventDefault();
 
                 let roomName = $(this).children('option:selected').text();
                 setStream(roomName);
+            });
+
+            // load data
+            $.getJSON('{{ site.baseurl }}/assets/js/data.json', function(json) {
+                data = json;
             });
         };
 

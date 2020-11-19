@@ -10,7 +10,7 @@
   </title>
   <meta name="description" content="{{ site.description }}" />
 
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: "%s" }}" />
 
   {%- if site.conference.live -%}
     <link rel="prefetch" href="{{ site.baseurl }}/assets/icons/live.svg" />
