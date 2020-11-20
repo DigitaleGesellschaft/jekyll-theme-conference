@@ -72,12 +72,13 @@ $fa-font-path: '/assets/webfonts' !default;
   margin-bottom: 0;
 }
 
-//   Live button icon
+//   Live icon
 .live-button > object {
   width: 0.85em;
   height: 0.85em;
-  color: white;
+  color: inherit;
 }
+
 //   Live button font size in navigation bar
 .nav-link .live-button {
   font-size: 1em;
