@@ -34,8 +34,8 @@
             {%- assign time_end = conf_end -%}
             {%- include partials/get_timestamp.html -%}
 
-            {%- assign offset_start = site.conference.live.streaming.start_early | default: 0 -%}
-            {%- assign offset_end = site.conference.live.streaming.end_late | default: 0 -%}
+            {%- assign offset_start = site.conference.live.streaming.time_prepend | default: 5 -%}
+            {%- assign offset_end = site.conference.live.streaming.time_extend | default: 5 -%}
             {%- assign timestamp_start = offset_start | times: -60 | plus: timestamp_start -%}
             {%- assign timestamp_end = offset_end | times: 60 | plus: timestamp_end %}
 

@@ -4,31 +4,10 @@
     {%- for r in site.data.program %}
         {%- assign room = site.rooms | where: 'name', r.room | first -%}
         {%- if room.live -%}
-
-            {%- assign t = r.talks | first -%}
-            {%- include partials/get_talk_time.html -%}
-            {%- assign time_start = talk_start -%}
-            {%- assign time_end = talk_end -%}
-            {%- include partials/get_timestamp.html -%}
-
-            {%- assign offset_start = site.conference.live.streaming.start_early | default: 0 -%}
-            {%- assign room_ts_start = offset_start | times: -60 | plus: timestamp_start -%}
-
-            {%- assign t = r.talks | last -%}
-            {%- include partials/get_talk_time.html -%}
-            {%- assign time_start = talk_start -%}
-            {%- assign time_end = talk_end -%}
-            {%- include partials/get_timestamp.html -%}
-
-            {%- assign offset_end = site.conference.live.streaming.end_late | default: 0 -%}
-            {%- assign room_ts_end = offset_end | times: 60 | plus: timestamp_end -%}
-
         "{{ room.name }}": {
             "id": {{ forloop.index }},
             "name": "{{ room.name }}",
-            "href": "{{ room.live }}",
-            "start": {{ room_ts_start }},
-            "end": {{ room_ts_end }}
+            "href": "{{ room.live }}"
         }{%- unless forloop.last -%},{%- endunless %}
         {%- endif -%}
     {%- endfor %}

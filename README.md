@@ -334,7 +334,10 @@ In order to activate the functionality the `live` property has to be set contain
 
 - the date of the day at which the conference takes place (`date`),
 - the timezone in which the conference takes place (`timezone`),
-- optionally if streaming is enabled (`streaming`) with indications how many minutes early the stream will begin and end, and
+- optionally if streaming is enabled (`streaming`) with indications
+  + how many minutes the stream goes active before a talk (`time_prepend`),
+  + how many minutes the stream stays active after a talk (`time_extend`), and
+  + how long a pause between two consecutive talks has to be for the stream to pause (`time_pause`),
 - optionally a demo mode setting, whereby the JavaScript function cycles through the entire program in five minutes for demonstration purposes (`demo: true`, default: `false`).
 
 ```yaml
@@ -343,8 +346,9 @@ conference:
     date: 01.01.2020
     timezone: GMT+1
     streaming:
-      start_early: 15  # in minutes
-      end_late:     0  # in minutes
+      time_pause:   60  # in minutes
+      time_prepend:  5  # in minutes
+      time_extend:   5  # in minutes
     demo: false
 ```
 

@@ -8,7 +8,9 @@
     let confEnd = {{ timestamp_end }};
     let confDur = confEnd - confStart;
 
-    let talkAnnounce = 120;  // in minutes
+    let streamPause   = {{ site.conference.live.streaming.time_pause | default: 60 }};  // in minutes
+    let streamPrepend = {{ site.conference.live.streaming.time_prepend | default: 5 }};  // in minutes
+    let streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
 
     let freezeTime = false;
     let timeFrozen = 0;
@@ -22,7 +24,7 @@
     let demoEnd = confEnd + confDur/durDemo*durPause;
 
     let liveTimer;
-    let streamTimer;
+    let streamVideoTimer;
     let streamInfoTimer;
 
     let mod = function (n, m) {
@@ -293,88 +295,135 @@
             }
         };
 
-        let preStartStream = function (roomName) {
-            let room = getRoom(roomName);
+        let getNextTalk = function (roomName) {
+            let timeNow = time();
+            let talksHere = data.talks[roomName];
 
-            streamModal.find('iframe').attr('src', '');
-            streamModal.find('iframe').addClass('d-none');
-            streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
-            streamModal.find('#stream-placeholder').addClass('d-flex');
-
-            if (typeof streamTimer !== "undefined") {
-                clearInterval(streamTimer);
+            if (typeof talksHere !== "undefined") {
+                if (timeNow < talksHere[talksHere.length-1].end) {
+                    for (var i = 0; i < talksHere.length; i++) {
+                        if (timeNow < talksHere[i].end) {
+                            return talksHere[i];
+                        }
+                    }
+                }
             }
-            if (!freezeTime) {
-                streamTimer = setTimeout(activeStream, delayStart(room.start) * 1000, roomName);
-            }
+            return false;
         };
 
-        let activeStream = function (roomName) {
-            let room = getRoom(roomName);
+        let getNextPause = function (roomName) {
+            let timeNow = time();
+            let talksHere = data.talks[roomName];
 
-            streamModal.find('iframe').attr('src', room.href);
+            if (typeof talksHere !== "undefined") {
+                if (timeNow < talksHere[talksHere.length-1].end) {
+                    for (var i = 1; i < talksHere.length; i++) {
+                        if (timeNow < talksHere[i].start && streamPause*60 <= talksHere[i].start - talksHere[i-1].end) {
+                            return {
+                                'start': talksHere[i-1].end,
+                                'end':   talksHere[i].start,
+                            };
+                        }
+                    }
+                }
+            }
+            return false;
+        };
+
+        let setStreamContent = function (content) {
+            streamModal.find('iframe').attr('src', '');
+            streamModal.find('iframe').addClass('d-none');
+            streamModal.find('#stream-placeholder > div').text(content);
+            streamModal.find('#stream-placeholder').addClass('d-flex');
+        };
+
+        let setStreamSrc = function (href) {
+            streamModal.find('iframe').attr('src', href);
             streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
             streamModal.find('iframe').removeClass('d-none');
-
-            if (typeof streamTimer !== "undefined") {
-                clearInterval(streamTimer);
-            }
-            if (!freezeTime) {
-                streamTimer = setTimeout(postEndStream, delayStart(room.end) * 1000, roomName);
-            }
         };
 
-        let postEndStream = function (roomName) {
-            let room = getRoom(roomName);
+        let setStreamVideo = function (roomName) {
+            let timeNow = time();
 
-            streamModal.find('iframe').attr('src', '');
-            streamModal.find('iframe').addClass('d-none');
-            streamModal.find('#stream-placeholder > div').text('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
-            streamModal.find('#stream-placeholder').addClass('d-flex');
+            let talksHere = data.talks[roomName];
+            let roomStart = talksHere[0].start;
+            let roomEnd = talksHere[talksHere.length-1].end;
 
-            if (typeof streamTimer !== "undefined") {
-                clearInterval(streamTimer);
+            if (typeof streamVideoTimer !== "undefined") {
+                clearInterval(streamVideoTimer);
             }
-            if (!freezeTime && demo) {
-                streamTimer = setTimeout(preStartStream, delayStart(demoStart) * 1000, roomName);
+
+            // Conference not yet started
+            if (timeNow < roomStart - streamPrepend*60) {
+                setStreamContent('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
+
+                if (!freezeTime) {
+                    streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomStart - streamPrepend*60) * 1000, roomName);
+                }
+            }
+
+            // Conference is over
+            else if (timeNow > roomEnd + streamExtend*60) {
+                setStreamContent('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
+
+                if (!freezeTime && demo) {
+                    streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd - streamPrepend*60) * 1000, roomName);
+                }
+            }
+
+            // Conference ongoing
+            else {
+                let pauseNext = getNextPause(roomName);
+
+                // Currently stream is paused
+                if (pauseNext && timeNow >= pauseNext.start + streamExtend*60 && timeNow <= pauseNext.end - streamPrepend*60) {
+                    setStreamContent('{{ site.data.lang[site.conference.lang].live.pause_stream | default: "Live stream is currently paused." }}');
+
+                    if (!freezeTime) {
+                        streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.end - streamPrepend*60) * 1000, roomName);
+                    }
+                }
+                // Currently a talk is active
+                else {
+                    let room = getRoom(roomName);
+                    setStreamSrc(room.href);
+
+                    if (!freezeTime) {
+                        if (pauseNext) {
+                            streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.start + streamExtend*60) * 1000, roomName);
+                        }
+                        else {
+                            streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd + streamExtend*60) * 1000, roomName);
+                        }
+                    }
+                }
             }
         };
 
         let setStreamInfo = function (roomName) {
             let timeNow = time();
-            let talksHere = data.talks[roomName];
-            let talkNow;
+            let talkNext = getNextTalk(roomName);
 
             if (typeof streamInfoTimer !== "undefined") {
                 clearInterval(streamInfoTimer);
             }
 
-            if (typeof talksHere !== "undefined") {
-                if (timeNow < talksHere[talksHere.length-1].end) {
-                    for (var i = 0; i < talksHere.length; i++) {
-                        if (timeNow < talksHere[i].end && timeNow >= talksHere[i].start - talkAnnounce*60) {
-                            talkNow = talksHere[i];
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (typeof talkNow !== "undefined") {
-                document.getElementById('stream-info').dataset.time = talkNow.start;
-                document.getElementById('stream-info-time').dataset.time = talkNow.start;
+            if (timeNow >= talkNext.start - streamPause*60) {
+                document.getElementById('stream-info').dataset.time = talkNext.start;
+                document.getElementById('stream-info-time').dataset.time = talkNext.start;
                 updateLive();
 
                 streamModal.find('#stream-info-color').removeClass(function (index, className) {
                     return (className.match(/(^|\s)border-soft-\S+/g) || []).join(' ');
                 });
-                streamModal.find('#stream-info-color').addClass('border-soft-' + talkNow.color);
+                streamModal.find('#stream-info-color').addClass('border-soft-' + talkNext.color);
 
-                streamModal.find('#stream-info-talk').text(talkNow.name).attr('href', talkNow.href);
+                streamModal.find('#stream-info-talk').text(talkNext.name).attr('href', talkNext.href);
 
                 let speakerStr = '';
-                for (var i = 0; i < talkNow.speakers.length; i++) {
-                    let speaker = data.speakers[talkNow.speakers[i]];
+                for (var i = 0; i < talkNext.speakers.length; i++) {
+                    let speaker = data.speakers[talkNext.speakers[i]];
                     if (speaker.href == '') {
                         speakerStr += speaker.name +', '
                     }
@@ -388,11 +437,21 @@
                 streamModal.find('#stream-info').removeClass('d-none');
 
                 if (!freezeTime) {
-                    streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNow.end) * 1000, roomName);
+                    streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.end) * 1000, roomName);
                 }
             }
             else {
                 streamModal.find('#stream-info').addClass('d-none');
+
+                if (!freezeTime) {
+                    if (talkNext) {
+                        streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.start - streamPause*60) * 1000, roomName);
+                    }
+                    else if (demo) {
+                        let talksHere = data.talks[roomName];
+                        streamInfoTimer = setTimeout(setStreamInfo, delayStart(talksHere[0].start - streamPrepend*60) * 1000, roomName);
+                    }
+                }
             }
         };
 
@@ -400,19 +459,11 @@
             streamModal.find('.modal-footer .btn').removeClass('active');
             streamModal.find('#stream-select').selectedIndex = -1;
 
+            // Recover room name in case of empty default
             let room = getRoom(roomName);
             roomName = room.name;
-            let tNow = time();
 
-            if (tNow < room.start) {
-                preStartStream(roomName);
-            }
-            else if (tNow > room.end) {
-                postEndStream(roomName);
-            }
-            else {
-                activeStream(roomName);
-            }
+            setStreamVideo(roomName);
             setStreamInfo(roomName);
 
             streamModal.find('#stream-button' + room.id).addClass('active');
@@ -431,8 +482,8 @@
         };
 
         let stopUpdateStream = function () {
-            if (typeof streamTimer !== "undefined") {
-                clearInterval(streamTimer);
+            if (typeof streamVideoTimer !== "undefined") {
+                clearInterval(streamVideoTimer);
             }
             if (typeof streamInfoTimer !== "undefined") {
                 clearInterval(streamInfoTimer);
