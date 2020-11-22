@@ -334,6 +334,7 @@ In order to activate the functionality the `live` property has to be set contain
 
 - the date of the day at which the conference takes place (`date`),
 - the timezone in which the conference takes place (`timezone`),
+- how long a pause between two consecutive talks has to be for the live indication to pause (`time_stop`),
 - optionally if streaming is enabled (`streaming`) with indications
   + how many minutes the stream goes active before a talk (`time_prepend`),
   + how many minutes the stream stays active after a talk (`time_extend`), and
@@ -345,6 +346,7 @@ conference:
   live:
     date: 01.01.2020
     timezone: GMT+1
+    time_stop: 240      # in minutes
     streaming:
       time_pause:   60  # in minutes
       time_prepend:  5  # in minutes

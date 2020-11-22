@@ -113,6 +113,7 @@ conference:
   live:
     date: 01.01.2020
     timezone: GMT+1
+    time_stop: 240      # in minutes
     streaming:
       time_pause:   60  # in minutes
       time_prepend:  5  # in minutes

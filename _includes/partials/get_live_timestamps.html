@@ -1,0 +1,50 @@
+{%- assign min_pause = site.conference.live.time_stop | default: 240 -%}
+{%- assign min_pause = min_pause | times: 60 -%}
+
+{%- if site.conference.live.streaming -%}
+  {%- assign offset_start = site.conference.live.streaming.time_prepend | default: 5 -%}
+  {%- assign offset_end = site.conference.live.streaming.time_extend | default: 5 -%}
+{%- else -%}
+  {%- assign offset_start = 0 -%}
+  {%- assign offset_end = 0 -%}
+{%- endif -%}
+
+{%- assign live_starts = "" -%}
+{%- assign live_ends = "" -%}
+
+{%- for r in site.data.program -%}
+  {%- assign last_end = 0 -%}
+
+  {%- for t in r.talks -%}
+    {%- assign time_start = t.time_start -%}
+    {%- assign time_end = t.time_end -%}
+    {%- include partials/get_timestamp.html -%}
+
+    {%- assign last_pause = timestamp_start | minus: last_end -%}
+
+    {%- if forloop.last == true or last_pause >= min_pause and forloop.index0 > 0 -%}
+      {%- if forloop.last -%}
+        {%- assign last_end = timestamp_end -%}
+      {%- endif -%}
+
+      {%- assign live_end = offset_end | times: 60 | plus: last_end %}
+      {%- if live_ends == "" -%}
+        {%- assign live_ends = live_end -%}
+      {%- else -%}
+        {%- assign live_ends = live_ends | append: "," | append: live_end -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if forloop.index0 == 0 or last_pause >= min_pause -%}
+      {%- assign live_start = offset_start | times: -60 | plus: timestamp_start -%}
+      {%- if live_starts == "" -%}
+        {%- assign live_starts = live_start -%}
+      {%- else -%}
+        {%- assign live_starts = live_starts | append: "," | append: live_start -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- assign last_end = timestamp_end -%}
+  {%- endfor -%}
+
+{%- endfor -%}

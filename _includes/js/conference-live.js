@@ -8,10 +8,6 @@
     let confEnd = {{ timestamp_end }};
     let confDur = confEnd - confStart;
 
-    let streamPause   = {{ site.conference.live.streaming.time_pause | default: 60 }};  // in minutes
-    let streamPrepend = {{ site.conference.live.streaming.time_prepend | default: 5 }};  // in minutes
-    let streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
-
     let freezeTime = false;
     let timeFrozen = 0;
     let timeOffset = 0;
@@ -147,32 +143,38 @@
         let livePast = document.getElementsByClassName('live-past');
 
         for (let i = 0; i < liveShow.length; i++) {
-            let tStart = liveShow[i].dataset.start;
-            let tEnd = liveShow[i].dataset.end;
+            let tStarts = liveShow[i].dataset.start.split(',');
+            let tEnds = liveShow[i].dataset.end.split(',');
 
-            if (tNow >= tStart && tNow < tEnd) {
-                // Show when active
-                liveShow[i].classList.remove('d-none');
-            }
-            else if (!liveShow[i].classList.contains('d-none')) {
-                // Hide otherwise
-                liveShow[i].classList.add('d-none');
+            for (let k = 0; k < tStarts.length; k++) {
+                if (tNow >= tStarts[k] && tNow < tEnds[k]) {
+                    // Show when active
+                    liveShow[i].classList.remove('d-none');
+                    break;
+                }
+                else if (!liveShow[i].classList.contains('d-none')) {
+                    // Hide otherwise
+                    liveShow[i].classList.add('d-none');
+                }
             }
         }
 
         for (let i = 0; i < liveHide.length; i++) {
-            let tStart = liveHide[i].dataset.start;
-            let tEnd = liveHide[i].dataset.end;
+            let tStarts = liveHide[i].dataset.start.split(',');
+            let tEnds = liveHide[i].dataset.end.split(',');
 
-            if (tNow >= tStart && tNow < tEnd) {
-                // Hide when active
-                if (!liveHide[i].classList.contains('d-none')) {
-                    liveHide[i].classList.add('d-none');
+            for (let k = 0; k < tStarts.length; k++) {
+                if (tNow >= tStarts[k] && tNow < tEnds[k]) {
+                    // Hide when active
+                    if (!liveHide[i].classList.contains('d-none')) {
+                        liveHide[i].classList.add('d-none');
+                        breal;
+                    }
                 }
-            }
-            else {
-                // Show otherwise
-                liveHide[i].classList.remove('d-none');
+                else {
+                    // Show otherwise
+                    liveHide[i].classList.remove('d-none');
+                }
             }
         }
 
@@ -283,6 +285,10 @@
     };
 
     {% if site.conference.live.streaming -%}
+        let streamPause   = {{ site.conference.live.streaming.time_pause | default: 60 }};  // in minutes
+        let streamPrepend = {{ site.conference.live.streaming.time_prepend | default: 5 }};  // in minutes
+        let streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
+
         let streamModal;
         let data;
 
