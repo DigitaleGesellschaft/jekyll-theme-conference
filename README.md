@@ -139,14 +139,6 @@ To get started, simply copy the desired workflow file to your repository and ada
 
 - `_tools/build.yml` -> `.github/workflows/build.yml`
 
-Hidden rooms, speakers, or talks are automatically generated in way containing no content. In order to remove these empty files simply add a file called `delete_hidden.sh` to the root with the following content. It will automatically called by the `build` workflow (if available) to delete the files.
-
-```markdown
----
-layout: delete_hidden
----
-```
-
 
 ## Configuration
 
