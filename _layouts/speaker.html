@@ -18,12 +18,16 @@
   {% if has_icon_links %}
     <ul class="list-unstyled">
       {% for link in speaker.links %}
+        {% assign link_styleclass = "text-reset" %}
         {% include partials/get_link.html %}
 
         {% if link_icon %}
-          <li class="mb-1 ml-2">
+          <li class="mb-1">
             {{ link_tag }}
-              <i class="fas fa-{{ link_icon }} pr-1"></i>&nbsp;{{ link.name }}
+              <span class="badge badge-light font-weight-normal mr-1">
+                <i class="fas fa-{{ link_icon }} fa-fw"></i>
+              </span>
+              {{- link.name }}
             </a>
           </li>
         {% endif %}
@@ -61,40 +65,40 @@
   {% endfor %}
 
   {% if active_speaker %}
-    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
+    <h5 class="mt-4 mb-0">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
 
-    <ul class="list-program list-unstyled">
-      {% for r in site.data.program %}
-        {% if r.talks.size > 0 %}
-          {% for t in r.talks %}
-            {% assign talk = site.talks | where: 'name', t.name | first %}
+    <table class="list-program">
+      {%- for d in site.data.program.days -%}
+        {%- include partials/get_day_hash.html -%}
+        {%- for r in d.rooms -%}
+          {%- for t in r.talks -%}
+            {%- assign talk = site.talks | where: 'name', t.name | first -%}
 
-            {% for speaker_name in talk.speakers %}
-              {% if speaker_name == speaker.name %}
+            {%- for speaker_name in talk.speakers -%}
+              {%- if speaker_name == speaker.name -%}
 
-                {% include partials/get_main_category.html %}
+                {%- include partials/get_main_category.html -%}
 
-                <li class="d-flex flex-row">
-                  <div class="flex-column">
-                    {% include partials/get_talk_time.html %}
-                    {% include partials/show_talk_time.html %}
-                  </div>
-                  <div class="flex-column ml-2 pl-2 mb-2 border-soft-{{ main_cat_color }}">
-                    <p class="mb-0">
-                      {% include partials/show_talk.html %}
+                <tr>
+                  <td class="pr-2 py-0">
+                    {%- include partials/get_talk_time.html -%}
+                    {%- assign talk_time_styleclass = "w-100" -%}
+                    {%- include partials/show_talk_time.html -%}
+                  </td>
+                  <td class="pl-2 py-0 align-baseline border-soft-{{ main_cat_color }}">
+                    <span class="mr-2">
+                      {%- include partials/show_talk.html -%}
+                    </span>
+                    {%- include partials/show_live_button.html -%}
+                  </td>
+                </tr>
 
-                      {% assign live_button_styleclass = "ml-2" %}
-                      {% include partials/live_button.html %}
-                    </p>
-                  </div>
-                </li>
-
-              {% endif %}
-            {% endfor %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-    </ul>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    </table>
   {% endif %}
 
   <p class="d-print-none mt-5">

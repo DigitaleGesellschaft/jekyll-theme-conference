@@ -1,11 +1,20 @@
-    window.conference.live = (function() {
-    {%- include partials/get_conf_time.html -%}
-    {%- assign time_start = conf_start -%}
-    {%- assign time_end = conf_end -%}
-    {%- include partials/get_timestamp.html -%}
+window.conference.live = (function() {
+    {% assign d = site.data.program.days | first -%}
+    {%- include partials/get_day_time.html -%}
+    {%- assign t = day_start_talk -%}
 
-    let confStart = {{ timestamp_start }};
-    let confEnd = {{ timestamp_end }};
+    {%- include partials/get_talk_timestamp.html -%}
+    {%- assign conf_start = timestamp_start -%}
+
+    {%- assign d = site.data.program.days | last -%}
+    {%- include partials/get_day_time.html -%}
+    {%- assign t = day_end_talk -%}
+
+    {%- include partials/get_talk_timestamp.html -%}
+    {%- assign conf_end = timestamp_end -%}
+
+    let confStart = {{ conf_start }};
+    let confEnd = {{ conf_end }};
     let confDur = confEnd - confStart;
 
     let freezeTime = false;
@@ -78,10 +87,22 @@
         startUpdate();
     };
 
-    let setTime = function (newTime) {
+    let setTime = function (newTime, newDay=1) {
         pauseTime();
 
-        let d = new Date(confStart * 1000);
+        let dayIdx;
+        if (Number.isInteger(newDay)) {
+            dayIdx = newDay-1;
+        }
+        else if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(newDay)) {
+            dayIdx = data.days.find(o => o.name === newDay);
+        }
+        else {
+            dayIdx = data.days.find(o => o.name === newDay);
+        }
+        newDate = data.days[dayIdx].date;
+
+        let d = new Date(newDate);
         newTime = newTime.split(':');
         d.setHours(newTime[0], newTime[1]);
 
@@ -90,12 +111,13 @@
         update();
     };
 
-    let getTime = function (tConvert = time()) {
+    let getTime = function (tConvert=time()) {
         let d = new Date(tConvert * 1000);
+        let dStr = d.toISOString().slice(0,10);
         let h = d.getHours();
         let m = d.getMinutes();
 
-        return h + ":" + (m < 10 ? "0" : "") + m;
+        return dStr +" "+ h +":"+ (m < 10 ? "0" : "") + m;
     };
 
     let timeUnit = function () {
@@ -168,7 +190,7 @@
                     // Hide when active
                     if (!liveHide[i].classList.contains('d-none')) {
                         liveHide[i].classList.add('d-none');
-                        breal;
+                        break;
                     }
                 }
                 else {

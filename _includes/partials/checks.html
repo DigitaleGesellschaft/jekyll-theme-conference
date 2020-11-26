@@ -16,9 +16,17 @@
   {%- assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README file." -%}
 {%- endif -%}
 
-{%- assign program_size = site.data.program | size -%}
-{%- if program_size == 0 -%}
-  {%- assign errors = errors | push : "Your schedule in `_data/program.yml` does not seem to contain any entry. Have you already created the file?" -%}
+{%- assign nbr_days = site.data.program.days | size -%}
+{%- if nbr_days == 0 -%}
+  {%- assign errors = errors | push : "Your schedule in `_data/program.yml` does not seem to contain any days. Have you already created the file?" -%}
+{%- endif -%}
+{%- if site.conference.live -%}
+  {%- for d in site.data.program.days -%}
+    {%- unless d.date or d.date == "" -%}
+      {%- assign error_msg = "Day " | append: forloop.index | append: " in your schedule should have a (non-empty) `date` property."  -%}
+      {%- assign errors = errors | push : error_msg -%}
+    {%- endunless -%}
+  {%- endfor -%}
 {%- endif -%}
 
 {%- assign nbr_rooms = site.rooms | size -%}

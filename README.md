@@ -2,17 +2,16 @@
 
 ![Screenshot](screenshot.png)
 
-This is a [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 4](http://getbootstrap.com) which can be used to make a simple, responsive website for a one-day conference or workshop with parallel tracks containing:
+This is a responsive [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 4](http://getbootstrap.com) for conferences. It contains
 
-- program / schedule,
-- talk and speaker descriptions with
-  + links to slides, and
-  + embedded recordings,
+- multiday program / schedule,
+- talk and speaker descriptions,
 - map for directions,
-- live indication and embedded video streaming.
+- realtime live indications during the conference, and
+- supports embedded video streaming or recordings.
 
-All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files. A script and workflows are available for easy import, e.g. [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible schedules.
-The design is easily modifiable and is adapted for mobile uses and printing.
+All components such as talks, speakers or rooms are represented as collection of files. The schedule is given is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files. A script and workflows are available for easy import, e.g. of [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible schedules.
+The design is easily customizable and is adapted for mobile uses and printing.
 
 The theme was originally created for the yearly Winterkongress conference of the [Digital Society Switzerland](https://digitale-gesellschaft.ch/). You can see this theme in action here:
 
@@ -322,10 +321,8 @@ In order to help users navigating the program during the congress, a _Live_ indi
 
 This can be further extended if some of the talks have an associated live stream: Upon clicking one of the live indications a modal will open containing the corresponding live stream embedded. The URL to the live stream has to be set via `live` property in each room (see the _Content_ > _Room_ section below).
 
-In order to activate the functionality the `live` property has to be set containing
+In order to activate the functionality, each day in the `program.yml` file must contain a `date` property (see section _Content_ > _Schedule / Program_ below) and the `live` property has to be set in the configuration file containing
 
-- the date of the day at which the conference takes place (`date`),
-- the timezone in which the conference takes place (`timezone`),
 - how long a pause between two consecutive talks has to be for the live indication to pause (`time_stop`),
 - optionally if streaming is enabled (`streaming`) with indications
   + how many minutes the stream goes active before a talk (`time_prepend`),
@@ -336,8 +333,6 @@ In order to activate the functionality the `live` property has to be set contain
 ```yaml
 conference:
   live:
-    date: 01.01.2020
-    timezone: GMT+1
     time_stop: 240      # in minutes
     streaming:
       time_pause:   60  # in minutes
@@ -464,33 +459,52 @@ The actual schedule defining when and in which room a talk takes place is stored
 
 ### Schedule / Program
 
-The schedule of the conference linking the talks with the rooms and indicating when each talk talks place and how long it goes is set in the `_data/program.yml` file. It consists of an array of rooms each consisting of a
+The schedule of the conference linking the talks with the rooms and indicating when each talk talks place and how long it goes is set in the `_data/program.yml` file. It contains a list of days, whereby each day contains a list of rooms, whereby each room contains a list of talks.
 
-- `room` name (must correspond to one of the room identifier), and
-- an array of `talks` which also can be empty `[]`.
+Each day consists of
 
-The order of the room in the file defines the order of the rooms on the website (program and room listings). Each talk in the array consists of
+- a list of rooms (`rooms`) in which talks are taking place on that day
+- optionally, the day's `name`, e.g. the weekday
+- optionally, the short form of the day's name (`abbr`), and
+- optionally only if no live indications are active, a `date` in the format `YYYY-MM-DD`.
+
+Each room consists of
+
+- the room's `name` (must correspond to one of the room identifier), and
+- a list of talks (`talks`) which also can be empty `[]`.
+
+The order of the rooms in the list defines the order of the rooms as shown in the schedule on the program page. For the live streaming or the room overview the order of the rooms is alphabetical but can be adapted via the [main configuration file](https://jekyllrb.com/docs/collections/#sort-by-front-matter-key).
+
+Each talk consists of
 
 - a `name` (must correspond to one of the talk identifier),
 - a starting time `time_start` given as `H:M` ([`strftime`](http://www.strfti.me) formated), and
 - an end time `time_end`.
 
-The array should (manually) be ordered by time. Currently talks can only take place on the same day and multi-day conferences are not supported.
+The list of talks should (manually) be ordered by time, i.e. the first occurring talk should be listed first.
 
 Example:
 
 ```yaml
-- room: Room A
-  talks:
-    - name: Vim Impetus Placerat Cotidieque Ad
-      time_start: '12:00'
-      time_end: '12:45'
-    - name: Condimentum Vitae Sapien Pellentesque
-      time_start: '12:45'
-      time_end: '13:30'
-- room: Room B
-  talks:
-    ...
+days:
+- name: Monday
+  abbr: Mo
+  date: 2020-01-31
+  rooms:
+  - name: Room A
+    talks:
+      - name: Vim Impetus Placerat Cotidieque Ad
+        time_start: '12:00'
+        time_end: '12:45'
+      - name: Condimentum Vitae Sapien Pellentesque
+        time_start: '12:45'
+        time_end: '13:30'
+
+  - name: Room B
+    talks:
+      - name: Arcu Non Odio
+        time_start: '12:00'
+        time_end: '13:00'
 ```
 
 ### Talks

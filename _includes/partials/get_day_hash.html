@@ -1,0 +1,20 @@
+{%- assign day_index = forloop.index -%}
+
+{%- if d.abbr -%}
+  {%- assign day_hash = d.abbr -%}
+  {%- assign day_abbr = d.abbr -%}
+{%- elsif d.name -%}
+  {%- assign day_hash = d.name -%}
+  {%- assign day_abbr = d.name -%}
+{%- else -%}
+  {%- assign day_hash = site.data.lang[site.conference.lang].live.time.day | append: "-" | append: day_index -%}
+  {%- assign day_abbr = site.data.lang[site.conference.lang].live.time.day | capitalize | append: " " | append: day_index -%}
+{%- endif -%}
+
+{%- assign day_hash = day_hash | downcase | url_encode -%}
+
+{%- if d.name -%}
+  {%- assign day_name = d.name -%}
+{%- else -%}
+  {%- assign day_name = day_abbr -%}
+{%- endif -%}

@@ -1,0 +1,4 @@
+{%- assign datetime_start = d.date | append: " " | append: t.time_start -%}
+{%- assign timestamp_start = datetime_start | date: "%s" -%}
+{%- assign datetime_end = d.date | append: " " | append: t.time_end -%}
+{%- assign timestamp_end = datetime_end | date: "%s" -%}

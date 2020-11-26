@@ -12,17 +12,20 @@
 
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: "%s" }}" />
 
-  {%- if site.conference.live -%}
-    <link rel="prefetch" href="{{ site.baseurl }}/assets/icons/live.svg" />
-  {%- endif -%}
+  <link rel="preload" as="font" href="{{ site.baseurl }}/assets/webfonts/fa-regular-400.woff2" type="font/woff2" crossorigin="anonymous" />
+  <link rel="preload" as="font" href="{{ site.baseurl }}/assets/webfonts/fa-solid-900.woff2" type="font/woff2" crossorigin="anonymous" />
+  {% if site.conference.live -%}
+  <link rel="prefetch" as="image" href="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml" crossorigin="anonymous" />
+  <link rel="prefetch" as="fetch" href="{{ site.baseurl }}/assets/js/data.json" type="application/json" crossorigin="anonymous" />
+  {%- endif %}
 
   {%- if site.conference.live.streaming -%}
     {%- for room in site.rooms -%}
-      {%- if room.live -%}
-        <link rel="preconnect" href="{{ room.live }}" />
+      {%- if room.live %}
+  <link rel="preconnect" href="{{ room.live }}" />
       {%- endif -%}
     {%- endfor -%}
-  {%- endif -%}
+  {%- endif %}
 </head>
 
 <body class="pb-4">

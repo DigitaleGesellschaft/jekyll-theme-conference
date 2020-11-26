@@ -48,6 +48,18 @@ $fa-font-path: '/assets/webfonts' !default;
   }
 }
 
+//   Button group for lists
+ul.btn-group {
+  > li:not(:first-child) > .btn {
+    margin-left: -$btn-border-width;
+    @include border-left-radius(0);
+  }
+
+  > li:not(:last-child) > .btn {
+    @include border-right-radius(0);
+  }
+}
+
 // Extend Bootstrap Elements
 .display-5 {
   font-size:   3rem;
@@ -133,7 +145,7 @@ $fa-font-path: '/assets/webfonts' !default;
     }
     // Width of first column containing timestamps
     > :nth-child(1) {
-      width: 4rem;
+      width: 4.5em;
     }
   }
 }
@@ -150,11 +162,20 @@ $fa-font-path: '/assets/webfonts' !default;
 }
 
 //   Program per Room
-.list-program li > div.flex-column:first-of-type {
-  width: 4em;
+.list-program {
+  border: 0 none white;
 
-  & > * {
-    width: 4.6em;
+  border-collapse: separate;
+  border-spacing: 0 0.5em;
+
+  tr {
+    td:first-child {
+      vertical-align: top;
+    }
+
+    td:last-child {
+      width: 100%;
+    }
   }
 }
 

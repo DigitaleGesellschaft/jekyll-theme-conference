@@ -1,9 +1,19 @@
 {% if site.conference.live and site.conference.live.streaming -%}
 {
+    "days": [
+        {%- for d in site.data.program.days %}
+        {
+            {%- include partials/get_day_hash.html %}
+            "name": "{{ day_name }}",
+            "hash": "{{ day_hash }}",
+            "date": "{{ d.date }}"
+        }{%- unless forloop.last -%},{%- endunless %}
+        {%- endfor %}
+    ],
+
     "rooms": {
-    {%- for r in site.data.program %}
-        {%- assign room = site.rooms | where: 'name', r.room | first -%}
-        {%- if room.live -%}
+    {%- for room in site.rooms %}
+        {%- if room.live %}
         "{{ room.name }}": {
             "id": {{ forloop.index }},
             "name": "{{ room.name }}",
@@ -31,38 +41,49 @@
     },
 
     "talks": {
-    {%- for r in site.data.program -%}
-        {%- assign room = site.rooms | where: 'name', r.room | first -%}
-        {%- if room.live %}
+    {%- for room in site.rooms -%}
+        {%- assign room_has_talks = false %}
+        {%- for d in site.data.program.days -%}
+            {%- for r in d.rooms -%}
+                {%- if room.name == r.name and room.live %}
+
+                    {%- unless room_has_talks %}
         "{{ room.name | replace: '"', '\"' }}": [
-            {%- for t in r.talks %}
-                {%- assign talk = site.talks | where: 'name', t.name | first -%}
+                        {%- assign room_has_talks = true %}
+                    {%- else -%}
+                        ,
+                    {%- endunless -%}
+
+                    {%- for t in r.talks %}
+                        {%- assign talk = site.talks | where: 'name', t.name | first %}
             {
                 "name": "{{ talk.name | replace: '"', '\"' }}",
 
-                {%- unless talk.hide %}
+                        {%- unless talk.hide %}
                 "href": "{{ talk.url | prepend: site.baseurl }}",
-                {%- else %}
+                        {%- else %}
                 "href": "",
-                {%- endunless -%}
+                        {%- endunless -%}
 
-                {%- include partials/get_main_category.html %}
+                        {%- include partials/get_main_category.html %}
                 "color": "{{ main_cat_color }}",
-
                 "speakers": [
-                {%- for speaker_name in talk.speakers %}
+                        {%- for speaker_name in talk.speakers %}
                     "{{ speaker_name}}"{%- unless forloop.last -%},{%- endunless -%}
-                {%- endfor %}
+                        {%- endfor %}
                 ],
 
-                {%- assign time_start = t.time_start -%}
-                {%- assign time_end = t.time_end -%}
-                {%- include partials/get_timestamp.html %}
+                        {%- include partials/get_talk_timestamp.html %}
                 "start": {{ timestamp_start }},
                 "end": {{ timestamp_end }}
-            }{%- unless forloop.last -%},{%- endunless %}
-            {%- endfor %}
-        ]{%- unless forloop.last -%},{%- endunless %}
+            }{%- unless forloop.last -%},{%- endunless -%}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endfor -%}
+
+        {%- if room_has_talks %}
+        ]{%- unless forloop.last -%},{%- endunless -%}
         {%- endif -%}
     {%- endfor %}
     }

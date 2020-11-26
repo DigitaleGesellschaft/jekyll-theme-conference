@@ -1,0 +1,17 @@
+{%- if site.conference.live -%}
+  {%- include partials/get_talk_timestamp.html -%}
+
+  {%- if site.conference.live.streaming -%}
+    <a title="{{ link.name }}" data-toggle="modal" data-target="#stream-modal" data-room="{{ r.name }}" href="#"
+  {%- else -%}
+    <span
+  {%- endif %} class="live-show live-button badge badge-dark font-weight-normal text-center d-none {{ live_button_styleclass }}" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+    <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml">!</object>
+    {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
+  {%- if site.conference.live.streaming -%}
+    </a>
+  {%- else -%}
+    </span>
+  {%- endif -%}
+  {%- assign live_button_styleclass = "" -%}
+{%- endif -%}

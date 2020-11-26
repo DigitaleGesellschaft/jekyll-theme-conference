@@ -2,6 +2,7 @@ version: 5
 
 en:
   pronoun:
+    on_: on
     at: at
     in: in
     for: for
@@ -30,7 +31,6 @@ en:
     title: Location
     directions: Directions
     talks: Talks in this room
-    no_talks: no talks planned
     focus_conf: Center map on conference location
     focus_me: Show my current location
   program:
@@ -45,6 +45,7 @@ en:
 
 de:
   pronoun:
+    on_: am
     at: um
     in: im Raum
     for: für
@@ -73,7 +74,6 @@ de:
     title: Örtlichkeit
     directions: Anreise
     talks: Vorträge in diesem Raum
-    no_talks: keine Vorträge geplant
     focus_conf: Karte auf den Konferenz-Ort zentrieren
     focus_me: Meinen aktuellen Standort anzeigen
   program:
@@ -88,6 +88,7 @@ de:
 
 fr:
   pronoun:
+    on_: le
     at: à
     in: dans
     for: pour
@@ -116,7 +117,6 @@ fr:
     title: Lieu
     directions: Indications
     talks: Présentations dans cette salle
-    no_talks: pas des présentations prévues
     focus_conf: Centrer la carte sur le lieu de la conférence
     focus_me: Afficher ma localisation actuelle
   program:
@@ -131,6 +131,7 @@ fr:
 
 pt:
   pronoun:
+    on_: no
     at: às
     in: em
     for: por
@@ -159,7 +160,6 @@ pt:
     title: Localização
     directions: Indicações
     talks: Apresentações nesta sala
-    no_talks: não estão previstas apresentações
     focus_conf: Centralizar o mapa para o local da conferência
     focus_me: Mostrar minha localização atual
   program:

@@ -4,8 +4,7 @@
       {{ site.data.lang[site.conference.lang].location.directions | default: "Directions" }}
     </a>
   </li>
-  {%- for r in site.data.program -%}
-    {%- assign room = site.rooms | where: 'name', r.room | first %}
+  {%- for room in site.rooms -%}
     <li class="nav-item">
       {%- if room.hide %}
         <span class="nav-item nav-link disabled">
@@ -20,11 +19,13 @@
   {%- endfor -%}
   {%- for room in site.rooms -%}
     {%- assign room_displayed = false -%}
-    {%- for r in site.data.program -%}
-      {%- if room.name == r.room -%}
-        {%- assign room_displayed = true -%}
-        {%- break -%}
-      {%- endif -%}
+    {%- for d in site.data.program.days -%}
+      {%- for r in d.rooms -%}
+        {%- if room.name == r.name -%}
+          {%- assign room_displayed = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
     {%- endfor -%}
     {%- unless room_displayed %}
       <li class="nav-item">

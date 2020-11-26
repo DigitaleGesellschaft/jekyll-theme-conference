@@ -71,7 +71,7 @@ jobs:
 
       - name: Compress JavaScript with Terser
         run: |
-          terser --compress --mangle --output _site/assets/js/main_ugly.js -- _site/assets/js/main.js
+          terser --compress --output _site/assets/js/main_ugly.js -- _site/assets/js/main.js
 
       - name: Compress entire website
         run: |
