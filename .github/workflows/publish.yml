@@ -31,9 +31,15 @@ jobs:
         mkdir -p $HOME/.gem
         touch $HOME/.gem/credentials
         chmod 0600 $HOME/.gem/credentials
-        printf -- "---\n:rubygems_api_key: ${RUBYGEMS_API_KEY}\n" > $HOME/.gem/credentials
+        echo "---" >> $HOME/.gem/credentials
+        echo ":rubygems_api_key: ${RUBYGEMS_API_KEY}" >> $HOME/.gem/credentials
+        echo ":github: Bearer ${GITHUB_TOKEN}" >> $HOME/.gem/credentials
+
         gem build *.gemspec
+
         gem push *.gem
+        gem push --key github --host "https://rubygems.pkg.github.com/${OWNER}" *.gem
+
         mv *.gem jekyll-theme-conference.gem
       env:
         RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
