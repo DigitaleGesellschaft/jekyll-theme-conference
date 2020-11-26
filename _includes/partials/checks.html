@@ -11,24 +11,51 @@
   {%- assign errors = errors | push : "Unknown language selected for `site.conference.lang` parameter. Supported are `en`, `de`, `fr`, and `pt`." -%}
 {%- endunless -%}
 
+{%- assign main_category_size = site.conference.talks.main_categories | size -%}
+{%- if main_category_size == 0 -%}
+  {%- assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README file." -%}
+{%- endif -%}
+
 {%- assign program_size = site.data.program | size -%}
 {%- if program_size == 0 -%}
   {%- assign errors = errors | push : "Your schedule in `_data/program.yml` does not seem to contain any entry. Have you already created the file?" -%}
 {%- endif -%}
-{%- assign talk_size = site.talks | size -%}
-{%- if talk_size == 0 -%}
-  {%- assign errors = errors | push : "The `talks` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_talks/` folder empty?" -%}
-{%- endif -%}
-{%- assign speaker_size = site.speakers | size -%}
-{%- if speaker_size == 0 -%}
-  {%- assign errors = errors | push : "The `speakers` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_speakers/` folder empty?" -%}
-{%- endif -%}
-{%- assign room_size = site.rooms | size -%}
-{%- if room_size == 0 -%}
+
+{%- assign nbr_rooms = site.rooms | size -%}
+{%- if nbr_rooms == 0 -%}
   {%- assign errors = errors | push : "The `rooms` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_rooms/` folder empty?" -%}
+{%- else -%}
+  {%- for room in site.rooms -%}
+    {%- assign nbr_rooms_name = site.rooms | where: 'name', room.name | size %}
+    {%- if nbr_rooms_name > 1 -%}
+      {%- assign error_msg = "The room with the `name` _" | append: room.name | append: "_ oocures more than once but should be unique."  -%}
+      {%- assign errors = errors | push : error_msg -%}
+    {%- endif -%}
+  {%- endfor -%}
 {%- endif -%}
 
-{%- assign main_category_size = site.conference.talks.main_categories | size -%}
-{%- if main_category_size == 0 -%}
-  {%- assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README file." -%}
+{%- assign nbr_speakers = site.speakers | size -%}
+{%- if nbr_speakers == 0 -%}
+  {%- assign errors = errors | push : "The `speakers` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_speakers/` folder empty?" -%}
+{%- else -%}
+  {%- for speaker in site.speakers -%}
+    {%- assign nbr_speakers_name = site.speakers | where: 'name', speaker.name | size %}
+    {%- if nbr_speakers_name > 1 -%}
+      {%- assign error_msg = "The speaker with the `name` _" | append: speaker.name | append: "_ oocures more than once but should be unique."  -%}
+      {%- assign errors = errors | push : error_msg -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- assign nbr_talks = site.talks | size -%}
+{%- if nbr_talks == 0 -%}
+  {%- assign errors = errors | push : "The `talks` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_talks/` folder empty?" -%}
+{%- else -%}
+  {%- for talk in site.talks -%}
+    {%- assign nbr_talks_name = site.talks | where: 'name', talk.name | size %}
+    {%- if nbr_talks_name > 1 -%}
+      {%- assign error_msg = "The talk with the `name` _" | append: talk.name | append: "_ oocures more than once but should be unique."  -%}
+      {%- assign errors = errors | push : error_msg -%}
+    {%- endif -%}
+  {%- endfor -%}
 {%- endif -%}
