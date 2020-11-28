@@ -41,37 +41,10 @@ jobs:
         run: |
           bundle exec jekyll build -d _site/
 
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12'
-
-      - name: NPM Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install PurgeCSS and Terser
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          npm install -g purgecss
-          npm install -g terser
-
       - name: Install Minify
         run: |
           sudo apt-get update
           sudo apt-get install minify
-
-      - name: Compress CSS with PurgeCSS
-        run: |
-          purgecss --css _site/assets/css/main.css --content _site/**/*.html _site/assets/js/main.js
-
-      - name: Compress JavaScript with Terser
-        run: |
-          terser --compress --output _site/assets/js/main_ugly.js -- _site/assets/js/main.js
 
       - name: Compress entire website
         run: |
