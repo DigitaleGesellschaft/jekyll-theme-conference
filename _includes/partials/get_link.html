@@ -29,34 +29,30 @@
   {%- assign link_iframe = true -%}
 
   {%- if talk -%}
-    {%- capture modal_header -%}
-      <h3 class="font-weight-light">
-        {%- if talk.hide -%}
+    {%- capture modal_title -%}
+      {%- if talk.hide -%}
+        {{ talk.name }}
+      {%- else -%}
+        <a class="text-reset" href="{{ talk.url | prepend: site.baseurl }}">
           {{ talk.name }}
-        {%- else -%}
-          <a class="text-reset" href="{{ talk.url | prepend: site.baseurl }}">
-            {{ talk.name }}
-          </a>
-        {%- endif -%}
-      </h3>
-      <p class="mb-0 font-weight-light">
-        {%- include partials/list_speakers.html -%}
-      </p>
+        </a>
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- capture modal_subtitle -%}
+      {%- include partials/list_speakers.html -%}
     {%- endcapture -%}
 
   {%- elsif speaker -%}
-    {%- capture modal_header -%}
-      <h3 class="mb-0 font-weight-light">
-        {%- if speaker.hide -%}
+    {%- capture modal_title -%}
+      {%- if speaker.hide -%}
+        {{ speaker.first_name }} {{ speaker.last_name }}
+      {%- else -%}
+        <a class="text-reset" href="{{ speaker.url | prepend: site.baseurl }}">
           {{ speaker.first_name }} {{ speaker.last_name }}
-        {%- else -%}
-          <a class="text-reset" href="{{ speaker.url | prepend: site.baseurl }}">
-            {{ speaker.first_name }} {{ speaker.last_name }}
-          </a>
-        {%- endif -%}
-      </h3>
+        </a>
+      {%- endif -%}
     {%- endcapture -%}
-    {%- assign modal_desc = link.name -%}
+    {%- assign modal_footer = link.name -%}
 
   {%- endif -%}
 
@@ -70,18 +66,14 @@
     <a class="disabled{% if link_styleclass %} {{ link_styleclass }}{% endif %}" href="#">
 
   {%- elsif link_iframe -%}
-    <a {% if link_styleclass %}class="{{ link_styleclass }}"{% endif %} title="{{ link.name }}" data-toggle="modal" data-target="#link-modal" data-href="{{ link_href }}" href="#" {% if modal_header -%}
-      data-header="{{ modal_header | strip_newlines | escape }}"
-    {%- elsif modal_title -%}
-      data-title="{{ modal_title }}"
+    <a {% if link_styleclass %}class="{{ link_styleclass }}"{% endif %} title="{{ link.name }}" data-toggle="modal" data-target="#link-modal" data-href="{{ link_href }}" href="#" {% if modal_title -%}
+      data-format='html' data-title="{{ modal_title | strip_newlines | escape }}" {%- if modal_subtitle %} data-subtitle="{{ modal_subtitle | strip_newlines | escape }}"{%- endif -%}
     {%- elsif link.name -%}
-      data-title="{{ link.name }}"
+      data-format='text' data-title="{{ link.name }}"
     {%- endif %} {% if modal_footer -%}
-      data-footer="{{ modal_footer | strip_newlines | escape }}"
-    {%- elsif modal_desc -%}
-      data-desc="{{ modal_desc }}"
+      data-format='html' data-footer="{{ modal_footer | strip_newlines | escape }}"
     {%- elsif link.description -%}
-      data-desc="{{ link.description }}"
+      data-format='text' data-footer="{{ link.description }}"
     {%- endif %}>
 
   {%- else -%}

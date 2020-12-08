@@ -2,24 +2,7 @@
   </main>
   <footer class="container"></footer>
 
-  <div class="modal fade" id="link-modal" tabindex="-1" role="dialog" aria-labelledby="link-modal-label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="link-modal-label"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body embed-responsive embed-responsive-16by9">
-          <iframe class="embed-responsive-item" src="" allowfullscreen></iframe>
-        </div>
-        <div class="modal-footer justify-content-start">
-          <p class="modal-description"></p>
-        </div>
-      </div>
-    </div>
-  </div>
+  {%- include partials/modal_link.html -%}
 
   {%- if site.conference.live.streaming -%}
     {%- include partials/modal_live.html -%}

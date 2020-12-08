@@ -4,31 +4,47 @@ window.conference.modal = (function () {
         let button = $(event.relatedTarget);
 
         let href = button.data('href');
-        let header = button.data('header');
+        let format = button.data('format');
         let title = button.data('title');
+        let subtitle = button.data('subtitle');
         let footer = button.data('footer');
-        let desc = button.data('desc');
 
         let modal = $(el);
         modal.find('iframe').attr('src', href);
 
-        if (header) {
-            modal.find('.modal-title').html(header);
-        }
-        else if (title) {
-            modal.find('.modal-title').text(title);
+        if (title) {
+            if (format == 'html') {
+                modal.find('.modal-title h3').html(title);
+                if (subtitle) {
+                    modal.find('.modal-title h5').html(subtitle).removeClass('d-none');
+                }
+                else {
+                    modal.find('.modal-title h5').text('').addClass('d-none');
+                }
+            }
+            else {
+                modal.find('.modal-title h3').text(title);
+                if (subtitle) {
+                    modal.find('.modal-title h5').text(subtitle).removeClass('d-none');
+                }
+                else {
+                    modal.find('.modal-title h5').text('').addClass('d-none');
+                }
+            }
         }
         else {
-            modal.find('.modal-title').text('');
+            modal.find('.modal-title h3').text('');
+            modal.find('.modal-title h5').text('').addClass('d-none');
         }
 
         if (footer) {
             modal.find('.modal-footer').removeClass('d-none');
-            modal.find('.modal-description').html(footer);
-        }
-        else if (desc) {
-            modal.find('.modal-footer').removeClass('d-none');
-            modal.find('.modal-description').text(desc);
+            if (format == 'html') {
+                modal.find('.modal-footer p').html(footer);
+            }
+            else {
+                modal.find('.modal-footer p').text(footer);
+            }
         }
         else {
             modal.find('.modal-footer').addClass('d-none');
@@ -38,9 +54,10 @@ window.conference.modal = (function () {
     let hide = function (el, event) {
         let modal = $(el);
 
-        modal.find('.modal-title').text('');
+        modal.find('.modal-title h3').text('');
+        modal.find('.modal-title h5').text('').addClass('d-none');
         modal.find('iframe').attr('src', '');
-        modal.find('.modal-description').html('');
+        modal.find('.modal-footer p').html('');
     };
 
     let init = function() {
