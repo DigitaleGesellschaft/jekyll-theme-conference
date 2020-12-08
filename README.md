@@ -552,7 +552,7 @@ Links are used at different location throughout the theme: They can either be us
 Additionally, a navigation bar or main landing page link can also have the following properties:
 
 - `menu` containing another list of links. This creates a dropdown menu of multiple sublinks. The sublinks have the same properties as regular links, or
-- `live` making the link only visible during the conference and adds a live indication. The `name` property can be omitted. If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ above).
+- `live` making the link only visible during the conference and adds a live indication. The `name` property can be omitted. Using the optional `name_inactive` property shows a placeholder text while the conference is **not** live. If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ above).
 
 Using the `file:` indicator, the relative address is automatically set as well as the icon. Using the `video:` indicator, the link is automatically configured to open in an iframe with a corresponding title and the icon is set.
 

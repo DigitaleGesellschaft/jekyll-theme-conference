@@ -31,6 +31,14 @@
           {%- elsif link.live -%}
             {%- include partials/get_live_timestamps.html -%}
 
+            {%- if link.name_inactive -%}
+              <li class="nav-item live-hide" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
+                  {{ link.name_inactive }}
+                </a>
+              </li>
+            {%- endif -%}
+
             <li class="nav-item live-show d-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
               {%- if site.conference.live.streaming %}
                 <a class="nav-link" title="{% if link.name %}{{ link.name }}{% else %}{{ site.data.lang[site.conference.lang].live.streaming | default: "Live Stream" }}{% endif %}" data-toggle="modal" data-target="#stream-modal" data-room="" href="#">
