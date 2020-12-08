@@ -1,5 +1,5 @@
 <div class="modal fade" id="stream-modal" tabindex="-1" role="dialog" aria-labelledby="link-modal-label" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
 
       <div class="modal-header">
@@ -20,7 +20,7 @@
 
       <div class="modal-footer flex-column justify-content-start d-none live-past" id="stream-info" data-time="">
         <div class="my-0 small align-self-start live-time" id="stream-info-time" data-time=""></div>
-        <div class="pl-3 align-self-start" id="stream-info-color">
+        <div class="pl-2 align-self-start" id="stream-info-color">
           <p class="mb-0">
             <a class="text-reset" href="#" id="stream-info-talk"></a>
           </p>
@@ -37,7 +37,7 @@
         <div class="form-group w-100 d-block d-sm-none">
           <select class="form-control" id="stream-select">
             {%- for room in site.rooms -%}
-              <option {% unless room.live %}disabled{% endunless %}>{{ room.name }}</option>
+              <option value="{{ forloop.index }}" {% unless room.live %}disabled{% endunless %}>{{ room.name }}</option>
             {%- endfor %}
           </select>
         </div>

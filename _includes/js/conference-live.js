@@ -485,7 +485,7 @@ window.conference.live = (function() {
 
         let setStream = function (roomName) {
             streamModal.find('.modal-footer .btn').removeClass('active');
-            streamModal.find('#stream-select').selectedIndex = -1;
+            streamModal.find('#stream-select').val(0);
 
             // Recover room name in case of empty default
             let room = getRoom(roomName);
@@ -495,7 +495,7 @@ window.conference.live = (function() {
             setStreamInfo(roomName);
 
             streamModal.find('#stream-button' + room.id).addClass('active');
-            streamModal.find('#stream-select').selectedIndex = room.id;
+            streamModal.find('#stream-select').val(room.id);
         };
 
         let updateStream = function () {
