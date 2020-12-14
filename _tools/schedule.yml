@@ -23,6 +23,7 @@ jobs:
         pip install pyyaml
 
     - name: Parse schedule and generate files
+      # add argument --lc-time to create_entries.py to select language of weekday representation
       run: |
         source venv/bin/activate
         python _tools/create_entries.py --frab schedule.json

@@ -143,7 +143,7 @@ default_file_structure = {
         'file_content': 'bio'
     },
     'rooms': {
-        'folder_name': '_location',
+        'folder_name': '_rooms',
         'file_name': 'name',
         'file_vars': ['name'],
         'file_content': 'description'
