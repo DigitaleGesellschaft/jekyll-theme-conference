@@ -30,11 +30,11 @@
     {%- endif %}
 
     <div class="sticky-top syncscroll overflow-hidden" name="sync-table">
-      <table class="table mb-0">
+      <table class="table mb-0 mx-auto">
         <thead>
           <tr>
-            <th scope="col" class="text-right">#<span class="invisible">I0</span></th>
-            <th class="p-0" scope="col"></th>
+            <th scope="col" class="col-title text-right">#<span class="invisible">I0</span></th>
+            <th class="col-space p-0" scope="col"></th>
             {%- assign nbr_rooms = d.rooms | size -%}
             {%- for r in d.rooms -%}
               {%- assign room = site.rooms | where: 'name', r.name | first %}
@@ -48,7 +48,7 @@
                 {%- endif -%}
               </th>
               {%- unless forloop.last %}
-                <th class="p-0" scope="col"></th>
+                <th class="col-space p-0" scope="col"></th>
               {%- endunless -%}
             {%- endfor %}
           </tr>
@@ -57,7 +57,7 @@
     </div>
 
     <div class="syncscroll overflow-y-hidden" name="sync-table">
-      <table class="table">
+      <table class="table mx-auto">
         <tbody>
           {%- include partials/get_day_time.html -%}
 
@@ -85,17 +85,17 @@
             <tr>
 
               {%- if current_min == 0 -%}
-                <th scope="row" class="text-right" style="z-index: {{ z-index-max }}">
+                <th scope="row" class="col-title text-right" style="z-index: {{ z-index-max }}">
                   {{- current_time -}}
                 </th>
               {%- elsif site.conference.program.show_alltimes -%}
-                <th scope="row" class="text-right text-muted font-weight-normal" style="z-index: {{ z-index-max }}">
+                <th scope="row" class="col-title text-right text-muted font-weight-normal" style="z-index: {{ z-index-max }}">
                   :{{ current_min }}
                 </th>
               {%- else -%}
-                <th scope="row" style="z-index: {{ z-index-max }}"></th>
+                <th scope="row" class="col-title" style="z-index: {{ z-index-max }}"></th>
               {%- endif %}
-              <td class="p-0"></td>
+              <td class="col-space p-0"></td>
 
               {%- for r in d.rooms -%}
                 {%- assign room = site.rooms | where: 'name', r.name | first -%}
@@ -135,7 +135,7 @@
 
                     {%- assign talk_nbr_steps = talk_duration_min | divided_by: site.conference.program.time_steps -%}
                     {%- include partials/get_main_category.html -%}
-                    <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }} shadow-sm" style="z-index: {{ z-index-max | minus: i }}">
+                    <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }} shadow-sm overflow-hidden" style="z-index: {{ z-index-max | minus: i }}">
 
                       {%- assign live_button_styleclass = "mb-2" %}
                       {%- include partials/show_live_button.html %}
@@ -161,7 +161,7 @@
                 {%- endunless -%}
 
                 {%- if forloop.last != true %}
-                  <td class="p-0"></td>
+                  <td class="col-space p-0"></td>
                 {%- endif -%}
 
               {%- endfor %}

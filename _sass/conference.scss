@@ -130,22 +130,24 @@ ul.btn-group {
   // First row defines width for all columns
   table-layout: fixed;
 
-  // Table width
-  min-width: 100%;
+  // Columns define table width
+  width: auto;
 
   // Column widths
-  tr {
+  th, td {
+    // Width of columns with content (default)
+    width: 220px;
+    min-width: 220px;
+
     // Spacing between columns
-    > :nth-child(even) {
+    &.col-space {
       width: 10px;
-    }
-    // Width of columns with content
-    > :nth-child(odd) {
-      width: 180px;
+      min-width: 10px;
     }
     // Width of first column containing timestamps
-    > :nth-child(1) {
+    &.col-title {
       width: 4.5em;
+      min-width: 4.5em;
     }
   }
 }
