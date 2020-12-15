@@ -135,19 +135,21 @@ ul.btn-group {
 
   // Column widths
   th, td {
+    // Total available container width is 1110px
+
     // Width of columns with content (default)
-    width: 220px;
-    min-width: 220px;
+    width: 245px;
+    min-width: 245px;
 
     // Spacing between columns
     &.col-space {
-      width: 10px;
-      min-width: 10px;
+      width: 15px;
+      min-width: 15px;
     }
     // Width of first column containing timestamps
     &.col-title {
-      width: 4.5em;
-      min-width: 4.5em;
+      width: 70px;
+      min-width: 70px;
     }
   }
 }
