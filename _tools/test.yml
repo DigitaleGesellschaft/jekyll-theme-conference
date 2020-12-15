@@ -6,7 +6,7 @@ name: Test Website Generation
 
 jobs:
   build:
-    name: Generate Website
+    name: Test Website Generation
     runs-on: ubuntu-latest
     steps:
 

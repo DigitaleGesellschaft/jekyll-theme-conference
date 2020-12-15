@@ -1,9 +1,10 @@
-name: Generate Website and add as Release
 # Gets triggered upon the creation of a new tag
 on:
   push:
     tags:
     - 'v*' # Matches tags with the name "v*", i.e. v1.0, v20.15.10
+
+name: Generate Website and add as Release
 # Performs the following steps:
 #   - Install all dependencies (and caches them for future runs)
 #   - Builds the website
@@ -13,12 +14,14 @@ on:
 #   - Attaches the package to the release
 jobs:
   build:
-    name: Upload Release Asset
+    name: Generate Website and add as Release
     runs-on: ubuntu-latest
     steps:
 
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          lfs: true
 
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
@@ -49,11 +52,11 @@ jobs:
 
       - name: Compress entire website
         run: |
-          minify --all --html-keep-document-tags --html-keep-end-tags -r -o _site_compressed/ _site/
+          minify --all --html-keep-document-tags --html-keep-end-tags -r -o _site/ _site/
 
       - name: Package generated website
         run: |
-          cd _site_compressed/
+          cd _site/
           zip -r ../website.zip *
           cd ../
 
