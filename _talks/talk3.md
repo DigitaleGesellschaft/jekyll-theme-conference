@@ -8,9 +8,9 @@ categories:
 links:
   - name: Recodring
     icon: video
-    href: https://media.ccc.de/
+    absolute_url: https://media.ccc.de/
   - name: Wikipedia
-    href: https://en.wikipedia.org
+    absolute_url: https://en.wikipedia.org
 ---
 
 Duis at tellus at urna condimentum mattis pellentesque id nibh. In fermentum et sollicitudin ac orci phasellus egestas. Convallis aenean et tortor at risus viverra. Mus mauris vitae ultricies leo integer. Metus dictum at tempor commodo ullamcorper. Sem nulla pharetra diam sit. Eu lobortis elementum nibh tellus molestie nunc.

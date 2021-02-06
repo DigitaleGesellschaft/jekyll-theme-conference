@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-ruby@v1
 
       - name: Cache
+        id: cache_ruby
         uses: actions/cache@v1
         with:
           path: vendor/bundle
@@ -27,7 +28,7 @@ jobs:
             ${{ runner.os }}-gem-
 
       - name: Install Bundler and Jekyll
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache_ruby.outputs.cache-hit != 'true'
         run: |
           gem install bundler
           bundle install --path vendor/bundle
