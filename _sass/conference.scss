@@ -79,6 +79,12 @@ ul.btn-group {
 
 // General
 
+//   Keep images in container
+main.container img {
+  max-width: 100%;
+  height: auto;
+}
+
 //   No bottom margin on info-bar
 .alert > p:last-of-type {
   margin-bottom: 0;
