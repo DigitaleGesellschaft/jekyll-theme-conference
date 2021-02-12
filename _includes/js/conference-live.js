@@ -13,6 +13,8 @@ window.conference.live = (function() {
     {%- include partials/get_talk_timestamp.html -%}
     {%- assign conf_end = timestamp_end -%}
 
+    let data;
+
     let confStart = {{ conf_start }};
     let confEnd = {{ conf_end }};
     let confDur = confEnd - confStart;
@@ -31,6 +33,16 @@ window.conference.live = (function() {
     let liveTimer;
     let streamVideoTimer;
     let streamInfoTimer;
+
+    let loadData = function () {
+        $.getJSON('{{ site.baseurl }}/assets/js/data.json', function(json) {
+            data = json;
+        });
+    };
+
+    let getData = function () {
+        return data;
+    };
 
     let mod = function (n, m) {
         return ((n % m) + m) % m;
@@ -312,7 +324,6 @@ window.conference.live = (function() {
         let streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
 
         let streamModal;
-        let data;
 
         let getRoom = function (roomName) {
             if (roomName in data.rooms) {
@@ -552,14 +563,10 @@ window.conference.live = (function() {
                 let roomName = $(this).children('option:selected').text();
                 setStream(roomName);
             });
-
-            // load data
-            $.getJSON('{{ site.baseurl }}/assets/js/data.json', function(json) {
-                data = json;
-            });
         };
 
         let setup = function () {
+            loadData();
             startUpdateLive();
             setupStream();
         };
@@ -582,6 +589,7 @@ window.conference.live = (function() {
     {%- else -%}
 
         let setup = function () {
+            loadData();
             startUpdateLive();
         };
 
@@ -601,6 +609,7 @@ window.conference.live = (function() {
 
     return {
         init: setup,
+        getData: getData,
 
         pauseTime: pauseTime,
         continueTime: continueTime,
