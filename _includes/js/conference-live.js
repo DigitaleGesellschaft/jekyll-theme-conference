@@ -35,28 +35,34 @@ window.conference.live = (function() {
     let streamInfoTimer;
 
     let loadData = function () {
+        // Fetch schedule from external file
         $.getJSON('{{ site.baseurl }}/assets/js/data.json', function(json) {
             data = json;
         });
     };
 
     let getData = function () {
+        // Return data
         return data;
     };
 
     let mod = function (n, m) {
+        // Absolute modulo
         return ((n % m) + m) % m;
     };
 
     let timeNow = function () {
+        // Current timestamp in seconds
         return Math.floor(Date.now() / 1000);
     };
 
     let timeCont = function () {
+        // Continuous time (respecting previous pauses)
         return timeNow() - timeOffset;
     };
 
     let timeCycle = function () {
+        // Cyclic timestamp in seconds
         let actTime = timeNow();
         let relTime = mod(actTime, durDemo + 2*durPause) / (durDemo + 2*durPause);
         let cycleTime = mod((demoEnd - demoStart) * relTime - timeOffset, (demoEnd - demoStart)) + demoStart;
@@ -64,6 +70,7 @@ window.conference.live = (function() {
     };
 
     let time = function () {
+        // Return app time
         if (freezeTime) {
             return timeFrozen;
         }
@@ -76,6 +83,7 @@ window.conference.live = (function() {
     };
 
     let pauseTime = function () {
+        // Pause app time
         if (!freezeTime) {
             timeFrozen = time();
             freezeTime = true;
@@ -85,6 +93,7 @@ window.conference.live = (function() {
     };
 
     let continueTime = function () {
+        // Continue app time
         if (freezeTime) {
             freezeTime = false;
             timeOffset += time() - timeFrozen;
@@ -93,6 +102,7 @@ window.conference.live = (function() {
     };
 
     let resetTime = function (timeStr) {
+        // Reset app time
         timeOffset = 0;
         freezeTime = false;
 
@@ -100,6 +110,7 @@ window.conference.live = (function() {
     };
 
     let setTime = function (newTime, newDay=1) {
+        // Set and pause app time
         pauseTime();
 
         let dayIdx;
@@ -124,6 +135,7 @@ window.conference.live = (function() {
     };
 
     let getTime = function (tConvert=time()) {
+        // Return app time as string
         let d = new Date(tConvert * 1000);
         let dStr = d.toISOString().slice(0,10);
         let h = d.getHours();
@@ -133,6 +145,7 @@ window.conference.live = (function() {
     };
 
     let timeUnit = function () {
+        // App time refresh rate
         if (demo) {
             return 0.1;
         }
@@ -142,6 +155,7 @@ window.conference.live = (function() {
     };
 
     let delayStart = function (startTime) {
+        // Seconds until given startTime occurs
         let tNow = time();
         let tUnit = timeUnit();
 
@@ -161,21 +175,25 @@ window.conference.live = (function() {
     };
 
     let toggleDemo = function () {
+        // Toggle app demo mode
         demo = !demo;
         resetTime();
     };
 
     let demoOn = function () {
+        // Return app demo status
         return demo;
     };
 
     let updateLive = function () {
+        // Update status all live elements in DOM
         let tNow = time();
         let liveShow = document.getElementsByClassName('live-show');
         let liveHide = document.getElementsByClassName('live-hide');
         let liveTime = document.getElementsByClassName('live-time');
         let livePast = document.getElementsByClassName('live-past');
 
+        // Show elements for a given period
         for (let i = 0; i < liveShow.length; i++) {
             let tStarts = liveShow[i].dataset.start.split(',');
             let tEnds = liveShow[i].dataset.end.split(',');
@@ -193,6 +211,7 @@ window.conference.live = (function() {
             }
         }
 
+        // Hide elements for a given period
         for (let i = 0; i < liveHide.length; i++) {
             let tStarts = liveHide[i].dataset.start.split(',');
             let tEnds = liveHide[i].dataset.end.split(',');
@@ -212,6 +231,7 @@ window.conference.live = (function() {
             }
         }
 
+        // Update duration string for given elements
         for (let i = 0; i < liveTime.length; i++) {
             let t = liveTime[i].dataset.time;
             if (typeof t == "undefined") {
@@ -271,6 +291,7 @@ window.conference.live = (function() {
             liveTime[i].innerHTML = tStr;
         }
 
+        // Disable elements for a given period
         for (let i = 0; i < livePast.length; i++) {
             let t = livePast[i].dataset.time;
             if (typeof t == "undefined") {
@@ -290,13 +311,14 @@ window.conference.live = (function() {
             }
         }
 
+        // Cancel timer after program is over
         if (tNow > confEnd && !demo) {
-            // Cancel timer after program is over
             stopUpdateLive();
         }
     };
 
     let startUpdateLive = function () {
+        // Start update timer to update live elements in DOM
         stopUpdateLive();
         updateLive();
 
@@ -313,6 +335,7 @@ window.conference.live = (function() {
     };
 
     let stopUpdateLive = function () {
+        // stopUpdate update timer to update live elements in DOM
         if (typeof liveTimer !== "undefined") {
             clearInterval(liveTimer);
         }
@@ -326,6 +349,7 @@ window.conference.live = (function() {
         let streamModal;
 
         let getRoom = function (roomName) {
+            // Return room object for given room name
             if (roomName in data.rooms) {
                 return data.rooms[roomName];
             }
@@ -335,6 +359,7 @@ window.conference.live = (function() {
         };
 
         let getNextTalk = function (roomName) {
+            // Get talk object for next talk in given room
             let timeNow = time();
             let talksHere = data.talks[roomName];
 
@@ -351,6 +376,7 @@ window.conference.live = (function() {
         };
 
         let getNextPause = function (roomName) {
+            // Get time object for next pause in given room
             let timeNow = time();
             let talksHere = data.talks[roomName];
 
@@ -369,20 +395,24 @@ window.conference.live = (function() {
             return false;
         };
 
-        let setStreamContent = function (content) {
+        let setStreamIframeContent = function (content) {
+            // Set stream modal iframe to show given text
             streamModal.find('iframe').attr('src', '');
             streamModal.find('iframe').addClass('d-none');
             streamModal.find('#stream-placeholder > div').text(content);
             streamModal.find('#stream-placeholder').addClass('d-flex');
         };
 
-        let setStreamSrc = function (href) {
+        let setStreamIframeSrc = function (href) {
+            // Set stream modal iframe to show given URL
             streamModal.find('iframe').attr('src', href);
             streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
             streamModal.find('iframe').removeClass('d-none');
         };
 
         let setStreamVideo = function (roomName) {
+            // Update stream modal iframe:
+            // Show stream with start/pause/end message (for given room) and keep updated
             let timeNow = time();
 
             let talksHere = data.talks[roomName];
@@ -395,7 +425,7 @@ window.conference.live = (function() {
 
             // Conference not yet started
             if (timeNow < roomStart - streamPrepend*60) {
-                setStreamContent('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
+                setStreamIframeContent('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
 
                 if (!freezeTime) {
                     streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomStart - streamPrepend*60) * 1000, roomName);
@@ -404,7 +434,7 @@ window.conference.live = (function() {
 
             // Conference is over
             else if (timeNow > roomEnd + streamExtend*60) {
-                setStreamContent('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
+                setStreamIframeContent('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
 
                 if (!freezeTime && demo) {
                     streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd - streamPrepend*60) * 1000, roomName);
@@ -417,7 +447,7 @@ window.conference.live = (function() {
 
                 // Currently stream is paused
                 if (pauseNext && timeNow >= pauseNext.start + streamExtend*60 && timeNow <= pauseNext.end - streamPrepend*60) {
-                    setStreamContent('{{ site.data.lang[site.conference.lang].live.pause_stream | default: "Live stream is currently paused." }}');
+                    setStreamIframeContent('{{ site.data.lang[site.conference.lang].live.pause_stream | default: "Live stream is currently paused." }}');
 
                     if (!freezeTime) {
                         streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.end - streamPrepend*60) * 1000, roomName);
@@ -426,7 +456,7 @@ window.conference.live = (function() {
                 // Currently a talk is active
                 else {
                     let room = getRoom(roomName);
-                    setStreamSrc(room.href);
+                    setStreamIframeSrc(room.href);
 
                     if (!freezeTime) {
                         if (pauseNext) {
@@ -441,6 +471,8 @@ window.conference.live = (function() {
         };
 
         let setStreamInfo = function (roomName) {
+            // Update stream modal info bar:
+            // Show next talk and speaker (for given room) and keep updated
             let timeNow = time();
             let talkNext = getNextTalk(roomName);
 
@@ -495,6 +527,7 @@ window.conference.live = (function() {
         };
 
         let setStream = function (roomName) {
+            // Update stream modal (iframe and info bar) for given room
             streamModal.find('.modal-footer .btn').removeClass('active');
             streamModal.find('#stream-select').val(0);
 
@@ -510,6 +543,7 @@ window.conference.live = (function() {
         };
 
         let updateStream = function () {
+            // Update stream modal for currently active room button
             if (streamModal.hasClass('show')) {
                 let activeButton = streamModal.find('.modal-footer .btn.active');
                 let roomName = activeButton.data('room');
@@ -521,6 +555,7 @@ window.conference.live = (function() {
         };
 
         let stopUpdateStream = function () {
+            // Stop stream modal update timer
             if (typeof streamVideoTimer !== "undefined") {
                 clearInterval(streamVideoTimer);
             }
@@ -530,12 +565,14 @@ window.conference.live = (function() {
         };
 
         let hideModal = function (event) {
+            // Close stream modal
             streamModal.find('iframe').attr('src', '');
             streamModal.find('.modal-footer .btn').removeClass('active');
             streamModal.find('#stream-select').selectedIndex = -1;
         };
 
         let setupStream = function () {
+            // Setup events when modal opens/closes
             streamModal = $('#stream-modal');
 
             // configure modal opening buttons
