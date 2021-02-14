@@ -2,7 +2,11 @@
   {%- include partials/get_talk_timestamp.html -%}
 
   {%- if site.conference.live.streaming -%}
-    <a title="{{ link.name }}" data-toggle="modal" data-target="#stream-modal" data-room="{{ r.name }}" href="#"
+    <a title="{{ link.name }}" {% if site.conference.live.streaming.external -%}
+      href="{{ site.conference.live.streaming.external }}"
+    {%- else -%}
+      data-toggle="modal" data-target="#stream-modal" data-room="{{ r.name }}" href="#"
+    {%- endif -%}
   {%- else -%}
     <span
   {%- endif %} class="live-show live-button badge badge-dark font-weight-normal text-center d-none {{ live_button_styleclass }}" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">

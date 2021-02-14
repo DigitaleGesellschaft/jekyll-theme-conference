@@ -319,15 +319,16 @@ conference:
 
 In order to help users navigating the program during the congress, a _Live_ indication can be shown next to talks which are currently taking place. A small JavaScript functions keeps the site automatically up-to-date (without the need to refresh) showing the indication as soon as the talk has started and hiding it once it is over (according to the timetable indicated in the `_data/program.yml` file).
 
-This can be further extended if some of the talks have an associated live stream: Upon clicking one of the live indications a modal will open containing the corresponding live stream embedded. The URL to the live stream has to be set via `live` property in each room (see the _Content_ > _Room_ section below).
+This can be further extended if some of the talks have an associated live stream: Upon clicking one of the live indications a modal will open containing the corresponding live stream embedded. The URL to the live stream has to be set via `live` property in each room (see the _Content_ > _Room_ section below). Instead of opening the modal an external link can also be used.
 
 In order to activate the functionality, each day in the `program.yml` file must contain a `date` property (see section _Content_ > _Schedule / Program_ below) and the `live` property has to be set in the configuration file containing
 
 - how long a pause between two consecutive talks has to be for the live indication to pause (`time_stop`),
 - optionally if streaming is enabled (`streaming`) with indications
   + how many minutes the stream goes active before a talk (`time_prepend`),
-  + how many minutes the stream stays active after a talk (`time_extend`), and
-  + how long a pause between two consecutive talks has to be for the stream to pause (`time_pause`),
+  + how many minutes the stream stays active after a talk (`time_extend`),
+  + how long a pause between two consecutive talks has to be for the stream to pause (`time_pause`), and
+  + optionally an external (absolute) link to which the user will be redirected instead of opening the modal (`external`),
 - optionally a demo mode setting, whereby the JavaScript function cycles through the entire program in five minutes for demonstration purposes (`demo: true`, default: `false`).
 
 ```yaml
