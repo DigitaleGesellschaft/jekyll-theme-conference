@@ -1,4 +1,4 @@
-version: 5
+version: 6
 
 en:
   pronoun:
@@ -10,7 +10,8 @@ en:
   more_information: More Information
   live:
     live: Live
-    streaming: Live Stream
+    stream: Live Stream
+    streams: Live Streams
     pre_stream: Live stream has not started yet.
     pause_stream: Live stream is currently paused.
     post_stream: Live stream has ended.
@@ -53,7 +54,8 @@ de:
   more_information: Weitere Informationen
   live:
     live: Live
-    streaming: Live Stream
+    stream: Live Stream
+    streams: Live Streams
     pre_stream: Der Live Stream hat noch nicht begonnen.
     pause_stream: Der Live Stream ist derzeit pausiert.
     post_stream: Der Live Stream ist beendet.
@@ -96,7 +98,8 @@ fr:
   more_information: Plus d'informations
   live:
     live: En direct
-    streaming: Diffusion en direct
+    stream: Diffusion en direct
+    streams: Diffusions en direct
     pre_stream: La diffusion en direct n'a pas encore commencé.
     pause_stream: La diffusion est actuellement en pause.
     post_stream: La diffusion en direct est terminée.
@@ -139,7 +142,8 @@ pt:
   more_information: Mais informações
   live:
     live: Ao vivo
-    streaming: Transmissão ao vivo
+    stream: Transmissão ao vivo
+    streams: Transmissãos ao vivo
     pre_stream: A transmissão ao vivo ainda não começou.
     pause_stream: A transmissão está atualmente em pausa.
     post_stream: A transmissão ao vivo terminou.

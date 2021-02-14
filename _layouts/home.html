@@ -49,7 +49,7 @@
           {%- if link.name -%}
             {%- assign link_name = link.name -%}
           {%- else -%}
-            {%- assign link_name =  site.data.lang[site.conference.lang].live.streaming | default: "Live Stream" -%}
+            {%- assign link_name =  site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
           {%- endif -%}
 
           {%- if link.name_inactive -%}

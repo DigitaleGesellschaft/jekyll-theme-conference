@@ -1,0 +1,42 @@
+{% include partials/header.html %}
+
+  <h1 class="display-5 mb-4">
+    {% if page.title %}
+      {{ page.title }}
+    {% else %}
+      {{ site.data.lang[site.conference.lang].live.stream | default: "Live Streams" }}
+    {% endif %}
+  </h1>
+
+  {{ content }}
+
+  {%- assign nbr_streams = 0 -%}
+  {%- for room in site.rooms -%}
+    {%- if room.live -%}
+      {%- assign mod_nbr_streams = nbr_streams | modulo: 2 -%}
+      {%- if mod_nbr_streams == 0 %}
+  <div class="row">
+      {%- endif %}
+
+    <div class="col-md">
+      <h3>{{ room.name }}</h3>
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="{{ room.live }}" allowfullscreen></iframe>
+      </div>
+    </div>
+
+      {%- if mod_nbr_streams == 1 %}
+  </div>
+      {%- endif -%}
+
+      {%- assign nbr_streams = nbr_streams | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor %}
+
+  {% assign mod_nbr_streams = nbr_streams | modulo: 2 %}
+  {%- if mod_nbr_streams == 1 %}
+    <div class="col-md"></div>
+  </div>
+  {%- endif %}
+
+{% include partials/footer.html %}

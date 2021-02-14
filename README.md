@@ -587,6 +587,10 @@ If you choose a different location for the overview pages you must:
 
 The `location` layout contains a map container (if not disabled, see section _Location Settings_ above) which can be customized. See the section above for further details.
 
+### Live Stream Overview
+
+The `stream-overview` layout contains all active streams on a single page (see the section _Live Indications & Streaming_ above).
+
 ### Additional Pages
 
 Additional static pages can easily be added as files and linked to via navigation bar or main landing page (see above on how to).
