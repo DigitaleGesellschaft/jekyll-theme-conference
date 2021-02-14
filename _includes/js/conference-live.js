@@ -58,7 +58,7 @@ window.conference.live = (function() {
 
     let timeCycle = function () {
         let actTime = timeNow();
-        let relTime = mod(actTime, durDemo + 2*durPause) / durDemo;
+        let relTime = mod(actTime, durDemo + 2*durPause) / (durDemo + 2*durPause);
         let cycleTime = mod((demoEnd - demoStart) * relTime - timeOffset, (demoEnd - demoStart)) + demoStart;
         return cycleTime;
     };
