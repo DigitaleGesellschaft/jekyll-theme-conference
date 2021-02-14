@@ -18,6 +18,41 @@ The theme was originally created for the yearly Winterkongress conference of the
 - [Demo: Winterkongress](https://digitale-gesellschaft.ch/kongress/)
 
 
+## Table of Contents
+
+- [Installation](#installation)
+  * [Gem-based Method](#gem-based-method)
+  * [Remote Theme Method](#remote-theme-method)
+- [Setup](#setup)
+  * [Jump Start](#jump-start)
+  * [Automatic Import](#automatic-import)
+  * [Automatic Build](#automatic-build)
+- [Configuration](#configuration)
+  * [Theme Verification](#theme-verification)
+  * [Collection URLs](#collection-urls)
+  * [Language](#language)
+  * [Navigation Bar](#navigation-bar)
+  * [Main Landing Page](#main-landing-page)
+  * [Information Boxes](#information-boxes)
+  * [Live Indications & Streaming](#live-indications---streaming)
+  * [Talk Settings](#talk-settings)
+  * [Speaker Settings](#speaker-settings)
+  * [Location Settings](#location-settings)
+  * [Program Settings](#program-settings)
+- [Content](#content)
+  * [Schedule / Program](#schedule---program)
+  * [Talks](#talks)
+  * [Speakers](#speakers)
+  * [Rooms](#rooms)
+  * [Links](#links)
+- [Overview Pages](#overview-pages)
+  * [Location / Room Overview](#location---room-overview)
+  * [Live Stream Overview](#live-stream-overview)
+  * [Additional Pages](#additional-pages)
+- [Design](#design)
+- [License](#license)
+
+
 ## Installation
 
 There are three ways to install: As a [Gem-based theme](https://jekyllrb.com/docs/themes/#understanding-gem-based-themes), as a [remote theme](https://github.blog/2017-11-29-use-any-theme-with-github-pages/) (GitHub Pages compatible), or by cloning/forking this repository and reference to it directly.
