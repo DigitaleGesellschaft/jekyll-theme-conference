@@ -12,13 +12,19 @@
     ],
 
     "rooms": {
+    {%- assign first_room = true -%}
     {%- for room in site.rooms %}
-        {%- if room.live %}
+        {%- if room.live -%}
+            {%- unless first_room -%}
+                ,
+            {%- else -%}
+                {%- assign first_room = false -%}
+            {%- endunless %}
         "{{ room.name }}": {
             "id": {{ forloop.index }},
             "name": "{{ room.name }}",
             "href": "{{ room.live }}"
-        }{%- unless forloop.last -%},{%- endunless %}
+        }
         {%- endif -%}
     {%- endfor %}
     },
@@ -41,18 +47,24 @@
     },
 
     "talks": {
+    {%- assign first_room = true -%}
     {%- for room in site.rooms -%}
-        {%- assign room_has_talks = false %}
+        {%- assign first_talk = true -%}
         {%- for d in site.data.program.days -%}
             {%- for r in d.rooms -%}
                 {%- if room.name == r.name and room.live %}
 
-                    {%- unless room_has_talks %}
+                    {%- if first_talk -%}
+                        {%- unless first_room -%}
+                            ,
+                        {%- else -%}
+                            {%- assign first_room = false -%}
+                        {%- endunless %}
         "{{ room.name | replace: '"', '\"' }}": [
-                        {%- assign room_has_talks = true %}
+                        {%- assign first_talk = false %}
                     {%- else -%}
                         ,
-                    {%- endunless -%}
+                    {%- endif -%}
 
                     {%- for t in r.talks %}
                         {%- assign talk = site.talks | where: 'name', t.name | first %}
@@ -82,9 +94,9 @@
             {%- endfor -%}
         {%- endfor -%}
 
-        {%- if room_has_talks %}
-        ]{%- unless forloop.last -%},{%- endunless -%}
-        {%- endif -%}
+        {%- unless first_talk %}
+        ]
+        {%- endunless -%}
     {%- endfor %}
     }
 }
