@@ -29,7 +29,7 @@ function (exports) {
         var elems = document.getElementsByClassName('syncscroll');
         var i, j, el, found, name;
         for (name in names) {
-            if (names.hasOwnProperty(name)) {
+            if (Object.prototype.hasOwnProperty.call(names, name)) {
                 for (i = 0; i < names[name].length; i++) {
                     names[name][i].removeEventListener(
                         'scroll', names[name][i].syn, 0

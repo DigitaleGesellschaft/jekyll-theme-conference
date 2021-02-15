@@ -24,7 +24,7 @@ window.conference.mapConfig = (function() {
     };
 
     let init = function () {
-        elId = 'map';
+        let elId = 'map';
 
         if (document.getElementById(elId)) {
             setup(elId);

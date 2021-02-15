@@ -51,7 +51,7 @@ window.conference.modal = (function () {
         }
     };
 
-    let hide = function (el, event) {
+    let hide = function (el) {
         let modal = $(el);
 
         modal.find('.modal-title h3').text('');
@@ -61,13 +61,13 @@ window.conference.modal = (function () {
     };
 
     let init = function() {
-        elSel = '#link-modal';
+        let elSel = '#link-modal';
 
         $(elSel).on('show.bs.modal', function (event) {
             show(this, event);
         });
-        $(elSel).on('hide.bs.modal', function (event) {
-            hide(this, event);
+        $(elSel).on('hide.bs.modal', function () {
+            hide(this);
         });
     };
 

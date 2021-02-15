@@ -34,7 +34,7 @@ window.conference.program = (function() {
             }
 
             // Add current selected day as hash to URL while keeping current scrolling position
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
                 updateHash(this.hash);
             });
         }

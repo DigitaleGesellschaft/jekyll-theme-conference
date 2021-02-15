@@ -101,7 +101,7 @@ window.conference.live = (function() {
         }
     };
 
-    let resetTime = function (timeStr) {
+    let resetTime = function () {
         // Reset app time
         timeOffset = 0;
         freezeTime = false;
@@ -109,12 +109,15 @@ window.conference.live = (function() {
         startUpdate();
     };
 
-    let setTime = function (newTime, newDay=1) {
+    let setTime = function (newTime, newDay) {
         // Set and pause app time
         pauseTime();
 
         let dayIdx;
-        if (Number.isInteger(newDay)) {
+        if (arguments.length < 2) {
+            dayIdx = 0;
+        }
+        else if (Number.isInteger(newDay)) {
             dayIdx = newDay-1;
         }
         else if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(newDay)) {
@@ -123,7 +126,7 @@ window.conference.live = (function() {
         else {
             dayIdx = data.days.find(o => o.name === newDay);
         }
-        newDate = data.days[dayIdx].date;
+        let newDate = data.days[dayIdx].date;
 
         let d = new Date(newDate);
         newTime = newTime.split(':');
@@ -134,8 +137,10 @@ window.conference.live = (function() {
         update();
     };
 
-    let getTime = function (tConvert=time()) {
+    let getTime = function () {
         // Return app time as string
+        let tConvert = time();
+
         let d = new Date(tConvert * 1000);
         let dStr = d.toISOString().slice(0,10);
         let h = d.getHours();
@@ -564,7 +569,7 @@ window.conference.live = (function() {
             }
         };
 
-        let hideModal = function (event) {
+        let hideModal = function () {
             // Close stream modal
             streamModal.find('iframe').attr('src', '');
             streamModal.find('.modal-footer .btn').removeClass('active');
@@ -581,8 +586,8 @@ window.conference.live = (function() {
                 let roomName = button.data('room');
                 setStream(roomName);
             });
-            streamModal.on('hide.bs.modal', function (event) {
-                hideModal(event);
+            streamModal.on('hide.bs.modal', function () {
+                hideModal();
             });
 
             // configure room selection buttons in modal
