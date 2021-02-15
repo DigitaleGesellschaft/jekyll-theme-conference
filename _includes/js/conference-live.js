@@ -363,12 +363,21 @@ window.conference.live = (function() {
             }
         };
 
+        let getTalks = function (roomName) {
+            if (roomName in data.talks) {
+                return data.talks[roomName];
+            }
+            else {
+                return false;
+            }
+        };
+
         let getNextTalk = function (roomName) {
             // Get talk object for next talk in given room
             let timeNow = time();
-            let talksHere = data.talks[roomName];
+            let talksHere = getTalks(roomName);
 
-            if (typeof talksHere !== "undefined") {
+            if (talksHere) {
                 if (timeNow < talksHere[talksHere.length-1].end) {
                     for (var i = 0; i < talksHere.length; i++) {
                         if (timeNow < talksHere[i].end) {
@@ -383,9 +392,9 @@ window.conference.live = (function() {
         let getNextPause = function (roomName) {
             // Get time object for next pause in given room
             let timeNow = time();
-            let talksHere = data.talks[roomName];
+            let talksHere = getTalks(roomName);
 
-            if (typeof talksHere !== "undefined") {
+            if (talksHere) {
                 if (timeNow < talksHere[talksHere.length-1].end) {
                     for (var i = 1; i < talksHere.length; i++) {
                         if (timeNow < talksHere[i].start && streamPause*60 <= talksHere[i].start - talksHere[i-1].end) {
@@ -420,9 +429,29 @@ window.conference.live = (function() {
             // Show stream with start/pause/end message (for given room) and keep updated
             let timeNow = time();
 
-            let talksHere = data.talks[roomName];
-            let roomStart = talksHere[0].start;
-            let roomEnd = talksHere[talksHere.length-1].end;
+            let talksHere = getTalks(roomName);
+            let roomStart, roomEnd;
+            if (talksHere) {
+                roomStart = talksHere[0].start;
+                roomEnd = talksHere[talksHere.length-1].end;
+            }
+            else {
+                // If no program for given room, take overall first and last talk
+                roomStart = 0;
+                roomEnd = 0;
+                for (let roomNameTalk in data.talks) {
+                    talksHere = getTalks(roomNameTalk);
+                    let crntRoomStart = talksHere[0].start;
+                    let crntRoomEnd = talksHere[talksHere.length-1].end;
+
+                    if (roomStart == 0 || roomStart > crntRoomStart) {
+                        roomStart = crntRoomStart;
+                    }
+                    if (roomEnd == 0 || roomEnd < crntRoomEnd) {
+                        roomEnd = crntRoomEnd;
+                    }
+                }
+            }
 
             if (typeof streamVideoTimer !== "undefined") {
                 clearInterval(streamVideoTimer);
@@ -485,7 +514,7 @@ window.conference.live = (function() {
                 clearInterval(streamInfoTimer);
             }
 
-            if (timeNow >= talkNext.start - streamPause*60) {
+            if (talkNext && timeNow >= talkNext.start - streamPause*60) {
                 document.getElementById('stream-info').dataset.time = talkNext.start;
                 document.getElementById('stream-info-time').dataset.time = talkNext.start;
                 updateLive();
@@ -524,8 +553,10 @@ window.conference.live = (function() {
                         streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.start - streamPause*60) * 1000, roomName);
                     }
                     else if (demo) {
-                        let talksHere = data.talks[roomName];
-                        streamInfoTimer = setTimeout(setStreamInfo, delayStart(talksHere[0].start - streamPrepend*60) * 1000, roomName);
+                        let talksHere = getTalks(roomName);
+                        if (talksHere) {
+                            streamInfoTimer = setTimeout(setStreamInfo, delayStart(talksHere[0].start - streamPrepend*60) * 1000, roomName);
+                        }
                     }
                 }
             }
