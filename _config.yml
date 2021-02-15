@@ -18,6 +18,7 @@ exclude:
   - REDISTRIBUTED.md
   - screenshot.png
   - jekyll-theme-conference.gemspec
+  - purgecss.config.js
   - _config.example.yml
 
 # Collections and their defaults

@@ -23,23 +23,11 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Ruby
-        uses: actions/setup-ruby@v1
-
-      - name: Ruby Cache
-        id: cache_ruby
-        uses: actions/cache@v2
+      - name: Setup Ruby, Bundler and Jekyll
+        uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gem-
-
-      - name: Install Bundler and Jekyll
-        if: steps.cache_ruby.outputs.cache-hit != 'true'
-        run: |
-          gem install bundler
-          bundle install --path vendor/bundle
+          ruby-version: 2.6
+          bundler-cache: true
 
       - name: Build website
         run: |
@@ -59,16 +47,7 @@ jobs:
         with:
           node-version: '12'
 
-      - name: NPM Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Install PurgeCSS and Terser
-        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm install -g purgecss
           npm install -g terser

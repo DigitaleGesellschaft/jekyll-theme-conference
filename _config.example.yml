@@ -14,10 +14,10 @@ sass:
 # Additional exclude from processing
 exclude:
   - .github/
-  - venv/
   - README.md
   - LICENSE.md
   - REDISTRIBUTED.md
+  - purgecss.config.js
 
 # Collections and their defaults
 collections:
