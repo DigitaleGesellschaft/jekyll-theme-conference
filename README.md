@@ -165,7 +165,7 @@ There exists a Python file in this repository, `_tools/create_entries.py`, which
 
 In case you do not want to install the entire Ruby/Jekyll toolchain on your machine you can make use of [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains multiple example Github Action configuration files in the `_tools/` folder:
 
-- `build.yml`: automatically builds and minimizes the website upon adding a new tag starting with a `v` (e.g. `v2020.01.01`). It then attaches the generated website as an archive to a release for easy downloading.
+- `build.yml`: automatically builds and minimizes the website upon adding a new tag starting with a `v` (e.g. `v2020.01.01`). It then attaches the generated website as an archive to a release for easy downloading. Requires `purgecss.config.js` to be copied to the project's root too.
 - `test.yml`: automatically tries to build the website upon a new pull request. It can thus be used as status check before merging.
 - `schedule.yml`: automatically generates the schedule and content files when a new pull request contains a `schedule.json` file (see the _Automatic Import_subsection above). Thus, it allows quick updates of the site's content from [pretalx.com](https://pretalx.com/p/about/) exports.
 
