@@ -131,6 +131,31 @@ def parse_frab(file_path):
         return content
 
 
+def extend_content(content, file_path):
+    # read file
+    with open(file_path, 'r', encoding='utf-8') as const_file:
+        info = yaml.safe_load(const_file)
+
+    # combine dictionaries per name
+    for category, entries in info.items():
+        if category in content:
+            for entry in entries:
+                # get index of existing entry in content
+                idx = next((idx for idx, item in enumerate(content[category])
+                            if item['name'] == entry['name']), None)
+
+                if idx:
+                    # extend existing entry
+                    for attr_name, attr_val in entry.items():
+                        if attr_name != 'name':
+                            content[category][idx][attr_name] = attr_val
+                else:
+                    # add new entry
+                    content[category].append(entry)
+
+    return content
+
+
 default_file_structure = {
     'talks': {
         'folder_name': '_talks',
@@ -276,7 +301,7 @@ if __name__ == "__main__":
         description='Generate Markdown and YAML files for Jekyll based on ' +
                     'a CSV table or a JSON file (frab compatible).')
     parser.add_argument('file', metavar='FILE',
-                        help='CSV file to read from')
+                        help='CSV/JSON file to read from')
 
     default_group = parser.add_argument_group('default options')
 
@@ -318,25 +343,32 @@ if __name__ == "__main__":
                               help='Field name whose content is used as ' +
                                    'main content for the Markdown files')
 
-    manual_group.add_argument('--file-path', type=str,
-                              help='Output file path for YAML data list')
-    manual_group.add_argument('--data_format', type=str,
-                              help='Date format of the date property ' +
-                                   '(strptime compatible) to translate' +
-                                   'numeric date into weekdays automatically')
-    manual_group.add_argument('--lc-time', type=str,
-                              help='Locale for weekday translation (e.g. ' +
-                                   'de_CH)')
+    add_group = parser.add_argument_group('additional options')
 
-    manual_group.add_argument('-c', '--clean',
-                              action='store_const', const=True,
-                              help='Delete all existing files (removes ' +
-                                   'files not existing in new dataset)')
+    add_group.add_argument('--file-path', type=str,
+                           help='Output file path for YAML data list')
+    add_group.add_argument('--data_format', type=str,
+                           help='Date format of the date property (strptime ' +
+                                'compatible) to translate numeric date into ' +
+                                'weekdays automatically')
+    add_group.add_argument('--lc-time', type=str,
+                           help='Locale for weekday translation (e.g. de_CH)')
+
+    add_group.add_argument('--info', type=str,
+                           help='File containing additional arguments to be ' +
+                                'added to specific talks/speakers/rooms')
+    add_group.add_argument('-c', '--clean',
+                           action='store_const', const=True,
+                           help='Delete all existing files (removes files ' +
+                                'not existing in new dataset)')
 
     args = parser.parse_args()
 
     if args.frab:
         content = parse_frab(args.file)
+        if args.info:
+            content = extend_content(content, args.info)
+
         create_files(content['talks'], **default_file_structure['talks'],
                      clean=True)
         create_files(content['speakers'], **default_file_structure['speakers'],
@@ -376,6 +408,8 @@ if __name__ == "__main__":
             file_args['clean'] = args.clean
 
         content = parse_csv(args.file, file_attrs + file_args['file_content'])
+        if args.info:
+            content = extend_content(content, args.info)
 
         create_files(content, **file_args)
 
