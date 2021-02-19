@@ -28,12 +28,12 @@ def transform_title(string):
 
 def escape_markdown(text):
     # escape pipes
-    new_text = text.replace('|', '\|')
+    new_text = text.replace('|', '\\|')
 
     return new_text
 
 
-def parse_csv(file_path):
+def parse_csv(file_path, keep_fields=[]):
     with open(file_path, 'r', encoding='utf-8') as csv_file:
         csv_content = csv.reader(csv_file, delimiter=',', quotechar='"')
         csv_content = list(csv_content)
@@ -50,6 +50,8 @@ def parse_csv(file_path):
             entry = {}
             for i, title in enumerate(titles):
                 if row[i] and row[i] != 'N/A':
+                    if len(keep_fields) > 0 and title not in keep_fields:
+                        continue
                     if title not in entry:
                         entry[title] = row[i]
                     elif not isinstance(entry[title], list):
@@ -133,26 +135,27 @@ default_file_structure = {
     'talks': {
         'folder_name': '_talks',
         'file_name': 'name',
-        'file_vars': ['name', 'speakers', 'categories'],
         'file_content': 'description'
     },
     'speakers': {
         'folder_name': '_speakers',
         'file_name': 'name',
-        'file_vars': ['name', 'first_name', 'last_name'],
         'file_content': 'bio'
     },
     'rooms': {
         'folder_name': '_rooms',
         'file_name': 'name',
-        'file_vars': ['name'],
         'file_content': 'description'
     }
 }
+default_file_attrs = {
+    'talks': ['name', 'speakers', 'categories'],
+    'speakers': ['name', 'first_name', 'last_name'],
+    'rooms': ['name']
+}
 
 
-def create_files(content, folder_name, file_name, file_vars, file_content,
-                 clean=False):
+def create_files(content, folder_name, file_name, file_content, clean=False):
     # verify if folder exists, otherwise create it
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
@@ -168,26 +171,26 @@ def create_files(content, folder_name, file_name, file_vars, file_content,
         file = transform_title(entry[file_name]) + '.md'
         file_path = os.path.join(folder_name, file)
 
-        # create arrays of variables to show in header of file
-        file_data = {}
-        for file_var in file_vars:
-            if file_var in entry:
-                file_data[file_var] = entry[file_var]
+        # extract main content
+        text = None
+        if file_content in entry:
+            if entry[file_content]:
+                # escape markdown text
+                text = escape_markdown(entry[file_content])
 
-        if file_content in entry and entry[file_content]:
-            # escape markdown text
-            text = escape_markdown(entry[file_content])
-        else:
-            # if no content add hide variable
-            text = None
-            file_data['hide'] = True
+            # delete entry
+            del entry[file_content]
+
+        # if no content add hide variable
+        if not text:
+            entry['hide'] = True
 
         # write to file
         with open(file_path, 'w', encoding='utf-8') as f:
 
             # Write Header
             f.write('---\n')
-            yaml.dump(file_data, f,
+            yaml.dump(entry, f,
                       encoding='utf-8', allow_unicode=True,
                       default_flow_style=False)
             f.write('---\n')
@@ -305,15 +308,15 @@ if __name__ == "__main__":
     manual_group.add_argument('--folder-name', type=str,
                               help='Output folder for Markdown files')
     manual_group.add_argument('--file-name', type=str,
-                              help='Category on which output filename for ' +
+                              help='Field name on which output filename for ' +
                                    'Markdown files is based on')
-    manual_group.add_argument('--file-vars', type=str, nargs='+',
-                              help='Categories which are added as ' +
-                                   'variables in the header for the ' +
+    manual_group.add_argument('--file-attrs', type=str, nargs='+',
+                              help='Field names which are added as ' +
+                                   'attributes in the header for the ' +
                                    'Markdown files')
     manual_group.add_argument('--file-content', type=str,
-                              help='Category whose content is used as ' +
-                                   'file content for the Markdown files')
+                              help='Field name whose content is used as ' +
+                                   'main content for the Markdown files')
 
     manual_group.add_argument('--file-path', type=str,
                               help='Output file path for YAML data list')
@@ -347,20 +350,24 @@ if __name__ == "__main__":
         # get default settings
         if args.talks:
             file_args = default_file_structure['talks']
+            file_attrs = default_file_attrs['talks']
         elif args.speakers:
             file_args = default_file_structure['speakers']
+            file_attrs = default_file_attrs['speakers']
         elif args.rooms:
             file_args = default_file_structure['rooms']
+            file_attrs = default_file_attrs['rooms']
         else:
             file_args = {}
+            file_attrs = []
 
         # overwrite default settings and/or define remaining settings
         if args.folder_name:
             file_args['folder_name'] = args.folder_name
         if args.file_name:
             file_args['file_name'] = args.file_name
-        if args.file_vars:
-            file_args['file_vars'] = args.file_vars
+        if args.file_attrs:
+            file_attrs = args.file_attrs
         if args.file_content:
             file_args['file_content'] = args.file_content
 
@@ -368,7 +375,8 @@ if __name__ == "__main__":
         if args.clean:
             file_args['clean'] = args.clean
 
-        content = parse_csv(args.file)
+        content = parse_csv(args.file, file_attrs + file_args['file_content'])
+
         create_files(content, **file_args)
 
     elif args.program:
