@@ -66,7 +66,6 @@ def parse_csv(file_path, keep_fields=[]):
 def parse_frab(file_path):
     with open(file_path, 'r', encoding='utf-8') as frab_file:
         data = json.load(frab_file)
-        rooms = data['schedule']['conference']['days'][0]['rooms']
 
         content = {
             'talks': [],
@@ -93,22 +92,42 @@ def parse_frab(file_path):
                             speaker_names = speaker_name.rsplit(' ', 1)
                             content['speakers'].append({
                                 'name': speaker_name,
-                                'first_name': speaker_names[0],
                                 'bio': speaker['biography']
                                 })
 
+                            # Always provide a last name
                             if len(speaker_names) > 1:
+                                content['speakers'][-1]['first_name'] = \
+                                    speaker_names[0]
                                 content['speakers'][-1]['last_name'] = \
                                     speaker_names[1]
                             else:
-                                content['speakers'][-1]['last_name'] = ''
+                                content['speakers'][-1]['first_name'] = ''
+                                content['speakers'][-1]['last_name'] = \
+                                    speaker_names[0]
+
+
+                    abstract = talk['abstract']
+                    description = talk['description']
+
+                    # Append abstract to description if contains more than one
+                    # word
+                    if description != '' and len(abstract.split()) > 1:
+                        text = '{{:.lead}}\n{}\n\n{}'.format(
+                            talk['abstract'], description)
+                    elif description != '':
+                        text = description
+                    elif len(abstract.split()) > 1:
+                        text = abstract
+                    else:
+                        text = ''
 
                     content['talks'].append({
                         'name': talk['title'],
                         'speakers':
                             [s['public_name'] for s in talk['persons']],
                         'categories': [talk['track'], talk['type']],
-                        'description': talk['description']
+                        'description': text
                         })
 
                     # Calculate talk end time

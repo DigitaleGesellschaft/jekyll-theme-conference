@@ -563,6 +563,8 @@ Each speaker is represented by a file in the `_speakers/` directory. It must beg
 - optionally a list of `links` (see the _Links_ subsection below for the available properties per link; links with icons are treated separately), and
 - optionally `hide: true` if the speaker's page should not be linked to.
 
+If the speaker's name consists only out of one word, populate the `last_name` property and leave the `first_name` property empty. The last name is generally used for sorting the speakers.
+
 ### Rooms
 
 Each room is represented by a file in the `_rooms/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
