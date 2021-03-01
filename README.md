@@ -514,7 +514,7 @@ The order of the rooms in the list defines the order of the rooms as shown in th
 Each talk consists of
 
 - a `name` (must correspond to one of the talk identifier),
-- a starting time `time_start` given as `H:M` ([`strftime`](http://www.strfti.me) formated), and
+- a starting time `time_start` given as `H:M` ([`strftime`](http://www.strfti.me) formated) or `H:M +∆` whereby ∆ is the day offset in relation to the date given for the given day, and
 - an end time `time_end`.
 
 The list of talks should (manually) be ordered by time, i.e. the first occurring talk should be listed first.

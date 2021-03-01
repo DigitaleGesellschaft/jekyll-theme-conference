@@ -2,8 +2,9 @@
   {%- assign t = r.talks | first -%}
   {%- include partials/get_talk_time.html -%}
 
-  {%- if forloop.index == 1 or talk_start_hour < day_start_hour or talk_start_hour == day_start_hour and talk_start_min < day_start_min-%}
+  {%- if forloop.index == 1 or talk_start_day < day_start_day or talk_start_day == day_start_day and talk_start_hour < day_start_hour or talk_start_hour == day_start_hour and talk_start_min < day_start_min-%}
     {%- assign day_start_talk = t -%}
+    {%- assign day_start_day = talk_start_day -%}
     {%- assign day_start_hour = talk_start_hour -%}
     {%- assign day_start_min = talk_start_min -%}
   {%- endif -%}
@@ -11,8 +12,9 @@
   {%- assign t = r.talks | last -%}
   {%- include partials/get_talk_time.html -%}
 
-  {%- if forloop.index == 1 or talk_end_hour > day_end_hour or talk_end_hour == day_end_hour and talk_end_min > day_end_min-%}
+  {%- if forloop.index == 1 or talk_end_day > day_end_day or talk_end_day == day_end_day and talk_end_hour > day_end_hour or talk_end_hour == day_end_hour and talk_end_min > day_end_min-%}
     {%- assign day_end_talk = t -%}
+    {%- assign day_end_day = talk_end_day -%}
     {%- assign day_end_hour = talk_end_hour -%}
     {%- assign day_end_min = talk_end_min -%}
   {%- endif -%}

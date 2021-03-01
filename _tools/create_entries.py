@@ -106,7 +106,6 @@ def parse_frab(file_path):
                                 content['speakers'][-1]['last_name'] = \
                                     speaker_names[0]
 
-
                     abstract = talk['abstract']
                     description = talk['description']
 
@@ -133,11 +132,19 @@ def parse_frab(file_path):
                     # Calculate talk end time
                     talk_start = (talk['start']).split(':')
                     talk_duration = (talk['duration']).split(':')
-                    talk_end = [int(talk_start[0]) + int(talk_duration[0]),
+
+                    talk_end = [0,
+                                int(talk_start[0]) + int(talk_duration[0]),
                                 int(talk_start[1]) + int(talk_duration[1])]
-                    talk_end[0] = (talk_end[0] + talk_end[1] // 60) % 24
-                    talk_end[1] = talk_end[1] % 60
-                    talk_end = "{}:{:02d}".format(talk_end[0], talk_end[1])
+                    talk_end[1] = (talk_end[1] + talk_end[2] // 60)
+                    talk_end[2] %= 60
+                    talk_end[0] = (talk_end[0] + talk_end[1] // 24)
+                    talk_end[1] %= 24
+
+                    # Indicate if talk is overlapping into next day
+                    talk_end = '{:02d}:{:02d}{}'.format(
+                        talk_end[1], talk_end[2],
+                        ' +{}'.format(talk_end[0]) if talk_end[0] > 0 else '')
 
                     content['program'].append({
                         'name': talk['title'],
