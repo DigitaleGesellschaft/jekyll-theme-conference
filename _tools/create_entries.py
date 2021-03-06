@@ -4,26 +4,8 @@ import os
 import csv
 import yaml
 import json
-import re
-from unicodedata import normalize
 from datetime import datetime
-
-
-def transform_title(string):
-    # replace spaces
-    new_string = string.replace(' ', '_')
-
-    # replace special characters (:, /, ...)
-    new_string = re.sub(r'(?u)[^-\w]', '', new_string)
-
-    # remove URL unsafe characters (ä, ö, ü, é, è, à, ...)
-    new_string = normalize(
-        'NFKD', new_string).encode('ASCII', 'ignore').decode("utf-8")
-
-    # work only in lower case
-    new_string = new_string.lower()
-
-    return new_string
+from conference import get_id
 
 
 def escape_markdown(text):
@@ -42,7 +24,7 @@ def parse_csv(file_path, keep_fields=[]):
         titles = csv_content.pop(0)
 
         # convert titles
-        titles = list(map(transform_title, titles))
+        titles = list(map(get_id, titles))
 
         # use rest as data
         content = []
@@ -219,7 +201,7 @@ def create_files(content, folder_name, file_name, file_content, clean=False):
 
     for entry in content:
         # create file title
-        file = transform_title(entry[file_name]) + '.md'
+        file = get_id(entry[file_name]) + '.md'
         file_path = os.path.join(folder_name, file)
 
         # extract main content

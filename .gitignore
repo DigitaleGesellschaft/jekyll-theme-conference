@@ -9,6 +9,7 @@ _site/
 vendor/bundle/
 
 ### Python ###
+__pycache__/
 venv/
 
 ### MacOS ###

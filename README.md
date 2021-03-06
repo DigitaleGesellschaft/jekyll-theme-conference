@@ -137,9 +137,9 @@ In order to be up and running simply use the default content of this repository 
 
 ### Automatic Import
 
-There exists a Python file in this repository, `_tools/create_entries.py`, which can be used to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible JSON file (e.g. from [pretalx.com](https://pretalx.com/p/about/)) or a CSV table and generate the different talk, speakers and room files automatically. It has as only dependency [PyYAML](https://pypi.org/project/PyYAML/):
+There exists a Python file in this repository, `_tools/create_entries.py`, which can be used to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible JSON file (e.g. from [pretalx.com](https://pretalx.com/p/about/)) or a CSV table and generate the different talk, speakers and room files automatically.
 
-1. Copy the file `_tools/create_entries.py` from this repository
+1. Copy the files `_tools/create_entries.py` and `_tools/requirements.txt` from this repository
 
 2. Create a virtual environment and activate it
 
@@ -148,10 +148,10 @@ There exists a Python file in this repository, `_tools/create_entries.py`, which
    source venv/bin/activate
    ```
 
-3. Install PyYAML
+3. Install the requirements
 
    ```bash
-   pip install pyyaml
+   pip install -r _tools/requirements.txt
    ```
 
 4. Execute the script, e.g. to show the help type
@@ -603,6 +603,29 @@ Example:
     - name: Recording
       video: https://media.ccc.de/
 ```
+
+There exists a Python file in this repository, `_tools/import_resources.py`, which can be used to import resources such as slides and other documents from [pretalx.com](https://pretalx.com/p/about/)) via its API. It automatically downloads all files, stores them and updates the links of the talks concerned.
+
+1. Copy the files `_tools/import_resources.py` and `_tools/requirements.txt` from this repository
+
+2. Create a virtual environment and activate it
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install the requirements
+
+   ```bash
+   pip install -r _tools/requirements.txt
+   ```
+
+4. Execute the script, e.g. to show the help type
+
+   ```bash
+   python _tools/import_resources.py --help
+   ```
 
 
 ## Overview Pages
