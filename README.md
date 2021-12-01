@@ -169,7 +169,7 @@ In case you do not want to install the entire Ruby/Jekyll toolchain on your mach
 
 - `build.yml`: automatically builds and minimizes the website upon adding a new tag starting with a `v` (e.g. `v2020.01.01`). It then attaches the generated website as an archive to a release for easy downloading. Requires `purgecss.config.js` to be copied to the project's root too.
 - `test.yml`: automatically tries to build the website upon a new pull request. It can thus be used as status check before merging.
-- `schedule.yml`: automatically generates the schedule and content files when a new pull request contains a `schedule.json` file (see the _Automatic Import_subsection above). Thus, it allows quick updates of the site's content from [pretalx.com](https://pretalx.com/p/about/) exports.
+- `schedule.yml`: automatically generates the schedule and content files when a new pull request contains a `schedule.json` file (see the _Automatic Import_ subsection above). Thus, it allows quick updates of the site's content from [pretalx.com](https://pretalx.com/p/about/) exports.
 
 To get started, simply copy the desired workflow file to your repository and adapt it to your needs:
 
@@ -695,6 +695,15 @@ Custom Bootstrap themes or simple color schemes such as designed with [Bootstrap
 2. Add your Bootstrap variables in front of the `@import 'conference'` line, e.g. currently the primary color is set internally to green (instead of Bootstrap's default blue): `$primary: #074 !default;`
 3. Add any additional CSS styles after it.
 
+## Development
+
+If you want to modify this theme and see its changes on an existing project, simply indicate in your `Gemfile` that you want to use the local copy of the theme by adding a `path` indication after the gem instantiation:
+
+```ruby
+group :jekyll_plugins do
+  gem "jekyll-theme-conference", path: "../[path to your local theme]"
+end
+```
 
 ## License
 
