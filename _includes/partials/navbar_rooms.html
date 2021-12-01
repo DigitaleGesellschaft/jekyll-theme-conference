@@ -1,7 +1,11 @@
 <ul class="nav nav-pills d-print-none mb-3">
   <li class="nav-item">
     <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.conference.location.url | prepend: site.baseurl }}">
-      {{ site.data.lang[site.conference.lang].location.directions | default: "Directions" }}
+      {% if site.conference.location.navbar_title -%}
+        {{- site.conference.location.navbar_title -}}
+      {%- else -%}
+        {{- site.data.lang[site.conference.lang].location.directions | default: "Directions" -}}
+      {%- endif %}
     </a>
   </li>
   {%- for room in site.rooms -%}

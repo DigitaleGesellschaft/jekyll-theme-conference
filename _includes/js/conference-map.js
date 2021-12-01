@@ -2,9 +2,9 @@ window.conference.mapConfig = (function() {
 
     let map;
 
-    let mapProvider = "{{ site.conference.location.map.map_provider | default: 'OpenStreetMap.Mapnik' }}";
-    let homeCoord = [{{ site.conference.location.map.home_coord }}];
-    let zoomLevel = {{ site.conference.location.map.default_zoom | default: 17 }};
+    let mapProvider = "{{ site.conference.map.map_provider | default: 'OpenStreetMap.Mapnik' }}";
+    let homeCoord = [{{ site.conference.map.home_coord }}];
+    let zoomLevel = {{ site.conference.map.default_zoom | default: 17 }};
 
     let setup = function (elId) {
         map = L.map(elId).setView(homeCoord, zoomLevel);

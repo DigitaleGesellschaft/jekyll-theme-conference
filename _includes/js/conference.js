@@ -13,7 +13,8 @@ window.conference = {};
 {% include js/conference-program.js %}
 
 // Leaflet (Map Display)
-{% if site.conference.location.hide != true and site.conference.location.map.enable %}
+{% include partials/get_enable_map.html %}
+{% if enable_map %}
     {% include js/leaflet.js %}
     {% include js/leaflet-easybutton.js %}
     {% include js/leaflet-locatecontrol.js %}

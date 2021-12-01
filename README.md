@@ -35,6 +35,7 @@ The theme was originally created for the yearly Winterkongress conference of the
   * [Main Landing Page](#main-landing-page)
   * [Information Boxes](#information-boxes)
   * [Live Indications & Streaming](#live-indications---streaming)
+  * [Map](#map)
   * [Talk Settings](#talk-settings)
   * [Speaker Settings](#speaker-settings)
   * [Location Settings](#location-settings)
@@ -50,6 +51,7 @@ The theme was originally created for the yearly Winterkongress conference of the
   * [Live Stream Overview](#live-stream-overview)
   * [Additional Pages](#additional-pages)
 - [Design](#design)
+- [Development](#development)
 - [License](#license)
 
 
@@ -377,6 +379,21 @@ conference:
     demo: false
 ```
 
+### Map
+
+In order to help users finding your venue, an [OpenStreetMap](https://www.openstreetmap.org/) container displaying a map can be shown on any page. The map's initial position is globally defined and thus the same for all map containers. You can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
+The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitors current location (has to be manually activated and granted by the visitor).
+
+The map can be added to any page by setting `map: true` in its Front Matter or on the location main page by setting `conference.location.map: true` (see _Location Settings_ section below).
+
+```yaml
+conference:
+  map:
+    default_zoom: 17
+    home_coord: 47.37808, 8.53935
+    map_provider: "OpenStreetMap.Mapnik"
+```
+
 ### Talk Settings
 
 Each talk can have one or multiple categories associated via FrontMatter (see the _Individual Pages: Talks_ section below for more details). Some of these categories can be elevated to so called main categories". These are used to color group the talks across the entire website, particularly in the program. In order to do so add the `main_categories` property under the `talks` property. It consists of a list of all main categories. Each main category consists of:
@@ -429,8 +446,9 @@ In order to hide all rooms add the `hide: true` setting (default: `false`) to th
 
 If your `location` overview file is not located under `/location` you can indicate an alternative path by setting the `url` property (default: `/location`) under the `location` property.
 
-The `location` layout automatically includes an [OpenStreetMap](https://www.openstreetmap.org/) container to point to your venue. If you want to hide it add the `enable: false` setting (default: `true`) to the `map` property under the `location` property. Otherwise, you can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
-The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitors current location (has to be manually activated and granted by the visitor).
+The location main page shows a navigation bar listing all the different rooms by name. Due to the quirks of Jekyll, the main page itself cannot be listed by title as defined in its Front Matter. Instead the title of the main landing page for the navigation bar is taken from the language files and defaults to "Directions". In order to change this, you can either change the language files directly (see the _Language_ section above), or you provide an alternative title by setting the `navbar_title` to the desired title under the `location` property.
+
+The `location` layout can include a map to point to your venue by adding the `map: true` setting (default: `true`) to the `location` property. See the _Map_ section above for more information.
 
 Example:
 
@@ -438,11 +456,9 @@ Example:
 conference:
   location:
     hide: false
-    map:
-      enable: true
-      default_zoom: 17
-      home_coord: 47.37808, 8.53935
-      map_provider: "OpenStreetMap.Mapnik"
+    url: '/location'
+    navbar_title: 'Location'
+    map: true
 ```
 
 The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/main.js` file, e.g. adding additional layers with markers, text, or shapes to the map. To start, copy simply the file from this repository and make use of the initialized global variable `window.conference.map` pointing to the Leaflet container.
@@ -646,7 +662,7 @@ If you choose a different location for the overview pages you must:
 
 ### Location / Room Overview
 
-The `location` layout contains a map container (if not disabled, see section _Location Settings_ above) which can be customized. See the section above for further details.
+The `location` layout can include a map container (if not disabled, see the _Location Settings_ section above) which can be customized (see the _Map_ section above).
 
 ### Live Stream Overview
 
@@ -656,6 +672,7 @@ The `stream-overview` layout contains all active streams on a single page (see t
 
 Additional static pages can easily be added as files and linked to via navigation bar or main landing page (see above on how to).
 
+Each of these pages can include a map at its end (e.g. to point to your venue) by adding the `map: true` setting to its Front Matter. See the _Map_ section above for more information.
 
 ## Design
 

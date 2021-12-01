@@ -120,6 +120,17 @@ conference:
       time_extend:   5  # in minutes
     demo: false
 
+  map:
+    # Initial map center point
+    home_coord: 47.37808, 8.53935
+    # Alternative map providers can be found on https://leaflet-extras.github.io/leaflet-providers/preview/
+    # The following do match the Bootstrap design not too badly:
+    #   - Hydda.Full
+    #   - Thunderforest.Neighbourhood
+    #   - Esri.WorldTopoMap
+    map_provider: "OpenStreetMap.Mapnik"
+    default_zoom: 17
+
   talks:
     # Talk categories
     main_categories:
@@ -136,23 +147,14 @@ conference:
     show_firstname: true
 
   location:
-    # URL of location / room overview page
-    url: '/location'
-
     # Disable links to locations
     hide: false
-    map:
-      # show map
-      enable: true
-      # initial map center point
-      home_coord: 47.37808, 8.53935
-      # Alternative map providers can be found on https://leaflet-extras.github.io/leaflet-providers/preview/
-      # The following do match the Bootstrap design not too badly:
-      #   - Hydda.Full
-      #   - Thunderforest.Neighbourhood
-      #   - Esri.WorldTopoMap
-      map_provider: "OpenStreetMap.Mapnik"
-      default_zoom: 17
+    # URL of location / room overview page
+    url: '/location'
+    # Main page title shown on location/room navigation bar
+    navbar_title: 'Location'
+    # Show map on location main page
+    map: true
 
   program:
     # URL of program page

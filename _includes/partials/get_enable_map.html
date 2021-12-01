@@ -1,0 +1,11 @@
+{%- if site.conference.location.map -%}
+  {%- assign enable_map = true -%}
+{%- else -%}
+  {%- assign enable_map = false -%}
+  {%- for page in site.pages -%}
+    {%- if page.map -%}
+      {%- assign enable_map = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
