@@ -1,0 +1,33 @@
+{%- capture page_title -%}
+  {%- if page.layout == 'room' -%}
+    {{- page.name -}}
+  {%- elsif page.layout == 'speaker' -%}
+    {{- page.first_name }} {{ page.last_name -}}
+  {%- elsif page.layout == 'talk' -%}
+    {{- page.name -}}
+
+  {%- elsif page.title -%}
+    {{- page.title -}}
+
+  {%- else -%}
+    {%- if page.layout == 'location' -%}
+      {{- site.data.lang[site.conference.lang].location.title | default: "Location" -}}
+    {%- elsif page.layout == 'program' -%}
+      {{- site.data.lang[site.conference.lang].program.title | default: "Program" -}}
+    {%- elsif page.layout == 'speaker-overview' -%}
+      {{- site.data.lang[site.conference.lang].speaker.overview | default: "Speakers" -}}
+    {%- elsif page.layout == 'stream-overview' -%}
+      {{ site.data.lang[site.conference.lang].live.stream | default: "Live Streams" }}
+    {%- elsif page.layout == 'talk-overview' -%}
+      {{- site.data.lang[site.conference.lang].talk.overview | default: "Talks" -}}
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if page_title == empty and include.default -%}
+  {%- assign page_title = include.default -%}
+{%- endif -%}
+
+{%- if include.replace_quotes -%}
+  {%- assign page_title = page_title | replace: '"', "'" -%}
+{%- endif -%}

@@ -5,8 +5,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  {% include partials/get_page_title.html -%}
   <title>
-    {% unless page.name contains '.' %}{{ page.name }} - {% else %}{% if page.title %}{{ page.title }} - {% endif %}{% endunless %}{{ site.title }}
+    {{- page_title -}}
+    {%- unless page_title == empty %} - {% endunless -%}
+    {{- site.title -}}
   </title>
   <meta name="description" content="{{ site.description }}" />
 
