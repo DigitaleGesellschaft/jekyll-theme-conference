@@ -1,4 +1,5 @@
 title: Conference 2020
+preposition: ''
 description: >-
   Conference of a random organization on January 1st in Zurich, Switzerland
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -54,6 +55,9 @@ defaults:
 conference:
   lang: en
   show_errors: True
+
+  link_preview:
+    disable: false
 
   speakers:
     show_firstname: true

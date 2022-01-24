@@ -1,0 +1,23 @@
+{% unless site.conference.link_preview.disable -%}
+  {%- include partials/get_page_title.html default=site.title replace_quotes=true -%}
+  {%- include partials/get_page_description.html default=site.title replace_quotes=true -%}
+
+  <meta name="description" content="{{ page_description }}" />
+
+  <meta name="twitter:card" content="summary" />
+  {%- if site.conference.link_preview.img and site.conference.link_preview.img.twitter %}
+  <meta name="twitter:image" content="{{ site.conference.link_preview.img.twitter | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}" />
+  {%- endif %}
+  <meta name="twitter:title" content="{{ page_title }}" />
+  <meta name="twitter:description" content="{{ page_description }}" />
+
+  <meta property="og:site_name" content="{{ site.title }}" />
+  {%- if site.conference.link_preview.img and site.conference.link_preview.img.open_graph %}
+  <meta property="og:image" content="{{ site.conference.link_preview.img.open_graph | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}" />
+  {%- endif %}
+  <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}" />
+  <meta property="og:title" content="{{ page_title }}" />
+  <meta property="og:description" content="{{ page_description }}" />
+  <meta property="og:type" content="website" />
+
+{%- endunless %}

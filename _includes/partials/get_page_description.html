@@ -1,0 +1,23 @@
+{%- unless site.preposition == empty -%}
+  {%- assign preposition = site.preposition -%}
+{%- else -%}
+  {%- assign preposition = '-' -%}
+{%- endunless -%}
+
+{%- capture page_description -%}
+  {%- if page.layout == 'talk' -%}
+    {{ site.data.lang[site.conference.lang].talk.title | default: 'Talk' }} {{ site.data.lang[site.conference.lang].pronoun.by | default: 'by'}} {% include partials/list_speakers.html text_only=true %} {{ preposition }} {{ site.title }}
+  {%- elsif page.layout == 'speaker' -%}
+    {{ site.data.lang[site.conference.lang].speaker.title | default: 'Speaker' }} {{ preposition }} {{ site.title }}
+  {%- elsif site.description -%}
+    {{ site.description }}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if page_description.empty and include.default -%}
+  {%- assign page_description = include.default -%}
+{%- endif -%}
+
+{%- if include.replace_quotes -%}
+  {%- assign page_description = page_description | replace: '"', "'" -%}
+{%- endif -%}

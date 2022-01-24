@@ -32,6 +32,7 @@ The theme was originally created for the yearly Winterkongress conference of the
   * [Collection URLs](#collection-urls)
   * [Language](#language)
   * [Navigation Bar](#navigation-bar)
+  * [Open Graph Link Preview](#open-graph-link-preview)
   * [Main Landing Page](#main-landing-page)
   * [Information Boxes](#information-boxes)
   * [Live Indications & Streaming](#live-indications---streaming)
@@ -283,7 +284,30 @@ conference:
     ...
     logo:
       name: Magic Organisation
+      img: 'logo.svg'  # inside /assets/images/
       url: 'https://github.com'
+```
+
+### Open Graph Link Preview
+
+The theme automatically includes the necessary `<meta>` tags to ease link previewing when sharing links based on the [Open Graph protocol](https://ogp.me/) and [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards). These tags control how a link is presented when shared via different platform and apps. In order to disable these `<meta>` tags add the `disable: true` setting (default: `false`) to the `link_preview` property.
+
+In order to generate a meaningful description for each of the links, the preposition for the conference title as given under the `title` property can be defined by using the `preposition` property. For example, if `title` is set to "Conference 2020" the corresponding `preposition` would be "at". The template can then use it to generate descriptions such as "Talk *at* Conference 2020".
+
+Optionally, an image which is shown as preview for all links can be specified. For sharing via Open Graph an image ratio of 1.91:1 and an ideal size of 1200x630 pixel is recommended. For sharing via Twitter an image ratio of 1:1 and a minimal size of 600x600 pixel (better 1200x1200 pixel) is recommended. SVG image files are not supported. It is activate through the `img` property under the `link_preview` property containing an image file shown for Open Graph (`open_graph`) and on the Twitter Cards (`twitter`), whereby the path to the image file relative to the `/assets/images/` folder has to be specified.
+
+```yaml
+title: Conference 2020
+preposition: 'at'
+
+...
+
+conference:
+  link_preview:
+    disable: false
+    img:
+      twitter: 'twitter_preview.png'      # inside /assets/images/
+      open_graph: 'facebook_preview.png'  # inside /assets/images/
 ```
 
 ### Main Landing Page

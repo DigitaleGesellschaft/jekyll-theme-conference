@@ -1,4 +1,5 @@
 title: Conference 2020
+preposition: at
 description: >-
   Conference of a random organization on January 1st in Zurich, Switzerland
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -80,6 +81,14 @@ conference:
             relative_url: /2019/
           - name: 2018
             relative_url: /2018/
+
+  # Link Preview for Sharing
+  link_preview:
+    # also adapt "preposition" property at top for more meaningful descriptions
+    disable: false
+    img:
+      twitter: 'twitter_preview.png'      # inside /assets/images/
+      open_graph: 'facebook_preview.png'  # inside /assets/images/
 
   # Main landing page
   main:

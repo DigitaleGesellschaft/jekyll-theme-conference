@@ -1,11 +1,13 @@
-version: 6
+version: 7
 
 en:
   pronoun:
-    on_: on
+    and: and
     at: at
-    in: in
+    by: by
     for: for
+    in: in
+    on_: on
   overview: Overview
   more_information: More Information
   live:
@@ -43,13 +45,16 @@ en:
     talks: Talks at this conference
   talk:
     overview: Talks
+    title: Talk
 
 de:
   pronoun:
-    on_: am
+    and: und
     at: um
-    in: im Raum
+    by: von
     for: für
+    in: im Raum
+    on_: am
   overview: Übersicht
   more_information: Weitere Informationen
   live:
@@ -87,13 +92,16 @@ de:
     talks: Vorträge an dieser Konferenz
   talk:
     overview: Vorträge
+    title: Vortrag
 
 fr:
   pronoun:
-    on_: le
+    and: et
     at: à
-    in: dans
+    by: de
     for: pour
+    in: dans
+    on_: le
   overview: Aperçu
   more_information: Plus d'informations
   live:
@@ -131,13 +139,16 @@ fr:
     talks: Présentations lors de cette conférence
   talk:
     overview: Présentations
+    title: Présentation
 
 pt:
   pronoun:
-    on_: no
+    and: e
     at: às
-    in: em
+    by: de
     for: por
+    in: em
+    on_: no
   overview: Visão geral
   more_information: Mais informações
   live:
@@ -175,3 +186,4 @@ pt:
     talks: Apresentações nesta conferência
   talk:
     overview: Apresentações
+    title: Apresentação
