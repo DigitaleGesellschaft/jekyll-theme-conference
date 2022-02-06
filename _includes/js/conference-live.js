@@ -15,9 +15,9 @@ window.conference.live = (function() {
 
     let data;
 
-    let confStart = {{ conf_start }};
-    let confEnd = {{ conf_end }};
-    let confDur = confEnd - confStart;
+    const confStart = {{ conf_start }};
+    const confEnd = {{ conf_end }};
+    const confDur = confEnd - confStart;
 
     let freezeTime = false;
     let timeFrozen = 0;
@@ -34,34 +34,34 @@ window.conference.live = (function() {
     let streamVideoTimer;
     let streamInfoTimer;
 
-    let loadData = function () {
+    const loadData = function () {
         // Fetch schedule from external file
         $.getJSON('{{ site.baseurl }}/assets/js/data.json', function(json) {
             data = json;
         });
     };
 
-    let getData = function () {
+    const getData = function () {
         // Return data
         return data;
     };
 
-    let mod = function (n, m) {
+    const mod = function (n, m) {
         // Absolute modulo
         return ((n % m) + m) % m;
     };
 
-    let timeNow = function () {
+    const timeNow = function () {
         // Current timestamp in seconds
         return Math.floor(Date.now() / 1000);
     };
 
-    let timeCont = function () {
+    const timeCont = function () {
         // Continuous time (respecting previous pauses)
         return timeNow() - timeOffset;
     };
 
-    let timeCycle = function () {
+    const timeCycle = function () {
         // Cyclic timestamp in seconds
         let actTime = timeNow();
         let relTime = mod(actTime, durDemo + 2*durPause) / (durDemo + 2*durPause);
@@ -69,7 +69,7 @@ window.conference.live = (function() {
         return cycleTime;
     };
 
-    let time = function () {
+    const time = function () {
         // Return app time
         if (freezeTime) {
             return timeFrozen;
@@ -82,7 +82,7 @@ window.conference.live = (function() {
         }
     };
 
-    let pauseTime = function () {
+    const pauseTime = function () {
         // Pause app time
         if (!freezeTime) {
             timeFrozen = time();
@@ -92,7 +92,7 @@ window.conference.live = (function() {
         }
     };
 
-    let continueTime = function () {
+    const continueTime = function () {
         // Continue app time
         if (freezeTime) {
             freezeTime = false;
@@ -101,7 +101,7 @@ window.conference.live = (function() {
         }
     };
 
-    let resetTime = function () {
+    const resetTime = function () {
         // Reset app time
         timeOffset = 0;
         freezeTime = false;
@@ -109,7 +109,7 @@ window.conference.live = (function() {
         startUpdate();
     };
 
-    let setTime = function (newTime, newDay) {
+    const setTime = function (newTime, newDay) {
         // Set and pause app time
         pauseTime();
 
@@ -137,7 +137,7 @@ window.conference.live = (function() {
         update();
     };
 
-    let getTime = function () {
+    const getTime = function () {
         // Return app time as string
         let tConvert = time();
 
@@ -149,7 +149,7 @@ window.conference.live = (function() {
         return dStr +" "+ h +":"+ (m < 10 ? "0" : "") + m;
     };
 
-    let timeUnit = function () {
+    const timeUnit = function () {
         // App time refresh rate
         if (demo) {
             return 0.1;
@@ -159,7 +159,7 @@ window.conference.live = (function() {
         }
     };
 
-    let delayStart = function (startTime) {
+    const delayStart = function (startTime) {
         // Seconds until given startTime occurs
         let tNow = time();
         let tUnit = timeUnit();
@@ -179,18 +179,17 @@ window.conference.live = (function() {
         }
     };
 
-    let toggleDemo = function () {
-        // Toggle app demo mode
-        demo = !demo;
-        resetTime();
+    let model = {
+        set demo(value) {
+            demo = value;
+            resetTime();
+        },
+        get demo() {
+            return demo;
+        }
     };
 
-    let demoOn = function () {
-        // Return app demo status
-        return demo;
-    };
-
-    let updateLive = function () {
+    const updateLive = function () {
         // Update status all live elements in DOM
         let tNow = time();
         let liveShow = document.getElementsByClassName('live-show');
@@ -322,7 +321,7 @@ window.conference.live = (function() {
         }
     };
 
-    let startUpdateLive = function () {
+    const startUpdateLive = function () {
         // Start update timer to update live elements in DOM
         stopUpdateLive();
         updateLive();
@@ -339,7 +338,7 @@ window.conference.live = (function() {
         }
     };
 
-    let stopUpdateLive = function () {
+    const stopUpdateLive = function () {
         // stopUpdate update timer to update live elements in DOM
         if (typeof liveTimer !== "undefined") {
             clearInterval(liveTimer);
@@ -347,13 +346,13 @@ window.conference.live = (function() {
     };
 
     {% if site.conference.live.streaming -%}
-        let streamPause   = {{ site.conference.live.streaming.time_pause | default: 60 }};  // in minutes
-        let streamPrepend = {{ site.conference.live.streaming.time_prepend | default: 5 }};  // in minutes
-        let streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
+        const streamPause   = {{ site.conference.live.streaming.time_pause | default: 60 }};  // in minutes
+        const streamPrepend = {{ site.conference.live.streaming.time_prepend | default: 5 }};  // in minutes
+        const streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
 
         let streamModal;
 
-        let getRoom = function (roomName) {
+        const getRoom = function (roomName) {
             // Return room object for given room name
             if (roomName in data.rooms) {
                 return data.rooms[roomName];
@@ -363,7 +362,7 @@ window.conference.live = (function() {
             }
         };
 
-        let getTalks = function (roomName) {
+        const getTalks = function (roomName) {
             if (roomName in data.talks) {
                 return data.talks[roomName];
             }
@@ -372,7 +371,7 @@ window.conference.live = (function() {
             }
         };
 
-        let getNextTalk = function (roomName) {
+        const getNextTalk = function (roomName) {
             // Get talk object for next talk in given room
             let timeNow = time();
             let talksHere = getTalks(roomName);
@@ -389,7 +388,7 @@ window.conference.live = (function() {
             return false;
         };
 
-        let getNextPause = function (roomName) {
+        const getNextPause = function (roomName) {
             // Get time object for next pause in given room
             let timeNow = time();
             let talksHere = getTalks(roomName);
@@ -409,7 +408,7 @@ window.conference.live = (function() {
             return false;
         };
 
-        let setStreamIframeContent = function (content) {
+        const setStreamIframeContent = function (content) {
             // Set stream modal iframe to show given text
             streamModal.find('iframe').attr('src', '');
             streamModal.find('iframe').addClass('d-none');
@@ -417,14 +416,14 @@ window.conference.live = (function() {
             streamModal.find('#stream-placeholder').addClass('d-flex');
         };
 
-        let setStreamIframeSrc = function (href) {
+        const setStreamIframeSrc = function (href) {
             // Set stream modal iframe to show given URL
             streamModal.find('iframe').attr('src', href);
             streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
             streamModal.find('iframe').removeClass('d-none');
         };
 
-        let setStreamVideo = function (roomName) {
+        const setStreamVideo = function (roomName) {
             // Update stream modal iframe:
             // Show stream with start/pause/end message (for given room) and keep updated
             let timeNow = time();
@@ -504,7 +503,7 @@ window.conference.live = (function() {
             }
         };
 
-        let setStreamInfo = function (roomName) {
+        const setStreamInfo = function (roomName) {
             // Update stream modal info bar:
             // Show next talk and speaker (for given room) and keep updated
             let timeNow = time();
@@ -562,7 +561,7 @@ window.conference.live = (function() {
             }
         };
 
-        let setStream = function (roomName) {
+        const setStream = function (roomName) {
             // Update stream modal (iframe and info bar) for given room
             streamModal.find('.modal-footer .btn').removeClass('active');
             streamModal.find('#stream-select').val(0);
@@ -578,7 +577,7 @@ window.conference.live = (function() {
             streamModal.find('#stream-select').val(room.id);
         };
 
-        let updateStream = function () {
+        const updateStream = function () {
             // Update stream modal for currently active room button
             if (streamModal.hasClass('show')) {
                 let activeButton = streamModal.find('.modal-footer .btn.active');
@@ -590,7 +589,7 @@ window.conference.live = (function() {
             }
         };
 
-        let stopUpdateStream = function () {
+        const stopUpdateStream = function () {
             // Stop stream modal update timer
             if (typeof streamVideoTimer !== "undefined") {
                 clearInterval(streamVideoTimer);
@@ -600,14 +599,14 @@ window.conference.live = (function() {
             }
         };
 
-        let hideModal = function () {
+        const hideModal = function () {
             // Close stream modal
             streamModal.find('iframe').attr('src', '');
             streamModal.find('.modal-footer .btn').removeClass('active');
             streamModal.find('#stream-select').selectedIndex = -1;
         };
 
-        let setupStream = function () {
+        const setupStream = function () {
             // Setup events when modal opens/closes
             streamModal = $('#stream-modal');
 
@@ -638,43 +637,43 @@ window.conference.live = (function() {
             });
         };
 
-        let setup = function () {
+        const setup = function () {
             loadData();
             startUpdateLive();
             setupStream();
         };
 
-        let update = function () {
+        const update = function () {
             updateLive();
             updateStream();
         };
 
-        let startUpdate = function () {
+        const startUpdate = function () {
             startUpdateLive();
             updateStream();
         };
 
-        let stopUpdate = function () {
+        const stopUpdate = function () {
             stopUpdateLive();
             stopUpdateStream();
         };
 
     {%- else -%}
 
-        let setup = function () {
+        const setup = function () {
             loadData();
             startUpdateLive();
         };
 
-        let update = function () {
+        const update = function () {
             updateLive();
         };
 
-        let startUpdate = function () {
+        const startUpdate = function () {
             startUpdateLive();
         };
 
-        let stopUpdate = function () {
+        const stopUpdate = function () {
             stopUpdateLive();
         };
 
@@ -690,8 +689,7 @@ window.conference.live = (function() {
         setTime: setTime,
         getTime: getTime,
 
-        toggleDemo: toggleDemo,
-        demo: demoOn,
+        demo: model.demo,
         durDemo: durDemo,
         durPause: durPause
     };
