@@ -590,7 +590,8 @@ Each talk is represented by a file in the `_talks/` directory. It must begin wit
 - the talk's `name` (used as identifier),
 - one or more existing `speakers` name(s),
 - optionally one or more `categories` of which one should be a main category as defined in the site's configuration,
-- optionally a list of `links` (see the _Links_ subsection below for the available properties per link; links with icons are treated separately and are also included on the talk overview page), and
+- optionally a list of `links` (see the _Links_ subsection below for the available properties per link; links with icons are treated separately and are also included on the talk overview page),
+- optionally a list of `live: links` (see the _Links_ subsection below for the available properties per link) which are shown below the live stream for the given talk in form of buttons, and
 - optionally `hide: true` if the talk's page should not be linked to.
 
 ### Speakers

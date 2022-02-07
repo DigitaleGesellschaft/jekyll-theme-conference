@@ -88,6 +88,23 @@
                         {%- include partials/get_talk_timestamp.html %}
                 "start": {{ timestamp_start }},
                 "end": {{ timestamp_end }}
+
+                        {%- if talk.live.links -%},
+                "live_links": [
+                            {%- for link in talk.live.links %}
+                    {
+                        "name": "{{ link.name | replace: '"', '\"' }}",
+                        "href": "{{ link.absolute_url | replace: '"', '%22' }}"
+                                {%- if link.icon -%},
+                        "icon": "{{ link.icon | replace: '"', '\"' }}"
+                                {%- endif %}
+                                {%- if link.disabled -%},
+                        "disabled": true
+                                {%- endif %}
+                    }{%- unless forloop.last -%},{%- endunless -%}
+                            {%- endfor %}
+                ]
+                        {%- endif %}
             }{%- unless forloop.last -%},{%- endunless -%}
                     {%- endfor -%}
                 {%- endif -%}

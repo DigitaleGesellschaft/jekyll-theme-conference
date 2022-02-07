@@ -526,7 +526,7 @@ window.conference.live = (function() {
                 streamModal.find('#stream-info-talk').text(talkNext.name).attr('href', talkNext.href);
 
                 let speakerStr = '';
-                for (var i = 0; i < talkNext.speakers.length; i++) {
+                for (let i = 0; i < talkNext.speakers.length; i++) {
                     let speaker = data.speakers[talkNext.speakers[i]];
                     if (speaker.href == '') {
                         speakerStr += speaker.name +', '
@@ -537,6 +537,27 @@ window.conference.live = (function() {
                 }
                 speakerStr = speakerStr.slice(0, -2);
                 streamModal.find('#stream-info-speakers').html(speakerStr);
+
+                if (talkNext.live_links) {
+                    let linksStr = '';
+                    for (let i = 0; i < talkNext.live_links.length; i++) {
+                        const link = talkNext.live_links[i];
+
+                        linksStr += '<a href="' + link.href + '" class="btn btn-light m-1'
+                        if (link.disabled) {
+                            linksStr += ' disabled';
+                        }
+                        linksStr += '">';
+                        if (link.icon) {
+                            linksStr += '<i class="fas fa-' + link.icon + '"></i>&nbsp;';
+                        }
+                        linksStr += link.name + '</a>';
+                    }
+                    streamModal.find('#stream-info-links').html(linksStr).removeClass('d-none');
+                }
+                else {
+                    streamModal.find('#stream-info-links').addClass('d-none');
+                }
 
                 streamModal.find('#stream-info').removeClass('d-none');
 

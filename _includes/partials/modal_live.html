@@ -26,17 +26,18 @@
           </p>
           <p class="font-weight-light mb-0" id="stream-info-speakers"></p>
         </div>
+        <div class="align-self-center m-0 mt-1" id="stream-info-links"></div>
       </div>
 
       <div class="modal-footer justify-content-around">
-        {%- for room in site.rooms -%}
+        {% for room in site.rooms -%}
           <a id="stream-button{{ forloop.index }}" href="#" class="btn btn-outline-primary d-none d-sm-inline {% unless room.live %}disabled{% endunless %}" role="button" data-room="{{ room.name }}">
             {{ room.name }}
           </a>
         {%- endfor %}
         <div class="form-group w-100 d-block d-sm-none">
           <select class="form-control" id="stream-select">
-            {%- for room in site.rooms -%}
+            {% for room in site.rooms -%}
               <option value="{{ forloop.index }}" {% unless room.live %}disabled{% endunless %}>{{ room.name }}</option>
             {%- endfor %}
           </select>
