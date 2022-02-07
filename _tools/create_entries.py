@@ -8,6 +8,35 @@ from datetime import datetime
 from conference import get_id
 
 
+QUESTIONS = {
+    # 1000: {
+    #     'category': 'categories',
+    #     'default': 'Beginner'
+    # },
+    # 1200: {
+    #     'category': 'live.links',
+    #     'structure': {
+    #         'name': 'Q&A',
+    #         'icon': 'question',
+    #         'absolute_url': '{answer}'
+    #     }
+    # }
+}
+
+
+def get_by_path(root, items, create=False):
+    data = root
+    for item in items:
+        if item not in data and create:
+            data[item] = {}
+        data = data[item]
+    return data
+
+
+def set_by_path(root, items, value):
+    get_by_path(root, items[:-1], True)[items[-1]] = value
+
+
 def escape_markdown(text):
     # escape pipes
     new_text = text.replace('|', '\\|')
@@ -88,6 +117,7 @@ def parse_frab(file_path):
                                 content['speakers'][-1]['last_name'] = \
                                     speaker_names[0]
 
+                    # Get abstract and description
                     abstract = talk['abstract']
                     description = talk['description']
 
@@ -103,13 +133,46 @@ def parse_frab(file_path):
                     else:
                         text = ''
 
-                    content['talks'].append({
+                    new_talk = {
                         'name': talk['title'],
                         'speakers':
                             [s['public_name'] for s in talk['persons']],
                         'categories': [talk['track'], talk['type']],
                         'description': text
-                        })
+                    }
+
+                    # Extract information from questions/answers
+                    if 'answers' in talk and len(talk['answers']) > 0:
+                        for answer in talk['answers']:
+                            # If answer is in questions extend new_talk
+                            if answer['question'] in QUESTIONS:
+                                question = QUESTIONS[answer['question']]
+                                answer = answer['answer']
+
+                                # Default answer
+                                if not answer and 'default' in question:
+                                    answer = question['default']
+
+                                # Format answer given a predefined structure
+                                if 'structure' in question:
+                                    struct_answer = question['structure']
+                                    for key, item in struct_answer.items():
+                                        struct_answer[key] = item.format(
+                                            answer=answer)
+                                    answer = struct_answer
+
+                                # Extend new_talk dictionary
+                                path = question['category'].split('.')
+                                item = get_by_path(new_talk, path, True)
+                                if isinstance(item, list):
+                                    item.append(answer)
+                                elif item:
+                                    item = [item, answer]
+                                else:
+                                    item = answer
+                                set_by_path(new_talk, path, item)
+
+                    content['talks'].append(new_talk)
 
                     # Calculate talk end time
                     talk_start = (talk['start']).split(':')
