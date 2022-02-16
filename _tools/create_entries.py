@@ -5,15 +5,19 @@ import csv
 import yaml
 import json
 from datetime import datetime
+from copy import deepcopy
+
 from conference import get_id
 
 
-QUESTIONS = {
-    # 1000: {
+QUESTIONS = [
+    # {
+    #     'id': 1000,
     #     'category': 'categories',
     #     'default': 'Beginner'
     # },
-    # 1200: {
+    # {
+    #     'id': 1200,
     #     'category': 'live.links',
     #     'structure': {
     #         'name': 'Q&A',
@@ -21,7 +25,7 @@ QUESTIONS = {
     #         'absolute_url': '{answer}'
     #     }
     # }
-}
+]
 
 
 def get_by_path(root, items, create=False):
@@ -143,53 +147,53 @@ def parse_frab(file_path):
 
                     # Extract information from questions/answers
                     if 'answers' in talk and len(talk['answers']) > 0:
-                        for answer in talk['answers']:
-                            # If answer is in questions extend new_talk
-                            if answer['question'] in QUESTIONS:
-                                question = QUESTIONS[answer['question']]
-                                answer = answer['answer']
+                        answers = {
+                            a['question']: a['answer'] for a in talk['answers']
+                        }
 
-                                # Default answer
-                                if not answer and 'default' in question:
+                        for question in QUESTIONS:
+                            # Extract answer
+                            answer = None
+                            if question['id'] in answers:
+                                answer = answers[question['id']]
+
+                            # Default answer or skip
+                            if not answer:
+                                if 'default' in question:
                                     answer = question['default']
-
-                                # Format answer given a predefined structure
-                                if 'structure' in question:
-                                    struct_answer = question['structure']
-                                    for key, item in struct_answer.items():
-                                        struct_answer[key] = item.format(
-                                            answer=answer)
-                                    answer = struct_answer
-
-                                # Extend new_talk dictionary
-                                path = question['category'].split('.')
-                                item = get_by_path(new_talk, path, True)
-                                if isinstance(item, list):
-                                    item.append(answer)
-                                elif item:
-                                    item = [item, answer]
                                 else:
-                                    item = answer
-                                set_by_path(new_talk, path, item)
+                                    continue
+
+                            # Format answer given a predefined structure
+                            if 'structure' in question:
+                                struct_answer = deepcopy(question['structure'])
+
+                                for key, item in struct_answer.items():
+                                    struct_answer[key] = item.format(
+                                        answer=answer)
+                                answer = struct_answer
+
+                            # Extend new_talk dictionary
+                            path = question['category'].split('.')
+                            item = get_by_path(new_talk, path, True)
+                            if isinstance(item, list):
+                                item.append(answer)
+                            elif item:
+                                item = [item, answer]
+                            else:
+                                item = answer
+                            set_by_path(new_talk, path, item)
 
                     content['talks'].append(new_talk)
 
                     # Calculate talk end time
                     talk_start = (talk['start']).split(':')
                     talk_duration = (talk['duration']).split(':')
-
-                    talk_end = [0,
-                                int(talk_start[0]) + int(talk_duration[0]),
+                    talk_end = [int(talk_start[0]) + int(talk_duration[0]),
                                 int(talk_start[1]) + int(talk_duration[1])]
-                    talk_end[1] = (talk_end[1] + talk_end[2] // 60)
-                    talk_end[2] %= 60
-                    talk_end[0] = (talk_end[0] + talk_end[1] // 24)
-                    talk_end[1] %= 24
-
-                    # Indicate if talk is overlapping into next day
-                    talk_end = '{:02d}:{:02d}{}'.format(
-                        talk_end[1], talk_end[2],
-                        ' +{}'.format(talk_end[0]) if talk_end[0] > 0 else '')
+                    talk_end[0] = (talk_end[0] + talk_end[1] // 60) % 24
+                    talk_end[1] = talk_end[1] % 60
+                    talk_end = "{}:{:02d}".format(talk_end[0], talk_end[1])
 
                     content['program'].append({
                         'name': talk['title'],
