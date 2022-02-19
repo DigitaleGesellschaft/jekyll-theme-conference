@@ -23,12 +23,11 @@ window.conference.live = (function() {
     let timeFrozen = 0;
     let timeOffset = 0;
 
-    let demo = {{ site.conference.live.demo | default: "false" }};
-    let durDemo  = 5*60; // in seconds
-    let durPause =   10; // in seconds
-
-    let demoStart = confStart - confDur/durDemo*durPause;
-    let demoEnd = confEnd + confDur/durDemo*durPause;
+    let demo = {{ site.conference.live.demo.enable | default: "false" }};
+    let demoDur  = {{ site.conference.live.demo.duration | default: 300 }};
+    let demoPause = {{ site.conference.live.demo.pause | default: 10 }};
+    let demoStart = confStart - confDur/demoDur*demoPause;
+    let demoEnd = confEnd + confDur/demoDur*demoPause;
 
     let liveTimer;
     let streamVideoTimer;
@@ -64,7 +63,7 @@ window.conference.live = (function() {
     const timeCycle = function () {
         // Cyclic timestamp in seconds
         let actTime = timeNow();
-        let relTime = mod(actTime, durDemo + 2*durPause) / (durDemo + 2*durPause);
+        let relTime = mod(actTime, demoDur + 2*demoPause) / (demoDur + 2*demoPause);
         let cycleTime = mod((demoEnd - demoStart) * relTime - timeOffset, (demoEnd - demoStart)) + demoStart;
         return cycleTime;
     };
@@ -166,7 +165,7 @@ window.conference.live = (function() {
 
         if (demo) {
             // Convert virtual duration to real duration
-            return mod(startTime - tNow, demoEnd - demoStart) / (demoEnd - demoStart) * (durDemo + 2*durPause);
+            return mod(startTime - tNow, demoEnd - demoStart) / (demoEnd - demoStart) * (demoDur + 2*demoPause);
         }
         else {
             if (startTime > tNow) {
@@ -345,7 +344,7 @@ window.conference.live = (function() {
         }
     };
 
-    {% if site.conference.live.streaming -%}
+    {% if site.conference.live.streaming.enable -%}
         const streamPause   = {{ site.conference.live.streaming.time_pause | default: 60 }};  // in minutes
         const streamPrepend = {{ site.conference.live.streaming.time_prepend | default: 5 }};  // in minutes
         const streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
@@ -710,9 +709,7 @@ window.conference.live = (function() {
         setTime: setTime,
         getTime: getTime,
 
-        demo: model.demo,
-        durDemo: durDemo,
-        durPause: durPause
+        demo: model.demo
     };
 
 })();

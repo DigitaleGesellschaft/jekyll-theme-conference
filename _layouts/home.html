@@ -59,7 +59,7 @@
           {%- endif -%}
 
           <span class="live-show d-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-            {% if site.conference.live.streaming %}
+            {% if site.conference.live.streaming.enable %}
               <a class="{{ btn_default }}" title="{{ link_name }}" data-toggle="modal" data-target="#stream-modal" data-room="" href="#">
             {% else %}
               {% assign link_styleclass = "{{ btn_default }}" %}

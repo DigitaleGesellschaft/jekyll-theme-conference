@@ -124,10 +124,14 @@ conference:
     timezone: GMT+1
     time_stop: 240      # in minutes
     streaming:
+      enable: true
       time_pause:   60  # in minutes
       time_prepend:  5  # in minutes
       time_extend:   5  # in minutes
-    demo: false
+    demo:
+      enable: false
+      duration: 300  # in seconds
+      pause:     10  # in seconds
 
   map:
     # Initial map center point

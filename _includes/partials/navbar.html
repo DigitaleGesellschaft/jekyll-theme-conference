@@ -40,7 +40,7 @@
             {%- endif -%}
 
             <li class="nav-item live-show d-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-              {%- if site.conference.live.streaming %}
+              {%- if site.conference.live.streaming.enable %}
                 <a class="nav-link" title="
                   {%- if link.name -%}
                     {{- link.name -}}
