@@ -1,15 +1,15 @@
-window.conference.modal = (function () {
+window.conference.modal = (() => {
 
-    let show = function (el, event) {
-        let button = $(event.relatedTarget);
+    const show = (el, event) => {
+        const button = $(event.relatedTarget);
 
-        let href = button.data('href');
-        let format = button.data('format');
-        let title = button.data('title');
-        let subtitle = button.data('subtitle');
-        let footer = button.data('footer');
+        const href = button.data('href');
+        const format = button.data('format');
+        const title = button.data('title');
+        const subtitle = button.data('subtitle');
+        const footer = button.data('footer');
 
-        let modal = $(el);
+        const modal = $(el);
         modal.find('iframe').attr('src', href);
 
         if (title) {
@@ -51,8 +51,8 @@ window.conference.modal = (function () {
         }
     };
 
-    let hide = function (el) {
-        let modal = $(el);
+    const hide = (el) => {
+        const modal = $(el);
 
         modal.find('.modal-title h3').text('');
         modal.find('.modal-title h5').text('').addClass('d-none');
@@ -60,8 +60,8 @@ window.conference.modal = (function () {
         modal.find('.modal-footer p').html('');
     };
 
-    let init = function() {
-        let elSel = '#link-modal';
+    const init = () => {
+        const elSel = '#link-modal';
 
         $(elSel).on('show.bs.modal', function (event) {
             show(this, event);
@@ -76,5 +76,3 @@ window.conference.modal = (function () {
     };
 
 })();
-
-window.conference.modal.init();

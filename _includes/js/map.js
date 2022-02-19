@@ -1,45 +1,38 @@
-window.conference.mapConfig = (function() {
+window.conference.mapConfig = (() => {
+    let config;
+    let lang;
 
     let map;
 
-    let mapProvider = "{{ site.conference.map.map_provider | default: 'OpenStreetMap.Mapnik' }}";
-    let homeCoord = [{{ site.conference.map.home_coord }}];
-    let zoomLevel = {{ site.conference.map.default_zoom | default: 17 }};
+    const setup = (elId) => {
+        map = L.map(elId).setView(config.map.home_coord, config.map.default_zoom);
 
-    let setup = function (elId) {
-        map = L.map(elId).setView(homeCoord, zoomLevel);
+        L.tileLayer.provider(config.map.map_provider).addTo(map);
 
-        L.tileLayer.provider(mapProvider).addTo(map);
-
-        L.easyButton('far fa-star', function(){
-            map.flyTo(homeCoord, zoomLevel);
-        }, '{{ site.data.lang[site.conference.lang].location.focus_conf | default: "Center map on conference location" }}').addTo(map);
+        L.easyButton('far fa-star', () => {
+            map.flyTo(config.map.home_coord, config.map.default_zoom);
+        }, lang.location.focus_conf).addTo(map);
 
         L.control.locate({
             flyTo: true,
             strings: {
-                title: '{{ site.data.lang[site.conference.lang].location.focus_me | default: "Show me where I am" }}'
+                title: lang.location.focus_me
             }
         }).addTo(map);
     };
 
-    let init = function () {
-        let elId = 'map';
+    const init = (c, l) => {
+        config = c;
+        lang = l;
+
+        const elId = 'map';
 
         if (document.getElementById(elId)) {
             setup(elId);
-            window.conference.map = map;
         }
     };
 
     return {
-        init: init,
-        default: {
-            mapProvider: mapProvider,
-            homeCoord: homeCoord,
-            zoomLevel: zoomLevel
-        }
+        init: init
     };
 })();
-
-window.conference.mapConfig.init();

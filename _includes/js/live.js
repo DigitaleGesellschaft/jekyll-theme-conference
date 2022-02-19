@@ -1,74 +1,77 @@
-window.conference.live = (function() {
-    {% assign d = site.data.program.days | first -%}
-    {%- include partials/get_day_time.html -%}
-    {%- assign t = day_start_talk -%}
-
-    {%- include partials/get_talk_timestamp.html -%}
-    {%- assign conf_start = timestamp_start -%}
-
-    {%- assign d = site.data.program.days | last -%}
-    {%- include partials/get_day_time.html -%}
-    {%- assign t = day_end_talk -%}
-
-    {%- include partials/get_talk_timestamp.html -%}
-    {%- assign conf_end = timestamp_end -%}
+window.conference.live = (() => {
+    let config;
+    let lang;
 
     let data;
 
-    const confStart = {{ conf_start }};
-    const confEnd = {{ conf_end }};
-    const confDur = confEnd - confStart;
+    let confStart;
+    let confEnd;
+    let confDur;
+
+    let stream;
+    let streamPause;
+    let streamPrepend;
+    let streamExtend;
+
+    let demo;
+    let demoStart;
+    let demoEnd;
+    let demoDur;
+    let demoPause;
 
     let freezeTime = false;
     let timeFrozen = 0;
     let timeOffset = 0;
 
-    let demo = {{ site.conference.live.demo.enable | default: "false" }};
-    let demoDur  = {{ site.conference.live.demo.duration | default: 300 }};
-    let demoPause = {{ site.conference.live.demo.pause | default: 10 }};
-    let demoStart = confStart - confDur/demoDur*demoPause;
-    let demoEnd = confEnd + confDur/demoDur*demoPause;
-
     let liveTimer;
     let streamVideoTimer;
     let streamInfoTimer;
 
-    const loadData = function () {
-        // Fetch schedule from external file
-        $.getJSON('{{ site.baseurl }}/assets/js/data.json', function(json) {
-            data = json;
+    const loadData = () => {
+        // Load schedule
+        const request = new Request(window.conference.config.baseurl + '/assets/js/data.json');
+
+        fetch(request)
+        .then(response =>
+            response.json()
+        )
+        .then(d => {
+            data = d;
+        })
+        .catch((error) => {
+            console.log(error);
         });
     };
 
-    const getData = function () {
+    const getData = () => {
         // Return data
         return data;
     };
 
-    const mod = function (n, m) {
+    const mod = (n, m) => {
         // Absolute modulo
         return ((n % m) + m) % m;
     };
 
-    const timeNow = function () {
+    const timeNow = () => {
         // Current timestamp in seconds
         return Math.floor(Date.now() / 1000);
     };
 
-    const timeCont = function () {
+    const timeCont = () => {
         // Continuous time (respecting previous pauses)
         return timeNow() - timeOffset;
     };
 
-    const timeCycle = function () {
+    const timeCycle = () => {
         // Cyclic timestamp in seconds
-        let actTime = timeNow();
-        let relTime = mod(actTime, demoDur + 2*demoPause) / (demoDur + 2*demoPause);
-        let cycleTime = mod((demoEnd - demoStart) * relTime - timeOffset, (demoEnd - demoStart)) + demoStart;
+        const actTime = timeNow();
+        const relTime = mod(actTime, demoDur + 2*demoPause) / (demoDur + 2*demoPause);
+        const cycleTime = mod((demoEnd - demoStart) * relTime - timeOffset, (demoEnd - demoStart)) + demoStart;
         return cycleTime;
     };
 
-    const time = function () {
+    const time = () => {
         // Return app time
         if (freezeTime) {
             return timeFrozen;
@@ -81,7 +84,7 @@ window.conference.live = (function() {
         }
     };
 
-    const pauseTime = function () {
+    const pauseTime = () => {
         // Pause app time
         if (!freezeTime) {
             timeFrozen = time();
@@ -91,7 +94,7 @@ window.conference.live = (function() {
         }
     };
 
-    const continueTime = function () {
+    const continueTime = () => {
         // Continue app time
         if (freezeTime) {
             freezeTime = false;
@@ -100,7 +103,7 @@ window.conference.live = (function() {
         }
     };
 
-    const resetTime = function () {
+    const resetTime = () => {
         // Reset app time
         timeOffset = 0;
         freezeTime = false;
@@ -108,12 +111,12 @@ window.conference.live = (function() {
         startUpdate();
     };
 
-    const setTime = function (newTime, newDay) {
+    const setTime = (newTime, newDay) => {
         // Set and pause app time
         pauseTime();
 
         let dayIdx;
-        if (arguments.length < 2) {
+        if (!newDay) {
             dayIdx = 0;
         }
         else if (Number.isInteger(newDay)) {
@@ -125,7 +128,7 @@ window.conference.live = (function() {
         else {
             dayIdx = data.days.find(o => o.name === newDay);
         }
-        let newDate = data.days[dayIdx].date;
+        const newDate = data.days[dayIdx].date;
 
         let d = new Date(newDate);
         newTime = newTime.split(':');
@@ -136,19 +139,19 @@ window.conference.live = (function() {
         update();
     };
 
-    const getTime = function () {
+    const getTime = () => {
         // Return app time as string
-        let tConvert = time();
+        const tConvert = time();
 
-        let d = new Date(tConvert * 1000);
-        let dStr = d.toISOString().slice(0,10);
-        let h = d.getHours();
-        let m = d.getMinutes();
+        const d = new Date(tConvert * 1000);
+        const dStr = d.toISOString().slice(0,10);
+        const h = d.getHours();
+        const m = d.getMinutes();
 
         return dStr +" "+ h +":"+ (m < 10 ? "0" : "") + m;
     };
 
-    const timeUnit = function () {
+    const timeUnit = () => {
         // App time refresh rate
         if (demo) {
             return 0.1;
@@ -158,10 +161,10 @@ window.conference.live = (function() {
         }
     };
 
-    const delayStart = function (startTime) {
+    const delayStart = (startTime) => {
         // Seconds until given startTime occurs
-        let tNow = time();
-        let tUnit = timeUnit();
+        const tNow = time();
+        const tUnit = timeUnit();
 
         if (demo) {
             // Convert virtual duration to real duration
@@ -178,7 +181,7 @@ window.conference.live = (function() {
         }
     };
 
-    let model = {
+    const model = {
         set demo(value) {
             demo = value;
             resetTime();
@@ -188,18 +191,18 @@ window.conference.live = (function() {
         }
     };
 
-    const updateLive = function () {
+    const updateLive = () => {
         // Update status all live elements in DOM
-        let tNow = time();
-        let liveShow = document.getElementsByClassName('live-show');
-        let liveHide = document.getElementsByClassName('live-hide');
-        let liveTime = document.getElementsByClassName('live-time');
-        let livePast = document.getElementsByClassName('live-past');
+        const tNow = time();
+        const liveShow = document.getElementsByClassName('live-show');
+        const liveHide = document.getElementsByClassName('live-hide');
+        const liveTime = document.getElementsByClassName('live-time');
+        const livePast = document.getElementsByClassName('live-past');
 
         // Show elements for a given period
         for (let i = 0; i < liveShow.length; i++) {
-            let tStarts = liveShow[i].dataset.start.split(',');
-            let tEnds = liveShow[i].dataset.end.split(',');
+            const tStarts = liveShow[i].dataset.start.split(',');
+            const tEnds = liveShow[i].dataset.end.split(',');
 
             for (let k = 0; k < tStarts.length; k++) {
                 if (tNow >= tStarts[k] && tNow < tEnds[k]) {
@@ -216,8 +219,8 @@ window.conference.live = (function() {
 
         // Hide elements for a given period
         for (let i = 0; i < liveHide.length; i++) {
-            let tStarts = liveHide[i].dataset.start.split(',');
-            let tEnds = liveHide[i].dataset.end.split(',');
+            const tStarts = liveHide[i].dataset.start.split(',');
+            const tEnds = liveHide[i].dataset.end.split(',');
 
             for (let k = 0; k < tStarts.length; k++) {
                 if (tNow >= tStarts[k] && tNow < tEnds[k]) {
@@ -236,7 +239,7 @@ window.conference.live = (function() {
 
         // Update duration string for given elements
         for (let i = 0; i < liveTime.length; i++) {
-            let t = liveTime[i].dataset.time;
+            const t = liveTime[i].dataset.time;
             if (typeof t == "undefined") {
                 break;
             }
@@ -244,17 +247,17 @@ window.conference.live = (function() {
 
             let tStr;
             if (tRel >= -60 && tRel < 0) {
-                tStr = '{{ site.data.lang[site.conference.lang].live.time.soon | default: "soon" }}';
+                tStr = lang.time.soon;
             }
             else if (tRel >= 0 && tRel < 60) {
-                tStr = '{{ site.data.lang[site.conference.lang].live.time.now | default: "now" }}';
+                tStr = lang.time.now;
             }
             else {
                 if (tRel < 0) {
-                    tStr = '{{ site.data.lang[site.conference.lang].live.time.in | default: "in" }} ';
+                    tStr = lang.time.in;
                 }
                 else {
-                    tStr = '{{ site.data.lang[site.conference.lang].live.time.since | default: "since" }} ';
+                    tStr = lang.time.since;
                 }
                 tRel = Math.abs(tRel);
 
@@ -266,28 +269,28 @@ window.conference.live = (function() {
                     break;
                 }
                 else if (dWeeks > 1) {
-                    tStr += dWeeks +' {{ site.data.lang[site.conference.lang].live.time.weeks | default: "weeks" }}';
+                    tStr += dWeeks +' '+ lang.time.weeks;
                 }
                 else if (dWeeks == 1) {
-                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.week | default: "week" }}';
+                    tStr += '1 '+ lang.time.week;
                 }
                 else if (dDays > 1) {
-                    tStr += dDays +' {{ site.data.lang[site.conference.lang].live.time.days | default: "days" }}';
+                    tStr += dDays +' '+ lang.time.days;
                 }
                 else if (dDays == 1) {
-                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.day | default: "day" }}';
+                    tStr += '1 '+ lang.time.day;
                 }
                 else if (dHours > 1) {
-                    tStr += dHours +' {{ site.data.lang[site.conference.lang].live.time.hours | default: "hours" }}';
+                    tStr += dHours +' '+ lang.time.hours;
                 }
                 else if (dHours == 1) {
-                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.hour | default: "hour" }}';
+                    tStr += '1 '+ lang.time.hour;
                 }
                 else if (dMins > 1) {
-                    tStr += dMins +' {{ site.data.lang[site.conference.lang].live.time.minutes | default: "minutes" }}';
+                    tStr += dMins +' '+ lang.time.minutes;
                 }
                 else {
-                    tStr += '1 {{ site.data.lang[site.conference.lang].live.time.minute | default: "minute" }}';
+                    tStr += '1 '+ lang.time.minute;
                 }
             }
 
@@ -296,7 +299,7 @@ window.conference.live = (function() {
 
         // Disable elements for a given period
         for (let i = 0; i < livePast.length; i++) {
-            let t = livePast[i].dataset.time;
+            const t = livePast[i].dataset.time;
             if (typeof t == "undefined") {
                 break;
             }
@@ -320,7 +323,7 @@ window.conference.live = (function() {
         }
     };
 
-    const startUpdateLive = function () {
+    const startUpdateLive = () => {
         // Start update timer to update live elements in DOM
         stopUpdateLive();
         updateLive();
@@ -330,377 +333,377 @@ window.conference.live = (function() {
             liveTimer = setInterval(updateLive, timeUnit() * 1000);
         }
         else {
-            setTimeout(function() {
+            setTimeout(() => {
                 liveTimer = setInterval(updateLive, timeUnit() * 1000);
                 updateLive();
             }, delayStart(confStart) * 1000);
         }
     };
 
-    const stopUpdateLive = function () {
+    const stopUpdateLive = () => {
         // stopUpdate update timer to update live elements in DOM
         if (typeof liveTimer !== "undefined") {
             clearInterval(liveTimer);
         }
     };
 
-    {% if site.conference.live.streaming.enable -%}
-        const streamPause   = {{ site.conference.live.streaming.time_pause | default: 60 }};  // in minutes
-        const streamPrepend = {{ site.conference.live.streaming.time_prepend | default: 5 }};  // in minutes
-        const streamExtend  = {{ site.conference.live.streaming.time_extend | default: 5 }};  // in minutes
+    let streamModal;
 
-        let streamModal;
+    const getRoom = (roomName) => {
+        // Return room object for given room name
+        if (roomName in data.rooms) {
+            return data.rooms[roomName];
+        }
+        else {
+            return data.rooms[Object.keys(data.rooms)[0]];
+        }
+    };
 
-        const getRoom = function (roomName) {
-            // Return room object for given room name
-            if (roomName in data.rooms) {
-                return data.rooms[roomName];
-            }
-            else {
-                return data.rooms[Object.keys(data.rooms)[0]];
-            }
-        };
-
-        const getTalks = function (roomName) {
-            if (roomName in data.talks) {
-                return data.talks[roomName];
-            }
-            else {
-                return false;
-            }
-        };
-
-        const getNextTalk = function (roomName) {
-            // Get talk object for next talk in given room
-            let timeNow = time();
-            let talksHere = getTalks(roomName);
-
-            if (talksHere) {
-                if (timeNow < talksHere[talksHere.length-1].end) {
-                    for (var i = 0; i < talksHere.length; i++) {
-                        if (timeNow < talksHere[i].end) {
-                            return talksHere[i];
-                        }
-                    }
-                }
-            }
+    const getTalks = (roomName) => {
+        if (roomName in data.talks) {
+            return data.talks[roomName];
+        }
+        else {
             return false;
-        };
+        }
+    };
 
-        const getNextPause = function (roomName) {
-            // Get time object for next pause in given room
-            let timeNow = time();
-            let talksHere = getTalks(roomName);
+    const getNextTalk = (roomName) => {
+        // Get talk object for next talk in given room
+        const timeNow = time();
+        const talksHere = getTalks(roomName);
 
-            if (talksHere) {
-                if (timeNow < talksHere[talksHere.length-1].end) {
-                    for (var i = 1; i < talksHere.length; i++) {
-                        if (timeNow < talksHere[i].start && streamPause*60 <= talksHere[i].start - talksHere[i-1].end) {
-                            return {
-                                'start': talksHere[i-1].end,
-                                'end':   talksHere[i].start,
-                            };
-                        }
+        if (talksHere) {
+            if (timeNow < talksHere[talksHere.length-1].end) {
+                for (let i = 0; i < talksHere.length; i++) {
+                    if (timeNow < talksHere[i].end) {
+                        return talksHere[i];
                     }
                 }
             }
-            return false;
-        };
+        }
+        return false;
+    };
 
-        const setStreamIframeContent = function (content) {
-            // Set stream modal iframe to show given text
-            streamModal.find('iframe').attr('src', '');
-            streamModal.find('iframe').addClass('d-none');
-            streamModal.find('#stream-placeholder > div').text(content);
-            streamModal.find('#stream-placeholder').addClass('d-flex');
-        };
+    const getNextPause = (roomName) => {
+        // Get time object for next pause in given room
+        const timeNow = time();
+        const talksHere = getTalks(roomName);
 
-        const setStreamIframeSrc = function (href) {
-            // Set stream modal iframe to show given URL
-            streamModal.find('iframe').attr('src', href);
-            streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
-            streamModal.find('iframe').removeClass('d-none');
-        };
-
-        const setStreamVideo = function (roomName) {
-            // Update stream modal iframe:
-            // Show stream with start/pause/end message (for given room) and keep updated
-            let timeNow = time();
-
-            let talksHere = getTalks(roomName);
-            let roomStart, roomEnd;
-            if (talksHere) {
-                roomStart = talksHere[0].start;
-                roomEnd = talksHere[talksHere.length-1].end;
-            }
-            else {
-                // If no program for given room, take overall first and last talk
-                roomStart = 0;
-                roomEnd = 0;
-                for (let roomNameTalk in data.talks) {
-                    talksHere = getTalks(roomNameTalk);
-                    let crntRoomStart = talksHere[0].start;
-                    let crntRoomEnd = talksHere[talksHere.length-1].end;
-
-                    if (roomStart == 0 || roomStart > crntRoomStart) {
-                        roomStart = crntRoomStart;
-                    }
-                    if (roomEnd == 0 || roomEnd < crntRoomEnd) {
-                        roomEnd = crntRoomEnd;
+        if (talksHere) {
+            if (timeNow < talksHere[talksHere.length-1].end) {
+                for (let i = 1; i < talksHere.length; i++) {
+                    if (timeNow < talksHere[i].start && streamPause*60 <= talksHere[i].start - talksHere[i-1].end) {
+                        return {
+                            'start': talksHere[i-1].end,
+                            'end':   talksHere[i].start,
+                        };
                     }
                 }
             }
+        }
+        return false;
+    };
 
-            if (typeof streamVideoTimer !== "undefined") {
-                clearInterval(streamVideoTimer);
+    const setStreamIframeContent = (content) => {
+        // Set stream modal iframe to show given text
+        streamModal.find('iframe').attr('src', '');
+        streamModal.find('iframe').addClass('d-none');
+        streamModal.find('#stream-placeholder > div').text(content);
+        streamModal.find('#stream-placeholder').addClass('d-flex');
+    };
+
+    const setStreamIframeSrc = (href) => {
+        // Set stream modal iframe to show given URL
+        streamModal.find('iframe').attr('src', href);
+        streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
+        streamModal.find('iframe').removeClass('d-none');
+    };
+
+    const setStreamVideo = (roomName) => {
+        // Update stream modal iframe:
+        // Show stream with start/pause/end message (for given room) and keep updated
+        const timeNow = time();
+
+        const talksHere = getTalks(roomName);
+        let roomStart, roomEnd;
+        if (talksHere) {
+            roomStart = talksHere[0].start;
+            roomEnd = talksHere[talksHere.length-1].end;
+        }
+        else {
+            // If no program for given room, take overall first and last talk
+            roomStart = 0;
+            roomEnd = 0;
+            for (let roomNameTalk in data.talks) {
+                talksHere = getTalks(roomNameTalk);
+                const crntRoomStart = talksHere[0].start;
+                const crntRoomEnd = talksHere[talksHere.length-1].end;
+
+                if (roomStart == 0 || roomStart > crntRoomStart) {
+                    roomStart = crntRoomStart;
+                }
+                if (roomEnd == 0 || roomEnd < crntRoomEnd) {
+                    roomEnd = crntRoomEnd;
+                }
             }
+        }
 
-            // Conference not yet started
-            if (timeNow < roomStart - streamPrepend*60) {
-                setStreamIframeContent('{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}');
+        if (typeof streamVideoTimer !== "undefined") {
+            clearInterval(streamVideoTimer);
+        }
+
+        // Conference not yet started
+        if (timeNow < roomStart - streamPrepend*60) {
+            setStreamIframeContent(lang.pre_stream);
+
+            if (!freezeTime) {
+                streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomStart - streamPrepend*60) * 1000, roomName);
+            }
+        }
+
+        // Conference is over
+        else if (timeNow > roomEnd + streamExtend*60) {
+            setStreamIframeContent(lang.post_stream);
+
+            if (!freezeTime && demo) {
+                streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd - streamPrepend*60) * 1000, roomName);
+            }
+        }
+
+        // Conference ongoing
+        else {
+            const pauseNext = getNextPause(roomName);
+
+            // Currently stream is paused
+            if (pauseNext && timeNow >= pauseNext.start + streamExtend*60 && timeNow <= pauseNext.end - streamPrepend*60) {
+                setStreamIframeContent(lang.pause_stream);
 
                 if (!freezeTime) {
-                    streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomStart - streamPrepend*60) * 1000, roomName);
+                    streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.end - streamPrepend*60) * 1000, roomName);
                 }
             }
-
-            // Conference is over
-            else if (timeNow > roomEnd + streamExtend*60) {
-                setStreamIframeContent('{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}');
-
-                if (!freezeTime && demo) {
-                    streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd - streamPrepend*60) * 1000, roomName);
-                }
-            }
-
-            // Conference ongoing
+            // Currently a talk is active
             else {
-                let pauseNext = getNextPause(roomName);
+                const room = getRoom(roomName);
+                setStreamIframeSrc(room.href);
 
-                // Currently stream is paused
-                if (pauseNext && timeNow >= pauseNext.start + streamExtend*60 && timeNow <= pauseNext.end - streamPrepend*60) {
-                    setStreamIframeContent('{{ site.data.lang[site.conference.lang].live.pause_stream | default: "Live stream is currently paused." }}');
-
-                    if (!freezeTime) {
-                        streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.end - streamPrepend*60) * 1000, roomName);
-                    }
-                }
-                // Currently a talk is active
-                else {
-                    let room = getRoom(roomName);
-                    setStreamIframeSrc(room.href);
-
-                    if (!freezeTime) {
-                        if (pauseNext) {
-                            streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.start + streamExtend*60) * 1000, roomName);
-                        }
-                        else {
-                            streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd + streamExtend*60) * 1000, roomName);
-                        }
-                    }
-                }
-            }
-        };
-
-        const setStreamInfo = function (roomName) {
-            // Update stream modal info bar:
-            // Show next talk and speaker (for given room) and keep updated
-            let timeNow = time();
-            let talkNext = getNextTalk(roomName);
-
-            if (typeof streamInfoTimer !== "undefined") {
-                clearInterval(streamInfoTimer);
-            }
-
-            if (talkNext && timeNow >= talkNext.start - streamPause*60) {
-                document.getElementById('stream-info').dataset.time = talkNext.start;
-                document.getElementById('stream-info-time').dataset.time = talkNext.start;
-                updateLive();
-
-                streamModal.find('#stream-info-color').removeClass(function (index, className) {
-                    return (className.match(/(^|\s)border-soft-\S+/g) || []).join(' ');
-                });
-                streamModal.find('#stream-info-color').addClass('border-soft-' + talkNext.color);
-
-                streamModal.find('#stream-info-talk').text(talkNext.name).attr('href', talkNext.href);
-
-                let speakerStr = '';
-                for (let i = 0; i < talkNext.speakers.length; i++) {
-                    let speaker = data.speakers[talkNext.speakers[i]];
-                    if (speaker.href == '') {
-                        speakerStr += speaker.name +', '
+                if (!freezeTime) {
+                    if (pauseNext) {
+                        streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.start + streamExtend*60) * 1000, roomName);
                     }
                     else {
-                        speakerStr += '<a class="text-reset" href="'+ speaker.href +'">'+ speaker.name +'</a>, ';
+                        streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd + streamExtend*60) * 1000, roomName);
                     }
                 }
-                speakerStr = speakerStr.slice(0, -2);
-                streamModal.find('#stream-info-speakers').html(speakerStr);
+            }
+        }
+    };
 
-                if (talkNext.live_links) {
-                    let linksStr = '';
-                    for (let i = 0; i < talkNext.live_links.length; i++) {
-                        const link = talkNext.live_links[i];
+    const setStreamInfo = (roomName) => {
+        // Update stream modal info bar:
+        // Show next talk and speaker (for given room) and keep updated
+        const timeNow = time();
+        const talkNext = getNextTalk(roomName);
 
-                        linksStr += '<a href="' + link.href + '" class="btn btn-light m-1'
-                        if (link.disabled) {
-                            linksStr += ' disabled';
-                        }
-                        linksStr += '">';
-                        if (link.icon) {
-                            linksStr += '<i class="fas fa-' + link.icon + '"></i>&nbsp;';
-                        }
-                        linksStr += link.name + '</a>';
-                    }
-                    streamModal.find('#stream-info-links').html(linksStr).removeClass('d-none');
+        if (typeof streamInfoTimer !== "undefined") {
+            clearInterval(streamInfoTimer);
+        }
+
+        if (talkNext && timeNow >= talkNext.start - streamPause*60) {
+            document.getElementById('stream-info').dataset.time = talkNext.start;
+            document.getElementById('stream-info-time').dataset.time = talkNext.start;
+            updateLive();
+
+            streamModal.find('#stream-info-color').removeClass((index, className) => {
+                return (className.match(/(^|\s)border-soft-\S+/g) || []).join(' ');
+            });
+            streamModal.find('#stream-info-color').addClass('border-soft-' + talkNext.color);
+
+            streamModal.find('#stream-info-talk').text(talkNext.name).attr('href', talkNext.href);
+
+            let speakerStr = '';
+            for (let i = 0; i < talkNext.speakers.length; i++) {
+                let speaker = data.speakers[talkNext.speakers[i]];
+                if (speaker.href == '') {
+                    speakerStr += speaker.name +', '
                 }
                 else {
-                    streamModal.find('#stream-info-links').addClass('d-none');
+                    speakerStr += '<a class="text-reset" href="'+ speaker.href +'">'+ speaker.name +'</a>, ';
                 }
+            }
+            speakerStr = speakerStr.slice(0, -2);
+            streamModal.find('#stream-info-speakers').html(speakerStr);
 
-                streamModal.find('#stream-info').removeClass('d-none');
+            if (talkNext.live_links) {
+                let linksStr = '';
+                for (let i = 0; i < talkNext.live_links.length; i++) {
+                    const link = talkNext.live_links[i];
 
-                if (!freezeTime) {
-                    streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.end) * 1000, roomName);
+                    linksStr += '<a href="' + link.href + '" class="btn btn-light m-1'
+                    if (link.disabled) {
+                        linksStr += ' disabled';
+                    }
+                    linksStr += '">';
+                    if (link.icon) {
+                        linksStr += '<i class="fas fa-' + link.icon + '"></i>&nbsp;';
+                    }
+                    linksStr += link.name + '</a>';
                 }
+                streamModal.find('#stream-info-links').html(linksStr).removeClass('d-none');
             }
             else {
-                streamModal.find('#stream-info').addClass('d-none');
+                streamModal.find('#stream-info-links').addClass('d-none');
+            }
 
-                if (!freezeTime) {
-                    if (talkNext) {
-                        streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.start - streamPause*60) * 1000, roomName);
-                    }
-                    else if (demo) {
-                        let talksHere = getTalks(roomName);
-                        if (talksHere) {
-                            streamInfoTimer = setTimeout(setStreamInfo, delayStart(talksHere[0].start - streamPrepend*60) * 1000, roomName);
-                        }
+            streamModal.find('#stream-info').removeClass('d-none');
+
+            if (!freezeTime) {
+                streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.end) * 1000, roomName);
+            }
+        }
+        else {
+            streamModal.find('#stream-info').addClass('d-none');
+
+            if (!freezeTime) {
+                if (talkNext) {
+                    streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.start - streamPause*60) * 1000, roomName);
+                }
+                else if (demo) {
+                    let talksHere = getTalks(roomName);
+                    if (talksHere) {
+                        streamInfoTimer = setTimeout(setStreamInfo, delayStart(talksHere[0].start - streamPrepend*60) * 1000, roomName);
                     }
                 }
             }
-        };
+        }
+    };
 
-        const setStream = function (roomName) {
-            // Update stream modal (iframe and info bar) for given room
-            streamModal.find('.modal-footer .btn').removeClass('active');
-            streamModal.find('#stream-select').val(0);
+    const setStream = (roomName) => {
+        // Update stream modal (iframe and info bar) for given room
+        streamModal.find('.modal-footer .btn').removeClass('active');
+        streamModal.find('#stream-select').val(0);
 
-            // Recover room name in case of empty default
-            let room = getRoom(roomName);
-            roomName = room.name;
+        // Recover room name in case of empty default
+        const room = getRoom(roomName);
+        roomName = room.name;
 
-            setStreamVideo(roomName);
-            setStreamInfo(roomName);
+        setStreamVideo(roomName);
+        setStreamInfo(roomName);
 
-            streamModal.find('#stream-button' + room.id).addClass('active');
-            streamModal.find('#stream-select').val(room.id);
-        };
+        streamModal.find('#stream-button' + room.id).addClass('active');
+        streamModal.find('#stream-select').val(room.id);
+    };
 
-        const updateStream = function () {
-            // Update stream modal for currently active room button
-            if (streamModal.hasClass('show')) {
-                let activeButton = streamModal.find('.modal-footer .btn.active');
-                let roomName = activeButton.data('room');
+    const updateStream = () => {
+        // Update stream modal for currently active room button
+        if (streamModal.hasClass('show')) {
+            let activeButton = streamModal.find('.modal-footer .btn.active');
+            let roomName = activeButton.data('room');
 
-                if (typeof roomName !== "undefined") {
-                    setStream(roomName);
-                }
-            }
-        };
-
-        const stopUpdateStream = function () {
-            // Stop stream modal update timer
-            if (typeof streamVideoTimer !== "undefined") {
-                clearInterval(streamVideoTimer);
-            }
-            if (typeof streamInfoTimer !== "undefined") {
-                clearInterval(streamInfoTimer);
-            }
-        };
-
-        const hideModal = function () {
-            // Close stream modal
-            streamModal.find('iframe').attr('src', '');
-            streamModal.find('.modal-footer .btn').removeClass('active');
-            streamModal.find('#stream-select').selectedIndex = -1;
-        };
-
-        const setupStream = function () {
-            // Setup events when modal opens/closes
-            streamModal = $('#stream-modal');
-
-            // configure modal opening buttons
-            streamModal.on('show.bs.modal', function (event) {
-                let button = $(event.relatedTarget);
-                let roomName = button.data('room');
+            if (typeof roomName !== "undefined") {
                 setStream(roomName);
-            });
-            streamModal.on('hide.bs.modal', function () {
-                hideModal();
-            });
+            }
+        }
+    };
 
-            // configure room selection buttons in modal
-            streamModal.find('.modal-footer .btn').on('click', function(event) {
-                event.preventDefault();
+    const stopUpdateStream = () => {
+        // Stop stream modal update timer
+        if (typeof streamVideoTimer !== "undefined") {
+            clearInterval(streamVideoTimer);
+        }
+        if (typeof streamInfoTimer !== "undefined") {
+            clearInterval(streamInfoTimer);
+        }
+    };
 
-                let roomName = $(this).data('room');
-                setStream(roomName);
-            });
+    const hideModal = () => {
+        // Close stream modal
+        streamModal.find('iframe').attr('src', '');
+        streamModal.find('.modal-footer .btn').removeClass('active');
+        streamModal.find('#stream-select').selectedIndex = -1;
+    };
 
-            // configure room selection menu in modal
-            streamModal.find('#stream-select').on('change', function(event) {
-                event.preventDefault();
+    const setupStream = () => {
+        // Setup events when modal opens/closes
+        streamModal = $('#stream-modal');
 
-                let roomName = $(this).children('option:selected').text();
-                setStream(roomName);
-            });
-        };
+        // configure modal opening buttons
+        streamModal.on('show.bs.modal', (event) => {
+            let button = $(event.relatedTarget);
+            let roomName = button.data('room');
+            setStream(roomName);
+        });
+        streamModal.on('hide.bs.modal', () => {
+            hideModal();
+        });
 
-        const setup = function () {
-            loadData();
-            startUpdateLive();
+        // configure room selection buttons in modal
+        streamModal.find('.modal-footer .btn').on('click', function (event) {
+            event.preventDefault();
+
+            let roomName = $(this).data('room');
+            setStream(roomName);
+        });
+
+        // configure room selection menu in modal
+        streamModal.find('#stream-select').on('change', function (event) {
+            event.preventDefault();
+
+            let roomName = $(this).children('option:selected').text();
+            setStream(roomName);
+        });
+    };
+
+    const init = (c, l) => {
+        config = c;
+        lang = l;
+
+        confStart = config.time.start;
+        confEnd = config.time.end;
+        confDur = confEnd - confStart;
+
+        demo = config.demo.enable;
+        demoDur = config.demo.duration;
+        demoPause = config.demo.pause;
+        demoStart = confStart - confDur/demoDur*demoPause;
+        demoEnd = confEnd + confDur/demoDur*demoPause;
+
+        stream = config.streaming.enable;
+        streamPause = config.streaming.pause;
+        streamPrepend = config.streaming.prepend;
+        streamExtend = config.streaming.extend;
+
+        loadData();
+        startUpdateLive();
+        if (stream) {
             setupStream();
-        };
+        }
+    };
 
-        const update = function () {
-            updateLive();
+    const update = () => {
+        updateLive();
+        if (stream) {
             updateStream();
-        };
+        }
+    };
 
-        const startUpdate = function () {
-            startUpdateLive();
+    const startUpdate = () => {
+        startUpdateLive();
+        if (stream) {
             updateStream();
-        };
+        }
+    };
 
-        const stopUpdate = function () {
-            stopUpdateLive();
+    const stopUpdate = () => {
+        stopUpdateLive();
+        if (stream) {
             stopUpdateStream();
-        };
-
-    {%- else -%}
-
-        const setup = function () {
-            loadData();
-            startUpdateLive();
-        };
-
-        const update = function () {
-            updateLive();
-        };
-
-        const startUpdate = function () {
-            startUpdateLive();
-        };
-
-        const stopUpdate = function () {
-            stopUpdateLive();
-        };
-
-    {%- endif %}
+        }
+    };
 
     return {
-        init: setup,
+        init: init,
         getData: getData,
 
         pauseTime: pauseTime,
@@ -713,5 +716,3 @@ window.conference.live = (function() {
     };
 
 })();
-
-window.conference.live.init();

@@ -1,0 +1,78 @@
+{
+    {%- include partials/get_enable_map.html -%}
+    {%- if enable_map %}
+    "map": {
+        "map_provider": "{{ site.conference.map.map_provider | default: 'OpenStreetMap.Mapnik' }}",
+        "home_coord": [{{ site.conference.map.home_coord }}],
+        "default_zoom": {{ site.conference.map.default_zoom | default: 17 }}
+    },
+    {%- endif %}
+
+    {% if site.conference.live -%}
+    "live": {
+        "time": {
+            {% assign d = site.data.program.days | first -%}
+            {%- include partials/get_day_time.html -%}
+            {%- assign t = day_start_talk -%}
+
+            {%- include partials/get_talk_timestamp.html -%}
+            {%- assign conf_start = timestamp_start -%}
+
+            {%- assign d = site.data.program.days | last -%}
+            {%- include partials/get_day_time.html -%}
+            {%- assign t = day_end_talk -%}
+
+            {%- include partials/get_talk_timestamp.html -%}
+            {%- assign conf_end = timestamp_end -%}
+
+            "start": {{ conf_start }},
+            "end": {{ conf_end }}
+        },
+
+        "streaming": {
+            "enable": {{ site.conference.live.streaming.enable | default: "false" }},
+            "pause": {{ site.conference.live.streaming.time_pause | default: 60 }},
+            "prepend": {{ site.conference.live.streaming.time_prepend | default: 5 }},
+            "extend": {{ site.conference.live.streaming.time_extend | default: 5 }}
+        },
+
+        "demo": {
+            "enable": {{ site.conference.live.demo.enable | default: "false" }},
+            "duration": {{ site.conference.live.demo.duration | default: 300 }},
+            "pause": {{ site.conference.live.demo.pause | default: 10 }}
+        }
+    },
+    {%- endif %}
+
+    "lang": {
+        {%- if enable_map %}
+        "map": {
+            "focus_conf": "{{ site.data.lang[site.conference.lang].location.focus_conf | default: "Center map on conference location" }}",
+            "focus_me": "{{ site.data.lang[site.conference.lang].location.focus_me | default: "Show me where I am" }}"
+        }
+        {%- endif -%}
+
+        {%- if site.conference.live and site.conference.live.streaming.enable -%}
+            {%- if enable_map %},{% endif %}
+        "live": {
+            "pre_stream": "{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}",
+            "post_stream": "{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}",
+            "pause_stream": "{{ site.data.lang[site.conference.lang].live.pause_stream | default: "Live stream is currently paused." }}",
+            "time": {
+                "soon": "{{ site.data.lang[site.conference.lang].live.time.soon | default: "soon" }}",
+                "now": "{{ site.data.lang[site.conference.lang].live.time.now | default: "now" }}",
+                "in": "{{ site.data.lang[site.conference.lang].live.time.in | default: "in" }} ",
+                "since": "{{ site.data.lang[site.conference.lang].live.time.since | default: "since" }} ",
+                "weeks": "{{ site.data.lang[site.conference.lang].live.time.weeks | default: "weeks" }}",
+                "week": "{{ site.data.lang[site.conference.lang].live.time.week | default: "week" }}",
+                "days": "{{ site.data.lang[site.conference.lang].live.time.days | default: "days" }}",
+                "day": "{{ site.data.lang[site.conference.lang].live.time.day | default: "day" }}",
+                "hours": "{{ site.data.lang[site.conference.lang].live.time.hours | default: "hours" }}",
+                "hour": "{{ site.data.lang[site.conference.lang].live.time.hour | default: "hour" }}",
+                "minutes": "{{ site.data.lang[site.conference.lang].live.time.minutes | default: "minutes" }}",
+                "minute": "{{ site.data.lang[site.conference.lang].live.time.minute | default: "minute" }}"
+            }
+        }
+        {%- endif %}
+    }
+}

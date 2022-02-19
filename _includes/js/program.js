@@ -1,27 +1,25 @@
-window.conference.program = (function() {
-    let updateHash = function (hash) {
-        let scrollPosition = $('body').scrollTop() || $('html').scrollTop();
+window.conference.program = (() => {
+    const updateHash = (hash) => {
+        const scrollPosition = document.documentElement.scrollTop;
         window.location.hash = hash;
-        $('html,body').scrollTop(scrollPosition);
+        document.documentElement.scrollTop = scrollPosition;
     };
 
-    let init = function () {
+    const init = () => {
         if ($('#day-list')) {
             // Switch to day if page load with hash
-            var hash = window.location.hash;
+            const hash = window.location.hash;
             if (hash) {
                 $('#day-list a[href="' + hash + '"]').tab('show');
             }
+
             // Switch to day if today
             else {
-                let d = new Date();
-                let dStr = d.getFullYear() +"-"+ (d.getMonth()+1) +"-"+ d.getDate()
-                // since a timezone compensation is added when passed as string, today's date has also
-                // to be passed as string (as it is done below)
-                let today = new Date(dStr);
+                let today = new Date();
+                today.setHours(0,0,0,0);
 
                 $('a[data-toggle="tab"]').each(function () {
-                    let d = new Date($(this).data('date'));
+                    const d = new Date($(this).data('date'));
 
                     if (today.getTime() === d.getTime()) {
                         $(this).tab('show');
@@ -41,5 +39,3 @@ window.conference.program = (function() {
         init: init
     };
 })();
-
-window.conference.program.init();

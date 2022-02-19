@@ -1,13 +1,19 @@
-// Global app variable
-window.conference = {};
-
-// Bootstrap (Style Framework)
+// Libraries
+//   Bootstrap (Style Framework)
 {% include js/lib/jquery-3.5.1.min.js %}
 {% include js/lib/popper.min.js %}
 {% include js/lib/bootstrap.js %}
 
-// FontAwesome (Icons)
-//   Imported via CSS and webfonts
+//   FontAwesome (Icons)
+//     Imported via CSS and webfonts
+
+// Conference
+window.conference = {
+    config: {
+        baseurl: '{{ site.baseurl }}'
+    }
+};
+
 
 // Program
 {% include js/lib/syncscroll.js %}
@@ -31,3 +37,6 @@ window.conference = {};
 {% if site.conference.live %}
     {% include js/live.js %}
 {% endif %}
+
+// Load configuration and start initialization
+{% include js/init.js %}

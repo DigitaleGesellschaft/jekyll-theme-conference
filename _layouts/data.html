@@ -1,5 +1,5 @@
-{% if site.conference.live and site.conference.live.streaming.enable -%}
 {
+    {% if site.conference.live and site.conference.live.streaming.enable -%}
     "days": [
         {%- for d in site.data.program.days %}
         {
@@ -116,5 +116,6 @@
         {%- endunless -%}
     {%- endfor %}
     }
+
+    {%- endif %}
 }
-{%- endif -%}
