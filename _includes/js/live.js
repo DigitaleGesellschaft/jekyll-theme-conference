@@ -540,6 +540,11 @@ window.conference.live = (() => {
                 for (let i = 0; i < talkNext.live_links.length; i++) {
                     const link = talkNext.live_links[i];
 
+                    // Skip empty links
+                    if ((link.name == '' && !link.icon) || link.href == '') {
+                        continue;
+                    }
+
                     linksStr += '<a href="' + link.href + '" class="btn btn-light m-1'
                     if (link.disabled) {
                         linksStr += ' disabled';
