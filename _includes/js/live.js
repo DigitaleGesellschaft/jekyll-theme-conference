@@ -27,6 +27,8 @@ window.conference.live = (() => {
     let streamVideoTimer;
     let streamInfoTimer;
 
+    let streamModal;
+
     const loadData = () => {
         // Load schedule
         const request = new Request(window.conference.config.baseurl + '/assets/js/data.json');
@@ -306,13 +308,22 @@ window.conference.live = (() => {
             let tRel = tNow - t;
 
             if (tRel < 0) {
-                // Grey out when in past
-                if (!livePast[i].classList.contains('text-secondary')) {
-                    livePast[i].classList.add('text-secondary');
+                if (livePast[i].nodeName == 'A' || livePast[i].nodeName == 'BUTTON') {
+                    // Disable when in past
+                    if (!livePast[i].classList.contains('disabled')) {
+                        livePast[i].classList.add('disabled');
+                    }
+                }
+                else {
+                    // Grey out when in past
+                    if (!livePast[i].classList.contains('text-secondary')) {
+                        livePast[i].classList.add('text-secondary');
+                    }
                 }
             }
             else {
                 // Show normal otherwise
+                livePast[i].classList.remove('disabled');
                 livePast[i].classList.remove('text-secondary');
             }
         }
@@ -346,8 +357,6 @@ window.conference.live = (() => {
             clearInterval(liveTimer);
         }
     };
-
-    let streamModal;
 
     const getRoom = (roomName) => {
         // Return room object for given room name
@@ -454,7 +463,7 @@ window.conference.live = (() => {
         }
 
         // Conference not yet started
-        if (timeNow < roomStart - streamPrepend*60) {
+        if (timeNow <= roomStart - streamPrepend*60) {
             setStreamIframeContent(lang.pre_stream);
 
             if (!freezeTime) {
@@ -463,7 +472,7 @@ window.conference.live = (() => {
         }
 
         // Conference is over
-        else if (timeNow > roomEnd + streamExtend*60) {
+        else if (timeNow >= roomEnd + streamExtend*60) {
             setStreamIframeContent(lang.post_stream);
 
             if (!freezeTime && demo) {
@@ -513,7 +522,6 @@ window.conference.live = (() => {
         if (talkNext && timeNow >= talkNext.start - streamPause*60) {
             document.getElementById('stream-info').dataset.time = talkNext.start;
             document.getElementById('stream-info-time').dataset.time = talkNext.start;
-            updateLive();
 
             streamModal.find('#stream-info-color').removeClass((index, className) => {
                 return (className.match(/(^|\s)border-soft-\S+/g) || []).join(' ');
@@ -545,11 +553,7 @@ window.conference.live = (() => {
                         continue;
                     }
 
-                    linksStr += '<a href="' + link.href + '" class="btn btn-light m-1'
-                    if (link.disabled) {
-                        linksStr += ' disabled';
-                    }
-                    linksStr += '">';
+                    linksStr += '<a href="' + link.href + '" class="btn btn-light m-1 live-past" data-time="'+ talkNext.start +'">';
                     if (link.icon) {
                         linksStr += '<i class="fas fa-' + link.icon + '"></i>&nbsp;';
                     }
@@ -563,6 +567,7 @@ window.conference.live = (() => {
 
             streamModal.find('#stream-info').removeClass('d-none');
 
+            updateLive();
             if (!freezeTime) {
                 streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.end) * 1000, roomName);
             }
