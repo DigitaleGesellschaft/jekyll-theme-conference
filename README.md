@@ -620,7 +620,22 @@ Each room is represented by a file in the `_rooms/` directory. It must begin wit
 
 - the room's `name`
 - optionally `hide: true` if the room's page should not be linked to, and
-- optionally a URL pointing to a live stream for the given room during the conference (`live`, see the section _Live Indications & Streaming_ above).
+- optionally under the `live` property a URL pointing to a live stream for the given room during the conference (see the section _Live Indications & Streaming_ above), either:
+  * as an `absolute_url`, or
+  * a `relative_url`.
+
+Example:
+
+```yaml
+---
+name: The Room
+hide: false
+live:
+  absolute_url: https://github.com
+---
+
+...
+```
 
 ### Links
 
