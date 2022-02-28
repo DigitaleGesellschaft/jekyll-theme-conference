@@ -122,12 +122,12 @@ conference:
   live:
     date: 01.01.2020
     timezone: GMT+1
-    time_stop: 240      # in minutes
+    stop:       240  # in minutes
     streaming:
       enable: true
-      time_pause:   60  # in minutes
-      time_prepend:  5  # in minutes
-      time_extend:   5  # in minutes
+      pause:     60  # in minutes
+      prepend:    5  # in minutes
+      extend:     5  # in minutes
     demo:
       enable: false
       duration: 300  # in seconds

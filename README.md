@@ -384,12 +384,12 @@ This can be further extended if some of the talks have an associated live stream
 
 In order to activate these functionalities, each day in the `program.yml` file must contain a `date` property (see section _Content_ > _Schedule / Program_ below) and the `live` property has to be set in the configuration file containing
 
-- how long a pause between two consecutive talks has to be for the live indication to pause (`time_stop`),
+- how long a pause between two consecutive talks has to be for the live indication to pause (`stop`),
 - optionally under the `streaming` property:
   + if streaming should be enabled (`enable`), and if enabled
-  + how many minutes the stream goes active before a talk (`time_prepend`),
-  + how many minutes the stream stays active after a talk (`time_extend`),
-  + how long a pause between two consecutive talks has to be for the stream to pause (`time_pause`), and
+  + how many minutes the stream goes active before a talk (`prepend`),
+  + how many minutes the stream stays active after a talk (`extend`),
+  + how long a pause between two consecutive talks has to be for the stream to pause (`pause`), and
   + optionally an external (absolute) link to which the user will be redirected instead of opening the modal (`external`),
 - optionally under the `demo` property:
   + if a demonstration mode should be enabled (`enable`), whereby the JavaScript function cycles continuously through the entire program in a few minutes, and if enabled
@@ -399,12 +399,12 @@ In order to activate these functionalities, each day in the `program.yml` file m
 ```yaml
 conference:
   live:
-    time_stop: 240      # in minutes
+    stop: 240      # in minutes
     streaming:
       enable: true
-      time_pause:   60  # in minutes
-      time_prepend:  5  # in minutes
-      time_extend:   5  # in minutes
+      pause:   60  # in minutes
+      prepend:  5  # in minutes
+      extend:   5  # in minutes
     demo:
       enable: false
       duration: 300  # in seconds

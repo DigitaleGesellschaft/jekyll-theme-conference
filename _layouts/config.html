@@ -31,9 +31,9 @@
 
         "streaming": {
             "enable": {{ site.conference.live.streaming.enable | default: "false" }},
-            "pause": {{ site.conference.live.streaming.time_pause | default: 60 }},
-            "prepend": {{ site.conference.live.streaming.time_prepend | default: 5 }},
-            "extend": {{ site.conference.live.streaming.time_extend | default: 5 }}
+            "pause": {{ site.conference.live.streaming.pause | default: 60 }},
+            "prepend": {{ site.conference.live.streaming.prepend | default: 5 }},
+            "extend": {{ site.conference.live.streaming.extend | default: 5 }}
         },
 
         "demo": {

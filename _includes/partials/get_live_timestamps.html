@@ -1,9 +1,9 @@
-{%- assign min_pause = site.conference.live.time_stop | default: 240 -%}
+{%- assign min_pause = site.conference.live.stop | default: 240 -%}
 {%- assign min_pause = min_pause | times: 60 -%}
 
 {%- if site.conference.live.streaming.enable -%}
-  {%- assign offset_start = site.conference.live.streaming.time_prepend | default: 5 -%}
-  {%- assign offset_end = site.conference.live.streaming.time_extend | default: 5 -%}
+  {%- assign offset_start = site.conference.live.streaming.prepend | default: 5 -%}
+  {%- assign offset_end = site.conference.live.streaming.extend | default: 5 -%}
 {%- else -%}
   {%- assign offset_start = 0 -%}
   {%- assign offset_end = 0 -%}
