@@ -370,7 +370,14 @@ window.conference.live = (() => {
 
     const getTalks = (roomName) => {
         if (roomName in data.talks) {
-            return data.talks[roomName];
+            return data.talks[roomName].map((talk) => {
+                // For talks with live links, add some grace period to the end
+                // time in order to prevent that the next talk is announced
+                // immediately
+                const end = talk.live_links && talk.live_links.length > 0 ?
+                    talk.end + streamExtend * 60 : talk.end;
+                return { ...talk, end };
+            });
         }
         else {
             return false;
