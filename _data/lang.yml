@@ -1,4 +1,4 @@
-version: 7
+version: 8
 
 en:
   pronoun:
@@ -31,7 +31,7 @@ en:
       soon: soon
       now: now
   location:
-    title: Location
+    rooms: Rooms
     directions: Directions
     talks: Talks in this room
     focus_conf: Center map on conference location
@@ -78,7 +78,7 @@ de:
       soon: demnächst
       now: jetzt
   location:
-    title: Örtlichkeit
+    rooms: Räume
     directions: Anreise
     talks: Vorträge in diesem Raum
     focus_conf: Karte auf den Konferenz-Ort zentrieren
@@ -125,8 +125,8 @@ fr:
       soon: à venir
       now: maintenant
   location:
-    title: Lieu
-    directions: Indications
+    rooms: Salles
+    directions: Directions
     talks: Présentations dans cette salle
     focus_conf: Centrer la carte sur le lieu de la conférence
     focus_me: Afficher ma localisation actuelle
@@ -172,8 +172,8 @@ pt:
       soon: em breve
       now: agora
   location:
-    title: Localização
-    directions: Indicações
+    rooms: Salas
+    directions: Direções
     talks: Apresentações nesta sala
     focus_conf: Centralizar o mapa para o local da conferência
     focus_me: Mostrar minha localização atual

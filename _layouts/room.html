@@ -10,7 +10,7 @@
 
   <!-- title shown in browser: -->
   <h1 class="display-5 mb-3 d-print-none">
-    {{ site.data.lang[site.conference.lang].location.title | default: "Location" }}
+    {{ site.data.lang[site.conference.lang].location.rooms | default: "Rooms" }}
   </h1>
 
   {% include partials/navbar_rooms.html %}

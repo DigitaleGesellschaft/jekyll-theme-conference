@@ -11,7 +11,7 @@
 
   {%- else -%}
     {%- if page.layout == 'location' -%}
-      {{- site.data.lang[site.conference.lang].location.title | default: "Location" -}}
+      {{- site.data.lang[site.conference.lang].location.rooms | default: "Rooms" -}}
     {%- elsif page.layout == 'program' -%}
       {{- site.data.lang[site.conference.lang].program.title | default: "Program" -}}
     {%- elsif page.layout == 'speaker-overview' -%}
