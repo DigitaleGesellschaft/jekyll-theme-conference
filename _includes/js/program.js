@@ -19,7 +19,8 @@ window.conference.program = (() => {
                 today.setHours(0,0,0,0);
 
                 $('a[data-toggle="tab"]').each(function () {
-                    const d = new Date($(this).data('date'));
+                    let d = new Date($(this).data('date'));
+                    d.setHours(0,0,0,0);
 
                     if (today.getTime() === d.getTime()) {
                         $(this).tab('show');
