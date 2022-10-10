@@ -148,7 +148,7 @@ pt:
     by: de
     for: por
     in: em
-    on_: no
+    on_: "no"
   overview: Visão geral
   more_information: Mais informações
   live:
