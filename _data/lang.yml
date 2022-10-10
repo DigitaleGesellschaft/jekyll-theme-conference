@@ -7,7 +7,7 @@ en:
     by: by
     for: for
     in: in
-    on_: on
+    on_: "on"
   overview: Overview
   more_information: More Information
   live:
@@ -148,7 +148,7 @@ pt:
     by: de
     for: por
     in: em
-    on_: no
+    on_: "no"
   overview: Visão geral
   more_information: Mais informações
   live:
