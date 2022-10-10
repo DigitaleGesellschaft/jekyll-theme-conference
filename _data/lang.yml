@@ -7,7 +7,7 @@ en:
     by: by
     for: for
     in: in
-    on_: on
+    on_: "on"
   overview: Overview
   more_information: More Information
   live:
