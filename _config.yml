@@ -1,9 +1,8 @@
-title: Conference 2020
-preposition: ''
-description: >-
-  Conference of a random organization on January 1st in Zurich, Switzerland
+title: Climate Informatics 2023
+preposition: 'at'
+description: Climate Informatics 2023 conference, hosted at the University of Cambridge
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://example.com" # the base hostname & protocol for your site, e.g. https://example.com
+url: "https://cambridge-iccs.github.io/climate-informatics-2023" # the base hostname & protocol for your site, e.g. https://example.com
 
 # Build settings
 markdown: kramdown
