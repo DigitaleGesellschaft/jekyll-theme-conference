@@ -53,7 +53,7 @@ defaults:
 # Theme default values
 conference:
   lang: en
-  show_errors: True
+  show_errors: false
 
   navigation:
     logo:
