@@ -4,12 +4,3 @@
 $fa-font-path: '{{ site.baseurl }}/assets/webfonts';
 
 @import 'conference';
-
-#logo-container {
-    margin: 0 auto;
-    width: 80vw;
-}
-#logo-container img {
-    width: 80vw;
-}
-

@@ -1,6 +1,16 @@
 ---
 layout: home
 ---
+<style>
+#logo-container {
+    margin: 0 auto;
+    width: 70vw;
+}
+
+#logo-container img {
+    width: 70vw;
+}
+</style>
 
 <div id='logo-container'><img src="assets/images/splash.png" /></div>
 
