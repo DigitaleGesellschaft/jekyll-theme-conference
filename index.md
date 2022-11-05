@@ -1,6 +1,15 @@
 ---
 layout: home
 ---
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultricies interdum lacus quis gravida. Vestibulum eget arcu in dui facilisis luctus. Curabitur rhoncus nibh non neque viverra facilisis. Nam nec placerat augue, ut mollis ante. Morbi pulvinar iaculis felis eget pretium. Duis euismod, risus non placerat accumsan, mi nisl euismod nibh, quis finibus ante mauris eu odio.
 
-Nullam a nunc felis. Aenean nec metus sed elit feugiat elementum sed ut quam. Maecenas dignissim augue nec sollicitudin sagittis. Donec sagittis dolor non tincidunt eleifend. Donec vel nibh et leo pretium dignissim. Nulla vehicula arcu velit, ac facilisis turpis fermentum ac. Integer at tempus sem, in vehicula magna. Ut tempor est nec nisl imperdiet porttitor sit amet maximus massa.
+<div id='logo-container'><img src="assets/images/splash.png" /></div>
+
+## 12<sup>th</sup> International Conference on Climate Informatics
+
+### About the Conference
+
+The Institute of Computing for Climate Science at the University of Cambtidge
+is pleased to announce the 12th International Conference on Climate Informatics, which will be hosted at
+the university in April 2022.
+
+The Climate Informatics conference series aims to bring together researchers and users across different disciplines and sectors to forge international collaboration between climate science, data science, and computer science, share state-of-art developments in climate data and informatics, and accelerate the rate of discovery in climate science and adaptation of climate applications.

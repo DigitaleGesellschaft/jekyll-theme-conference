@@ -55,6 +55,24 @@ conference:
   lang: en
   show_errors: True
 
+  navigation:
+    logo:
+      name: CI
+      image: 'assets/images/ci-logo.png'
+    links:
+      - name: "Paper submission"
+        relative_url: submission
+      - live:true
+      
+      - name: "Travel and accommodation"
+        relative_url: travel
+      - live:true
+
+      - name : "Organizing Committee"
+        relative_url: commitee
+      - live:true
+      
+
   link_preview:
     disable: false
 
