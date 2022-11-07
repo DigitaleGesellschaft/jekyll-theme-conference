@@ -33,8 +33,8 @@ climate science and adaptation of climate applications.
 
 ### Key dates
 
-- Submission deadline: 26th January 2023
-- Notification: 23rd February 2023
-- Conference: 19-21st April 2023
+- __Submission deadline: 26th January 2023__
+- __Notification: 23rd February 2023__
+- __Conference: 19-21st April 2023__
 
 [Submission details](https://cambridge-iccs.github.io/climate-informatics-2023/submission)
