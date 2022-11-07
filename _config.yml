@@ -69,7 +69,7 @@ conference:
       - live:true
 
       - name : "Organizing Committee"
-        relative_url: /commitee
+        relative_url: /committee
       - live:true
       
 
