@@ -3,8 +3,6 @@ layout: maine
 title: CI2023: Paper submission guidelines
 ---
 
-# PAPER SUBMISSION GUIDELINES
-
 The subject matter should be selected with Climate Informatics in mind: either presenting algorithms that could have potential applications in geosciences or datasets and physical problems that pose a specific problem in geosciences are both welcome, but ideally should combine machine/deep learning and advanced statistics with a geophysical issue.
 
 This year’s conference offers two tracks for submissions:
