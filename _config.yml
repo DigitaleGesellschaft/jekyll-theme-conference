@@ -73,7 +73,7 @@ conference:
       - live:true
 
       - name: 'Conference series'
-        url: http://www.climateinformatics.org/
+        absolute_url: http://www.climateinformatics.org/
       - live:true
       
 
