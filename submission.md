@@ -1,5 +1,6 @@
 ---
 layout: maine
+title: CI2023: Paper submission guidelines
 ---
 
 # PAPER SUBMISSION GUIDELINES

@@ -1,5 +1,6 @@
 ---
 layout: home
+title: CI2023: Travel and accommodation
 ---
 
 # Accommodation
