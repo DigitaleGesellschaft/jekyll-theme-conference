@@ -1,5 +1,5 @@
 ---
-layout: maine
+layout: home
 ---
 
 # Accommodation
