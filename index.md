@@ -5,6 +5,7 @@ layout: home
 #logo-container {
     margin: 0 auto;
     width: 70vw;
+	padding: 10px;
 }
 
 #logo-container img {

@@ -1,6 +1,6 @@
 title: Climate Informatics 2023
 preposition: 'at'
-description: Climate Informatics 2023 conference, hosted at the University of Cambridge
+description: 12th International Conference on Climate Informatics, hosted at the University of Cambridge
 baseurl: "/climate-informatics-2023" # the subpath of your site, e.g. /blog
 url: "https://cambridge-iccs.github.io" # the base hostname & protocol for your site, e.g. https://example.com
 
@@ -61,15 +61,15 @@ conference:
       image: 'assets/images/ci-logo.png'
     links:
       - name: "Paper submission"
-        relative_url: submission
+        relative_url: /submission
       - live:true
       
       - name: "Travel and accommodation"
-        relative_url: travel
+        relative_url: /travel
       - live:true
 
       - name : "Organizing Committee"
-        relative_url: commitee
+        relative_url: /commitee
       - live:true
       
 
