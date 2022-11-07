@@ -71,6 +71,10 @@ conference:
       - name : "Organizing Committee"
         relative_url: /committee
       - live:true
+
+      - name: 'Conference series'
+        url: http://www.climateinformatics.org/
+      - live:true
       
 
   link_preview:
