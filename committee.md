@@ -1,6 +1,7 @@
 ---
 layout: home
-title: CI2023: Organising committee
+page:
+  title: CI2023: Organising committee
 ---
 
 ## Chairs
