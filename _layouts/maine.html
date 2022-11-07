@@ -1,0 +1,87 @@
+{% include partials/header.html %}
+
+  <div class="jumbotron">
+    <h1 class="display-3">
+      {% if site.conference.main.logo.img %}
+        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+      {% elsif page.title %}
+        {{ page.title }}
+      {% else %}
+        {{ site.title }}
+      {% endif %}
+    </h1>
+    {% if site.description != none %}
+      <p class="lead">
+        {{ site.description | markdownify | replace: '<p>', '<p class="lead">' }}
+      </p>
+    {% endif %}
+
+    <hr class="my-4">
+
+    {{ content }}
+
+    {% if site.conference.main.links %}
+      <div class="lead d-print-none">
+      {% assign btn_default = 'btn btn-outline-primary btn-lg mt-2 ml-1' %}
+      {% for link in site.conference.main.links %}
+
+        {% if link.menu %}
+          <div class="dropdown d-inline">
+            <a class="{{ btn_default }} dropdown-toggle" href="#" role="button" id="main-dropdown{{ forloop.index0 }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ link.name }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="main-dropdown{{ forloop.index0 }}">
+              {% assign parent_link = link %}
+              {% for link in parent_link.menu %}
+                {% assign link_styleclass = "dropdown-item" %}
+                {% include partials/get_link.html %}
+                {{ link_tag }}
+                  {{ link.name }}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+
+        {% elsif link.live %}
+          {%- include partials/get_live_timestamps.html -%}
+
+          {%- if link.name -%}
+            {%- assign link_name = link.name -%}
+          {%- else -%}
+            {%- assign link_name =  site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
+          {%- endif -%}
+
+          {%- if link.name_inactive -%}
+            <span class="live-hide {{ btn_default }} disabled" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+              {{ link.name_inactive }}
+            </span>
+          {%- endif -%}
+
+          <span class="live-show d-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+            {% if site.conference.live.streaming.enable %}
+              <a class="{{ btn_default }}" title="{{ link_name }}" data-toggle="modal" data-target="#stream-modal" data-room="" href="#">
+            {% else %}
+              {% assign link_styleclass = "{{ btn_default }}" %}
+              {% include partials/get_link.html %}
+              {{ link_tag }}
+            {% endif %}
+
+              {{ link_name }}
+            </a>
+          </span>
+
+        {% else %}
+          {% assign link_styleclass = btn_default %}
+          {% include partials/get_link.html %}
+          {{ link_tag }}
+            {{ link.name }}
+          </a>
+        {% endif %}
+      {% endfor %}
+      </p>
+    {% endif %}
+
+  </div>
+
+{% include partials/footer.html %}

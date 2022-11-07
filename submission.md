@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: maine
 ---
 
 # PAPER SUBMISSION GUIDELINES
