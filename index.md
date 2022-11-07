@@ -31,6 +31,12 @@ science, and computer science, share state-of-art developments in
 climate data and informatics, and accelerate the rate of discovery in
 climate science and adaptation of climate applications.
 
+Climate Informatics is an open community interested in research
+combining climate science with approaches from statistics, machine
+learning and data mining. We hope to stimulate discussion of new
+ideas, foster new collaborations, grow the community, and thus
+accelerate discovery across disciplinary boundaries.
+
 ### Key dates
 
 - __Submission deadline: 26th January 2023__
