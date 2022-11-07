@@ -13,4 +13,7 @@ layout: maine
 - [Dominic Orchard](https://dorchard.github.io/), Institute of Computing for Climate Science, University of Cambridge
 - Marla Fuchs, Institute of Computing for Climate Science, University of Cambridge
 
+# Programme committee
+
+TBD
 
