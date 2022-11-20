@@ -7,7 +7,8 @@ import json
 from datetime import datetime
 from copy import deepcopy
 
-from conference import get_id
+import re
+from unicodedata import normalize
 
 
 QUESTIONS = [
@@ -39,6 +40,29 @@ def get_by_path(root, items, create=False):
 
 def set_by_path(root, items, value):
     get_by_path(root, items[:-1], True)[items[-1]] = value
+
+
+def get_id(string):
+    # work only in lower case
+    string = string.lower()
+
+    # remove URL unsafe characters (ä, ö, ü, é, è, à, ...)
+    string = normalize(
+        'NFKD', string).encode('ASCII', 'ignore').decode('utf-8')
+
+    # replace spaces
+    string = string.replace(' ', '_')
+
+    # replace dashes
+    string = string.replace('-', '_')
+
+    # remove remaining special characters (:, /, ...)
+    string = re.sub(r'(?u)[^-\w]', '', string)
+
+    # remove consecutive underscores
+    string = re.sub('_+','_', string)
+
+    return string
 
 
 def escape_markdown(text):
@@ -262,7 +286,7 @@ def create_files(content, folder_name, file_name, file_content, clean=False):
 
     # otherwise, delete if requested
     elif clean:
-        for root, dirs, files in os.walk(folder_name):
+        for root, _, files in os.walk(folder_name):
             for f in files:
                 os.unlink(os.path.join(root, f))
 
@@ -452,8 +476,7 @@ if __name__ == "__main__":
                      clean=True)
         create_program(content['program'], **default_program_structure,
                        lc_time=args.lc_time)
-
-    elif args.talks or args.speakers or args.rooms or args.create_files:
+    else:
         # get default settings
         if args.talks:
             file_args = default_file_structure['talks']
@@ -482,23 +505,27 @@ if __name__ == "__main__":
         if args.clean:
             file_args['clean'] = args.clean
 
-        content = parse_csv(args.file, file_attrs + file_args['file_content'])
-        if args.info:
-            content = extend_content(content, args.info)
+        if args.talks or args.speakers or args.rooms or args.create_files:
+            keep_fields = file_attrs
+            keep_fields.append(file_args['file_content'])
 
-        create_files(content, **file_args)
+            content = parse_csv(args.file, keep_fields)
+            if args.info:
+                content = extend_content(content, args.info)
 
-    elif args.program:
-        # get default settings
-        program_args = default_program_structure
+            create_files(content, **file_args)
 
-        # overwrite default settings and/or define remaining settings
-        if args.file_path:
-            file_args['file_path'] = args.file_path
-        if args.data_format:
-            file_args['data_format'] = args.data_format
-        if args.lc_time:
-            file_args['lc_time'] = args.lc_times
+        elif args.program:
+            # get default settings
+            program_args = default_program_structure
 
-        content = parse_csv(args.file)
-        create_program(content, **program_args)
+            # overwrite default settings and/or define remaining settings
+            if args.file_path:
+                file_args['file_path'] = args.file_path
+            if args.data_format:
+                file_args['data_format'] = args.data_format
+            if args.lc_time:
+                file_args['lc_time'] = args.lc_times
+
+            content = parse_csv(args.file)
+            create_program(content, **program_args)

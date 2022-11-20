@@ -187,7 +187,7 @@ def update(asset_names=None):
             # (allows to overwrite existing files)
             items = {}
             if os.path.isdir(src_path):
-                for path, subdirs, files in os.walk(src_path):
+                for path, _, files in os.walk(src_path):
                     for file in files:
                         src_file = os.path.join(path, file)
                         dest_file = src_file.replace(src_path, dest_path)
