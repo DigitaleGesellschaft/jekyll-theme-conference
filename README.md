@@ -110,7 +110,7 @@ To install:
    bundle
    ```
 
-4. Add `remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@v3.6.0"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
+4. Add `remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@v3.6.1"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
 
 5. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
 
