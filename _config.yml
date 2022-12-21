@@ -68,7 +68,7 @@ conference:
         relative_url: /travel
       - live:true
 
-      - name : "Organizing & Programme Committee"
+      - name : "Committees"
         relative_url: /committee
       - live:true
 
