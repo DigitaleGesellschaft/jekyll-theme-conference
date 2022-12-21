@@ -64,11 +64,11 @@ conference:
         relative_url: /submission
       - live:true
       
-      - name: "Travel and accommodation"
+      - name: "Travel & Accommodation"
         relative_url: /travel
       - live:true
 
-      - name : "Organizing Committee"
+      - name : "Organizing & Programme Committee"
         relative_url: /committee
       - live:true
 
