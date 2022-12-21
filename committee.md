@@ -16,5 +16,9 @@ title: "CI2023: Organising committee"
 
 ## Programme committee
 
-TBD
-
+- [Tom Beucler](https://wp.unil.ch/dawn/), Université de Lausanne
+- [Leif Denby](https://leif.denby.eu/), University of Leeds
+- [Deborah Khider](https://earth.usc.edu/~khider/), University of Southern California
+- [Maria J. Molina](https://mariajmolina.github.io/), University of Maryland
+- [Peer Nowack](https://research-portal.uea.ac.uk/en/persons/peer-nowack), University of East Anglia
+- [Maike Sonnewald](https://msonnewald.com/), Princeton University
