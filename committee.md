@@ -27,7 +27,7 @@ title: "CI2023: Organising committee"
 - [Kasia Tokarska](kasiatokarska.com), ETH Zurich
 - [Adway Mitra](https://sites.google.com/site/adwayresearch/?pli=1), IIT Kharagpur
 
-## Steering Committee
+## Steering committee
 - [Claire Monteleoni](), University of Colorado Boulder
 - [Jakob Runge](https://climateinformaticslab.com/about/), German Aerospace Center (DLR)
 - [Eniko Szekely](https://eszekely.github.io/), Swiss Data Science Center
