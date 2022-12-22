@@ -23,6 +23,9 @@ title: "CI2023: Organising committee"
 - [Maria J. Molina](https://mariajmolina.github.io/), University of Maryland
 - [Peer Nowack](https://research-portal.uea.ac.uk/en/persons/peer-nowack), University of East Anglia
 - [Maike Sonnewald](https://msonnewald.com/), Princeton University
+- Karthik Kashinath, NVIDIA
+- [Kasia Tokarska](kasiatokarska.com), ETH Zurich
+- [Adway Mitra](https://sites.google.com/site/adwayresearch/?pli=1), IIT Kharagpur
 
 ## Steering Committee
 - [Claire Monteleoni](), University of Colorado Boulder
