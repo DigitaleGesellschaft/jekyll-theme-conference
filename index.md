@@ -39,7 +39,7 @@ accelerate discovery across disciplinary boundaries.
 
 ### Key dates
 
-- __Submission deadline: ~~26th January 2023 (AoE)~~~ (Extended: 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe)))__
+- __Submission deadline: ~~26th January 2023 (AoE)~~ (Extended: 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe)))__
 - __Notification: 23rd February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__
 - __Conference: 19-21st April 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__
 
