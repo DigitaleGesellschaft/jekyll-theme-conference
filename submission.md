@@ -20,6 +20,6 @@ __b) Extended abstract submission__
 
 No template is provided and no particular formatting is required, but extended abstract should contain sufficient information for the reviewer to determine the quality of the work, including data and methods used as well as a summary of results. The extended abstract should be no longer than 2 pages, including the most relevant references or figures (not required). You can present preliminary results.
 
-All submissions should be made through the [CMT portal](https://cmt3.research.microsoft.com/ClimateInformatics2023/) by the deadline of _~~26th January 2023 (AoE)~~~ (Extended: 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))))_.
+All submissions should be made through the [CMT portal](https://cmt3.research.microsoft.com/ClimateInformatics2023/) by the deadline of _~~26th January 2023 (AoE)~~ (Extended: 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))))_.
 
 The papers will be peer-reviewed and decisions about acceptance will be made by 23 February 2023. 
