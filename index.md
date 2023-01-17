@@ -39,8 +39,8 @@ accelerate discovery across disciplinary boundaries.
 
 ### Key dates
 
-- __Submission deadline: 26th January 2023__
-- __Notification: 23rd February 2023__
-- __Conference: 19-21st April 2023__
+- __Submission deadline: ~~26th January 2023 (AoE)~~~ (Extended: 1st February 2023 (AoE)__
+- __Notification: 23rd February 2023 (AoE)___
+- __Conference: 19-21st April 2023 (AoE)___
 
 [Submission details](https://cambridge-iccs.github.io/climate-informatics-2023/submission)
