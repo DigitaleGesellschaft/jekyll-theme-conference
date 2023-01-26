@@ -11,7 +11,7 @@ __a) Full paper submission__
 
 The accepted full paper will be considered to be included in an open-access, peer-reviewed special collection on the journal [Environmental Data Science](https://www.cambridge.org/core/journals/environmental-data-science) tied to the conference.
 
-The paper should be no longer than 8 pages, including references, using the templates provided by Environmental Data Science (for more information, see the [journal’s instructions](https://www.cambridge.org/core/journals/environmental-data-science/information/instructions-for-authors) for authors).
+The paper should be no longer than 8 pages, not including references, using the templates provided by Environmental Data Science (for more information, see the [journal’s instructions](https://www.cambridge.org/core/journals/environmental-data-science/information/instructions-for-authors) for authors).
 
 * [Download LaTeX template files](https://www.cambridge.org/core/services/aop-file-manager/file/5f84547e1a014c397d6273b7)
 * [Download a Word template](https://www.cambridge.org/core/services/aop-file-manager/file/608853cd9a02c82ae9dcbf0d)
