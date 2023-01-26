@@ -26,9 +26,13 @@ title: "CI2023: Organising committee"
 - Karthik Kashinath, NVIDIA
 - [Kasia Tokarska](kasiatokarska.com), ETH Zurich
 - [Adway Mitra](https://sites.google.com/site/adwayresearch/?pli=1), IIT Kharagpur
+- [Andreas Gerhardus](https://orcid.org/0000-0003-1868-655X), German Aerospace Center
+- [Chen Chen](http://ccrs.weather.gov.sg/chen-chen/), Centre for Climate Research Singapore
+- [Jacquelyn Shelton](https://fatflake.github.io/), Hong Kong Polytechnic University
+- [Julien Brajard](https://www.nersc.no/staff/julien-brajard), Nasen Environmental and Remote Sensing Center 
 
 ## Steering committee
-- [Claire Monteleoni](), University of Colorado Boulder
+- [Claire Monteleoni](https://www.colorado.edu/faculty/claire-monteleoni/), University of Colorado Boulder
 - [Jakob Runge](https://climateinformaticslab.com/about/), German Aerospace Center (DLR)
 - [Eniko Szekely](https://eszekely.github.io/), Swiss Data Science Center
 - Anastase Alexandre Charantonis, ENSIIE
