@@ -9,6 +9,8 @@ TBD
 
 ## Travel
 
+If possible, we strongly encourage participants to travel by low-carbon means (e.g., across land). We have deliberately scheduled CI2023 just before the [EGU General Assembly 2023](https://egu23.eu/) in Vienna so that participants coming from outside of Europe can combine trips and reduce air travel.
+
 ### Train
 
 Cambridge is well connected by train to the rest of the UK and Europe.
