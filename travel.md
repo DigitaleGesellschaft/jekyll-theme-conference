@@ -3,6 +3,13 @@ layout: home
 title: "CI2023: Travel and accommodation"
 ---
 
+<style>
+  h3 {
+    font-size: 12pt;
+    font-weight: 800;
+  }
+ </style>
+
 ## Accommodation
 
 TBD
