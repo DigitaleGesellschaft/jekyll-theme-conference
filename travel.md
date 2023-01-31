@@ -47,3 +47,7 @@ The nearest airports to Cambridge are Stansted (30 miles) and Luton (40 miles). 
 
 A good route to take from the airport is the Heathrow Express to Paddington then the tube (metro) to Kings Cross / St. Pancras
 (see [Train](#Train)).
+
+## VISA
+
+If you need an invitation letter for VISA purposes then please do [ask the local organisers](mailto:iccs@maths.cam.ac.uk).
