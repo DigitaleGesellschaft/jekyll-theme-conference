@@ -25,7 +25,7 @@ A good website for planning train journeys is [Transport for London](https://tfl
 
 ### From Continental Europe
 
-Cambridge is well connected to rest of Europe via the [Eurostar](https://www.eurostar.com/uk-en) which arrives to London St. Pancras. The train is very comfortable and quick (e.g., 2 hours from Paris). It is then easy to get the train from London St. Pancras directly to Cambridge, or by [walking across the road to London Kings Cross for the fast train](###from-london).
+Cambridge is well connected to rest of Europe via the [Eurostar](https://www.eurostar.com/uk-en) which arrives to London St. Pancras. The train is very comfortable and quick (e.g., 2 hours from Paris). It is then easy to get the train from London St. Pancras directly to Cambridge, or by [walking across the road to London Kings Cross for the fast train](#from-london).
 
 
 ## Bus
