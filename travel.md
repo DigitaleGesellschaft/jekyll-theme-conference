@@ -25,7 +25,7 @@ A good website for planning train journeys is [Transport for London](https://tfl
 
 ### From Continental Europe
 
-Cambridge is well connected to rest of Europe via the [Eurostar](https://www.eurostar.com/uk-en) which arrives to London St. Pancras. The train is very comfortable and quick (e.g., 2 hours from Paris). It is then easy to get the train from London St. Pancras directly to Cambridge, or by [walking across the road to London Kings Cross for the fast train](#from-london).
+Cambridge is well connected to rest of Europe via the [Eurostar](https://www.eurostar.com/uk-en) which arrives to London St. Pancras. The train is very comfortable and quick (e.g., 2 hours from Paris). It is then easy to get the train from London St. Pancras directly to Cambridge, or by walking across the road to London Kings Cross for the fast train (see above).
 
 
 ## Bus
@@ -46,7 +46,7 @@ Disabled parking is available in the city’s car parks and on some streets. Ple
 The nearest airports to Cambridge are Stansted (30 miles) and Luton (40 miles). London Heathrow has the most routes from non-EU destinations. There's a direct train link to Cambridge from Stansted and Gatwick airports, and Heathrow airport is also easily accessible by train (via London King's Cross/London St Pancras) see below and coach (bus). 
 
 A good route to take from the airport is the Heathrow Express to Paddington then the tube (metro) to Kings Cross / St. Pancras
-(see [Train](#Train)).
+(see [Train](#Train) above).
 
 ## VISA
 
