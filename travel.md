@@ -39,14 +39,14 @@ Cambridge is well connected to rest of Europe via the [Eurostar](https://www.eur
 
 ## Bus
 
-In addition, [National Express coaches](https://www.nationalexpress.com/en) regularly run from Stansted, Luton, Heathrow and Gatwick airports to the city centre of Cambridge. National Express coaches usually stop on Parkside, next to Parker’s Piece in the city centre. 
+In addition, [National Express coaches](https://www.nationalexpress.com/en) regularly run from major cities and Stansted, Luton, Heathrow and Gatwick airports to the city centre of Cambridge. National Express coaches usually stop on Parkside, next to Parker’s Piece in the city centre. 
 
 Local bus services usually run to/from Cambridge bus station in Drummer Street, and/or the adjacent Emmanuel Street and St Andrew’s Street. There are frequent buses from the railway station to the city centre.
 The 'U' / Universal bus service bus service runs from Eddington, next to the Madingley Road Park and Ride site, through to our Biomedical Campus from Monday to Saturday, and from Eddington to Cambridge Railway Station on Sundays.
 
 ## Car
 
-If you’re planning on driving to Cambridge, we strongly recommend that you use the Park & Ride scheme. Parking in the city centre is extremely limited (with no parking at Jesus College) and several city centre roads have restricted access with penalties for using them.
+If you’re planning on driving to Cambridge, we strongly recommend that you use the Park & Ride scheme. Parking in the city centre is extremely limited (with no parking at the colleges) and several city centre roads have restricted access with penalties for using them.
 Those travelling from the north can also use the Guided Busway Park & Ride services (follow signs for Longstanton P&R from Junction 29 of the A14).
 Disabled parking is available in the city’s car parks and on some streets. Please check in advance with the Cambridge Tourist Information Centre or visit www.cambridge.gov.uk/parking.
 
