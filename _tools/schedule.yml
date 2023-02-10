@@ -3,7 +3,7 @@ on:
     paths:
       - 'schedule.json'
     branches:
-      - master
+      - main
 
 name: Update Schedule and Content
 
