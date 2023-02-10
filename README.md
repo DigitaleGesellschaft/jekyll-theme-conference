@@ -493,9 +493,14 @@ conference:
     map: true
 ```
 
-The map is based on the JavaScript Library [Leaflet](https://leafletjs.com/) and can be customized by editing the `assets/js/main.js` file, e.g. adding additional layers with markers, text, or shapes to the map. To start, copy simply the file from this repository and make use of the initialized global variable `window.conference.map` pointing to the Leaflet container.
+The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. The map object can be customized by adding additional layers with markers, text, or shapes. To do so, one has to edit the main JavaScript file, `assets/js/main.js`:
 
-Example:
+1. Import the JavaScript library of the theme (via Jekyll `include` command)
+2. Await the initialization of the theme's object
+3. Fetch the map object and verify it is set (while the JavaScript code is imported and executed on each page, the map object will only exist on the location site)
+4. Modify the map.
+
+Following an example is given adding a simple marker to the map:
 
 ```javascript
 ---
@@ -503,8 +508,8 @@ Example:
 
 {% include js/conference.js %}
 
-(() => {
-    const map = window.conference.map;
+window.conference.awaitReady().then(() => {
+    const map = window.conference.map.getMap();
 
     if (typeof map !== 'undefined') {
         let main_station = L.marker([47.37785, 8.54035], {
@@ -515,7 +520,7 @@ Example:
             })
         }).addTo(map);
     }
-})();
+});
 
 ```
 

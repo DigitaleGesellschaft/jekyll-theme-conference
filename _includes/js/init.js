@@ -12,7 +12,7 @@ const init = () => {
 
         // Execute initialization functions
         for (const [name, module] of Object.entries(window.conference)) {
-            if (name == 'config') {
+            if (['config','ready','awaitReady'].includes(name)) {
                 continue;
             }
 
@@ -25,9 +25,11 @@ const init = () => {
                 l = config.lang[name];
             }
 
-            module.init(c, l)
+            module.init(c, l);
         }
 
+    }).then(() => {
+        window.conference.ready = true;
     })
     .catch((error) => {
         console.log(error);

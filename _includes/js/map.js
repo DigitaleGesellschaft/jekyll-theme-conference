@@ -11,12 +11,12 @@ window.conference.map = (() => {
 
         L.easyButton('far fa-star', () => {
             map.flyTo(config.home_coord, config.default_zoom);
-        }, lang.location.focus_conf).addTo(map);
+        }, lang.focus_conf).addTo(map);
 
         L.control.locate({
             flyTo: true,
             strings: {
-                title: lang.location.focus_me
+                title: lang.focus_me
             }
         }).addTo(map);
     };
@@ -32,7 +32,12 @@ window.conference.map = (() => {
         }
     };
 
+    const getMap = () => {
+        return map
+    };
+
     return {
-        init: init
+        init: init,
+        getMap: getMap
     };
 })();
