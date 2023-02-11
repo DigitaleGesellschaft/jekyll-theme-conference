@@ -176,6 +176,8 @@ To get started, simply copy the desired workflow file to your repository and ada
 
 - `_tools/build.yml` -> `.github/workflows/build.yml`
 
+Please note that the `Gemfile.lock` of your project must be adapted to include specific versions required by Github's workflow server, i.e. run `bundle lock --add-platform x86_64-linux` to add support for them.
+
 
 ## Configuration
 
