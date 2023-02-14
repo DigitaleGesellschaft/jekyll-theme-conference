@@ -22,4 +22,4 @@ No template is provided and no particular formatting is required, but extended a
 
 All submissions should be made through the [CMT portal](https://cmt3.research.microsoft.com/ClimateInformatics2023/) by the deadline of _~~26th January 2023 (AoE)~~ (Extended: 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))))_.
 
-The papers will be peer-reviewed and decisions about acceptance will be made by 23 February 2023. 
+The papers will be peer-reviewed and decisions about acceptance will be made by 27 February 2023. 
