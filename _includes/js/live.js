@@ -2,7 +2,7 @@ window.conference.live = (() => {
     let config;
     let lang;
 
-    let data;
+    let data = {};
 
     let confStart;
     let confEnd;
@@ -116,6 +116,11 @@ window.conference.live = (() => {
     const setTime = (newTime, newDay) => {
         // Set and pause app time
         pauseTime();
+
+        if (!('days' in data)) {
+            console.log('Data is not loaded yet!')
+            return
+        }
 
         let dayIdx;
         if (!newDay) {
@@ -359,17 +364,34 @@ window.conference.live = (() => {
     };
 
     const getRoom = (roomName) => {
-        // Return room object for given room name
-        if (roomName in data.rooms) {
-            return data.rooms[roomName];
+        // Verify if data is already loaded and object populated
+        if ('rooms' in data && Object.keys(data.rooms).length > 0) {
+            // Return room object for given room name
+            if (roomName in data.rooms) {
+                return data.rooms[roomName];
+            }
+            else {
+                return data.rooms[Object.keys(data.rooms)[0]];
+            }
         }
         else {
-            return data.rooms[Object.keys(data.rooms)[0]];
+            console.log('Cannot read rooms as data is not loaded yet!')
+            return {}
+        }
+    };
+
+    const getAllTalks = () => {
+        if ('talks' in data && Object.keys(data.talks).length > 0) {
+            return data.talks
+        }
+        else {
+            console.log('Cannot read talks as data is not loaded yet!')
+            return {}
         }
     };
 
     const getTalks = (roomName) => {
-        if (roomName in data.talks) {
+        if (roomName in getAllTalks()) {
             return data.talks[roomName].map((talk) => {
                 // For talks with live links, add some grace period to the end
                 // time in order to prevent that the next talk is announced
@@ -380,7 +402,7 @@ window.conference.live = (() => {
             });
         }
         else {
-            return false;
+            return [];
         }
     };
 
@@ -389,7 +411,7 @@ window.conference.live = (() => {
         const timeNow = time();
         const talksHere = getTalks(roomName);
 
-        if (talksHere) {
+        if (talksHere.length > 0) {
             if (timeNow < talksHere[talksHere.length-1].end) {
                 for (let i = 0; i < talksHere.length; i++) {
                     if (timeNow < talksHere[i].end) {
@@ -398,7 +420,18 @@ window.conference.live = (() => {
                 }
             }
         }
-        return false;
+        return {};
+    };
+
+    const getSpeaker = (speakerName) => {
+        if ('speakers' in data && Object.keys(data.speakers).length > 0) {
+            if (speakerName in data.speakers) {
+                return data.speakers[speakerName]
+            }
+        }
+
+        console.log('Cannot read speakers as data is not loaded yet!')
+        return {}
     };
 
     const getNextPause = (roomName) => {
@@ -406,7 +439,7 @@ window.conference.live = (() => {
         const timeNow = time();
         const talksHere = getTalks(roomName);
 
-        if (talksHere) {
+        if (talksHere.length > 0) {
             if (timeNow < talksHere[talksHere.length-1].end) {
                 for (let i = 1; i < talksHere.length; i++) {
                     if (timeNow < talksHere[i].start && streamPause*60 <= talksHere[i].start - talksHere[i-1].end) {
@@ -440,10 +473,10 @@ window.conference.live = (() => {
         // Update stream modal iframe:
         // Show stream with start/pause/end message (for given room) and keep updated
         const timeNow = time();
-
-        const talksHere = getTalks(roomName);
         let roomStart, roomEnd;
-        if (talksHere) {
+
+        let talksHere = getTalks(roomName);
+        if (talksHere.length > 0) {
             roomStart = talksHere[0].start;
             roomEnd = talksHere[talksHere.length-1].end;
         }
@@ -451,16 +484,19 @@ window.conference.live = (() => {
             // If no program for given room, take overall first and last talk
             roomStart = 0;
             roomEnd = 0;
-            for (let roomNameTalk in data.talks) {
+            for (let roomNameTalk in getAllTalks()) {
                 talksHere = getTalks(roomNameTalk);
-                const crntRoomStart = talksHere[0].start;
-                const crntRoomEnd = talksHere[talksHere.length-1].end;
 
-                if (roomStart == 0 || roomStart > crntRoomStart) {
-                    roomStart = crntRoomStart;
-                }
-                if (roomEnd == 0 || roomEnd < crntRoomEnd) {
-                    roomEnd = crntRoomEnd;
+                if (talksHere.length > 0) {
+                    const crntRoomStart = talksHere[0].start;
+                    const crntRoomEnd = talksHere[talksHere.length-1].end;
+
+                    if (roomStart == 0 || roomStart > crntRoomStart) {
+                        roomStart = crntRoomStart;
+                    }
+                    if (roomEnd == 0 || roomEnd < crntRoomEnd) {
+                        roomEnd = crntRoomEnd;
+                    }
                 }
             }
         }
@@ -502,14 +538,16 @@ window.conference.live = (() => {
             // Currently a talk is active
             else {
                 const room = getRoom(roomName);
-                setStreamIframeSrc(room.href);
+                if (room !== {}) {
+                    setStreamIframeSrc(room.href);
 
-                if (!freezeTime) {
-                    if (pauseNext) {
-                        streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.start + streamExtend*60) * 1000, roomName);
-                    }
-                    else {
-                        streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd + streamExtend*60) * 1000, roomName);
+                    if (!freezeTime) {
+                        if (pauseNext) {
+                            streamVideoTimer = setTimeout(setStreamVideo, delayStart(pauseNext.start + streamExtend*60) * 1000, roomName);
+                        }
+                        else {
+                            streamVideoTimer = setTimeout(setStreamVideo, delayStart(roomEnd + streamExtend*60) * 1000, roomName);
+                        }
                     }
                 }
             }
@@ -526,7 +564,7 @@ window.conference.live = (() => {
             clearInterval(streamInfoTimer);
         }
 
-        if (talkNext && timeNow >= talkNext.start - streamPause*60) {
+        if (talkNext !== {} && timeNow >= talkNext.start - streamPause*60) {
             document.getElementById('stream-info').dataset.time = talkNext.start;
             document.getElementById('stream-info-time').dataset.time = talkNext.start;
 
@@ -539,8 +577,12 @@ window.conference.live = (() => {
 
             let speakerStr = '';
             for (let i = 0; i < talkNext.speakers.length; i++) {
-                let speaker = data.speakers[talkNext.speakers[i]];
-                if (speaker.href == '') {
+                let speaker = getSpeaker(talkNext.speakers[i]);
+
+                if (speaker == {}) {
+                    speakerStr += talkNext.speakers[i] +', '
+                }
+                else if (speaker.href == '') {
                     speakerStr += speaker.name +', '
                 }
                 else {
@@ -588,7 +630,7 @@ window.conference.live = (() => {
                 }
                 else if (demo) {
                     let talksHere = getTalks(roomName);
-                    if (talksHere) {
+                    if (talksHere.length > 0) {
                         streamInfoTimer = setTimeout(setStreamInfo, delayStart(talksHere[0].start - streamPrepend*60) * 1000, roomName);
                     }
                 }
@@ -603,13 +645,15 @@ window.conference.live = (() => {
 
         // Recover room name in case of empty default
         const room = getRoom(roomName);
-        roomName = room.name;
+        if (room !== {}) {
+            roomName = room.name;
 
-        setStreamVideo(roomName);
-        setStreamInfo(roomName);
+            setStreamVideo(roomName);
+            setStreamInfo(roomName);
 
-        streamModal.find('#stream-button' + room.id).addClass('active');
-        streamModal.find('#stream-select').val(room.id);
+            streamModal.find('#stream-button' + room.id).addClass('active');
+            streamModal.find('#stream-select').val(room.id);
+        }
     };
 
     const updateStream = () => {
