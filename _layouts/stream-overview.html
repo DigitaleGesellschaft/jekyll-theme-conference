@@ -21,7 +21,8 @@
     <div class="col-md mb-4">
       <h3>{{ room.name }}</h3>
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="{{ room.live }}" allowfullscreen></iframe>
+        {%- include partials/get_room_live_href.html %}
+        <iframe class="embed-responsive-item" src="{{ room_live_href }}" allowfullscreen></iframe>
       </div>
     </div>
 

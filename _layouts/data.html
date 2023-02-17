@@ -15,13 +15,10 @@
     {%- assign first_room = true -%}
     {%- for room in site.rooms %}
         {%- if room.live -%}
-            {%- if room.live.absolute_url -%}
-                {%- assign room_live_href = room.live.absolute_url -%}
-            {%- elsif room.live.relative_url -%}
-                {%- assign room_live_href = room.live.relative_url | prepend: site.baseurl -%}
-            {%- else -%}
+            {%- include partials/get_room_live_href.html -%}
+            {%- unless room_live_href -%}
                 {%- continue -%}
-            {%- endif -%}
+            {%- endunless -%}
 
             {%- unless first_room -%}
                 ,

@@ -22,12 +22,15 @@
   <link rel="prefetch" as="fetch" href="{{ site.baseurl }}/assets/js/data.json" type="application/json" crossorigin="anonymous" />
   {%- endif %}
 
-  {%- if site.conference.live.streaming.enable -%}
-    {%- for room in site.rooms -%}
+  {%- if site.conference.live.streaming.enable %}
+    {%- for room in site.rooms %}
       {%- if room.live %}
-  <link rel="preconnect" href="{{ room.live }}" />
-      {%- endif -%}
-    {%- endfor -%}
+        {%- include partials/get_room_live_href.html %}
+        {%- if room_live_href %}
+  <link rel="preconnect" href="{{ room_live_href }}" />
+        {%- endif %}
+      {%- endif %}
+    {%- endfor %}
   {%- endif %}
 </head>
 
