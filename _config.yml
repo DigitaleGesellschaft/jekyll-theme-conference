@@ -8,7 +8,6 @@ github_username:  VIBE2023
 timezone: Europe/Dublin
 
 remote_theme: "DigitaleGesellschaft/jekyll-theme-conference"
-exclude: [vendor]
 
 # Build settings
 plugins:
@@ -20,10 +19,14 @@ sass:
 # Additional exclude from processing
 exclude:
   - .github/
+  - venv/
   - README.md
   - LICENSE.md
   - REDISTRIBUTED.md
+  - screenshot.png
+  - jekyll-theme-conference.gemspec
   - purgecss.config.js
+  - _config.example.yml
 
 # Collections and their defaults
 collections:
