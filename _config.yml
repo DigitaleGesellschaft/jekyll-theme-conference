@@ -8,6 +8,7 @@ github_username:  VIBE2023
 timezone: Europe/Dublin
 
 remote_theme: "DigitaleGesellschaft/jekyll-theme-conference"
+exclude: [vendor]
 
 # Build settings
 plugins:
