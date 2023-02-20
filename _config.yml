@@ -82,19 +82,14 @@ conference:
       #  relative_url: /speakers/
       - name: Location
         relative_url: /location/
-      - name: Register
+      - name: Register/Submit Abstract
         relative_url: /register/
-      - name: Submit Abstracts
-        relative_url: /submit_abstracts/
       - name: Previous Editions
         menu:
           - name: 2023 (current)
             disabled: true
           - name: 2022
-            relative_url: https://vibe2023.github.io/
-          # broken link
-          #- name: 2020
-          #  relative_url: http://www.gen.tcd.ie/vibe/
+            relative_url: https://vibe2022.github.io/
 
   # Link Preview for Sharing
   link_preview:
@@ -114,7 +109,7 @@ conference:
       - name: How to get there
         relative_url: /location/
       - name: Register Here
-        disabled: false
+        disabled: true
         absolute_url: /register/
 
 #  # Information boxes
@@ -124,11 +119,6 @@ conference:
      main_only: true
      text: |
        This site is currently under development. Please do not attempt to register at this time.
-
-#        See the [README](github.com/DigitaleGesellschaft/jekyll-theme-conference/) on the project's GitHub #repository for further information on how to configure and adapt it to your needs.
-#    - text: This is just some random content for demonstration purposes.
- #     color: warning
-  #    pages_only: true
 
   # Live indications
 #  live:
@@ -148,14 +138,13 @@ conference:
   map:
     # Initial map center point
     default_zoom: 17
-    home_coord: 54.57646350357862, -5.934881983999575
+    home_coord: 54.57646, -5.93488
+    map_provider: "OpenStreetMap.Mapnik"
     # Alternative map providers can be found on https://leaflet-extras.github.io/leaflet-providers/preview/
     # The following do match the Bootstrap design not too badly:
     #   - Hydda.Full
     #   - Thunderforest.Neighbourhood
     #   - Esri.WorldTopoMap
-    map_provider: "Esri.WorldTopoMap" # "OpenStreetMap.Mapnik"
-    #default_zoom: 17
 
   talks:
     # Talk categories
