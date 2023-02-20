@@ -1,5 +1,5 @@
 ---
-name: Room A
+name: Isdell Courtyard
 ---
 
-A short way description on how to find the room
+The primary meeting room
