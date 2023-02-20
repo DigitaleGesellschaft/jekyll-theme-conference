@@ -84,6 +84,7 @@ conference:
         relative_url: /location/
       - name: Register/Submit Abstract
         relative_url: /register/
+        disabled: true
       - name: Previous Editions
         menu:
           - name: 2023 (current)
@@ -167,13 +168,13 @@ conference:
 
   location:
     # Disable links to locations
-    hide: false
+    hide: true
     # URL of location /  overview page
     url: '/location'
     # Main page title shown on location/room navigation bar
     navbar_title: 'Location'
     # Show map on location main page
-    map: true
+    map: false
 
   program:
     # URL of program page
