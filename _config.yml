@@ -1,16 +1,22 @@
-title: Conference 2020
-preposition: ''
+title: VIBE Conference 2023
+preposition: at
 description: >-
-  Conference of a random organization on January 1st in Zurich, Switzerland
+  Virtual Institute of Bioinformatics and Evolution, All-Ireland Conference 2023
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://example.com" # the base hostname & protocol for your site, e.g. https://example.com
+url: "https://VIBE2023.github.io" # the base hostname & protocol for your site, e.g. https://example.com
+github_username:  VIBE2023
+timezone: Europe/Dublin
+
+remote_theme: "DigitaleGesellschaft/jekyll-theme-conference"
 
 # Build settings
+plugins:
+  [jekyll-include-cache]
 markdown: kramdown
 sass:
   style: compressed
 
-# Exclude from processing
+# Additional exclude from processing
 exclude:
   - .github/
   - venv/
@@ -21,6 +27,7 @@ exclude:
   - jekyll-theme-conference.gemspec
   - purgecss.config.js
   - _config.example.yml
+  - vendor
 
 # Collections and their defaults
 collections:
@@ -51,22 +58,140 @@ defaults:
     values:
       layout: room
 
-# Theme default values
+
 conference:
+
+  # Language
   lang: en
+
+  # Show theme errors:
   show_errors: True
 
+  # Navigation bar
+  navigation:
+    #logo:
+      #name: Digital Society Switzerland
+      # img: ''
+      #url: 'https://digitale-gesellschaft.ch/'
+    links:
+      - name: Program
+        relative_url: /program/
+      #- name: Talks
+      #  relative_url: /talks/
+      #- name: Speakers
+      #  relative_url: /speakers/
+      - name: Location
+        relative_url: /location/
+      - name: Register
+        relative_url: /register/
+      - name: Submit Abstracts
+        relative_url: /submit_abstracts/
+      - name: Previous Editions
+        menu:
+          - name: 2023 (current)
+            disabled: true
+          - name: 2022
+            relative_url: https://vibe2023.github.io/
+          # broken link
+          #- name: 2020
+          #  relative_url: http://www.gen.tcd.ie/vibe/
+
+  # Link Preview for Sharing
   link_preview:
+    # also adapt "preposition" property at top for more meaningful descriptions
     disable: false
+    img:
+      twitter: 'twitter_preview.png'      # inside /assets/images/
+      open_graph: 'facebook_preview.png'  # inside /assets/images/
+
+  # Main landing page
+  main:
+    # logo:
+    img: 'VIBE2023_main.png'
+    links:
+      - name: Program
+        relative_url: /program/
+      - name: How to get there
+        relative_url: /location/
+      - name: Register Here
+        disabled: false
+        absolute_url: /register/
+
+#  # Information boxes
+  info_bars:
+   - title: Site under development
+     color: primary
+     main_only: true
+     text: |
+       This site is currently under development. Please do not attempt to register at this time.
+
+#        See the [README](github.com/DigitaleGesellschaft/jekyll-theme-conference/) on the project's GitHub #repository for further information on how to configure and adapt it to your needs.
+#    - text: This is just some random content for demonstration purposes.
+ #     color: warning
+  #    pages_only: true
+
+  # Live indications
+#  live:
+#    date: 09.06.2022
+#    timezone: Europe/Dublin
+#    stop:       240  # in minutes
+#    streaming:
+#      enable: false
+#      pause:     60  # in minutes
+#      prepend:    5  # in minutes
+#      extend:     5  # in minutes
+#    demo:
+#      enable: false
+#      duration: 300  # in seconds
+#      pause:     10  # in seconds
+
+  map:
+    # Initial map center point
+    default_zoom: 17
+    home_coord: 54.57646350357862, -5.934881983999575
+    # Alternative map providers can be found on https://leaflet-extras.github.io/leaflet-providers/preview/
+    # The following do match the Bootstrap design not too badly:
+    #   - Hydda.Full
+    #   - Thunderforest.Neighbourhood
+    #   - Esri.WorldTopoMap
+    map_provider: "Esri.WorldTopoMap" # "OpenStreetMap.Mapnik"
+    #default_zoom: 17
+
+  talks:
+    # Talk categories
+    main_categories:
+      - name: Keynote
+        color: info 
+      - name: 10 minute
+        color: warning 
+      - name: Lightning (5min)
+        color: success
+      - name: Break
+        color: dark
+
+    # Hide icons on talk overview page
+    hide_icons: false
 
   speakers:
+    # Show first and last name
     show_firstname: true
 
   location:
+    # Disable links to locations
+    hide: false
+    # URL of location /  overview page
     url: '/location'
+    # Main page title shown on location/room navigation bar
+    navbar_title: 'Location'
+    # Show map on location main page
     map: true
 
   program:
+    # URL of program page
     url: '/program'
-    time_steps: 15
-    show_alltimes: true
+
+    # Time steps in program table
+    time_steps: 10 # in minutes
+
+    # Show intermediary time steps (next to full hours)
+    show_alltimes: false
