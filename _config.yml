@@ -27,6 +27,7 @@ exclude:
   - jekyll-theme-conference.gemspec
   - purgecss.config.js
   - _config.example.yml
+  - vendor
 
 # Collections and their defaults
 collections:
