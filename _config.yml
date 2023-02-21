@@ -103,7 +103,7 @@ conference:
   # Main landing page
   main:
     # logo:
-    img: 'VIBE2023_main.png'
+    img: 'VIBE2023.jpg'
     links:
       - name: Program
         relative_url: /program/
