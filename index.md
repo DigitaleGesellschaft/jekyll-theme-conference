@@ -1,7 +1,8 @@
 ---
 layout: home
 ---
-![Poster](assets/images/VIBE2023.jpg)
+
+![Poster](assets/images/VIBE2023.png)
 
 - *Location*: Queens University Belfast
 - *Venue:* The Isdell Courtyard at Riddel Hall
