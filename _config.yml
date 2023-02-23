@@ -69,9 +69,9 @@ conference:
 
   # Navigation bar
   navigation:
-    #logo:
-      #name: Digital Society Switzerland
-      # img: ''
+    logo:
+      name: QUB&Almac
+      img: 'VIBE2023_tp.png'
       #url: 'https://digitale-gesellschaft.ch/'
     links:
       - name: Program
