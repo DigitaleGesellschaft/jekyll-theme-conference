@@ -9,3 +9,5 @@ layout: home
 - *Date:* 12th May 2023 
 - *Time:* 10:00am - 5:00pm
 - *Keynote:* TBD 
+
+The conference program will be made available in due course.
