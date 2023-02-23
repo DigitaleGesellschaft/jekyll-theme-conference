@@ -82,9 +82,10 @@ conference:
       #  relative_url: /speakers/
       - name: Location
         relative_url: /location/
-      - name: Register/Submit Abstract
-        relative_url: /register/
-        disabled: true
+      - name: /Submit Abstract
+        #relative_url: /register/
+        absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
+        disabled: false
       - name: Previous Editions
         menu:
           - name: 2023 (current)
@@ -110,16 +111,16 @@ conference:
       - name: How to get there
         relative_url: /location/
       - name: Register Here
-        disabled: true
-        absolute_url: /register/
+        disabled: false
+        absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
 
 #  # Information boxes
-  info_bars:
-   - title: Site under development
-     color: primary
-     main_only: true
-     text: |
-       This site is currently under development. Please do not attempt to register at this time.
+#  info_bars:
+#   - title: Site under development
+#     color: primary
+#     main_only: true
+#     text: |
+#       This site is currently under development. Please do not attempt to register at this time.
 
   # Live indications
 #  live:
@@ -156,6 +157,8 @@ conference:
         color: warning 
       - name: Lightning (5min)
         color: success
+      - name: Poster Presentations
+        color: light
       - name: Break
         color: dark
 
