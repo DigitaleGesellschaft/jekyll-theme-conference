@@ -82,7 +82,7 @@ conference:
       #  relative_url: /speakers/
       - name: Location
         relative_url: /location/
-      - name: /Submit Abstract
+      - name: Register/Submit Abstract
         #relative_url: /register/
         absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
         disabled: false
@@ -158,7 +158,7 @@ conference:
       - name: Lightning (5min)
         color: success
       - name: Poster Presentations
-        color: light
+        color: secondary
       - name: Break
         color: dark
 
