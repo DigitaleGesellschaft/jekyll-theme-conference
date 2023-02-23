@@ -71,7 +71,7 @@ conference:
   navigation:
     logo:
       name: QUB&Almac
-      img: 'VIBE2023_ribbon_tp.png'
+      img: 'VIBE2023_ribbon_tp_small.png'
       #url: 'https://digitale-gesellschaft.ch/'
     links:
       - name: Program
