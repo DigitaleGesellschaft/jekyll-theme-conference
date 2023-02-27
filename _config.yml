@@ -116,13 +116,13 @@ conference:
         disabled: false
         absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
 
-#  # Information boxes
-#  info_bars:
-#   - title: Site under development
-#     color: primary
-#     main_only: true
-#     text: |
-#       This site is currently under development. Please do not attempt to register at this time.
+# Information boxes
+  info_bars:
+   - title: Registration now open!
+     color: primary
+     main_only: false
+     text: |
+       We are now accepting abstracts for talks and posters. Deadline for submission: 14th April 2023.
 
   # Live indications
 #  live:

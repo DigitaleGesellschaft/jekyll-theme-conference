@@ -10,4 +10,13 @@ layout: home
 - *Time:* 10:00am - 5:00pm
 - *Keynote:* TBD 
 
-The conference program will be made available in due course.
+VIBE 2023 will have four sessions:
+
+    "Medical bioinformatics" (Chair: Dr. Ian Overton).
+    "Agricultural and Environmental" (Chair: TBC).
+    "Evolution and genetics" Chair: Prof Chris Creevey.
+    "Algorithms and methods" (Chair: TBC).
+
+There will be a keynote talk (TBC), talks from established researchers, ten minute talks, two minute "lightning" talks, and a poster presentation session. There will also be tea/coffee breaks and lunch provided.
+
+The full conference program will be made available in due course.
