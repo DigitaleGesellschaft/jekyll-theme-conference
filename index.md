@@ -12,6 +12,12 @@ layout: home
 #logo-container img {
     width: 70vw;
 }
+
+#partners {
+ img {
+   max-height: 150px;
+ }
+}
 </style>
 
 <div id='logo-container'><img src="assets/images/splash.png" /></div>
@@ -52,3 +58,13 @@ Delegates can benefit from a discounted conference room rate at the [Graduate Ho
 - __Conference: 19-21st April 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__
 
 [Submission details](https://cambridge-iccs.github.io/climate-informatics-2023/submission)
+
+### Partners
+
+<div id='partners'>
+<img src="assets/images/partners/ati.jpg" />
+<img src="https://www.bas.ac.uk/wp-content/themes/baspress/img/bas-full-logo.png />
+<img src="https://ncics.org/wp-content/themes/ncics/img/NCICS_logo-560x292.png" />
+<img src="https://cdn-ukwest.onetrust.com/logos/b1267e56-9bec-4ebe-a985-519ebdee1430/1d68d9f9-4078-44bb-9419-6d02957faf01/128a5669-6106-4f93-8945-4652309c3cdc/Cambridge_Landscape_Logo_POS_RGB.png" />
+<img src="https://cambridge-iccs.github.io/assets/images/iccs-uni-logo.png" />
+</div>
