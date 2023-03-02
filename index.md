@@ -53,8 +53,8 @@ Delegates can benefit from a discounted conference room rate at the [Graduate Ho
 
 ### Key dates
 
-- __Submission deadline: ~~26th January 2023 (AoE)~~ (<span style="color:red">Extended:</span> 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe)))__
-- __Notification: ~~23rd February 2023~~ 27th February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__
+- <span style='color:#888'>__Submission deadline: ~~26th January 2023 (AoE)~~ (<span style="color:red">Extended:</span> 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe)))__</span>
+- <span style='color:#888'>__Notification: ~~23rd February 2023~~ 27th February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__</span>
 - __Conference: 19-21st April 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__
 
 [Submission details](https://cambridge-iccs.github.io/climate-informatics-2023/submission)
