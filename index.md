@@ -21,6 +21,7 @@ layout: home
 #partners img {
    max-height: 150px;
    max-wdith: 200px;
+   margin: 15px;
 }
 </style>
 
