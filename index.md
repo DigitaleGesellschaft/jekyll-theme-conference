@@ -13,8 +13,13 @@ layout: home
     width: 70vw;
 }
 
+#partners {
+  display: flex;
+}
+
 #partners img {
    max-height: 150px;
+   max-wdith: 200px;
 }
 </style>
 
