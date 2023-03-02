@@ -39,9 +39,7 @@ accelerate discovery across disciplinary boundaries.
 
 ### Registration
 
-[Registration is now open!](https://onlinesales.admin.cam.ac.uk/conferences-and-events/department-of-applied-mathematics-theoretical-physics-damtp/climate-informatics-conference/climate-informatics-conference-2023).
-
-Registration closed April 3rd.
+__[Registration for in-person and online attendance is now open!](https://onlinesales.admin.cam.ac.uk/conferences-and-events/department-of-applied-mathematics-theoretical-physics-damtp/climate-informatics-conference/climate-informatics-conference-2023)__ and closes **April 3rd**.
 
 A variety of accommodation is available for booking at [Jesus College (60 rooms available)](https://www.universityrooms.com/en-GB/eventcode?ec=CICAPR23&vid=jesuscambridge).
 
