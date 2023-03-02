@@ -19,7 +19,6 @@ layout: home
 }
 
 #partners img {
-   max-height: 100px;
    max-width: 150px;
    margin: 15px;
 }
