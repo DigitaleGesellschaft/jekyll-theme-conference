@@ -19,8 +19,8 @@ layout: home
 }
 
 #partners img {
-   max-height: 150px;
-   max-wdith: 200px;
+   max-height: 100px;
+   max-wdith: 150px;
    margin: 15px;
 }
 </style>
