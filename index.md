@@ -32,7 +32,7 @@ layout: home
 
 The Institute of Computing for Climate Science at the University of Cambridge
 is pleased to announce the 12th International Conference on Climate Informatics, which will be hosted at
-the university in April 2022.
+the university in April 2023.
 
 The Climate Informatics conference series aims to bring together
 researchers and users across different disciplines and sectors to
