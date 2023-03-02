@@ -19,8 +19,8 @@ layout: home
 }
 
 #partners img {
-   max-width: 175px;
    margin: 15px;
+   width: 150px;
 }
 </style>
 
