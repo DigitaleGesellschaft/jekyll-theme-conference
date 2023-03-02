@@ -39,7 +39,13 @@ accelerate discovery across disciplinary boundaries.
 
 ### Registration
 
-[Registration is now open!](https://onlinesales.admin.cam.ac.uk/conferences-and-events/department-of-applied-mathematics-theoretical-physics-damtp/climate-informatics-conference/climate-informatics-conference-2023). 
+[Registration is now open!](https://onlinesales.admin.cam.ac.uk/conferences-and-events/department-of-applied-mathematics-theoretical-physics-damtp/climate-informatics-conference/climate-informatics-conference-2023).
+
+Registration closed April 3rd.
+
+A variety of accommodation is available for booking at [Jesus College (60 rooms available)](https://www.universityrooms.com/en-GB/eventcode?ec=CICAPR23&vid=jesuscambridge).
+
+Delegates can benefit from a discounted conference room rate at the [Graduate Hotel](https://www.graduatehotels.com/cambridge/). When you select the room type, type in the code DIRECT under CORPORATE/PROMO CODE. Both Jesus college and the Graduate Hotel are only a 10-minute walk from the conference venue at Trinity Hall.
 
 ### Key dates
 
