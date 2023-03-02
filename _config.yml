@@ -64,6 +64,10 @@ conference:
         relative_url: /submission
       - live:true
       
+      - name: "Registration"
+        absolute_url: https://onlinesales.admin.cam.ac.uk/conferences-and-events/department-of-applied-mathematics-theoretical-physics-damtp/climate-informatics-conference/climate-informatics-conference-2023
+      - live:true
+   
       - name: "Travel & Accommodation"
         relative_url: /travel
       - live:true
