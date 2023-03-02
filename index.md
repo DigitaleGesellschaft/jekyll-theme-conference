@@ -13,10 +13,8 @@ layout: home
     width: 70vw;
 }
 
-#partners {
- img {
+#partners img {
    max-height: 150px;
- }
 }
 </style>
 
