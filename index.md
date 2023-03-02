@@ -20,7 +20,7 @@ layout: home
 
 #partners img {
    margin: 15px;
-   width: 150px;
+   width: 250px;
 }
 </style>
 
