@@ -61,8 +61,6 @@ Delegates can benefit from a discounted conference room rate at the [Graduate Ho
 - <span style='color:#888'>__Notification: ~~23rd February 2023~~ 27th February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__</span>
 - __Conference: 19-21st April 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe))__
 
-[Submission details](https://cambridge-iccs.github.io/climate-informatics-2023/submission)
-
 ### Partners
 
 <div id='partners'>
