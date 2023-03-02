@@ -15,6 +15,7 @@ layout: home
 
 #partners {
   display: flex;
+  flex-wrap: wrap;
 }
 
 #partners img {
