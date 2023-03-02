@@ -14,8 +14,8 @@ layout: home
 }
 
 #partners {
-  display: flex;
   flex-wrap: wrap;
+  align-items: stretch;
 }
 
 #partners img {
