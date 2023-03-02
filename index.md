@@ -20,7 +20,7 @@ layout: home
 
 #partners img {
    max-height: 100px;
-   max-wdith: 150px;
+   max-width: 150px;
    margin: 15px;
 }
 </style>
