@@ -37,6 +37,10 @@ learning and data mining. We hope to stimulate discussion of new
 ideas, foster new collaborations, grow the community, and thus
 accelerate discovery across disciplinary boundaries.
 
+### Registration
+
+[Registration is now open!](https://onlinesales.admin.cam.ac.uk/conferences-and-events/department-of-applied-mathematics-theoretical-physics-damtp/climate-informatics-conference/climate-informatics-conference-2023). 
+
 ### Key dates
 
 - __Submission deadline: ~~26th January 2023 (AoE)~~ (<span style="color:red">Extended:</span> 1st February 2023 ([AoE](https://www.timeanddate.com/time/zones/aoe)))__
