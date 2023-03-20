@@ -2,6 +2,8 @@
 
 Welcome to the 2023 Climate Informatics Reproducibility Challenge!
 
+![](assets/images/splash-reproducibility-challenge.png)
+
 ## Registration
 Registration is now open at [this link](https://forms.gle/ixRizjFYP3BxycEfA) through 22 April @ 23:59 AOE. Read on to learn more about the challenge!
 
