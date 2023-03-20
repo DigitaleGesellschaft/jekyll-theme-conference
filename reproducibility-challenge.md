@@ -1,3 +1,10 @@
+---
+layout: home
+title: "Reproducibility Challenge"
+---
+
+<h3>Reproducibility challenge</h3>
+
 Welcome to the 2023 Climate Informatics Reproducibility Challenge!
 
 ![](assets/images/splash-reproducibility-challenge.png)
