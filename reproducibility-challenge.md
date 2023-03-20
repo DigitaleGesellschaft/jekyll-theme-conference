@@ -44,9 +44,9 @@ Too long; didn't read? Here is the TL;DR on the 2023 Climate Informatics Reprodu
 Key dates for the 2023 Climate Informatics Reproducibility Challenge:
 - Challenge Registration Closes: 22 April @ 23:59 AOE
 - Teams & Project Assignments Announced: 30 April
-- Challenge Begins: 1 May
-- Peer Review Begins: 15 May
-- Challenge Ends: 1 June @ 23:59 AOE
+- Challenge Begins: 1 May @ 00:00 AOE
+- Peer Review Begins: 15 May @ 00:00 AOE
+- Challenge Ends: 31 May @ 23:59 AOE
 - Results Announced: 15 June
 - Submissions Integrated into EDS Book: Throughout summer
 
