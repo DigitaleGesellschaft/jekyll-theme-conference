@@ -1,5 +1,3 @@
-# Reproducibility Challenge
-
 Welcome to the 2023 Climate Informatics Reproducibility Challenge!
 
 ![](assets/images/splash-reproducibility-challenge.png)
