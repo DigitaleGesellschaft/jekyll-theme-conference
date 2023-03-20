@@ -76,6 +76,10 @@ conference:
         relative_url: /travel
       - live:true
 
+      - name: "Reproducibility Challenge"
+        relative_url: /reproducibility-challenge
+      - live:true
+
       - name : "Organising Committees"
         relative_url: /committee
       - live:true
