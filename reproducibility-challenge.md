@@ -24,7 +24,7 @@ Teams may choose to join the challenge through one of two tracks:
 2. Participant-Suggested Paper Track: Suggest a paper to reproduce, subject to approval by the Organising Committee. This mechanism is designed to ensure teams choose papers which are realistic to reproduce in a month.
 
 ## Peer-Review
-All notebooks within the EDS book are peer-reviewed to maintain a high standard of scientific integrity. A pool of peer reviewers consisting of original authors of pre-approved papers, reviewers for the Climate Informatics conference, and other members of the Climate Informatics community will begin working with participants at the two-week mark of the competition to sharpen the submission and ensure it is ready for publication in the EDS book following the competition.
+All notebooks within the EDS book are peer-reviewed to maintain a high standard of scientific integrity. A pool of peer reviewers consisting of original authors of pre-approved papers, reviewers for the Climate Informatics conference, and other members of the Climate Informatics and EDS book communities will begin working with participants at the two-week mark of the competition to sharpen the submission and ensure it is ready for publication in the EDS book following the competition.
 
 ## Judging
 Submissions to both tracks will be judged together by the following panel of environmental data science experts on the basis of their adherence to open science and FAIR practices, adherence to the objectives of the EDS book, and tutorial contributions, adjusted to consider the amount of resources provided by the authors of the original paper.
