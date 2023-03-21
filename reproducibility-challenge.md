@@ -1,9 +1,4 @@
----
-layout: home
-title: "Reproducibility Challenge"
----
-
-<h3>Reproducibility challenge</h3>
+## Reproducibility Challenge
 
 Welcome to the 2023 Climate Informatics Reproducibility Challenge!
 
@@ -16,11 +11,11 @@ Registration is now open at [this link](https://forms.gle/ixRizjFYP3BxycEfA) thr
 This year's challenge aims to build community, facilitate collaboration, and advance open science within the Climate Informatics community, continuing the tradition of an annual Climate Informatics conference-associated hackathon whilst drawing inspiration from [The ML Reproducibility Challenge](https://twitter.com/repro_challenge?lang=en).
 
 ## Overview
-In this year's challenge, teams of 2-4 will collaborate to create a notebook which reproduces the key contributions of a published environmental data science paper for eventual integration in the open-source [Environmental Data Science (EDS) Book](https://edsbook.org/). Over the course of a month, teams will locate the data and code associated with their chosen paper; train, validate, and test the models used in the paper; visualise key results from these experiments; discuss their work with peer reviewer(s); and ultimately weave together a narrative illuminating the value of open science which culminates in a citeable, DOI-tagged notebook. Teams will further have the opportunity to network and exchange technical Q&A with fellow participants in weekly drop-in socials throughout the competition. Check out [this notebook](https://the-environmental-ds-book.netlify.app/gallery/modelling/polar-modelling-icenet/polar-modelling-icenet.html) in the EDS book which reproduces [IceNet (Andersson, 2021)](https://www.nature.com/articles/s41467-021-25257-4) for an example of what you'll be working towards!
+In this year's challenge, teams of 2-4 will collaborate to create a notebook which reproduces the key contributions of a published environmental data science paper for eventual integration in the open-source [Environmental Data Science (EDS) Book](https://edsbook.org/). Over the course of a month, teams will locate the data and code associated with their chosen paper; train, validate, and test the models used in the paper; visualise key results from these experiments; discuss their work with peer reviewer(s); and ultimately weave together a narrative illuminating the value of open science which culminates in a citeable, DOI-tagged notebook. Teams will further have the opportunity to network and exchange technical Q&A with fellow participants in weekly drop-in socials throughout the competition. Check out [this notebook](https://edsbook.org/notebooks/gallery/ac327c3a-5264-40a2-8c6e-1e8d7c4b37ef/notebook.html) in the EDS book which reproduces [IceNet (Andersson, 2021)](https://doi.org/10.1038/s41467-021-25257-4) for an example of what you'll be working towards!
 
 ## Tracks
 Teams may choose to join the challenge through one of two tracks:
-1. Pre-Approved Paper Track: Reproduce a paper pre-approved by the Organising Committee to have sufficient data and code availability. Pre-approved papers are listed [here](https://docs.google.com/spreadsheets/d/1TGqhn7gx_yncgiCJN7o8oOatDeukgkw5mHzw57SBxuU/edit?usp=sharing).
+1. Pre-Approved Paper Track: Reproduce a paper pre-approved by the Organising Committee to have sufficient data and code availability. Pre-approved papers are listed in alphabetical order [here](https://docs.google.com/spreadsheets/d/1fKmt3B5RJjJ0V0CfUksNQr2rZVCkxOO015b_2fwOzpg/edit?usp=sharing).
 2. Participant-Suggested Paper Track: Suggest a paper to reproduce, subject to approval by the Organising Committee. This mechanism is designed to ensure teams choose papers which are realistic to reproduce in a month.
 
 ## Peer-Review
@@ -29,7 +24,7 @@ All notebooks within the EDS book are peer-reviewed to maintain a high standard 
 ## Judging
 Submissions to both tracks will be judged together by the following panel of environmental data science experts on the basis of their adherence to open science and FAIR practices, adherence to the objectives of the EDS book, and tutorial contributions, adjusted to consider the amount of resources provided by the authors of the original paper.
 - [Alejandro Coca-Castro, The Alan Turing Institute](https://acocac.github.io/en/)
-- [Anne Fouilloux, University of Oslo](https://annefou.github.io/)
+- [Anne Fouilloux, Simula Research Laboratory](https://annefou.github.io/)
 - [Douglas (Yuhan) Rao, North Carolina Institute for Climate Studies](https://ncics.org/people/douglas-rao/)
 
 ## Prizes
@@ -61,7 +56,7 @@ Key dates for the 2023 Climate Informatics Reproducibility Challenge:
 The 2023 Climate Informatics Reproducibility Challenge Organising Committee warmly welcomes your participation.
 - [Andrew McDonald, University of Cambridge and British Antarctic Survey](https://ampersandmcd.com/)
 - [Alejandro Coca-Castro, The Alan Turing Institute](https://acocac.github.io/en/)
-- [Anne Fouilloux, University of Oslo](https://annefou.github.io/)
+- [Anne Fouilloux, Simula Research Laboratory](https://annefou.github.io/)
 - [Andrew Hyde, Cambridge University Press](https://twitter.com/andrewchyde?lang=en)
 
 ## Contact
