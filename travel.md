@@ -12,7 +12,13 @@ title: "CI2023: Travel and accommodation"
 
 ## Accommodation
 
-TBD
+A variety of accommodation is available for booking at [Jesus College (60 rooms available)](https://www.universityrooms.com/en-GB/eventcode?ec=CICAPR23&vid=jesuscambridge) for the 19-21st of April. 
+Delegates can also benefit from a discounted conference room rate at the [Graduate Hotel](https://www.graduatehotels.com/cambridge/) from the 18th. 
+When you select the room type, type in the code DIRECT under CORPORATE/PROMO CODE. Both Jesus college and the Graduate Hotel are only a 10-minute 
+walk from the conference venue at Trinity Hall.
+
+**Note**: If you plan to arrive before 19 April 2023, please book your room with the Graduate Hotel since the room at Jesus College is only available
+on the 19-21st of April.
 
 ## Travel
 
