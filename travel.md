@@ -16,7 +16,7 @@ title: "CI2023: Information for attendees"
 
 __Map__
 
-Click the top-right icon (<img src="assets/images/key-icon.png"/ >) to see the locations key for the map.
+Click the top-right icon (![image]("assets/images/key-icon.png")) to see the locations key for the map.
 
 <iframe src="https://www.google.com/maps/d/embed?mid=1cc1vp7NBe401YdnpKcpLBvdL1TZY70Q&ehbc=2E312F" width="640" height="480"></iframe>
 
