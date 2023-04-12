@@ -1,6 +1,6 @@
 ---
 layout: home
-title: "CI2023: Travel and accommodation"
+title: "CI2023: Attending"
 ---
 
 <style>
@@ -10,11 +10,19 @@ title: "CI2023: Travel and accommodation"
   }
  </style>
 
+## Handbook
+
+[Handbook for antendees]("assets/CI 2023 programme handbook_April 12th 2023.pdf")
+
+## Map
+
+<iframe src="https://www.google.com/maps/d/u/0/embed?mid=1cc1vp7NBe401YdnpKcpLBvdL1TZY70Q&ehbc=2E312F" width="640" height="480"></iframe>
+
 ## Accommodation
 
-A variety of accommodation is available for booking at [Jesus College (60 rooms available)](https://www.universityrooms.com/en-GB/eventcode?ec=CICAPR23&vid=jesuscambridge) for the 19-21st of April. 
-Delegates can also benefit from a discounted conference room rate at the [Graduate Hotel](https://www.graduatehotels.com/cambridge/) from the 18th. 
-When you select the room type, type in the code DIRECT under CORPORATE/PROMO CODE. Both Jesus college and the Graduate Hotel are only a 10-minute 
+A variety of accommodation is available for booking at [Jesus College (60 rooms available)](https://www.universityrooms.com/en-GB/eventcode?ec=CICAPR23&vid=jesuscambridge) for the 19-21st of April.
+Delegates can also benefit from a discounted conference room rate at the [Graduate Hotel](https://www.graduatehotels.com/cambridge/) from the 18th.
+When you select the room type, type in the code DIRECT under CORPORATE/PROMO CODE. Both Jesus college and the Graduate Hotel are only a 10-minute
 walk from the conference venue at Trinity Hall.
 
 **Note**: If you plan to arrive before 19 April 2023, please book your room with the Graduate Hotel since the room at Jesus College is only available
@@ -45,7 +53,7 @@ Cambridge is well connected to rest of Europe via the [Eurostar](https://www.eur
 
 ## Bus
 
-In addition, [National Express coaches](https://www.nationalexpress.com/en) regularly run from major cities and Stansted, Luton, Heathrow and Gatwick airports to the city centre of Cambridge. National Express coaches usually stop on Parkside, next to Parker’s Piece in the city centre. 
+In addition, [National Express coaches](https://www.nationalexpress.com/en) regularly run from major cities and Stansted, Luton, Heathrow and Gatwick airports to the city centre of Cambridge. National Express coaches usually stop on Parkside, next to Parker’s Piece in the city centre.
 
 Local bus services usually run to/from Cambridge bus station in Drummer Street, and/or the adjacent Emmanuel Street and St Andrew’s Street. There are frequent buses from the railway station to the city centre.
 The 'U' / Universal bus service bus service runs from Eddington, next to the Madingley Road Park and Ride site, through to our Biomedical Campus from Monday to Saturday, and from Eddington to Cambridge Railway Station on Sundays.
@@ -58,7 +66,7 @@ Disabled parking is available in the city’s car parks and on some streets. Ple
 
 ## Air travel
 
-The nearest airports to Cambridge are Stansted (30 miles) and Luton (40 miles). London Heathrow has the most routes from non-EU destinations. There's a direct train link to Cambridge from Stansted and Gatwick airports, and Heathrow airport is also easily accessible by train (via London King's Cross/London St Pancras) see below and coach (bus). 
+The nearest airports to Cambridge are Stansted (30 miles) and Luton (40 miles). London Heathrow has the most routes from non-EU destinations. There's a direct train link to Cambridge from Stansted and Gatwick airports, and Heathrow airport is also easily accessible by train (via London King's Cross/London St Pancras) see below and coach (bus).
 
 A good route to take from the airport is the Heathrow Express to Paddington then the tube (metro) to Kings Cross / St. Pancras
 (see [Train](#Train) above).
