@@ -10,7 +10,7 @@ title: "CI2023: Information for attendees"
   }
 
 #explain img {
-  width: 50px;
+  width: 32px;
 }
  </style>
 
