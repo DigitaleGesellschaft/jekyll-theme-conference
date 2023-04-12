@@ -10,13 +10,13 @@ title: "CI2023: Attending"
   }
  </style>
 
-## Handbook
-
-[Handbook for antendees]("assets/CI 2023 programme handbook_April 12th 2023.pdf")
+[<h3>Handbook for antendees</h3>](assets/CI 2023 programme handbook_April 12th 2023.pdf)
 
 ## Map
 
+
 <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1cc1vp7NBe401YdnpKcpLBvdL1TZY70Q&ehbc=2E312F" width="640" height="480"></iframe>
+
 
 ## Accommodation
 
