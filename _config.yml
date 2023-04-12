@@ -72,7 +72,7 @@ conference:
         absolute_url: https://docs.google.com/spreadsheets/d/e/2PACX-1vS3UIt7aGJe0eQA9PskHcbGthBp6YWTEcm8yDYx0wgGmykqntU7cupBzS2HFDnFGGTaYoAsb06dr01W/pubhtml?gid=1558072167&single=true
       - live:true
 
-      - name: "Attending & Handbook"
+      - name: "Information for attendees"
         relative_url: /travel
       - live:true
 
