@@ -14,10 +14,11 @@ title: "CI2023: Attending"
 
 [Handbook for antendees](assets/CI 2023 programme handbook_April 12th 2023.pdf)
 
+<br />
 
-### Map
+__Map__
 
-<iframe src="https://www.google.com/maps/d/u/0/embed?mid=1cc1vp7NBe401YdnpKcpLBvdL1TZY70Q&ehbc=2E312F" width="640" height="480"></iframe>
+<iframe src="https://www.google.com/maps/d/embed?mid=1cc1vp7NBe401YdnpKcpLBvdL1TZY70Q&ehbc=2E312F" width="640" height="480"></iframe>
 
 <br />
 
