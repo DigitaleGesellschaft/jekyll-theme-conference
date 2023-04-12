@@ -1,6 +1,6 @@
 ---
 layout: home
-title: "CI2023: Attending"
+title: "CI2023: Information for attendees"
 ---
 
 <style>
