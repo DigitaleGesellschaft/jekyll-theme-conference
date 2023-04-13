@@ -16,7 +16,7 @@ title: "CI2023: Information for attendees"
 
 ## Information for attendees
 
-<span style='font-size:14pt;'>__[Handbook for antendees](assets/CI 2023 programme handbook_April 12th 2023.pdf)__</span> (includes the full programme)
+<span style='font-size:14pt;'>__[Handbook for antendees](assets/CI 2023 programme handbook.pdf)__</span> (includes the full programme)
 
 __Map__
 
