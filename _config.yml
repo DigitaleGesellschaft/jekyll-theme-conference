@@ -1,9 +1,9 @@
-title: Conference 2020
+title: FIBE Conference 2023
 preposition: ''
 description: >-
-  Conference of a random organization on January 1st in Zurich, Switzerland
+  Conference of FIBE CDT on Wednesday November 29th in Cambridge, UK
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://example.com" # the base hostname & protocol for your site, e.g. https://example.com
+url: "https://fibeconference.com" # the base hostname & protocol for your site, e.g. https://example.com
 
 # Build settings
 markdown: kramdown
@@ -69,4 +69,116 @@ conference:
   program:
     url: '/program'
     time_steps: 15
+    show_alltimes: true
+
+ # Navigation bar
+  navigation:
+    logo:
+      name: FIBE Conference 2023
+      # img: ''
+      url: 'https://fibeconference.com'
+    links:
+      - name: Program
+        relative_url: /program/
+      - name: Talks
+        relative_url: /talks/
+      - name: Speakers
+        relative_url: /speakers/
+      - name: Location
+        relative_url: /location/
+      - name: Previous Editions
+        menu:
+          - name: 2023 (current)
+            disabled: true
+          - name: 2022
+            disabled: true
+            relative_url: /2019/
+
+  # Main landing page
+  main:
+    # logo:
+    #   img: ''
+    links:
+      - name: Program
+        relative_url: /program/
+      - name: How to get there
+        relative_url: /location/
+      - name: Tickets
+        disabled: true
+        absolute_url: ''
+
+  # Information boxes
+  info_bars:
+    - title: Welcome to the Conference Theme for Jekyll!
+      color: primary
+      main_only: true
+      text: |
+        The Theme was originally made for the [Winterkongress](https://www.digitale-gesellschaft.ch/kongress/), a yearly conference of the [Digital Society Switzerland](https://digitale-gesellschaft.ch/).
+
+        ---
+
+        See the [README](github.com/DigitaleGesellschaft/jekyll-theme-conference/) on the project's GitHub repository for further information on how to configure and adapt it to your needs.
+    - text: This is just some random content for demonstration purposes.
+      color: warning
+      pages_only: true
+
+  # Live indications
+  live:
+    date: 01.01.2020
+    timezone: GMT+1
+    stop:       240  # in minutes
+    streaming:
+      enable: true
+      pause:     60  # in minutes
+      prepend:    5  # in minutes
+      extend:     5  # in minutes
+    demo:
+      enable: false
+      duration: 300  # in seconds
+      pause:     10  # in seconds
+
+  map:
+    # Initial map center point
+    home_coord: 47.37808, 8.53935
+    # Alternative map providers can be found on https://leaflet-extras.github.io/leaflet-providers/preview/
+    # The following do match the Bootstrap design not too badly:
+    #   - Hydda.Full
+    #   - Thunderforest.Neighbourhood
+    #   - Esri.WorldTopoMap
+    map_provider: "OpenStreetMap.Mapnik"
+    default_zoom: 17
+
+  talks:
+    # Talk categories
+    main_categories:
+      - name: Cat A
+        color: info
+      - name: Cat B
+        color: success
+
+    # Hide icons on talk overview page
+    hide_icons: false
+
+  speakers:
+    # Show first and last name
+    show_firstname: true
+
+  location:
+    # Disable links to locations
+    hide: false
+    # URL of location / room overview page
+    url: '/location'
+    # Main page title shown on location/room navigation bar
+    navbar_title: 'Location'
+    # Show map on location main page
+    map: true
+
+  program:
+    # URL of program page
+    url: '/program'
+
+    # Time steps in program table
+    time_steps: 15 # in minutes
+
+    # Show intermediary time steps (next to full hours)
     show_alltimes: true
