@@ -49,7 +49,7 @@ Too long; didn't read? Here is the TL;DR on the 2023 Climate Informatics Reprodu
 
 ## Dates
 Key dates for the 2023 Climate Informatics Reproducibility Challenge:
-* Challenge Registration Closes (Participants): 28 April @ 23:59 AOE
+* Challenge Registration Closes (Participants): ~~22 April 23:59 AOE~~ 28 April @ 23:59 AOE
 * Challenge Registration Closes (Reviewers): 13 May @ 23:59 AOE
 * Teams & Project Assignments Announced: 30 April
 * Challenge Begins: 1 May @ 00:00 AOE
