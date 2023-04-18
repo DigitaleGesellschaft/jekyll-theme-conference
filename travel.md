@@ -16,7 +16,7 @@ title: "CI2023: Information for attendees"
 
 ## Information for attendees
 
-<span style='font-size:14pt;'>__[Handbook for antendees](assets/CI2023 programme handbook.pdf)__</span> (includes the full programme)
+<span style='font-size:14pt;'>__[Handbook for attendees](assets/CI2023 programme handbook.pdf)__</span> (includes the full programme)
 
 <span style='font-size:14pt;'>__[Poster videos](https://www.youtube.com/playlist?list=PL3PByZO-B6dO6Wokz9YlwSsPAsF32vGg7)__</span>
 
