@@ -10,7 +10,7 @@ Welcome to the 2023 Climate Informatics Reproducibility Challenge!
 ![](assets/images/splash-reproducibility-challenge.png)
 
 ## Registration
-Registration is now open at [this link](https://forms.gle/ixRizjFYP3BxycEfA) through 22 April @ 23:59 AOE. Read on to learn more about the challenge!
+Registration is now open for authors and reviewers at [this link](https://eds-book.github.io/reproducibility-challenge-2023/details/application.html) (go to Applications form) through 28 April @ 23:59 AOE and 13th May @ 23:59 AOE, respectively. Read on to learn more about the challenge!
 
 ## Objectives
 This year's challenge aims to build community, facilitate collaboration, and advance open science within the Climate Informatics community, continuing the tradition of an annual Climate Informatics conference-associated hackathon whilst drawing inspiration from [The ML Reproducibility Challenge](https://twitter.com/repro_challenge?lang=en).
@@ -49,13 +49,14 @@ Too long; didn't read? Here is the TL;DR on the 2023 Climate Informatics Reprodu
 
 ## Dates
 Key dates for the 2023 Climate Informatics Reproducibility Challenge:
-- Challenge Registration Closes: 22 April @ 23:59 AOE
-- Teams & Project Assignments Announced: 30 April
-- Challenge Begins: 1 May @ 00:00 AOE
-- Peer Review Begins: 15 May @ 00:00 AOE
-- Challenge Ends: 31 May @ 23:59 AOE
-- Results Announced: 15 June
-- Submissions Integrated into EDS Book: Throughout summer
+* Challenge Registration Closes (Participants): 28 April @ 23:59 AOE
+* Challenge Registration Closes (Reviewers): 13 May @ 23:59 AOE
+* Teams & Project Assignments Announced: 30 April
+* Challenge Begins: 1 May @ 00:00 AOE
+* Peer Review Begins: 15 May @ 00:00 AOE
+* Challenge Ends: 31 May @ 23:59 AOE
+* Results Announced: 15 June
+* Submissions Integrated into EDS Book: Throughout summer
 
 ## Organising Committee
 The 2023 Climate Informatics Reproducibility Challenge Organising Committee warmly welcomes your participation.
