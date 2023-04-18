@@ -68,3 +68,19 @@ The 2023 Climate Informatics Reproducibility Challenge Organising Committee warm
 ## Contact
 Please direct any questions to Andrew McDonald at [arm99@cam.ac.uk](arm99@cam.ac.uk). 
 Follow us on Twitter [@Climformatics](https://twitter.com/Climformatics) for updates as the conference and competition approaches!
+
+
+## Acknowledgments 🙌 
+2023 Climate Informatics Reproducibility Challenge is co-hosted by EDS book, Climate Informatics and Cambridge University Press & Assessment with support from Cambridge University, The Alan Turing Institute and Simula Research Laboratory.
+
+<img src="https://raw.githubusercontent.com/eds-book/reproducibility-challenge-2023/main/challenge/figures/logos-organisers.png" height="100">
+
+The computing and storage resources used for this challenge have been kindly provided by [CESNET](https://www.cesnet.cz/?lang=en) in the context of the [C-SCALE](https://c-scale.eu) project that provides advanced computing for [EOSC](https://eosc-portal.eu/about/eosc).
+
+<table>
+  <tr>
+   <th><img src="https://raw.githubusercontent.com/eds-book/reproducibility-challenge-2023/main/challenge/figures/logo-c-scale-vertical-blue.png" width="180" align="Left" /></th>
+   <th>The <a href="https://c-scale.eu/">C-SCALE project (Copernicus – eoSC AnaLytics Engine)</a> has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 101017529.</th>
+   <th><img src="https://raw.githubusercontent.com/eds-book/reproducibility-challenge-2023/main/challenge/figures/EC-ack.jpg" width="300" align="Right" /></th>
+  </tr>
+</table>
