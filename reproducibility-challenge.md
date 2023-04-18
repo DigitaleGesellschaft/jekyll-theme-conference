@@ -69,7 +69,6 @@ The 2023 Climate Informatics Reproducibility Challenge Organising Committee warm
 Please direct any questions to Andrew McDonald at [arm99@cam.ac.uk](arm99@cam.ac.uk). 
 Follow us on Twitter [@Climformatics](https://twitter.com/Climformatics) for updates as the conference and competition approaches!
 
-
 ## Acknowledgments 🙌 
 2023 Climate Informatics Reproducibility Challenge is co-hosted by EDS book, Climate Informatics and Cambridge University Press & Assessment with support from Cambridge University, The Alan Turing Institute and Simula Research Laboratory.
 
