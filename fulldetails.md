@@ -120,6 +120,10 @@ background: rgb(255, 251, 204);
     padding-left: 10px;
 }
 
+.jumbotron {
+    width: 100vw;
+}
+
 
 
 </style>
