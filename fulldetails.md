@@ -313,9 +313,9 @@ tags will be replaced.-->
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
   <td height=20 class=xl65 style='height:15.75pt'>12:15–12:30</td>
-  <td class=xl66 width=251 style='width:188pt'>Ensemble-based 4DVarNet
+  <td class=xl66 width=251 style='width:188pt'><a href="assets/pdfs/Beauchamp_et_al._En4DVarNet_paper.pdf"> Ensemble-based 4DVarNet
   uncertainty quantification for the reconstruction of Sea Surface Height
-  dynamics</td>
+  dynamics </a> (<a href="assets/pdfs/Beauchamp_et_al._En4DVarNet_slides.pdf">slides</a>)</td>
   <td class=xl66 width=251 style='width:188pt'>Maxime Beauchamp (IMT
   Atlantique)*; Quentin Febvre (IMT Atlantique); ronan fablet (IMT Atlantique)</td>
   <td class=xl67 width=701 style='width:40vw;'>Uncertainty quantification (UQ)
