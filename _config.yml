@@ -73,7 +73,7 @@ conference:
       - live:true
 
       - name: "Programme details"
-        absolute_url: /fulldetails
+        relative_url: /fulldetails
       - live:true
 
       - name: "Information for attendees"
