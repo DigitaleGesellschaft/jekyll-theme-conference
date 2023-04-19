@@ -182,7 +182,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-   <td colspan=2 height=20 class=xl65 style='height:15.75pt'><a name="wed1" class="sess">Wednesday: Session 1</a><a class='toplink' href='#top'>(Back to top)</a></td><td></td>
+   <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a name="wed1" class="sess">Wednesday: Session 1</a><a class='toplink' href='#top'>(Back to top)</a></td><td></td>
    </tr><tr><td></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Emily Shuckburgh and Dominic Orchard</td>
   <td class=xl66 width=251 style='width:188pt'></td>
@@ -360,7 +360,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-   <td height=20 class=xl65 style='height:15.75pt'><a name="wed3" class="sess">Wednesday: Session 3</a><a class='toplink' href='#top'>(Back to top)</a></td>
+   <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a name="wed3" class="sess">Wednesday: Session 3</a><a class='toplink' href='#top'>(Back to top)</a></td>
    </tr><tr><td></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Scott Hosking</td>
   <td class=xl66 width=251 style='width:188pt'></td>
@@ -700,7 +700,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-  <td height=20 class=xl65 style='height:15.75pt'><a class='sess' name='thu4'>Thursday: Session 4</a><a class='toplink' href='#top'>(Back to top)</a></td>
+  <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a class='sess' name='thu4'>Thursday: Session 4</a><a class='toplink' href='#top'>(Back to top)</a></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Tom Beucler</td>
   <td class=xl66 width=251 style='width:188pt'></td>
   <td class=xl67 width=701 style=''></td>
@@ -1047,7 +1047,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-   <td height=20 class=xl65 style='height:15.75pt'><a name="thu5" class="sess">Thursday: Session 5</a><a class='toplink' href='#top'>(Back to top)</a></td>
+   <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a name="thu5" class="sess">Thursday: Session 5</a><a class='toplink' href='#top'>(Back to top)</a></td>
    </tr><tr><td></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Andrew Hyde</td>
   <td class=xl66 width=251 style='width:188pt'></td>
@@ -1176,7 +1176,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-   <td height=20 class=xl65 style='height:15.75pt'><a name="thu6" class="sess">Thursday: Session 6</a><a class='toplink' href='#top'>(Back to top)</a></td>
+   <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a name="thu6" class="sess">Thursday: Session 6</a><a class='toplink' href='#top'>(Back to top)</a></td>
    </tr><tr><td></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Colm-cille Caulfield</td>
   <td class=xl66 width=251 style='width:188pt'></td>
@@ -1406,7 +1406,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-   <td height=20 class=xl65 style='height:15.75pt'><a name="thu7" class="sess">Thursday: Session 7</a><a class='toplink' href='#top'>(Back to top)</a></td>
+   <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a name="thu7" class="sess">Thursday: Session 7</a><a class='toplink' href='#top'>(Back to top)</a></td>
    </tr><tr><td></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Dominic Orchard</td>
   <td class=xl66 width=251 style='width:188pt'></td>
@@ -1746,7 +1746,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-   <td height=20 class=xl65 style='height:15.75pt'><a name="fri8" class="sess">Friday: Session 8</a><a class='toplink' href='#top'>(Back to top)</a></td>
+   <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a name="fri8" class="sess">Friday: Session 8</a><a class='toplink' href='#top'>(Back to top)</a></td>
    </tr><tr><td></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Emma Boland</td>
   <td class=xl66 width=251 style='width:188pt'></td>
@@ -2095,7 +2095,7 @@ tags will be replaced.-->
   <td class=xl66 width=101 style='width:76pt'></td>
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
-   <td height=20 class=xl65 style='height:15.75pt'><a name="fri9" class="sess">Friday: Session 9</a><a class='toplink' href='#top'>(Back to top)</a></td>
+   <td colspan=3 height=20 class=xl65 style='height:15.75pt'><a name="fri9" class="sess">Friday: Session 9</a><a class='toplink' href='#top'>(Back to top)</a></td>
    </tr><tr><td></td>
   <td class=xl66 width=251 style='width:188pt'>Chair: Marla Fuchs<span
   style='mso-spacerun:yes'> </span></td>
