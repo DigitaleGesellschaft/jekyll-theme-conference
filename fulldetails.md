@@ -1480,12 +1480,11 @@ tags will be replaced.-->
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
   <td height=20 class=xl65 style='height:15.75pt'>15:45–16:00</td>
-  <td class=xl66 width=251 style='width:188pt'>[Reducing the overhead of coupled
+  <td class=xl66 width=251 style='width:188pt'>Reducing the overhead of coupled
   ML models between Python and Fortran: an application to Gravity Wave
-  Parameterizations](assets/pdfs/Reducing_the_overhead_of_coupled_ML_models.pdf
-)</td>
+  Parameterizations</td>
   <td class=xl66 width=251 style='width:188pt'>Jack Atkinson (University of
-  Cambridge); __Simon Clifford (University of Cambridge)__; David Connelly (New
+  Cambridge); Simon Clifford (University of Cambridge); David Connelly (New
   York University); Chris Edsall (University of Cambridge); Athena Elafrou
   (NVIDIA); Edwin Gerber (New York University); Laura Mansfield (Stanford
   University); Dominic Orchard (University of Cambridge)*; Aditi Sheshadri
