@@ -124,6 +124,9 @@ background: rgb(255, 251, 204);
     width: 100vw;
 }
 
+main.container {
+    margin-left: 0px;
+}
 
 
 </style>
