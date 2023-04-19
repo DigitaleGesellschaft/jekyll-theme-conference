@@ -60,7 +60,7 @@ conference:
       name: CI
       image: 'assets/images/ci-logo.png'
     links:
-      - name: "Paper submission"
+      - name: "Submission"
         relative_url: /submission
       - live:true
 
