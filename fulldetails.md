@@ -146,8 +146,8 @@ tags will be replaced.-->
 
 <div id="abstracts_12551" align=center x:publishsource="Excel">
 
-<table border=0 cellpadding=0 cellspacing=0 width=3526 style='border-collapse:
- collapse;table-layout:fixed;width:2650pt'>
+<table border=0 cellpadding=0 cellspacing=0 style='border-collapse:
+ collapse;table-layout:fixed;'>
  <col width=101 style='width:76pt'>
  <col width=251 span=2 style='mso-width-source:userset;mso-width-alt:8021;
  width:188pt'>
