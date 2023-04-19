@@ -256,8 +256,8 @@ tags will be replaced.-->
  </tr>
  <tr height=20 style='mso-height-source:userset;height:15.75pt'>
   <td height=20 class=xl65 style='height:15.75pt'>12:00–12:15</td>
-  <td class=xl66 width=251 style='width:188pt'>IceNet - demonstrating
-  data-driven climate science for real-world applications</td>
+  <td class=xl66 width=251 style='width:188pt'><a href="assets/pdfs/IceNet_demonstrating_data_driven_climate_science_for_real_world_applications.pdf">IceNet - demonstrating
+  data-driven climate science for real-world applications</a></td>
   <td class=xl66 width=251 style='width:188pt'>James Byrne (British Antarctic
   Survey)*</td>
   <td class=xl67 width=701 style=''>British Antarctic Survey,
