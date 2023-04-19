@@ -120,6 +120,8 @@ background: rgb(255, 251, 204);
     padding-left: 10px;
 }
 
+
+
 </style>
 
 <!--[if !excel]>&nbsp;&nbsp;<![endif]-->
@@ -147,7 +149,7 @@ tags will be replaced.-->
 <div id="abstracts_12551" align=center x:publishsource="Excel">
 
 <table border=0 cellpadding=0 cellspacing=0 style='border-collapse:
- collapse;table-layout:fixed;width:70vw;'>
+ collapse;table-layout:fixed;width:50vw;'>
  <col width=101 style='width:76pt'>
  <col width=251 span=2 style='mso-width-source:userset;mso-width-alt:8021;
  width:188pt'>
