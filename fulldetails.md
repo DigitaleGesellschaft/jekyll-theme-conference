@@ -44,8 +44,8 @@ td
 	{mso-style-parent:style0;
 	padding-top:1px;
 	padding-left:1px;
-	padding-bottom: 10px;
-	padding-right: 10px;
+	padding-bottom: 15px;
+	padding-right: 15px;
 	mso-ignore:padding;
 	color:black;
 	font-size:10.0pt;
