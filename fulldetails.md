@@ -14,7 +14,7 @@ title: "CI2023: Full programme details"
 tr
 {mso-height-source:auto;}
 td.xl67 {
-    cell-padding: 10px;
+    cell-padding: 15px;
 }
 col
 	{mso-width-source:auto;}
