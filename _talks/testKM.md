@@ -3,7 +3,7 @@ name: wNetNC - an enhanced network analysis tool integrating additional biologic
 speakers:
   - Kelsey McCulloch
 categories:
-  - Talk
+  - Talk (8min)
 ---
 
 Authors: Kelsey McCulloch, Ian Mills, Ian Overton
