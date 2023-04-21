@@ -17,7 +17,7 @@ VIBE 2023 will have four sessions:
 - "Evolution and genetics" (Chair: Prof. Chris Creevey).
 - "Algorithms and methods" (Chair: Dr. Guillermo Lopez Campos).
 
-There will be twi keynote talks (Aedín Culhane and Evangelia Petsalaki), ten minute talks, one minute "lightning" talks, and a poster presentation session. There will also be tea/coffee breaks and lunch provided.
+There will be two keynote talks (Aedín Culhane and Evangelia Petsalaki), ten minute talks, one minute "lightning" talks, and a poster presentation session. There will also be tea/coffee breaks and lunch provided.
 
 The full conference program will be made available in due course.
 
