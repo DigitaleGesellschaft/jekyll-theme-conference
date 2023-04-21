@@ -104,7 +104,7 @@ conference:
 
   # Main landing page
   main:
-    # logo:
+    # logo:We are now accepting abstracts for talks and posters. Deadline for submission: 14th April 2023.
     img: 'VIBE2023.jpg'
     links:
       - name: Program
@@ -122,7 +122,7 @@ conference:
      color: primary
      main_only: false
      text: |
-       We are now accepting abstracts for talks and posters. Deadline for submission: 14th April 2023.
+       We are now accepting registations for attendance only. Limited spaces are available.
 
   # Live indications
 #  live:
