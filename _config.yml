@@ -83,7 +83,7 @@ conference:
       #  relative_url: /speakers/
       - name: Location
         relative_url: /location/
-      - name: Register/Submit Abstract
+      - name: Register
         #relative_url: /register/
         absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
         disabled: false
