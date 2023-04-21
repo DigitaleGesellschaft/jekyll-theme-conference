@@ -155,9 +155,9 @@ conference:
     main_categories:
       - name: Keynote
         color: info 
-      - name: 10 minute
+      - name: Talk (8min)
         color: warning 
-      - name: Lightning (5min)
+      - name: Lightning (1min)
         color: success
       - name: Poster Presentations
         color: secondary
