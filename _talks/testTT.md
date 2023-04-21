@@ -3,7 +3,7 @@ name: Data preparation and cohort discovery with AI in a colon cancer datase
 speakers:
   - Tom Toner
 categories:
-  - Talk
+  - Lightning (1min)
   - Poster
 ---
 
