@@ -1,25 +1,20 @@
 days:
-- name: Monday
-  abbr: Mo
-  date: 2020-01-31
+- name: Friday
+  abbr: Fr
+  date: 2023-05-12
   rooms:
-  - name: Room A
+  - name: Isdell Courtyard
     talks:
-      - name: Vim Impetus Placerat Cotidieque Ad
+      - name: wNetNC - an enhanced network analysis tool integrating additional biological properties for improved community detection
         time_start: '12:00'
-        time_end: '12:45'
-      - name: Condimentum Vitae Sapien Pellentesque
-        time_start: '12:45'
+        time_end: '12:10'
+      - name: Data preparation and cohort discovery with AI in a colon cancer dataset
+        time_start: '12:10'
+        time_end: '12:20'
+      - name: Lunch
+        time_start: '12:20'
+        time_end: '13:20'
+        - name: Development and Application of the MultiSEp R Package to Identify Multiple Myeloma  Achilles' Heels for Drug Discovery.
+        time_start: '13:20'
         time_end: '13:30'
 
-  - name: Room B
-    talks:
-      - name: Arcu Non Odio
-        time_start: '12:00'
-        time_end: '13:00'
-
-  - name: Room C
-    talks:
-      - name: Eu Nisl Nunc Mi Ipsum Faucibus
-        time_start: '13:30'
-        time_end: '14:30'

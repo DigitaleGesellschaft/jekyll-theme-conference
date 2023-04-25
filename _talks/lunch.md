@@ -3,5 +3,5 @@ name: Lunch
 speakers:
   - All
 categories:
-  - Break
+  - Break & Posters
 ---
