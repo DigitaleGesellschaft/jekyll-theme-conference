@@ -86,7 +86,7 @@ conference:
       - name: Register
         #relative_url: /register/
         absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
-        disabled: false
+        disabled: true
       - name: Previous Editions
         menu:
           - name: 2023 (current)
@@ -104,7 +104,6 @@ conference:
 
   # Main landing page
   main:
-    # logo:We are now accepting abstracts for talks and posters. Deadline for submission: 14th April 2023.
     img: 'VIBE2023.jpg'
     links:
       - name: Program
@@ -113,17 +112,16 @@ conference:
       - name: How to get there
         relative_url: /location/
       - name: Register Here
-        disabled: false
+        disabled: true
         absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
 
 # Information boxes
   info_bars:
-   - title: Registration now open!
+   - title: Registration closed
      color: primary
-     main_only: false
+     main_only: true
      text: |
-       We are now accepting registations for attendance only. Limited spaces are available.
-
+       Registration is now closed. If you would like to be added to the waitlist, please message vibe2023@qub.ac.uk. The conference program will shortly be made available.
   # Live indications
 #  live:
 #    date: 09.06.2022
