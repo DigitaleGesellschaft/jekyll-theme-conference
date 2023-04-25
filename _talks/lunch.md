@@ -1,7 +1,6 @@
 ---
 name: Lunch
 speakers:
-  - All
   - Poster Presenters
 
 categories:
