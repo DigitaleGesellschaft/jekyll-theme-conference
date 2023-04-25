@@ -14,7 +14,6 @@ days:
       - name: Lunch
         time_start: '12:20'
         time_end: '13:20'
-        - name: Development and Application of the MultiSEp R Package to Identify Multiple Myeloma  Achilles' Heels for Drug Discovery.
+      - name: Development and Application of the MultiSEp R Package to Identify Multiple Myeloma  Achilles' Heels for Drug Discovery.
         time_start: '13:20'
         time_end: '13:30'
-
