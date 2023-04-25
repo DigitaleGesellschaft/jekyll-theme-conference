@@ -1,13 +1,13 @@
 ---
-name: wNetNC - an enhanced network analysis tool integrating additional biological properties for improved community detection
+name: Development and benchmarking of wNetNC: a weighted network analysis tool to identify functional pathway structures and protein complexes
 speakers:
   - Kelsey McCulloch
 categories:
   - Talk (8min)
 ---
-
 Authors: Kelsey McCulloch, Ian Mills, Ian Overton
 
-Systems biology is a rapidly developing area of research, with new methods capable of utlising high performance computing to generate large models of complex biological systems. High numbers of unique components, with an even greater number of interactions occurring between components can make it difficult to accurately model cellular systems and analyse these models to glean relevant biological insights.
-wNetNC describes the new version of the existing NetNC algorithm, building upon the original functionality of the tool to include network weight values in the calculations, with node weights representing genetic activity and edge weights describing confidence of genetic interactions in functional networks. Use of these additional data prevents information loss that occurs during thresholding of networks and genelists prior to analysis. Benchmarking against blind test data showed that wNetNC achieved increased performance in identifying biologically-derived gold-standard cluster structures compared to other published methods (NetNC, NEST, HC-PIN), clearly demonstrating the added benefit of using additional edge- and node-weightings in network community detection.
-wNetNC has been applied to single-sample prostate cancer data to model mechanisms of resistance to radiotherapy and interpreted to predict two novel treatments to reduce observed resistance, which have proven successful in initial laboratory validation. wNetNC is applicable to any disease and has been proven to predict active biological mechanisms for single sample data, demonstrating potential impact in precision medicine research in the future.
+Personalised medical research is uncovering new challenges, such as incompatibilities of traditional statistical analyses due to lack of replicate samples, difficulties gleaning meaningful insights from genetic data with high levels of noise, and pressures to extract the maximum value from patient data.
+wNetNC (weighted-NetNC) builds upon the published NetNC algorithm to incorporate node weight values representing gene attributes (such as expression data) and edge weight values describing confidence of interactions in functional gene networks. Use of these additional data prevents information loss that occurs during thresholding of input networks and genelists prior to analysis. 
+Novel gold-standard datasets were generated for various network properties and genelist attributes. wNetNC was extensively trained against these new gold-standards, generating over 50 million output predictions used to find new, robust parameters for the algorithm. wNetNC performed best in benchmarking against blind test data compared to other published methods (NetNC, NEST, HC-PIN), achieving significantly higher Matthew’s correlation coefficient performance values, especially at low to medium noise levels (5%-50%).
+Application of wNetNC to single-sample prostate cancer data identified mechanisms of resistance to radiotherapy and network models were used to predict two novel treatments to reduce this observed resistance, both successfully validated in further experiments using cell lines. wNetNC will be containerised using Docker and available soon on GitHub (github.com/overton-group) following publication.
