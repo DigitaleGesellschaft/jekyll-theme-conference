@@ -5,7 +5,7 @@ days:
   rooms:
   - name: Isdell Courtyard
     talks:
-      - name: Genomic data infrastructure project
+      - name: Genomic Data Infrastructure Project
         time_start: '11:00'
         time_end: '12:00'
       - name: "Development and benchmarking of wNetNC: a weighted network analysis tool to identify functional pathway structures and protein complexes"
