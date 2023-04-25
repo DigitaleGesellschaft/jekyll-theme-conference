@@ -3,7 +3,7 @@ name: Development and Application of the MultiSEp R Package to Identify Multiple
 speakers:
   - Adeline McKie
 categories:
-  - Poster
+  - Break & Posters
 ---
 Authors: Adeline McKie, Mark Wappett, Lisa Crawford, Ian Overton.
 
