@@ -83,10 +83,10 @@ conference:
       #  relative_url: /speakers/
       - name: Location
         relative_url: /location/
-      - name: Register
-        #relative_url: /register/
-        absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
-        disabled: true
+      #- name: Register
+      #  #relative_url: /register/
+      #  absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
+      #  disabled: true
       - name: Previous Editions
         menu:
           - name: 2023 (current)
@@ -111,9 +111,9 @@ conference:
         disabled: true
       - name: How to get there
         relative_url: /location/
-      - name: Register Here
-        disabled: true
-        absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
+      #- name: Register Here
+      #  disabled: true
+      #  absolute_url: 'https://docs.google.com/forms/d/e/1FAIpQLSeDlADcAg67SqH-oKPWU1LCDTU1WiNBEPfftLJnPFGz-oc_Ew/viewform?usp=sf_link'
 
 # Information boxes
   info_bars:
