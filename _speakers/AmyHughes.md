@@ -3,7 +3,7 @@ name: Amy Hughes
 first_name: Amy
 last_name: Hughes
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 Queen's University Belfast

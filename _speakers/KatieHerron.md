@@ -3,7 +3,7 @@ name: Katie Herron
 first_name: Katie
 last_name: Herron
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 University College Dublin

@@ -3,7 +3,7 @@ name: Sarang Bhutada
 first_name: Sarang
 last_name: Bhutada
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 UCD

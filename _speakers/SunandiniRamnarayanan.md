@@ -3,7 +3,7 @@ name: Sunandini Ramnarayanan
 first_name: Sunandini
 last_name: Ramnarayanan
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 UCD

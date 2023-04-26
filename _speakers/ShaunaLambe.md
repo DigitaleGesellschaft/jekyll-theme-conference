@@ -3,7 +3,7 @@ name: Shauna Lambe
 first_name: Shauna
 last_name: Lambe
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 BlokBio

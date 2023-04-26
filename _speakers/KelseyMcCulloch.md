@@ -3,7 +3,7 @@ name: Kelsey McCulloch
 first_name: Kelsey
 last_name: McCulloch
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 Queen's University Belfast

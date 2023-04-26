@@ -3,7 +3,7 @@ name: Caelainn Mcaloran
 first_name: Caelainn
 last_name: Mcaloran
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 QUB

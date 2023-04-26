@@ -3,7 +3,7 @@ name: Darragh Melaugh
 first_name: Darragh
 last_name: Melaugh
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 Queen's University Belfast 

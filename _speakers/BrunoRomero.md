@@ -3,7 +3,7 @@ name: Bruno Romero
 first_name: Bruno
 last_name: Romero
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 Trinity College

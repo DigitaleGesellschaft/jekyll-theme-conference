@@ -3,7 +3,7 @@ name: Katie Lawther
 first_name: Katie
 last_name: Lawther
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 Queens’a University Belfast

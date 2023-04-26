@@ -3,7 +3,7 @@ name: Mohan Govindasamy
 first_name: Mohan
 last_name: Govindasamy
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 University of Galway

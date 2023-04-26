@@ -3,7 +3,7 @@ name: Peter Eze
 first_name: Peter
 last_name: Eze
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 Queen's University Belfast

@@ -3,7 +3,7 @@ name: Declan Bennett
 first_name: Declan
 last_name: Bennett
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 University of Galway

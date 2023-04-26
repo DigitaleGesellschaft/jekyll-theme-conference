@@ -3,7 +3,7 @@ name: Shania Corry
 first_name: Shania
 last_name: Corry
 links:
-	- name: LinkedIn
-	absolutle_url:
+  - name: LinkedIn
+    absolute_url: 
 ---
 PGJCCR
