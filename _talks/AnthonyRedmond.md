@@ -1,0 +1,8 @@
+---
+name: 'Acoelomorph flatworm monophyly is a long branch attraction artefact obscuring a clade of Xenoturbella and Acoela'
+speakers:
+	- Anthony Redmond
+categories:
+	- Talk (8min)
+---
+Acoelomorpha is a broadly accepted clade of bilaterian animals made up of the fast-evolving, marine flatworm lineages Acoela and Nemertodermatida. Acoelomorpha belong to the phylum Xenacoelomorpha, along with the more slowly evolving Xenoturbella. The phylum is characterised by simple morphology, particularly an acoelomate body plan and the absence of nephridia. They also lack complex traits found in many other bilaterians such as a through-gut and circulatory, respiratory, and complex central nervous systems. The phylogenetic placement of Xenacoelomorpha amongst bilaterians is controversial, with some studies supporting Xenacoelomorpha as the sister group to all other bilaterians, implying that their simplicity is representative of early bilaterians. Others propose that this placement is a long branch attraction artefact resulting from the fast-evolving Acoelomorpha, and instead suggest that they are secondarily simplified deuterostomes. Perhaps as a result of this debate, internal xenacoelomorph relationships have not been extensively examined. Here, using both empirical and simulation approaches intended to detect and overcome phylogenomic errors, we reassess the relationship between Xenoturbella and the fast evolving acoelomorph flatworms. We conclude that subphylum Acoelomorpha is a long-branch attraction artefact obscuring a previously undiscovered clade comprising Xenoturbella and Acoela, for which we propose the name Xenacoela.

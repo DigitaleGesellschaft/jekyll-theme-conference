@@ -1,0 +1,8 @@
+---
+name: 'Machine Learning for Functional Reconstruction and Analysis of Biochemical Interactions Controlling Colorectal Cancer Phenotypes'
+speakers:
+	- Victor Olorunshola
+categories:
+	-
+---
+Colorectal Cancer (CRC) is the fourth leading cause of cancer-related deaths in the world, with a predicted increase of 60% by 2030. This raises a pressing need for better clinical tools  for CRC patient stratification and treatment. Advances in functional genomics technologies have resulted in a ‘data deluge’ and enabled determination of a ‘parts list’, including comprehensive characterisation of the protein coding genome and discovery of many non-coding genes. A current challenge is understanding the roles of individual component parts and how they work together in the cell to determine biological function in health and disease. Supervised machine learning for context-specific biological network reverse engineering is applied in this research, integrating polyomics data, focussed on CRC to capture molecular features specific to tumour stage and subtype. This approach entails implementing a pipeline that integrates functional genomics data (transcriptome and methylation) and extracts features using supervised machine learning to establish a context-specific genome scale biochemical interactions network. Networks for the following CRC contexts (based on stage and subtype) - stage ii, stage iii, CMS2 and CMS3 have been successfully produced. These contexts were chosen for their influence on clinical decisions cantered around prognosis and treatments.  The research has found some mechanistic insights around pathways and processes within these contexts that could aid as a precision medicine discovery tool. 
