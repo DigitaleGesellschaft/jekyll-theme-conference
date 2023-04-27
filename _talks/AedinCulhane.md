@@ -1,8 +1,8 @@
 ---
 name: "Single Cell ‘Omics – Data Analysis Tips and Challenges"
 speakers:
-	- Aedin Culhane
+  - Aedin Culhane
 categories:
-	- Keynote
+  - Keynote
 
 ---

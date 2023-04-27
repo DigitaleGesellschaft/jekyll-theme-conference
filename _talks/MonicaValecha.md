@@ -1,8 +1,8 @@
 ---
 name: 'Benchmarking single-cell DNA somatic variant callers'
 speakers:
-	- Monica Valecha
+  - Monica Valecha
 categories:
-	- Talk (8min)
+  - Talk (8min)
 
 ---

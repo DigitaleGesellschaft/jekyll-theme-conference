@@ -1,8 +1,8 @@
 ---
 name: 'Karyotypic Evolution of Near-Haploid and Low-Hypodiploid Tumours'
 speakers:
-	- Elle Loughran
+  - Elle Loughran
 categories:
-	- Talk (8min)
+  - Talk (8min)
 
 ---

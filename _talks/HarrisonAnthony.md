@@ -1,8 +1,8 @@
 ---
 name: 'Evaluating Microsatellite Instability Tools and Benchmarks'
 speakers:
-	- Harrison Anthony
+  - Harrison Anthony
 categories:
-	- Talk (8min)
+  - Talk (8min)
 
 ---

@@ -1,8 +1,8 @@
 ---
 name: Keynote 2
 speakers:
-	- Evangelia Petsalaki
+  - Evangelia Petsalaki
 categories:
-	- Keynote
+  - Keynote
 
 ---
