@@ -1,7 +1,7 @@
 ---
 name: Lightning Talks 1
 first_name: Lightning Talk 
-last_name: Speakers 2
+last_name: Speakers 1
 ---
 
 Each lightning talk will last one minute with one minute for questions.

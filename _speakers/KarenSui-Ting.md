@@ -1,7 +1,7 @@
 ---
-name: Karen Sui-Ting
+name: 'Karen Sui-Ting'
 first_name: Karen
-last_name: Karen Sui-Ting
+last_name: Sui-Ting
 links:
   - name: LinkedIn
     absolute_url: 
