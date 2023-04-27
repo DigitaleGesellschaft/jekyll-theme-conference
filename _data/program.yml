@@ -5,15 +5,78 @@ days:
   rooms:
   - name: Isdell Courtyard
     talks:
-      - name: Genomic Data Infrastructure Project
-        time_start: '11:00'
-        time_end: '12:00'
-      - name: "Development and benchmarking of wNetNC: a weighted network analysis tool to identify functional pathway structures and protein complexes"
-        time_start: '12:00'
+      - name: "Arrival / Registration"
+        time_start: '09:30'
+        time_end: '10:00'
+      - name: "Introduction / Overview of Day"
+        time_start: '10:00'
+        time_end: '10:10'
+      - name: "Genomic Data Infrastructure Project"
+        time_start: '10:10'
+        time_end: '10:50'
+      - name: "Data Preparation and Integrative Cohort Discovery with AI for Precision Oncology"
+        time_start: '10:55'
+        time_end: '11:05'
+      - name: "An approach to design benchmark datasets for pathogen detection in metagenomic data"
+        time_start: '11:05'
+        time_end: '11:15'
+      - name: "Multiple myeloma: single cell-level characterization of natural killer cells show disease specific pathways driving immune exhaustion"
+        time_start: '11:15'
+        time_end: '11:25'
+      - name: "Good Models or Good Riddance? An investigation into the suitability of cell lines as models of ovarian cancer histotypes"
+        time_start: '11:25'
+        time_end: '11:35'
+      - name: "Lightning Talks 1"
+        time_start: '11:35'
+        time_end: '11:50'
+      - name: "Tea & Coffee with Poster Viewing"
+        time_start: '11:50'
         time_end: '12:10'
-      - name: Data preparation and cohort discovery with AI in a colon cancer dataset
+      - name: "demuxSNP: supervised demultiplexing of scRNAseq data using cell hashing and SNPs"
         time_start: '12:10'
         time_end: '12:20'
-      - name: Lunch
+      - name: "Development and benchmarking of wNetNC: a weighted network analysis tool to identify functional pathway structures and protein complexes"
         time_start: '12:20'
-        time_end: '13:20'
+        time_end: '12:30'
+      - name: "Evaluating Microsatellite Instability Tools and Benchmarks"
+        time_start: '12:30'
+        time_end: '12:40'
+      - name: "Benchmarking single-cell DNA somatic variant callers"
+        time_start: '12:40'
+        time_end: '12:50'
+      - name: "Lightning Talks 2"
+        time_start: '12:50'
+        time_end: '13:05'
+      - name: "Lunch"
+        time_start: '13:05'
+        time_end: '14:35'
+      - name: "Evangelia Petsalaki Keynote"
+        time_start: '14:35'
+        time_end: '15:20'
+      - name: "Acoelomorph flatworm monophyly is a long branch attraction artefact obscuring a clade of Xenoturbella and Acoela"
+        time_start: '15:20'
+        time_end: '15:30'
+      - name: "How to become poisonous and avoid dying in the attempt: Investigating molecular adaptations in neotropical poison frogs"
+        time_start: '15:30'
+        time_end: '15:40'
+      - name: "Karyotypic Evolution of Near-Haploid and Low-Hypodiploid Tumours"
+        time_start: '15:40'
+        time_end: '15:50'
+      - name: "Gene duplication in the coral genus Acropora: Was there a whole genome duplication?"
+        time_start: '15:50'
+        time_end: '16:00'
+      - name: "Tea & Coffee with Poster Viewing 2"
+        time_start: '16:00'
+        time_end: '16:20'
+      - name: "Identification of biogeochemical drivers to explain global differences of arsenic and cadmium in rice grain"
+        time_start: '16:20'
+        time_end: '16:30'
+      - name: "An integrated analysis of the transcriptome and miRnome of the developing zebrafish (Danio rerio) exposed to bisphenol A"
+        time_start: '16:30'
+        time_end: '16:40'
+      - name: "Time to Flower: A flowering locust ortholog is associated with photoperiod-insensitive flowering in hemp (Cannabis sativa)"
+        time_start: '16:40'
+        time_end: '16:50'
+      - name: "Prizes & Closing Remarks"
+        time_start: '16:50'
+        time_end: '17:00'
