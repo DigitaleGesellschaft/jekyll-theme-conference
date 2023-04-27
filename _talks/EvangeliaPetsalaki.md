@@ -4,5 +4,5 @@ speakers:
 	- Evangelia Petsalaki
 categories:
 	- Keynote
+
 ---
-[Abstract]

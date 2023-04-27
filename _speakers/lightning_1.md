@@ -10,13 +10,11 @@ Each lightning talk will last one minute with one minute for questions.
 Speaker: (Link to speaker page?)
 Authors: 
 
-[Abstract]
 
 
 **Lightning Talk 2 title**
 Speaker: (Link to speaker page?)
 Authors: 
 
-[Abstract]
 
 etc...

@@ -5,8 +5,9 @@ speakers:
 
 categories:
   - Break & Posters
+
 ---
 
-The list of poster abstracts are available [here](https://vibe2023.github.io/speakers/poster_presenters/).
+The list of poster titles are available [here](https://vibe2023.github.io/speakers/poster_presenters/).
 
 *[Menu?]*
