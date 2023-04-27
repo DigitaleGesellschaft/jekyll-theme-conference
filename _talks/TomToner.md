@@ -3,6 +3,6 @@ name: 'Data Preparation and Integrative Cohort Discovery with AI for Precision O
 speakers:
 	- Tom Toner
 categories:
-	- Talk (8min)
+	- 'Talk (8min)'
 
 ---
