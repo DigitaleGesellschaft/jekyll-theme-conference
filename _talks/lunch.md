@@ -4,7 +4,7 @@ speakers:
   - Poster Presenters
 
 categories:
-  - Break & Posters
+  - Other
 
 ---
 

@@ -157,7 +157,7 @@ conference:
         color: warning 
       - name: Lightning (1min)
         color: success
-      - name: Break & Posters
+      - name: Other
         color: dark
 
     # Hide icons on talk overview page
