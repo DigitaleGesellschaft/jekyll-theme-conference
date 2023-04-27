@@ -11,7 +11,7 @@ days:
       - name: "Introduction / Overview of Day"
         time_start: '10:00'
         time_end: '10:10'
-      - name: "Genomic Data Infrastructure Project"
+      - name: "Single Cell ‘Omics – Data Analysis Tips and Challenges"
         time_start: '10:10'
         time_end: '10:50'
       - name: "Data Preparation and Integrative Cohort Discovery with AI for Precision Oncology"

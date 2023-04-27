@@ -1,5 +1,5 @@
 ---
-name: Keynote 2
+name: "Evangelia Petsalaki Keynote"
 speakers:
   - Evangelia Petsalaki
 categories:
