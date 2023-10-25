@@ -8,7 +8,7 @@ Our students have likewise expressed concerns about submitting to and/or attendi
 
 To address these concerns, a 2-day mini-conference is being organized, scheduled for May 2024. The event will be hosted physically at CMU and virtually for remote participation. The primary goal is to spotlight the work of graduate students, pre-tenure faculty, and precariously employed academics from our region, especially research that will be presented virtually at CHI or has been withheld. Anticipate slightly extended paper presentations, each with a dedicated faculty discussant. Additional activities may include networking opportunities, paper workshop sessions, and unconference sessions (specifics to be determined).
 
-This endeavor is seen as a means to not only alleviate potential hardships associated with reduced participation in CHI 2024 but also as an opportunity to experiment with more accessible and sustainable regional conferences—a concept beginning to be explored by the HCI community (e.g., [CSCW Northeast 2023](https://hci.princeton.edu/cscw-northeast/). Our hope is that such regional conferences, if effective, can occur periodically in different places to promote sustainable academic practices into the future.
+This endeavor is seen as a means to not only alleviate potential hardships associated with reduced participation in CHI 2024 but also as an opportunity to experiment with more accessible and sustainable regional conferences—a concept beginning to be explored by the HCI community (e.g., [CSCW Northeast 2023](https://hci.princeton.edu/cscw-northeast/)). Our hope is that such regional conferences, if effective, can occur periodically in different places to promote sustainable academic practices into the future.
 
 ### Organizers
 
