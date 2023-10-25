@@ -12,6 +12,6 @@ This endeavor is seen as a means to not only alleviate potential hardships assoc
 
 ## Organizers
 
-- Robert Soden
-- Sarah Fox
-- Vera Khovanskaya
+- Robert Soden, University of Toronto
+- Sarah Fox, Carnegie Mellon University
+- Vera Khovanskaya, University of California San Diego & University of Toronto
