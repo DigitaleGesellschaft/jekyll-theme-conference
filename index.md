@@ -2,7 +2,7 @@
 layout: home
 ---
 
-In light of recent discussions surrounding CHI 2024, there has been careful consideration of our involvement this year. This has been driven in part by the conversation started by Josiah Hester, a Kānaka Maoli Professor in Computing, who has criticized the conference's disregard for the rights and sovereignty of Native Hawaiians and locals in the wake of the Maui fires, and urged researchers to limit their involvement in the event (see [https://www.chiinhawaii.info/(]https://www.chiinhawaii.info/)). 
+In light of recent discussions surrounding CHI 2024, there has been careful consideration of our involvement this year. This has been driven in part by the conversation started by Josiah Hester, a Kānaka Maoli Professor in Computing, who has criticized the conference's disregard for the rights and sovereignty of Native Hawaiians and locals in the wake of the Maui fires, and urged researchers to limit their involvement in the event. (For more information, see [https://www.chiinhawaii.info/](https://www.chiinhawaii.info/)). 
 
 Our students have likewise expressed concerns about submitting to and/or attending the conference in person—wishing to show solidarity to Kānaka Maoli requests to halt over-tourism and academic travel to Hawaii. However, they are also mindful of the professional implications, including missed opportunities for in-person networking, limited practice presenting to academic audiences, and reduced visibility of their research.
 
