@@ -1,7 +1,6 @@
 ---
 layout: home
 ---
-### Northeast HCI Meeting - May 8-10 @ Carnegie Mellon University, Pittsburgh, USA
 
 In light of recent discussions surrounding CHI 2024, there has been careful consideration of our involvement this year. This has been driven in part by the conversation started by Josiah Hester, a Kānaka Maoli Professor in Computing, who has criticized the conference's disregard for the rights and sovereignty of Native Hawaiians and locals in the wake of the Maui fires, and urged researchers to limit their involvement in the event (see https://www.chiinhawaii.info/). 
 
