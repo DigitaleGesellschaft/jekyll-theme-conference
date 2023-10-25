@@ -11,7 +11,7 @@
     {%- unless talk_day_hide -%} {{ day_abbr }}, {% endunless -%}
     {%- assign talk_day_hide = false -%}
   {% endif -%}
-  {{- talk_start_hour -}}:{%- if talk_start_min == 0 -%}0{%- endif -%}{{- talk_start_min -}}
+  {{- talk_start_hour -}}:{%- if talk_start_min < 10 -%}0{%- endif -%}{{- talk_start_min -}}
 </a>
 
 {%- assign talk_time_styleclass = "" -%}
