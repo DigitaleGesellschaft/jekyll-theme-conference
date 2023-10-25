@@ -1,9 +1,9 @@
-title: Conference 2020
+title: Northeast HCI Meeting 2024
 preposition: ''
 description: >-
-  Conference of a random organization on January 1st in Zurich, Switzerland
+  Conference to host NE Region HCI Researchers at CMU in May 2024
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://example.com" # the base hostname & protocol for your site, e.g. https://example.com
+url: "https://northeasthcimeeting.info" # the base hostname & protocol for your site, e.g. https://example.com
 
 # Build settings
 markdown: kramdown
@@ -25,13 +25,13 @@ exclude:
 # Collections and their defaults
 collections:
   talks:
-    output: true
+    output: false
     permalink: /:collection/:title/
   speakers:
-    output: true
+    output: false
     permalink: /:collection/:title/
   rooms:
-    output: true
+    output: false
     permalink: /:collection/:title/
 
 defaults:
@@ -64,7 +64,7 @@ conference:
 
   location:
     url: '/location'
-    map: true
+    map: false
 
   program:
     url: '/program'
