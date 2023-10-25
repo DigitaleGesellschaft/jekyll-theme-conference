@@ -10,7 +10,7 @@ To address these concerns, a 2-day mini-conference is being organized, scheduled
 
 This endeavor is seen as a means to not only alleviate potential hardships associated with reduced participation in CHI 2024 but also as an opportunity to experiment with more accessible and sustainable regional conferences—a notion widely supported by the HCI community. The hope is that these regional conferences can occur periodically in different places to promote sustainable academic practices into the future.
 
-## Organizers
+### Organizers
 
 - Robert Soden, University of Toronto
 - Sarah Fox, Carnegie Mellon University
