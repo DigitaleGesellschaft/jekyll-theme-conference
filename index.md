@@ -16,3 +16,4 @@ This endeavor is seen as a means to not only alleviate potential hardships assoc
 - Sarah Fox, Carnegie Mellon University
 - Vera Khovanskaya, University of California San Diego & University of Toronto
 - Danaë Metaxa, University of Pennsylvania
+- Michael Muller, IBM Research
