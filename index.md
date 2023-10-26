@@ -10,7 +10,7 @@ To address these concerns, a 2-day mini-conference is being organized, scheduled
 
 This endeavor is seen as a means to not only alleviate potential hardships associated with reduced participation in CHI 2024 but also as an opportunity to experiment with more accessible and sustainable regional conferences—a concept beginning to be explored by the HCI community (e.g., [CSCW Northeast 2023](https://hci.princeton.edu/cscw-northeast/)). Our hope is that such regional conferences, if effective, can occur periodically in different places to promote sustainable academic practices into the future.
 
-### Organizers
+### Organizing Team
 
 - Robert Soden, University of Toronto
 - Sarah Fox, Carnegie Mellon University
