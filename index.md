@@ -10,7 +10,7 @@ To address these concerns, a mini-conference is being organized, scheduled for M
 
 This endeavor is seen as a means to not only alleviate potential hardships associated with reduced participation in CHI 2024 but also as an opportunity to experiment with more accessible and sustainable regional conferences—a concept beginning to be explored by the HCI community (e.g., [CSCW Northeast 2023](https://hci.princeton.edu/cscw-northeast/)). Our hope is that such regional conferences, if effective, can occur periodically in different places to promote sustainable academic practices into the future.
 
-We are recruiting additional volunteers to help organize. To join the team, fill out this form and we'll get in touch: https://forms.gle/tHgv7UWns4LowhLa7 
+We are recruiting additional volunteers to help organize. To join the team, fill out this form and we'll get in touch: [https://forms.gle/tHgv7UWns4LowhLa7](https://forms.gle/tHgv7UWns4LowhLa7) 
 
 ### Organizing Team
 
