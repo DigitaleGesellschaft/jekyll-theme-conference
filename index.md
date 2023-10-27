@@ -19,3 +19,4 @@ We are recruiting additional volunteers to help organize. To join the team, fill
 - Vera Khovanskaya, University of California San Diego & University of Toronto
 - Danaë Metaxa, University of Pennsylvania
 - Michael Muller, IBM Research
+- Cindy Kaiying Lin (Penn State University)
