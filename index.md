@@ -20,3 +20,4 @@ We are recruiting additional volunteers to help organize. To join the team, fill
 - Danaë Metaxa, University of Pennsylvania
 - Michael Muller, IBM Research
 - Cindy Kaiying Lin, Pennsylvania State University
+- Richmond Wong, Georgia Tech
