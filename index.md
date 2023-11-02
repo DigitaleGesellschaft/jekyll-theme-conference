@@ -21,3 +21,4 @@ We are recruiting additional volunteers to help organize. To join the team, fill
 - Michael Muller, IBM Research
 - Cindy Kaiying Lin, Pennsylvania State University
 - Richmond Wong, Georgia Tech
+- Laura Forlano, Northeastern University
