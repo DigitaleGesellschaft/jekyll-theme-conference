@@ -22,3 +22,5 @@ We are recruiting additional volunteers to help organize. To join the team, fill
 - Cindy Kaiying Lin, Pennsylvania State University
 - Richmond Wong, Georgia Tech
 - Laura Forlano, Northeastern University
+- Carl DiSalvo, Georgia Tech
+- Maggie Jack, NYU
