@@ -26,4 +26,5 @@ We are recruiting additional volunteers to help organize. To join the team, fill
 - Maggie Jack, NYU
 - Alexandra To, Northeastern University
 - Priyank Chandra, University of Toronto
+- Meg Young, Data & Society
 
