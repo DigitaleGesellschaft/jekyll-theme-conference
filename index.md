@@ -2,6 +2,36 @@
 layout: home
 ---
 
+### Call For Papers: Midwest & Eastern North America Regions Mini-Conference 2024
+Conference Dates: May 8-10, 2024
+Location: Virtually and at Carnegie Mellon University, Pittsburgh, PA, USA
+
+This conference emerges in response to concerns about the impact of CHI 2024 in Hawaiʻi [https://www.chiinhawaii.info/](https://www.chiinhawaii.info/) which have prompted many researchers in the CHI community to reconsider submitting and traveling to CHI this year. Our goal is to create an alternative regional venue to highlight research that will be presented virtually at CHI or has been withheld due to these concerns, with a special emphasis on spotlighting the work of graduate students, pre-tenure faculty, and precariously employed academics from the Midwest and the eastern regions of North America. This mini-conference is also an experiment with a regional model to explore a  more accessible and sustainable alternative to global conference travel.
+
+We invite submissions from researchers in the Midwest and Eastern Regions of North America in the following formats:
+
+Full Papers
+Works in Progress
+Doctoral Consortium 
+
+Submissions will be due February 15 at [http://northeasthcimeeting.info/](http://northeasthcimeeting.info/). The submission form will be opened in mid January. 
+
+Papers and WIP will be selected following a juried/curated format reflecting the following principles: stage or seniority of scholar, balance of areas, excellence and interest of the contribution. 
+
+Papers submissions should follow the CHI submission format (https://chi2024.acm.org/submission-guides/chi-publication-formats/). However, author and affiliation information should be included in the submissions; papers should not be anonymized. 
+
+Works in Progress submissions should be 3000 words or less, and follow the CHI submission format.  You are welcome to include as many images as you want, but please keep the total number of pages reasonable for a work in progress.
+
+Doctoral Consortium submissions require a 600-1200 word summary of doctoral research and should be submitted at the following link via Google Forms: [https://forms.gle/7W7nLqZnGSHpMc2C9](https://forms.gle/7W7nLqZnGSHpMc2C9). 
+
+All areas of work represented at the CHI conference and its various sub-committee are welcome to apply. 
+
+Please note, all submission types will be curated to meet the conference goals and themes, and will not undergo dual-anonymous peer review. Accepted submissions will not be published. This is not an archival conference associated with any professional organization. 
+
+In addition to submitting to the conference, we also welcome participation from faculty and students interested in mentoring or assisting with the conference production. If you are interested in these roles, please reach out via this form: [https://forms.gle/tHgv7UWns4LowhLa7](https://forms.gle/tHgv7UWns4LowhLa7). 
+
+### Background
+
 In light of recent discussions surrounding CHI 2024, there has been careful consideration of our involvement this year. This has been driven in part by the conversation started by Josiah Hester, a Kānaka Maoli (Native Hawaiian) professor of Interactive Computing and Computer Science at Georgia Tech, who has criticized the conference's disregard for the rights and sovereignty of Native Hawaiians and locals in the wake of the Maui fires, and urged researchers to limit their involvement in the event (see [https://www.chiinhawaii.info/](https://www.chiinhawaii.info/)). 
 
 Some of our students have likewise expressed concerns about submitting to and/or attending the conference in person—wishing to show solidarity to Kānaka Maoli requests to halt over-tourism and academic travel to Hawai’i. However, they are also mindful of the professional implications, including missed opportunities for in-person networking, limited practice presenting to academic audiences, and reduced visibility of their research.
