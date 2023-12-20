@@ -2,10 +2,6 @@
 layout: home
 ---
 
-### Midwest & Eastern North America Regions Mini-Conference 2024
-Conference Dates: May 8-10, 2024
-Location: Virtually and at Carnegie Mellon University, Pittsburgh, PA, USA
-
 This conference emerges in response to concerns about the impact of CHI 2024 in Hawaiʻi [https://www.chiinhawaii.info/](https://www.chiinhawaii.info/) which have prompted many researchers in the CHI community to reconsider submitting and traveling to CHI this year. Our goal is to create an alternative regional venue to highlight research that will be presented virtually at CHI or has been withheld due to these concerns, with a special emphasis on spotlighting the work of graduate students, pre-tenure faculty, and precariously employed academics from the Midwest and the eastern regions of North America. This mini-conference is also an experiment with a regional model to explore a  more accessible and sustainable alternative to global conference travel.
 
 #### Call For Papers:
