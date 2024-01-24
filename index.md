@@ -12,7 +12,7 @@ Full Papers
 Works in Progress
 Doctoral Consortium 
 
-Submissions will be due February 15 at [http://northeasthcimeeting.info/](http://northeasthcimeeting.info/). The submission form will be opened in mid January. 
+Submissions will be due February 15 at [http://northeasthcimeeting.info/](http://northeasthcimeeting.info/). The submission form can be found at: [https://forms.gle/g4YDZQshpbrfwRpz7](https://forms.gle/g4YDZQshpbrfwRpz7) 
 
 Papers and WIP will be selected following a juried/curated format reflecting the following principles: stage or seniority of scholar, balance of areas, excellence and interest of the contribution. 
 
