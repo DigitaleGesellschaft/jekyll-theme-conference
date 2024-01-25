@@ -17,6 +17,7 @@ Submissions will be due February 15 at [http://northeasthcimeeting.info/](http:/
 Papers and WIP will be selected following a juried/curated format reflecting the following principles: stage or seniority of scholar, balance of areas, excellence and interest of the contribution. 
 
 Papers submissions should follow the CHI submission format (https://chi2024.acm.org/submission-guides/chi-publication-formats/). However, author and affiliation information should be included in the submissions; papers should not be anonymized. 
+Accepted submissions will not be published fornally, but authors will be invited to present their work as part of the the event. This is not an archival conference associated with any professional organization.
 
 Works in Progress submissions should be 3000 words or less, and follow the CHI submission format.  You are welcome to include as many images as you want, but please keep the total number of pages reasonable for a work in progress.
 
