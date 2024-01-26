@@ -8,11 +8,11 @@ This conference emerges in response to concerns about the impact of CHI 2024 in 
 
 We invite submissions from researchers in the Midwest and Eastern Regions of North America in the following formats:
 
-Full Papers
-Works in Progress
-Doctoral Consortium 
+- Full Papers
+- Works in Progress
+- Doctoral Consortium 
 
-Submissions will be due February 15 at [http://northeasthcimeeting.info/](http://northeasthcimeeting.info/). The submission form can be found at: [https://forms.gle/g4YDZQshpbrfwRpz7](https://forms.gle/g4YDZQshpbrfwRpz7) 
+Submissions will be due February 15 at [http://northeasthcimeeting.info/](http://northeasthcimeeting.info/). The submission form for Full Papers and Works in Progress can be found at: [https://forms.gle/g4YDZQshpbrfwRpz7](https://forms.gle/g4YDZQshpbrfwRpz7) 
 
 Papers and WIP will be selected following a juried/curated format reflecting the following principles: stage or seniority of scholar, balance of areas, excellence and interest of the contribution. 
 
