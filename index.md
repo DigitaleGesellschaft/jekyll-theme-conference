@@ -25,7 +25,7 @@ Doctoral Consortium submissions require a 600-1200 word summary of doctoral rese
 
 All areas of work represented at the CHI conference and its various sub-committee are welcome to apply. 
 
-Please note, all submission types will be curated to meet the conference goals and themes, and will not undergo dual-anonymous peer review. Accepted submissions will not be published. This is not an archival conference associated with any professional organization. 
+Please note, all submission types will be curated to meet the conference goals and themes, and will not undergo dual-anonymous peer review. Accepted submissions will not be published. This is not an archival conference associated with any professional organization. You therefore retain rights to your submission, and you may freely submit it to an archival category at a different venue.
 
 In addition to submitting to the conference, we also welcome participation from faculty and students interested in mentoring or assisting with the conference production. If you are interested in these roles, please reach out via this form: [https://forms.gle/tHgv7UWns4LowhLa7](https://forms.gle/tHgv7UWns4LowhLa7). 
 
