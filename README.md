@@ -290,6 +290,8 @@ conference:
       url: 'https://github.com'
 ```
 
+The navigation bar automatically collapses when the available space is too small (e.g. on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/4.6/layout/overview/#responsive-breakpoints). The default breakpoint is `md` (collapsing if the screen width is smaller than 992px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
+
 ### Open Graph Link Preview
 
 The theme automatically includes the necessary `<meta>` tags to ease link previewing when sharing links based on the [Open Graph protocol](https://ogp.me/) and [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards). These tags control how a link is presented when shared via different platform and apps. In order to disable these `<meta>` tags add the `disable: true` setting (default: `false`) to the `link_preview` property.

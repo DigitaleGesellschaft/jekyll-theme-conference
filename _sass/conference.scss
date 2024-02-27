@@ -79,6 +79,11 @@ ul.btn-group {
 
 // General
 
+//   Extend logo when collapsed navbar is shown
+.navbar-collapse.show + .navbar-logo {
+  width: 100%;
+}
+
 //   Keep images in container
 main.container img {
   max-width: 100%;
