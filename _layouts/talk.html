@@ -3,10 +3,10 @@
 {%- unless talk.hide -%}
   {%- include partials/header.html -%}
 
-  <div class="d-flex flex-lg-row flex-column container-fluid mb-2 p-0">
+  <div class="d-flex flex-md-row flex-column container-fluid mb-2 p-0">
     <div class="h6 mt-2 mb-0 mr-1 pr-1 pb-1">
       {% include partials/get_main_category.html %}
-      <span class="p-1 pl-2 pr-2 border-soft-{{ main_cat_color }} bg-soft-{{ main_cat_color }} font-weight-normal">
+      <span class="d-block d-sm-inline p-1 pl-2 pr-2 border-soft-{{ main_cat_color }} bg-soft-{{ main_cat_color }} font-weight-normal">
         {{ main_cat }}
       </span>
     </div>
