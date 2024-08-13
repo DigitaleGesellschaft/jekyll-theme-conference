@@ -16,13 +16,21 @@ window.conference.program = (() => {
             // Switch to day if today
             else {
                 let today = new Date();
-                today.setHours(0,0,0,0);
+                let localDateString = today.getFullYear() + "-";
+                let month = today.getMonth();
+                month = month + 1;
+                if (month < 10) {
+                    localDateString = localDateString + '0';
+                }
+                localDateString = localDateString + month + "-";
+                let dayOfMonth = today.getDate();
+                if (dayOfMonth < 10) {
+                    localDateString = localDateString + "0";
+                }
+                localDateString = localDateString + dayOfMonth;
 
                 $('a[data-toggle="tab"]').each(function () {
-                    let d = new Date($(this).data('date'));
-                    d.setHours(0,0,0,0);
-
-                    if (today.getTime() === d.getTime()) {
+                    if ($(this).data('date') === localDateString) {
                         $(this).tab('show');
                         updateHash(this.hash);
                     }
