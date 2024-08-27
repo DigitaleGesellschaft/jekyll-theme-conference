@@ -1,5 +1,5 @@
-{%- assign talk_start = t.time_start -%}
-{%- assign talk_end = t.time_end -%}
+{%- assign talk_start = t.time_start | default: "00:00" -%}
+{%- assign talk_end = t.time_end | default: "00:00" -%}
 
 {%- if talk_start contains ' +' -%}
   {%- assign talk_start_day = talk_start | split: ' +' | last | plus: 0 -%}

@@ -56,6 +56,9 @@ conference:
   # Language
   lang: en
 
+  # Timezone
+  tz: "+02:00"
+
   # Show theme errors:
   show_errors: True
 

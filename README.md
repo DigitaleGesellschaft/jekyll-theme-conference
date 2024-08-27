@@ -31,6 +31,7 @@ The theme was originally created for the yearly Winterkongress conference of the
   * [Theme Verification](#theme-verification)
   * [Collection URLs](#collection-urls)
   * [Language](#language)
+  * [Timezone](#timezone)
   * [Navigation Bar](#navigation-bar)
   * [Open Graph Link Preview](#open-graph-link-preview)
   * [Main Landing Page](#main-landing-page)
@@ -249,6 +250,17 @@ Example:
 ```yaml
 conference:
   lang: en
+```
+
+### Timezone
+
+Multiple dynamic features such as showing the current day in the program or live indications require correct timing. Define the timezone in which the conference takes place with the `tz` property set to a valid [UTC timezone offset](https://en.wikipedia.org/wiki/List_of_UTC_offsets) in the format `"+/-HH:MM"`:
+
+Example:
+
+```yaml
+conference:
+  tz: "+02:00"
 ```
 
 ### Navigation Bar

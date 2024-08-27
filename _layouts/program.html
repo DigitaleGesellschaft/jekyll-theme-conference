@@ -16,7 +16,7 @@
       {%- for d in site.data.program.days -%}
         {%- include partials/get_day_hash.html %}
         <li class="nav-item" role="presentation">
-          <a class="nav-link btn btn-outline-secondary {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-toggle="tab" {%- if d.date %} data-date="{{ d.date }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
+          <a class="nav-link btn btn-outline-secondary {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-toggle="tab" {%- if d.date -%}{%- include partials/get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
         </li>
       {%- endfor %}
     </ul>

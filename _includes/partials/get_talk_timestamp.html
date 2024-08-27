@@ -1,9 +1,15 @@
 {%- include partials/get_talk_time.html -%}
 
-{%- assign datetime_start = d.date | append: " " | append: talk_start -%}
+{%- assign datetime_start = d.date | append: "T" | append: talk_start | append: ":00" -%}
+{%- if site.conference.tz -%}
+  {%- assign datetime_start = datetime_start | append: site.conference.tz -%}
+{%- endif -%}
 {%- assign add_days_start = talk_start_day | times: 24 | times: 60 | times: 60 -%}
 {%- assign timestamp_start = datetime_start | date: "%s" | plus: add_days_start | date: "%s" -%}
 
-{%- assign datetime_end = d.date | append: " " | append: talk_end -%}
+{%- assign datetime_end = d.date | append: "T" | append: talk_end | append: ":00" -%}
+{%- if site.conference.tz -%}
+  {%- assign datetime_end = datetime_end | append: site.conference.tz -%}
+{%- endif -%}
 {%- assign add_days_end = talk_end_day | times: 24 | times: 60 | times: 60 -%}
 {%- assign timestamp_end = datetime_end | date: "%s" | plus: add_days_end | date: "%s" -%}
