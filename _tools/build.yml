@@ -2,7 +2,7 @@
 on:
   push:
     tags:
-    - 'v*' # Matches tags with the name "v*", i.e. v1.0, v20.15.10
+      - "v*" # Matches tags with the name "v*", i.e. v1.0, v20.15.10
 
 name: Generate Website and add as Release
 # Performs the following steps:
@@ -17,45 +17,40 @@ jobs:
     name: Generate Website and add as Release
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Ruby
+        # https://github.com/ruby/setup-ruby/releases/tag/v1.207.0
+        uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4
         with:
-          lfs: true
-
-      - name: Setup Ruby, Bundler and Jekyll
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2.1'
+          ruby-version: "3.1" # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-      - name: Build website
-        run: |
-          bundle exec jekyll build -d _site/
+          cache-version: 0 # Increment this number if you need to re-download cached gems
+      - name: Build with Jekyll
+        # Outputs to the './_site' directory by default
+        run: bundle exec jekyll build
+        env:
+          JEKYLL_ENV: production
 
       - name: Install Minify
         run: |
           sudo apt-get update
           sudo apt-get install minify
-
       - name: Compress entire website
         run: |
           minify --all --html-keep-document-tags --html-keep-end-tags -r -o _site/ _site/
 
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: '12'
-
+          node-version: "18"
       - name: Install PurgeCSS and Terser
         run: |
           npm install -g purgecss
           npm install -g terser
-
       - name: Compress CSS with PurgeCSS
         run: |
           purgecss --config purgecss.config.js
-
       - name: Compress JavaScript with Terser
         run: |
           terser _site/assets/js/main.js --compress ecma=2015,top_retain=window.conference --mangle --comments false --output _site/assets/js/main.js
@@ -68,21 +63,8 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload zipped Website as Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./website.zip
-          asset_name: website.zip
-          asset_content_type: application/zip
+          artifacts: ./website.zip
+          artifactContentType: application/zip
+          name: Release ${{ github.ref_name }}

@@ -1,7 +1,7 @@
 on:
   pull_request:
     paths:
-      - 'schedule.json'
+      - "schedule.json"
     branches:
       - main
 
@@ -13,46 +13,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.ref }}
-        lfs: true
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          lfs: true
 
-    - name: Install Python dependencies
-      run: |
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install pyyaml
+      - name: Install Python dependencies
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install pyyaml
 
-    - name: Parse schedule and generate files
-      # add argument --lc-time to create_entries.py to select language of weekday representation, e.g.
-      #   sudo locale-gen de_CH.UTF-8
-      #   python _tools/create_entries.py --lc-time de_CH.UTF-8 --frab schedule.json
-      run: |
-        source venv/bin/activate
-        python _tools/create_entries.py --frab schedule.json
+      - name: Parse schedule and generate files
+        run: |
+          sudo locale-gen de_CH.UTF-8
+          source venv/bin/activate
+          python _tools/create_entries.py --lc-time de_CH.UTF-8 --frab schedule.json
 
-    - name: Delete source and add generated files
-      run: |
-        git rm schedule.json
-        git add --ignore-errors _data/program.yml _rooms _speakers _talks
+      - name: Delete source and add generated files
+        run: |
+          git rm schedule.json
+          git add --ignore-errors _data/program.yml _rooms _speakers _talks
 
-    - name: Add new commit and push
-      run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-        git commit -m "Generate schedule and content from source"
-        git push
+      - name: Add new commit and push
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Generate schedule and content from source"
+          git push
 
-    - name: Add comment to PR
-      env:
-        URL: ${{ github.event.pull_request.comments_url }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        curl \
-          -X POST \
-          $URL \
-          -H "Content-Type: application/json" \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          --data '{ "body": "Schedule and content files have successfully been generated and added!\n\nBe sure to select _squash and merge_ for this pull request if you want to avoid that the original file `schedule.json` becomes a part of the repository." }'
+      - name: Add comment to PR
+        env:
+          URL: ${{ github.event.pull_request.comments_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X POST \
+            $URL \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            --data '{ "body": "Schedule and content files have successfully been generated and added!\n\nBe sure to select _squash and merge_ for this pull request if you want to avoid that the original file `schedule.json` becomes a part of the repository." }'

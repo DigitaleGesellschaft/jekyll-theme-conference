@@ -1,6 +1,7 @@
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
 
 name: Test Website Generation
 
@@ -9,18 +10,17 @@ jobs:
     name: Test Website Generation
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Ruby
+        # https://github.com/ruby/setup-ruby/releases/tag/v1.207.0
+        uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4
         with:
-          lfs: true
-
-      - name: Setup Ruby, Bundler and Jekyll
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2.1'
+          ruby-version: "3.1" # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-      - name: Build website
-        run: |
-          bundle exec jekyll build -d _site/
+          cache-version: 0 # Increment this number if you need to re-download cached gems
+      - name: Build with Jekyll
+        # Outputs to the './_site' directory by default
+        run: bundle exec jekyll build
+        env:
+          JEKYLL_ENV: production
