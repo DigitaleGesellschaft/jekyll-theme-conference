@@ -6,5 +6,6 @@ speakers:
   track: Cat A
   tags:
   - Talk
+  - No recording
 hide: true
 ---
