@@ -146,8 +146,13 @@ conference:
       - name: Track B
         color: success
 
+    # Talk tags
+    tags:
+      - name: No recording
+        icon: video-slash
+
     # Hide icons on talk overview page
-    hide_icons: false
+    hide_link_icons: false
 
   speakers:
     # Show first and last name

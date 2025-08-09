@@ -48,6 +48,10 @@ For more details, refer to the [Talk Settings](https://github.com/DigitaleGesell
   {%- assign errors = errors | push: error_msg -%}
 {%- endif -%}
 
+{%- if site.conference.talks.hide_icons == true -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.talks.hide_icons` to `conference.talks.hide_link_icons` in your configuration. For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README." -%}
+{%- endif -%}
+
 {%- assign nbr_days = site.data.program.days | size -%}
 {%- if nbr_days == 0 -%}
   {%- assign errors = errors | push: "Your schedule in `_data/program.yml` does not seem to contain any days. Have you already created the file?" -%}

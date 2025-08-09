@@ -17,7 +17,8 @@
       {% if talk.tags.size > 0 %}
         <div class="h6 mt-2 mb-0 ml-1 pr-1 pb-1">
           {% for tag in talk.tags %}
-            <span class="mr-2">{{ tag }}</span>
+            {%- include partials/get_tag_icon.html -%}
+            <span class="mr-2">{{ tag_html }}</span>
           {% endfor %}
         </div>
       {% endif %}

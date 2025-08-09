@@ -1,0 +1,13 @@
+{% assign tag_icon = "" %}
+{% for tag_prop in site.conference.talks.tags %}
+  {% if tag == tag_prop.name %}
+    {% if tag_prop.icon %}
+      {% assign tag_icon = tag_prop.icon %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% assign tag_html = tag %}
+{% if tag_icon.size > 0 %}
+  {% assign tag_html = '<i class="fas fa-' | append: tag_icon  | append: '"></i>'' %}
+{% endif %}
