@@ -10,7 +10,7 @@ vendor/bundle/
 
 ### Python ###
 __pycache__/
-venv/
+.venv/
 
 ### MacOS ###
 .DS_Store

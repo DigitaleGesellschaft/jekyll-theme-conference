@@ -139,15 +139,15 @@ To be up and running simply use the default content of this repository as an ini
 
 ### Automatic Import
 
-There exists a Python file in this repository, `_tools/create_entries.py`, which can be used to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible JSON file (e.g., from [pretalx.com](https://pretalx.com/p/about/)) or a CSV table and generate the different talk, speakers and room files automatically.
+In this repository, you'll find the Python file `_tools/import_schedule.py`. This script allows you to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction)-compatible JSON file, such as those exported from [pretalx.com](https://pretalx.com/p/about/)."
 
-1. Copy the files `_tools/create_entries.py` and `_tools/requirements.txt` from this repository
+1. Copy the files `_tools/import_schedule.py` and `_tools/requirements.txt` from this repository
 
 2. Create a virtual environment and activate it
 
    ```bash
-   python -m venv venv
-   source venv/bin/activate
+   python -m venv .venv
+   source .venv/bin/activate
    ```
 
 3. Install the requirements
@@ -159,16 +159,16 @@ There exists a Python file in this repository, `_tools/create_entries.py`, which
 4. Execute the script, e.g., to show the help type
 
    ```bash
-   python _tools/create_entries.py --help
+   python _tools/import_schedule.py --help
    ```
 
 ### Automatic Build
 
-If you do not want to install the entire Ruby/Jekyll tool chain on your machine you can use [GitHub Actions](https://github.com/features/actions), Github's continuous integration platform. This repository contains multiple example Github Action configuration files in the `_tools/` folder:
+If you prefer not to install the full Ruby/Jekyll toolchain locally, you can leverage [GitHub Actions](https://github.com/features/actions), GitHub's continuous integration platform. This repository includes several example GitHub Actions configuration files in the `_tools/` folder:
 
-- `build.yml`: automatically builds and minimizes the website upon adding a new tag starting with a `v` (e.g., `v2020.01.01`). It then attaches the generated website as an archive to a release for easy downloading. Requires `purgecss.config.js` to be copied to the project's root too.
-- `test.yml`: automatically tries to build the website upon a new pull request. It can thus be used as status check before merging.
-- `schedule.yml`: automatically generates the schedule and content files when a new pull request contains a `schedule.json` file (see the _Automatic Import_ subsection above). Thus, it allows quick updates of the site's content from [pretalx.com](https://pretalx.com/p/about/) exports.
+- `build.yml`: This workflow automatically builds and optimizes the website whenever a new tag starting with `v` (e.g., `v2020.01.01`) is added. It then attaches the generated website as an archive to a release for easy download. Note that `purgecss.config.js` must also be copied to the project's root for this to work.
+- `test.yml`: This workflow automatically attempts to build the website upon a new pull request, making it suitable for use as a status check before merging.
+- `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (refer to the 'Automatic Import' section for details). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports.
 
 To get started, simply copy the desired workflow file to your repository and adapt it to your needs:
 
@@ -741,8 +741,8 @@ There exists a Python file in this repository, `_tools/import_resources.py`, whi
 2. Create a virtual environment and activate it
 
    ```bash
-   python -m venv venv
-   source venv/bin/activate
+   python -m venv .venv
+   source .venv/bin/activate
    ```
 
 3. Install the requirements

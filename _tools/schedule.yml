@@ -21,15 +21,15 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python3 -m venv venv
-          source venv/bin/activate
+          python3 -m venv .venv
+          source .venv/bin/activate
           pip install pyyaml
 
       - name: Parse schedule and generate files
         run: |
           sudo locale-gen de_CH.UTF-8
-          source venv/bin/activate
-          python _tools/create_entries.py --lc-time de_CH.UTF-8 --frab schedule.json
+          source .venv/bin/activate
+          python _tools/create_schedule.py --lc-time de_CH.UTF-8 schedule.json
 
       - name: Delete source and add generated files
         run: |
