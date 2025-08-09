@@ -36,7 +36,7 @@
         <table class="list-program">
         {%- for t in r.talks -%}
           {%- assign talk = site.talks | where: 'name', t.name | first -%}
-          {%- include partials/get_main_category.html %}
+          {%- include partials/get_track_properties.html %}
 
           <tr>
             <td class="pr-2">
@@ -48,7 +48,7 @@
               {%- assign live_button_styleclass = "w-100" -%}
               {% include partials/show_live_button.html %}
             </td>
-            <td class="pl-2 border-soft-{{ main_cat_color }}">
+            <td class="pl-2 border-soft-{{ track_color }}">
               <p class="mb-0">
                 {%- include partials/show_talk.html -%}
               </p>

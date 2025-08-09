@@ -77,7 +77,7 @@
             {%- for speaker_name in talk.speakers -%}
               {%- if speaker_name == speaker.name -%}
 
-                {%- include partials/get_main_category.html -%}
+                {%- include partials/get_track_properties.html -%}
 
                 <tr>
                   <td class="pr-2 py-0">
@@ -85,7 +85,7 @@
                     {%- assign talk_time_styleclass = "w-100" -%}
                     {%- include partials/show_talk_time.html -%}
                   </td>
-                  <td class="pl-2 py-0 align-baseline border-soft-{{ main_cat_color }}">
+                  <td class="pl-2 py-0 align-baseline border-soft-{{ track_color }}">
                     <span class="mr-2">
                       {%- include partials/show_talk.html -%}
                     </span>

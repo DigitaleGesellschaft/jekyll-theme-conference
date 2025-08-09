@@ -1,0 +1,6 @@
+{%- assign has_tags = false -%}
+
+{%- for tag in talk.tags -%}
+  {%- assign has_tags = true -%}
+  <span class="badge badge-light text-reset font-weight-normal">{{ tag }}</span>&nbsp;
+{%- endfor -%}

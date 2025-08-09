@@ -3,24 +3,26 @@
 {%- unless talk.hide -%}
   {%- include partials/header.html -%}
 
-  <div class="d-flex flex-md-row flex-column container-fluid mb-2 p-0">
-    <div class="h6 mt-2 mb-0 mr-1 pr-1 pb-1">
-      {% include partials/get_main_category.html %}
-      <span class="d-block d-sm-inline p-1 pl-2 pr-2 border-soft-{{ main_cat_color }} bg-soft-{{ main_cat_color }} font-weight-normal">
-        {{ main_cat }}
-      </span>
-    </div>
+  {% if talk.track or talk.tags.size > 0 %}
+    <div class="d-flex flex-md-row flex-column container-fluid mb-2 p-0">
+      {% if talk.track %}
+        <div class="h6 mt-2 mb-0 mr-1 pr-1 pb-1">
+          {% include partials/get_track_properties.html %}
+          <span class="d-block d-sm-inline p-1 pl-2 pr-2 border-soft-{{ track_color }} bg-soft-{{ track_color }} font-weight-normal">
+            {{ talk.track }}
+          </span>
+        </div>
+      {% endif %}
 
-    {% if talk.categories.size > 1 %}
-      <div class="h6 mt-2 mb-0 ml-1 pr-1 pb-1">
-        {% for cat in talk.categories %}
-          {% if cat != main_cat %}
-            <span class="mr-2">{{ cat }}</span>
-          {% endif %}
-        {% endfor %}
-      </div>
-    {% endif %}
-  </div>
+      {% if talk.tags.size > 0 %}
+        <div class="h6 mt-2 mb-0 ml-1 pr-1 pb-1">
+          {% for tag in talk.tags %}
+            <span class="mr-2">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
 
   <h1 class="font-weight-light text-break">{{ talk.name }}</h1>
 
@@ -79,7 +81,7 @@
         {% if link_valid %}
           <li class="mb-1">
             {{ link_tag }}
-              <span class="badge bg-soft-{{ main_cat_color }} font-weight-normal mr-1">
+              <span class="badge bg-soft-{{ track_color | default: 'light' }} font-weight-normal mr-1">
                 <i class="fas fa-{{ link_icon }} fa-fw"></i>
               </span>
               {{- link.name }}
@@ -99,7 +101,7 @@
         {% include partials/get_link.html link_type="regular" %}
 
         {% if link_valid %}
-          <li class="mb-1 ml-2 pl-2 border-soft-{{ main_cat_color }}">
+          <li class="mb-1 ml-2 pl-2 border-soft-{{ track_color | default: 'light' }}">
             {{ link_tag }}
               {{ link.name }}
             </a>

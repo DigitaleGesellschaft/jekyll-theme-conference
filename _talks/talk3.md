@@ -2,8 +2,8 @@
 name: Arcu Non Odio
 speakers:
   - Alex Rosales
-categories:
-  - Cat A
+track: Cat A
+tags:
   - Talk
 links:
   - name: Recodring

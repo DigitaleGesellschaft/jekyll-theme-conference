@@ -439,10 +439,12 @@ conference:
 
 ### Talk Settings
 
-Each talk can have one or multiple categories associated via FrontMatter (see the _Individual Pages: Talks_ section below for more details). Some of these categories can be elevated to so-called main categories". These are used to color group the talks across the entire website, particularly in the program. To do so add the `main_categories` property under the `talks` property. It consists of a list of all main categories. Each main category consists of:
+Talks can optionally be organized into tracks, where each track groups talks under a common subject. Tracks are visually distinct across the website, especially in the program, by a unique color. Additionally, each talk can have one or more associated tags. Both tracks and tags are linked via the talk's FrontMatter (refer to the _Individual Pages: Talks_ section for more details).
 
-- its name (`name`, must be corresponding to the listed categories in the talk's FrontMatter), and
-- a color (`color`) following the Bootstrap color scheme (see below), possible values are:
+To define available tracks, add the `tracks` property under the `talks` property in the configuration file. This property is a list of tracks, with each track requiring:
+
+- its `name`, which must match the track specified in the talk's FrontMatter.
+- a color (`color`) following the Bootstrap color scheme (see below), possible values include:
   - `primary` (your website's main color, normally blue)
   - `secondary` (your website's secondary color, normally grey)
   - `success` (green)
@@ -452,18 +454,18 @@ Each talk can have one or multiple categories associated via FrontMatter (see th
   - `light` (white)
   - `dark` (dark grey)
 
-Each talk can have associated links listed at the end of its content. If these links have an icon associated (see _Content_ > _Talks_ below), they are also shown on the talk overview page (e.g., to show in the overview, which talk has a video recording and, which not). To disable the showing of icon links on the overview page, set the `hide_icons` property to `true` (default: `false`).
+Talks can also have associated links displayed at the end of their content. If these links have an icon (see _Content_ > _Talks_ below), they will also appear on the talk overview page (e.g., to indicate which talks have video recordings). To prevent icon links from showing on the overview page, set the `hide_icons` property to `true` (default is `false`).
 
 Example:
 
 ```yaml
 conference:
   talks:
-    # Talk categories
-    main_categories:
-      - name: Cat A
+    # Talk tracks
+    tracks:
+      - name: Track A
         color: info
-      - name: Cat B
+      - name: Track B
         color: success
 
     # Hide icons on talk overview page
@@ -613,7 +615,8 @@ Each talk is represented by a file in the `_talks/` directory. It must begin wit
 
 - the talk's `name` (used as identifier),
 - one or more existing `speakers` name(s),
-- optionally, one or more `categories` of which one should be a main category as defined in the site's configuration,
+- optionally, a `track` which should match the tracks defined in the site's configuration,
+- optionally, a list of `tags`
 - optionally, a list of `links` (see the _Links_ subsection below for the available properties):
   - Links with an `icon` are treated separately and are also included on the talk overview page.
   - Links with `live: true` are only shown below the live stream for the given talk in form of buttons.
@@ -626,9 +629,9 @@ Example:
 name: Vim Impetus Placerat Cotidieque Ad
 speakers:
   - Tolga Philip
-categories:
-  - Cat B
-  - Talk
+track: Track A
+tags:
+  - Short
 ---
 ```
 
