@@ -1,66 +1,53 @@
 name: Build & Publish Ruby Gem
-# Gets triggered upon the creation of a new tag
-on:
-  push:
-    tags:
-    - 'v*' # Matches tags with the name "v*", i.e. v1.0, v20.15.10
 # Performs the following steps:
 #   - Sets the environment up
 #   - Builds the gem
 #   - Uploads the gem to RubyGem
 #   - Creates a GitHub release and attaches the gem to it
+
+# Gets triggered upon the creation of a new tag
+on:
+  push:
+    tags:
+      - "v*" # Matches tags with the name "v*", i.e. v1.0, v20.15.10
+
 jobs:
   build:
     name: Build + Publish
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      id: checkout_code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        id: checkout_code
+        uses: actions/checkout@v4
 
-    - name: Set up Ruby 2.6
-      id: setup_ruby
-      uses: actions/setup-ruby@v1
-      with:
-        version: 2.6.x
+      - name: Set up Ruby 3.3
+        id: setup_ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
 
-    - name: Publish to RubyGems
-      id: publish_rubygems
-      run: |
-        mkdir -p $HOME/.gem
-        touch $HOME/.gem/credentials
-        chmod 0600 $HOME/.gem/credentials
-        echo "---" >> $HOME/.gem/credentials
-        echo ":rubygems_api_key: ${RUBYGEMS_API_KEY}" >> $HOME/.gem/credentials
-        gem build *.gemspec
-        gem push *.gem
-        mv *.gem jekyll-theme-conference.gem
-      env:
-        RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
+      - name: Publish to RubyGems
+        id: publish_rubygems
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: |
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          echo "---" >> $HOME/.gem/credentials
+          echo ":rubygems_api_key: ${RUBYGEMS_API_KEY}" >> $HOME/.gem/credentials
+          gem build *.gemspec
+          gem push *.gem
+          mv *.gem jekyll-theme-conference.gem
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Gem as Release Asset
-      id: upload_asset_release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        # This pulls from the CREATE RELEASE step above, referencing it's ID
-        # to get its outputs object, which include a `upload_url`. See this
-        # blog post for more info:
-        # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./jekyll-theme-conference.gem
-        asset_name: jekyll-theme-conference.gem
-        asset_content_type: application/x-tar
+      - name: Create Release and Upload Asset
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: jekyll-theme-conference.gem
