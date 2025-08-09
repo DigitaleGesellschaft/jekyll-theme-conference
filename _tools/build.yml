@@ -17,18 +17,20 @@ jobs:
     name: Generate Website and add as Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup Ruby
-        # https://github.com/ruby/setup-ruby/releases/tag/v1.207.0
-        uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4
         with:
-          ruby-version: "3.1" # Not needed with a .ruby-version file
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          cache-version: 0 # Increment this number if you need to re-download cached gems
+          lfs: true
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
       - name: Build with Jekyll
-        # Outputs to the './_site' directory by default
-        run: bundle exec jekyll build
+        run: |
+          bundle exec jekyll build -d _site/
         env:
           JEKYLL_ENV: production
 
@@ -62,9 +64,10 @@ jobs:
           cd ../
 
       - name: Create Release
-        id: create_release
-        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          artifacts: ./website.zip
-          artifactContentType: application/zip
+          files: ./website.zip
           name: Release ${{ github.ref_name }}
+          generate_release_notes: true
