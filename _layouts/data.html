@@ -94,19 +94,25 @@
                 "start": {{ timestamp_start }},
                 "end": {{ timestamp_end }}
 
-                        {%- if talk.live.links -%},
+                        {% include partials/get_link_types.html %}
+                        {%- if has_live_links > 0 -%},
                 "live_links": [
-                            {%- for link in talk.live.links %}
+                            {%- for link in talk.links -%}
+                                {%- include partials/get_link.html link_type="live" -%}
+                                {%- if link_valid %},
                     {
                         "name": "{{ link.name | replace: '"', '\"' }}",
-                        "href": "{{ link.absolute_url | replace: '"', '%22' }}"
-                                {%- if link.icon -%},
-                        "icon": "{{ link.icon | replace: '"', '\"' }}"
-                                {%- endif %}
-                                {%- if link.disabled -%},
+                        "href": "{{ link_href | replace: '"', '%22' }}"
+                                    {%- if link_icon -%},
+                        "icon": "{{ link_icon | replace: '"', '\"' }}"
+                                    {%- endif %}
+                                    {%- if link_disabled -%},
                         "disabled": true
+                                    {%- endif -%}
                                 {%- endif %}
-                    }{%- unless forloop.last -%},{%- endunless -%}
+                    }
+                                {%- assign has_live_links = has_live_links | minus: 1 -%}
+                                {%- if has_live_links > 0 -%},{%- endif -%}
                             {%- endfor %}
                 ]
                         {%- endif %}
