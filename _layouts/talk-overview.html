@@ -88,11 +88,11 @@
                 {%- include partials/list_sub_categories.html -%}
 
                 {%- include partials/get_link_types.html -%}
-                {%- if has_icon_links and site.conference.talks.hide_icons != true -%}
+                {%- if has_icon_links > 0 and site.conference.talks.hide_icons != true -%}
                   {% for link in talk.links -%}
                     {%- assign link_styleclass = "badge badge-light text-reset font-weight-normal mr-1" -%}
-                    {%- include partials/get_link.html -%}
-                    {%- if link_icon -%}
+                    {%- include partials/get_link.html link_type="icon" -%}
+                    {%- if link_valid -%}
                       {{- link_tag -}}
                         <i class="fas fa-{{ link_icon }} text-secondary"></i>
                       </a>

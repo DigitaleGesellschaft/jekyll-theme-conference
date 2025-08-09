@@ -4,12 +4,15 @@
   {%- assign links = speaker.links -%}
 {%- endif -%}
 
-{%- assign has_icon_links = false -%}
-{%- assign has_regular_links = false -%}
+{%- assign has_live_links = 0 -%}
+{%- assign has_icon_links = 0 -%}
+{%- assign has_regular_links = 0 -%}
 {%- for link in links -%}
-  {%- if link.icon or link.file or link.video -%}
-    {%- assign has_icon_links = true -%}
+  {%- if link.live -%}
+    {%- assign has_live_links = has_live_links | plus: 1 -%}
+  {%- elsif link.icon or link.file or link.video -%}
+    {%- assign has_icon_links = has_icon_links | plus: 1 -%}
   {%- else -%}
-    {%- assign has_regular_links = true -%}
+    {%- assign has_regular_links = has_regular_links | plus: 1 -%}
   {%- endif -%}
 {%- endfor -%}

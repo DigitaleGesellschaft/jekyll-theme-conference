@@ -70,13 +70,13 @@
 
   {% include partials/get_link_types.html %}
 
-  {% if has_icon_links %}
+  {% if has_icon_links > 0 %}
     <ul class="list-unstyled">
       {% for link in talk.links %}
         {% assign link_styleclass = "text-reset" %}
-        {% include partials/get_link.html %}
+        {% include partials/get_link.html link_type="icon" %}
 
-        {% if link_icon %}
+        {% if link_valid %}
           <li class="mb-1">
             {{ link_tag }}
               <span class="badge bg-soft-{{ main_cat_color }} font-weight-normal mr-1">
@@ -90,21 +90,21 @@
     </ul>
   {% endif %}
 
-  {% if has_regular_links %}
+  {% if has_regular_links > 0 %}
     <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information | default: "More information" }}:</h5>
 
     <ul class="list-unstyled">
       {% for link in talk.links %}
         {% assign link_styleclass = "text-reset" %}
-        {% include partials/get_link.html %}
+        {% include partials/get_link.html link_type="regular" %}
 
-        {% unless link_icon %}
+        {% if link_valid %}
           <li class="mb-1 ml-2 pl-2 border-soft-{{ main_cat_color }}">
             {{ link_tag }}
               {{ link.name }}
             </a>
           </li>
-        {% endunless %}
+        {% endif %}
       {% endfor %}
     </ul>
   {% endif %}

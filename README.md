@@ -619,9 +619,23 @@ Each talk is represented by a file in the `_talks/` directory. It must begin wit
 - the talk's `name` (used as identifier),
 - one or more existing `speakers` name(s),
 - optionally one or more `categories` of which one should be a main category as defined in the site's configuration,
-- optionally a list of `links` (see the _Links_ subsection below for the available properties per link; links with icons are treated separately and are also included on the talk overview page),
-- optionally a list of `live: links` (see the _Links_ subsection below for the available properties per link) which are shown below the live stream for the given talk in form of buttons, and
+- optionally a list of `links` (see the _Links_ subsection below for the available properties):
+  - Links with an `icon` are treated separately and are also included on the talk overview page.
+  - Links with `live: true` are only shown below the live stream for the given talk in form of buttons.
 - optionally `hide: true` if the talk's page should not be linked to.
+
+Example:
+
+```yaml
+---
+name: Vim Impetus Placerat Cotidieque Ad
+speakers:
+  - Tolga Philip
+categories:
+  - Cat B
+  - Talk
+---
+```
 
 ### Speakers
 
@@ -630,10 +644,24 @@ Each speaker is represented by a file in the `_speakers/` directory. It must beg
 - the speaker's `name` (used as identifier), as well as its
 - `first_name`,
 - `last_name`,
-- optionally a list of `links` (see the _Links_ subsection below for the available properties per link; links with icons are treated separately), and
+- optionally a list of `links` (see the _Links_ subsection below for the available properties):
+  - Links with an `icon` are treated separately and are also included on the speaker overview page.
 - optionally `hide: true` if the speaker's page should not be linked to.
 
 If the speaker's name consists only out of one word, populate the `last_name` property and leave the `first_name` property empty. The last name is generally used for sorting the speakers.
+
+Example:
+
+```yaml
+---
+name: Tolga Philip
+first_name: Tolga
+last_name: Philip
+links:
+  - name: Profile
+    absolute_url: https://github.com
+---
+```
 
 ### Rooms
 
@@ -642,8 +670,8 @@ Each room is represented by a file in the `_rooms/` directory. It must begin wit
 - the room's `name`
 - optionally `hide: true` if the room's page should not be linked to, and
 - optionally under the `live` property a URL pointing to a live stream for the given room during the conference (see the section _Live Indications & Streaming_ above), either:
-  * as an `absolute_url`, or
-  * a `relative_url`.
+  - as an `absolute_url`, or
+  - a `relative_url`.
 
 Example:
 
@@ -654,8 +682,6 @@ hide: false
 live:
   absolute_url: https://github.com
 ---
-
-...
 ```
 
 ### Links
@@ -663,31 +689,42 @@ live:
 Links are used at different location throughout the theme: They can either be used in the configuration file (for the landing page or the navigation bar), or in talks and for speakers. A link can thereby have the following properties:
 
 - the text to show (`name`),
-- optionally if it is disabled (`disabled: true`),
-- optionally if it should open in a iframe embedded in a popup-like modal in the site it self (`iframe: true`, e.g. for embedding videos thus having a default iframe ratio of 24:11)
-- optionally an icon to show (indicating the name of a [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon to be shown if supported at the given location)
-- the actual link address:
-  + given relatively to the site's base address: `relative_url:`,
-  + given absolute: `absolute_url:`,
-  + pointing to a file uploaded to the `/documents` folder (for talks `/documents/slides`, for speakers `/documents/bio`): `file:`
-  + pointing to an external video: `video:`
+- the link address:
+  - _relative_ to the site's base address: `relative_url:`,
+  - as an _absolute_ address: `absolute_url:`,
+  - pointing to a _file_ uploaded to the `/documents` folder: `file:`, or
+  - pointing to an external _video_: `video:`.
+- optionally, if it is disabled (`disabled: true`),
+- optionally, if it should open in a iframe embedded in a popup-like modal (`iframe: true`), and
+- optionally, an icon to show in front of the title (`icon: ` followed by the [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon name to show).
 
-Additionally, a navigation bar or main landing page link can also have the following properties:
+Using the `file:` indicator, the
 
-- `menu` containing another list of links. This creates a dropdown menu of multiple sublinks. The sublinks have the same properties as regular links, or
-- `live` making the link only visible during the conference and adds a live indication. The `name` property can be omitted. Using the optional `name_inactive` property shows a placeholder text while the conference is **not** live. If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ above).
+- link address is set to
+  - the site's base address followed by `/documents/slides` and the value for _talks_,
+  - the site's base address followed by `/documents/bio` and the value for _speakers_, or
+  - the site's base address followed by `/documents` and the value for all remaining types.
+- the link's `icon:` is set to `file-alt`.
 
-Using the `file:` indicator, the relative address is automatically set as well as the icon. Using the `video:` indicator, the link is automatically configured to open in an iframe with a corresponding title and the icon is set.
+Using the `video:` indicator, the
 
-Example:
+- link address is set to an absolute address as given by the value.
+- the link's `iframe:` attribute is set to `true` top embed the video in a popup-like modal having a default iframe ratio of 24:11.
+- the link's `icon:` is set to `video`.
 
-```yaml
-  links:
-    - name: Slides
-      file: slides.pdf
-    - name: Recording
-      video: https://media.ccc.de/
-```
+Additionally, a _talk_ link can also have the following property:
+
+- `live: true` whereby the link is only shown below the live stream for the given talk in form of buttons.
+
+Additionally, a _navigation bar_ or _main landing page_ link can also have the following properties:
+
+- `live: true` making the link only visible during the conference and adds a live indication.
+  - The link is only shown if `name` is set. If `name` is an empty string, "Live Stream" is shown instead.
+  - If `name_inactive` is set, its value is used to be shown as a placeholder text, while the conference is **not** live. If `name_inactive` is an empty string, "Live Stream" is shown instead.
+  - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ above).
+- `menu` containing another list of links. This creates a dropdown menu of multiple sublinks, while the URL of the parent link is ignored. The sublinks have the same properties as regular links.
+
+#### Import link files
 
 There exists a Python file in this repository, `_tools/import_resources.py`, which can be used to import resources such as slides and other documents from [pretalx.com](https://pretalx.com/p/about/)) via its API. It automatically downloads all files, stores them and updates the links of the talks concerned.
 
