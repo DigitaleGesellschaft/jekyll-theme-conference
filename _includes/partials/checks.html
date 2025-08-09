@@ -2,68 +2,100 @@
 
 {%- unless site.data.lang.version -%}
   {%- unless site.conference.lang == "en" -%}
-    {%- assign errors = errors | push : "The internationalization file containing different strings for this template seems to be missing. Have you copied the `_data/lang.yml` file from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/main/_data/lang.yml) to you local website folder?" -%}
+    {%- assign errors = errors | push: "The internationalization file containing different strings for this template seems to be missing. Have you copied the `_data/lang.yml` file from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/main/_data/lang.yml) to you local website folder?" -%}
   {%- endunless -%}
 {%- elsif site.data.lang.version != 8 -%}
-  {%- assign errors = errors | push : "The internationalization file in `_data/lang.yml` seems to be outdated and does not correspond to the current version of the theme. Grab the current version from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/main/_data/lang.yml)." -%}
+  {%- assign errors = errors | push: "The internationalization file in `_data/lang.yml` seems to be outdated and does not correspond to the current version of the theme. Grab the current version from the [theme's repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/main/_data/lang.yml)." -%}
 {%- endunless -%}
 {%- unless site.conference.lang == "en" or site.conference.lang == "de" or site.conference.lang == "fr" or site.conference.lang == "pt" -%}
-  {%- assign errors = errors | push : "Unknown language selected for `site.conference.lang` parameter. Supported are `en`, `de`, `fr`, and `pt`." -%}
+  {%- assign errors = errors | push: "Unknown language selected for `site.conference.lang` parameter. Supported are `en`, `de`, `fr`, and `pt`." -%}
 {%- endunless -%}
 
-{%- assign main_category_size = site.conference.talks.main_categories | size -%}
-{%- if main_category_size == 0 -%}
-  {%- assign errors = errors | push : "Your `_config.yml` configuration file does not define any main category for your talks. Have you set the `conference.talks.main_categories` property? See also [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README file." -%}
+{%- assign missing_tracks = "" | split: "," -%}
+{%- assign talks_with_categories = 0 -%}
+{%- for talk in site.talks -%}
+  {%- assign missing_track = 1 -%}
+  {%- for track in site.conference.talks.tracks -%}
+    {%- if talk.track == track.name -%}
+      {%- assign missing_track = 0 -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if missing_track > 0 -%}
+    {%- unless missing_tracks contains talk.track -%}
+      {%- assign missing_tracks = missing_tracks | push: talk.track -%}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- if talk.categories.size > 0 -%}
+    {%- assign talks_with_categories = talks_with_categories | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign main_categories_size = site.conference.talks.main_categories | size -%}
+{%- if main_categories_size > 0 -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.talks.main_categories` to `conference.talks.tracks` in your configuration. For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README." -%}
+{%- endif -%}
+{%- if talks_with_categories > 0 -%}
+  {%- assign errors = errors | push: "The `categories` property in the FrontMatter of some of your talks is deprecated. Please update it by reorganizing the content into `track` and `tags` properties instead. For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README." -%}
+{%- endif -%}
+{%- if missing_tracks.size > 0 -%}
+  {%- capture error_msg -%}
+    It looks like some of your talks are assigned to tracks not defined in your `_config.yml` file. Please add the following missing tracks to the `conference.talks.tracks` property in your configuration:
+    {%- for missing_track in missing_tracks %}
+- {{ missing_track }}
+{% endfor %}
+For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README
+  {%- endcapture -%}
+  {%- assign errors = errors | push: error_msg -%}
 {%- endif -%}
 
 {%- assign nbr_days = site.data.program.days | size -%}
 {%- if nbr_days == 0 -%}
-  {%- assign errors = errors | push : "Your schedule in `_data/program.yml` does not seem to contain any days. Have you already created the file?" -%}
+  {%- assign errors = errors | push: "Your schedule in `_data/program.yml` does not seem to contain any days. Have you already created the file?" -%}
 {%- endif -%}
 {%- if site.conference.live -%}
   {%- for d in site.data.program.days -%}
     {%- unless d.date or d.date == "" -%}
       {%- assign error_msg = "Day " | append: forloop.index | append: " in your schedule should have a (non-empty) `date` property."  -%}
-      {%- assign errors = errors | push : error_msg -%}
+      {%- assign errors = errors | push: error_msg -%}
     {%- endunless -%}
   {%- endfor -%}
 {%- endif -%}
 
 {%- assign nbr_rooms = site.rooms | size -%}
 {%- if nbr_rooms == 0 -%}
-  {%- assign errors = errors | push : "The `rooms` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_rooms/` folder empty?" -%}
+  {%- assign errors = errors | push: "The `rooms` collection does not seem to contain any entry. Have you accidentally renamed the collection or is your `_rooms/` folder empty?" -%}
 {%- else -%}
   {%- for room in site.rooms -%}
-    {%- assign nbr_rooms_name = site.rooms | where: 'name', room.name | size %}
+    {%- assign nbr_rooms_name = site.rooms | where: 'name', room.name | size -%}
     {%- if nbr_rooms_name > 1 -%}
-      {%- assign error_msg = "The room with the `name` _" | append: room.name | append: "_ oocures more than once but should be unique."  -%}
-      {%- assign errors = errors | push : error_msg -%}
+      {%- assign error_msg = "The room with the `name` _" | append: room.name | append: "_ occurs more than once but should be unique."  -%}
+      {%- assign errors = errors | push: error_msg -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endif -%}
 
 {%- assign nbr_speakers = site.speakers | size -%}
 {%- if nbr_speakers == 0 -%}
-  {%- assign errors = errors | push : "The `speakers` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_speakers/` folder empty?" -%}
+  {%- assign errors = errors | push: "The `speakers` collection does not seem to contain any entry. Have you accidentally renamed the collection or is your `_speakers/` folder empty?" -%}
 {%- else -%}
   {%- for speaker in site.speakers -%}
-    {%- assign nbr_speakers_name = site.speakers | where: 'name', speaker.name | size %}
+    {%- assign nbr_speakers_name = site.speakers | where: 'name', speaker.name | size -%}
     {%- if nbr_speakers_name > 1 -%}
-      {%- assign error_msg = "The speaker with the `name` _" | append: speaker.name | append: "_ oocures more than once but should be unique."  -%}
-      {%- assign errors = errors | push : error_msg -%}
+      {%- assign error_msg = "The speaker with the `name` _" | append: speaker.name | append: "_ occurs more than once but should be unique."  -%}
+      {%- assign errors = errors | push: error_msg -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endif -%}
 
 {%- assign nbr_talks = site.talks | size -%}
 {%- if nbr_talks == 0 -%}
-  {%- assign errors = errors | push : "The `talks` collection does not seem to contain any entry. Have you accidentially renamed the collection or is your `_talks/` folder empty?" -%}
+  {%- assign errors = errors | push: "The `talks` collection does not seem to contain any entry. Have you accidentally renamed the collection or is your `_talks/` folder empty?" -%}
 {%- else -%}
   {%- for talk in site.talks -%}
-    {%- assign nbr_talks_name = site.talks | where: 'name', talk.name | size %}
+    {%- assign nbr_talks_name = site.talks | where: 'name', talk.name | size -%}
     {%- if nbr_talks_name > 1 -%}
-      {%- assign error_msg = "The talk with the `name` _" | append: talk.name | append: "_ oocures more than once but should be unique."  -%}
-      {%- assign errors = errors | push : error_msg -%}
+      {%- assign error_msg = "The talk with the `name` _" | append: talk.name | append: "_ occurs more than once but should be unique."  -%}
+      {%- assign errors = errors | push: error_msg -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endif -%}

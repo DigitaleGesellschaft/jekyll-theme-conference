@@ -2,8 +2,8 @@
 name: Vim Impetus Placerat Cotidieque Ad
 speakers:
   - Tolga Philip
-categories:
-  - Cat B
+track: Cat B
+tags:
   - Talk
 ---
 

@@ -1,9 +1,0 @@
-{%- for main_cat in site.conference.talks.main_categories -%}
-  {%- for cat in talk.categories -%}
-    {%- if cat == main_cat.name -%}
-      {%- assign main_cat = main_cat.name -%}
-      {%- assign main_cat_color = main_cat.color -%}
-      {%- break -%}
-    {%- endif -%}
-  {%- endfor -%}
-{%- endfor -%}

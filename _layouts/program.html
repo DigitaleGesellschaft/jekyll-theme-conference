@@ -143,8 +143,8 @@
                   {%- if d_start_hour == 0 and d_start_min == 0 -%}
 
                     {%- assign talk_nbr_steps = talk_duration_min | divided_by: site.conference.program.time_steps -%}
-                    {%- include partials/get_main_category.html -%}
-                    <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ main_cat_color }} shadow-sm overflow-hidden" style="z-index: {{ z-index-max | minus: i }}">
+                    {%- include partials/get_track_properties.html -%}
+                    <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ track_color }} shadow-sm overflow-hidden" style="z-index: {{ z-index-max | minus: i }}">
 
                       {%- assign live_button_styleclass = "mb-2" %}
                       {%- include partials/show_live_button.html %}
@@ -156,7 +156,7 @@
                         {%- include partials/list_speakers.html %}
                       </p>
                       <p class="mb-1">
-                        {%- include partials/list_sub_categories.html %}
+                        {%- include partials/list_tags.html %}
                       </p>
                     </td>
                     {%- assign active_talk = true %}
@@ -189,11 +189,11 @@
     </div>
   {%- endif -%}
 
-  {%- if site.conference.talks.main_categories %}
+  {%- if site.conference.talks.tracks %}
     <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
-      {%- for main_cat in site.conference.talks.main_categories %}
-        <div class="d-block d-sm-inline-block m-1 p-1 pl-2 pr-2 border-soft-{{ main_cat.color }} bg-soft-{{ main_cat.color }} font-weight-normal">
-          {{- main_cat.name -}}
+      {%- for track in site.conference.talks.tracks %}
+        <div class="d-block d-sm-inline-block m-1 p-1 pl-2 pr-2 border-soft-{{ track.color | default: 'light' }} bg-soft-{{ track.color | default: 'light' }} font-weight-normal">
+          {{- track.name -}}
         </div>
       {%- endfor -%}
   {%- endif -%}

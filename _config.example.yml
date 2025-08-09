@@ -127,23 +127,23 @@ conference:
   live:
     date: 01.01.2020
     timezone: GMT+1
-    stop:       240  # in minutes
+    stop: 240 # in minutes
     streaming:
       enable: true
-      pause:     60  # in minutes
-      prepend:    5  # in minutes
-      extend:     5  # in minutes
+      pause: 60 # in minutes
+      prepend: 5 # in minutes
+      extend: 5 # in minutes
     demo:
       enable: false
-      duration: 300  # in seconds
-      pause:     10  # in seconds
+      duration: 300 # in seconds
+      pause: 10 # in seconds
 
   talks:
-    # Talk categories
-    main_categories:
-      - name: Cat A
+    # Talk tracks
+    tracks:
+      - name: Track A
         color: info
-      - name: Cat B
+      - name: Track B
         color: success
 
     # Hide icons on talk overview page

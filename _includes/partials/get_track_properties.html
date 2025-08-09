@@ -1,0 +1,6 @@
+{%- for track in site.conference.talks.tracks -%}
+  {%- if talk.track == track.name -%}
+    {%- assign track_color = track.color | default: 'light' -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}

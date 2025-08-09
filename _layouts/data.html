@@ -82,8 +82,8 @@
                 "href": "",
                         {%- endunless -%}
 
-                        {%- include partials/get_main_category.html %}
-                "color": "{{ main_cat_color }}",
+                        {%- include partials/get_track_properties.html %}
+                "color": "{{ track_color }}",
                 "speakers": [
                         {%- for speaker_name in talk.speakers %}
                     "{{ speaker_name}}"{%- unless forloop.last -%},{%- endunless -%}
