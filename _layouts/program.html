@@ -191,9 +191,9 @@
 
   {%- if site.conference.talks.tracks %}
     <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
-      {%- for track in site.conference.talks.tracks %}
-        <div class="d-block d-sm-inline-block m-1 p-1 pl-2 pr-2 border-soft-{{ track.color | default: 'light' }} bg-soft-{{ track.color | default: 'light' }} font-weight-normal">
-          {{- track.name -}}
+      {%- for track_prop in site.conference.talks.tracks %}
+        <div class="d-block d-sm-inline-block m-1 p-1 pl-2 pr-2 border-soft-{{ track_prop.color | default: 'light' }} bg-soft-{{ track_prop.color | default: 'light' }} font-weight-normal">
+          {{- track_prop.name -}}
         </div>
       {%- endfor -%}
   {%- endif -%}

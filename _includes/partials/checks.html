@@ -15,8 +15,8 @@
 {%- assign talks_with_categories = 0 -%}
 {%- for talk in site.talks -%}
   {%- assign missing_track = 1 -%}
-  {%- for track in site.conference.talks.tracks -%}
-    {%- if talk.track == track.name -%}
+  {%- for track_prop in site.conference.talks.tracks -%}
+    {%- if talk.track == track_prop.name -%}
       {%- assign missing_track = 0 -%}
       {%- break -%}
     {%- endif -%}

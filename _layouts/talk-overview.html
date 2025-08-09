@@ -11,15 +11,15 @@
 {{ content }}
 
 {% if site.conference.talks.tracks %}
-  {% for track in site.conference.talks.tracks %}
+  {% for track_prop in site.conference.talks.tracks %}
     <h3 class="mt-4 mb-3">
-      <span class="badge border-soft-{{ track.color | default: 'light' }} bg-soft-{{ track.color | default: 'light' }} d-block d-sm-inline text-wrap">
-        {{ track.name }}
+      <span class="badge border-soft-{{ track_prop.color | default: 'light' }} bg-soft-{{ track_prop.color | default: 'light' }} d-block d-sm-inline text-wrap">
+        {{ track_prop.name }}
       </span>
     </h3>
     <ul class="list-unstyled">
       {% for talk in site.talks -%}
-        {% if talk.track == track.name %}
+        {% if talk.track == track_prop.name %}
           {% include partials/get_talk_overview_talk.html %}
         {% endif %}
       {%- endfor %}
