@@ -1,11 +1,11 @@
+name: Update Schedule and Content
+
 on:
   pull_request:
     paths:
       - "schedule.json"
     branches:
       - main
-
-name: Update Schedule and Content
 
 jobs:
   build:
