@@ -52,7 +52,10 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Live Stream Overview](#live-stream-overview)
   - [Additional Pages](#additional-pages)
 - [Design](#design)
+- [JavaScript](#javascript)
 - [Development](#development)
+  - [Jekyll Theme Development](#jekyll-theme-development)
+  - [JavaScript Development](#javascript-development)
 - [License](#license)
 
 ## Installation
@@ -516,21 +519,16 @@ conference:
     map: true
 ```
 
-The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. The map object can be customized by adding additional layers with markers, text, or shapes. To do so, one has to edit the main JavaScript file, `assets/js/main.js`:
+The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. The map object can be customized by adding additional layers with markers, text, or shapes. To do so, edit the `assets/js/main.js` file in your project:
 
-1. Import the JavaScript library of the theme (via Jekyll `include` command)
-2. Await the initialization of the theme's object
-3. Fetch the map object and verify it is set (while the JavaScript code is imported and executed on each page, the map object will only exist on the location site)
+1. The conference JavaScript bundle (`conference.bundle.js`) is automatically loaded and provides all necessary libraries
+2. Await the initialization of the theme's object using `window.conference.awaitReady()`
+3. Fetch the map object and verify it is set (while the JavaScript code is executed on each page, the map object will only exist on the location site)
 4. Modify the map.
 
-Following an example is given adding a simple marker to the map:
+Following an example for `assets/js/main.js` is given adding a simple marker to the map:
 
 ```javascript
----
----
-
-{% include js/conference.js %}
-
 window.conference.awaitReady().then(() => {
     const map = window.conference.map.getMap();
 
@@ -544,7 +542,6 @@ window.conference.awaitReady().then(() => {
         }).addTo(map);
     }
 });
-
 ```
 
 ### Program Settings
@@ -808,7 +805,47 @@ Custom Bootstrap themes or simple color schemes such as designed with [Bootstrap
 2. Add your Bootstrap variables in front of the `@import 'conference'` line, e.g., currently the primary color is set internally to green (instead of Bootstrap's default blue): `$primary: #074 !default;`
 3. Add any additional CSS styles after it.
 
+## JavaScript
+
+The theme includes a pre-built JavaScript bundle (`assets/js/conference.bundle.js`). This bundle is automatically included in the theme gem, pre-compiled, and minified, requiring no build tools for end users. Please do not modify this file directly.
+
+To add custom JavaScript, edit the `assets/js/main.js file in your project. This file loads after the conference bundle, giving you full access to all theme functionality.
+
+**Available Global Objects:**
+
+- `window.conference`: Main conference object with the following modules:
+  - `conference.program`: Program navigation and tab management
+  - `conference.map`: Map functionality (if enabled)
+  - `conference.modal`: Modal popup handling
+  - `conference.live`: Live streaming and real-time updates
+  - `conference.awaitReady()`: Promise-based initialization helper
+- `window.$` / `window.jQuery`: jQuery library
+- `window.L`: Leaflet map library (if map is enabled)
+
+**Example Usage:**
+
+```javascript
+// Wait for conference to initialize
+window.conference.awaitReady().then(() => {
+    // Access the map
+    const map = window.conference.map.getMap();
+    if (typeof map !== 'undefined') {
+        // Add custom map markers
+        L.marker([47.37785, 8.54035]).addTo(map);
+    }
+
+    // Access live data
+    const liveData = window.conference.live.getData();
+
+    // Custom program interactions
+    // ...
+});
+```
+
+
 ## Development
+
+### Jekyll Theme Development
 
 If you want to modify this theme and see its changes on an existing project, simply indicate in your `Gemfile` that you want to use the local copy of the theme by adding a `path` indication after the gem instantiation:
 
@@ -817,6 +854,44 @@ group :jekyll_plugins do
   gem "jekyll-theme-conference", path: "../[path to your local theme]"
 end
 ```
+
+### JavaScript Development
+
+The theme's JavaScript is built using [Vite](https://vitejs.dev/) and modern ES modules. The source files are located in the `_js/` directory:
+
+```
+_js/
+├── main.js            # Main entry point
+├── init.js            # Initialization module
+├── core/
+│   └── conference.js  # Core conference object
+├── lib/
+│   └── syncscroll.js  # Synchronized scrolling library
+└── modules/
+    ├── program.js     # Program navigation
+    ├── map.js         # Map functionality
+    ├── modal.js       # Modal popups
+    └── live.js        # Live streaming
+```
+
+If you want to modify the theme's JavaScript source code, you'll need to rebuild the bundle:
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Build the JavaScript bundle:
+   ```bash
+   npm run build
+   ```
+   This will compile all ES modules from `_js/` into a single minified bundle at `assets/js/conference.bundle.js`.
+
+3. Test your changes:
+   After building, test the theme locally:
+   ```bash
+   bundle exec jekyll serve
+   ```
 
 ## License
 

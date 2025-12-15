@@ -8,8 +8,8 @@
     {%- include partials/modal_live.html -%}
   {%- endif -%}
 
-  <!-- Append build time to avoid caching of live program embedded in JavaScript file -->
-  <script src="{{ site.baseurl }}/assets/js/main.js?t={{ site.time | date: "%s" }}"></script>
+  <script src="{{ site.baseurl }}/assets/js/conference.bundle.js?t={{ site.time | date: '%s' }}" data-baseurl="{{ site.baseurl }}"></script>
+  <script src="{{ site.baseurl }}/assets/js/main.js?t={{ site.time | date: '%s' }}"></script>
 
 </body>
 </html>
