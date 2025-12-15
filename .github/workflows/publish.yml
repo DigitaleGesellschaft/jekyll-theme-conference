@@ -1,7 +1,8 @@
 name: Build & Publish Ruby Gem
 # Performs the following steps:
 #   - Sets the environment up
-#   - Builds the gem
+#   - Builds JavaScript bundle with Vite
+#   - Builds the gem (including the pre-built bundle)
 #   - Uploads the gem to RubyGem
 #   - Creates a GitHub release and attaches the gem to it
 
@@ -20,6 +21,18 @@ jobs:
       - name: Checkout code
         id: checkout_code
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Build JavaScript bundle with Vite
+        run: npm run build
 
       - name: Set up Ruby 3.3
         id: setup_ruby

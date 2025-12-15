@@ -10,7 +10,13 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/DigitaleGesellschaft/jekyll-theme-conference/"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_layouts|_includes|_sass|LICENSE|README)!i) }
+  spec.files         = begin
+    files = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_layouts|_includes|_sass|LICENSE|README)!i) }
+    # Include the pre-built JavaScript bundle (not added by default as listed in .gitignore file)
+    bundle_file = "assets/js/conference.bundle.js"
+    files << bundle_file if File.exist?(bundle_file)
+    files
+  end
 
   spec.add_runtime_dependency "jekyll", "~> 4.0"
 

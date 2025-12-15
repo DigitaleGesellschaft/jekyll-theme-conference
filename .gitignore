@@ -8,6 +8,10 @@ _site/
 .bundle/
 vendor/bundle/
 
+### Node.js ###
+node_modules/
+assets/js/conference.bundle.js
+
 ### Python ###
 __pycache__/
 .venv/
