@@ -1,4 +1,4 @@
-{% include partials/header.html %}
+{% include header.html %}
 
   <div class="jumbotron">
     <h1 class="display-3 text-break">
@@ -35,7 +35,7 @@
               {% assign parent_link = link %}
               {% for link in parent_link.menu %}
                 {% assign link_styleclass = "dropdown-item" %}
-                {% include partials/get_link.html %}
+                {% include get_link.html %}
                 {{ link_tag }}
                   {{ link.name }}
                 </a>
@@ -44,7 +44,7 @@
           </div>
 
         {% elsif link.live %}
-          {%- include partials/get_live_timestamps.html -%}
+          {%- include get_live_timestamps.html -%}
 
           {%- if link.name == blank -%}
             {%- assign link_name = site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
@@ -68,7 +68,7 @@
                 >
               {% else %}
                 {% assign link_styleclass = btn_default %}
-                {% include partials/get_link.html %}
+                {% include get_link.html %}
                 {{ link_tag }}
               {% endif %}
 
@@ -98,7 +98,7 @@
 
         {% else %}
           {% assign link_styleclass = btn_default %}
-          {% include partials/get_link.html %}
+          {% include get_link.html %}
           {{ link_tag }}
             {{ link.name }}
           </a>
@@ -109,4 +109,4 @@
 
   </div>
 
-{% include partials/footer.html %}
+{% include footer.html %}

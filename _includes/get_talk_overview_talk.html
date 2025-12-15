@@ -1,15 +1,15 @@
 <li class="pl-2 mb-2 border-soft-{{ track_prop.color | default: 'light' }}">
   <p class="mb-0">
-    {% include partials/show_talk.html %}
+    {% include show_talk.html %}
   </p>
   <p class="font-weight-light mb-0">
-    {% include partials/list_speakers.html %}
+    {% include list_speakers.html %}
   </p>
 
   {% if talk.hide -%}
     {%- assign talk_scheduled = false -%}
     {%- for d in site.data.program.days -%}
-      {%- include partials/get_day_hash.html -%}
+      {%- include get_day_hash.html -%}
       {%- for r in d.rooms -%}
         {%- assign room = site.rooms | where: 'name', r.name | first -%}
         {%- for t in r.talks -%}
@@ -17,20 +17,20 @@
             <p class="mb-0">
 
               {%- if site.conference.live -%}
-                {%- include partials/get_talk_timestamp.html -%}
+                {%- include get_talk_timestamp.html -%}
                 <span class="live-hide" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
               {%- endif -%}
 
-              {%- include partials/get_time_pronoun.html -%}
-              {%- include partials/get_talk_time.html -%}
-              {{- time_pronoun }} {% include partials/show_talk_time.html %}
+              {%- include get_time_pronoun.html -%}
+              {%- include get_talk_time.html -%}
+              {{- time_pronoun }} {% include show_talk_time.html %}
 
               {%- if site.conference.live -%}
                 </span>
-                {%- include partials/show_live_button.html -%}
+                {%- include show_live_button.html -%}
               {%- endif %}
 
-              {{ site.data.lang[site.conference.lang].pronoun.in | default: "in" }} {% include partials/show_room.html -%}
+              {{ site.data.lang[site.conference.lang].pronoun.in | default: "in" }} {% include show_room.html -%}
             </p>
 
             {%- assign talk_scheduled = true -%}
@@ -56,19 +56,19 @@
           {%- for t in r.talks -%}
             {%- if talk.name == t.name -%}
               {%- assign live_button_styleclass = "mr-1" -%}
-              {%- include partials/show_live_button.html -%}
+              {%- include show_live_button.html -%}
             {%- endif -%}
           {%- endfor -%}
         {%- endfor -%}
       {%- endfor -%}
     {%- endif -%}
-    {%- include partials/list_tags.html -%}
+    {%- include list_tags.html -%}
 
-    {%- include partials/get_link_types.html -%}
+    {%- include get_link_types.html -%}
     {%- if has_icon_links > 0 and site.conference.talks.hide_link_icons != true -%}
       {% for link in talk.links -%}
         {%- assign link_styleclass = "badge badge-light text-reset font-weight-normal mr-1" -%}
-        {%- include partials/get_link.html link_type="icon" -%}
+        {%- include get_link.html link_type="icon" -%}
         {%- if link_valid -%}
           {{- link_tag -}}
             <i class="fas fa-{{ link_icon }} text-secondary"></i>

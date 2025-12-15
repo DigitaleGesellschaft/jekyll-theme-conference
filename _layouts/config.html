@@ -1,5 +1,5 @@
 {
-    {%- include partials/get_enable_map.html -%}
+    {%- include get_enable_map.html -%}
     {%- if enable_map %}
     "map": {
         "map_provider": "{{ site.conference.location.map.map_provider | default: 'OpenStreetMap.Mapnik' }}",
@@ -12,17 +12,17 @@
     "live": {
         "time": {
             {% assign d = site.data.program.days | first -%}
-            {%- include partials/get_day_time.html -%}
+            {%- include get_day_time.html -%}
             {%- assign t = day_start_talk -%}
 
-            {%- include partials/get_talk_timestamp.html -%}
+            {%- include get_talk_timestamp.html -%}
             {%- assign conf_start = timestamp_start -%}
 
             {%- assign d = site.data.program.days | last -%}
-            {%- include partials/get_day_time.html -%}
+            {%- include get_day_time.html -%}
             {%- assign t = day_end_talk -%}
 
-            {%- include partials/get_talk_timestamp.html -%}
+            {%- include get_talk_timestamp.html -%}
             {%- assign conf_end = timestamp_end -%}
 
             "start": {{ conf_start }},

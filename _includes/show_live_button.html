@@ -1,5 +1,5 @@
 {%- if site.conference.live -%}
-  {%- include partials/get_talk_timestamp.html -%}
+  {%- include get_talk_timestamp.html -%}
 
   {%- if site.conference.live.streaming.enable -%}
     <a title="{{ link.name }}" {% if site.conference.live.streaming.external -%}

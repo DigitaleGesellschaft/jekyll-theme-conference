@@ -20,7 +20,7 @@
                 {%- assign parent_link = link -%}
                 {%- for link in parent_link.menu -%}
                   {%- assign link_styleclass = "dropdown-item" -%}
-                  {%- include partials/get_link.html %}
+                  {%- include get_link.html %}
                   {{ link_tag }}
                     {{ link.name }}
                   </a>
@@ -29,7 +29,7 @@
             </li>
 
           {%- elsif link.live -%}
-            {%- include partials/get_live_timestamps.html -%}
+            {%- include get_live_timestamps.html -%}
 
             {%- if link.name == blank -%}
               {%- assign link_name = site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
@@ -53,7 +53,7 @@
                   >
                 {%- else %}
                   {%- assign link_styleclass = "nav-link" -%}
-                  {%- include partials/get_link.html %}
+                  {%- include get_link.html %}
                   {{ link_tag }}
                 {%- endif %}
 
@@ -86,7 +86,7 @@
           {%- else %}
             <li class="nav-item {% if page.url contains link.relative_url %}active{% endif %}">
               {%- assign link_styleclass = "nav-link" -%}
-              {%- include partials/get_link.html -%}
+              {%- include get_link.html -%}
               {{ link_tag }}
                 {{ link.name }}
               </a>

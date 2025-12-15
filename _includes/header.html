@@ -5,13 +5,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  {% include partials/get_page_title.html -%}
+  {% include get_page_title.html -%}
   <title>
     {{- page_title -}}
     {%- unless page_title == empty %} - {% endunless -%}
     {{- site.title -}}
   </title>
-  {% include partials/list_page_meta.html %}
+  {% include list_page_meta.html %}
 
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: "%s" }}" />
 
@@ -25,7 +25,7 @@
   {%- if site.conference.live.streaming.enable %}
     {%- for room in site.rooms %}
       {%- if room.live %}
-        {%- include partials/get_room_live_href.html %}
+        {%- include get_room_live_href.html %}
         {%- if room_live_href %}
   <link rel="preconnect" href="{{ room_live_href }}" />
         {%- endif %}
@@ -37,7 +37,7 @@
 <body class="pb-4">
   <header>
     <!-- navigation bar (web only): -->
-    {%- include partials/navbar.html -%}
+    {%- include navbar.html -%}
 
     {%- unless page.url == "/" -%}
       <!-- site title (print only): -->
@@ -51,4 +51,4 @@
   </header>
   <main class="container">
 
-    {%- include partials/info_bar.html -%}
+    {%- include info_bar.html -%}

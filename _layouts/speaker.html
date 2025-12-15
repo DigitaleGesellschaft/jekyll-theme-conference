@@ -1,7 +1,7 @@
 {%- assign speaker = page -%}
 
 {%- unless speaker.hide -%}
-  {%- include partials/header.html -%}
+  {%- include header.html -%}
 
   <p class="h6">
     {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
@@ -13,13 +13,13 @@
 
   {{ content }}
 
-  {% include partials/get_link_types.html %}
+  {% include get_link_types.html %}
 
   {% if has_icon_links > 0 %}
     <ul class="list-unstyled">
       {% for link in speaker.links %}
         {% assign link_styleclass = "text-reset" %}
-        {% include partials/get_link.html link_type="icon" %}
+        {% include get_link.html link_type="icon" %}
 
         {% if link_valid %}
           <li class="mb-1">
@@ -41,7 +41,7 @@
     <ul class="list-unstyled">
       {% for link in speaker.links %}
         {% assign link_styleclass = "text-reset" %}
-        {% include partials/get_link.html link_type="regular" %}
+        {% include get_link.html link_type="regular" %}
 
         {% if link_valid %}
           <li class="mb-1 ml-2 pl-2 border-soft-primary">
@@ -69,7 +69,7 @@
 
     <table class="list-program">
       {%- for d in site.data.program.days -%}
-        {%- include partials/get_day_hash.html -%}
+        {%- include get_day_hash.html -%}
         {%- for r in d.rooms -%}
           {%- for t in r.talks -%}
             {%- assign talk = site.talks | where: 'name', t.name | first -%}
@@ -77,19 +77,19 @@
             {%- for speaker_name in talk.speakers -%}
               {%- if speaker_name == speaker.name -%}
 
-                {%- include partials/get_track_properties.html -%}
+                {%- include get_track_properties.html -%}
 
                 <tr>
                   <td class="pr-2 py-0">
-                    {%- include partials/get_talk_time.html -%}
+                    {%- include get_talk_time.html -%}
                     {%- assign talk_time_styleclass = "w-100" -%}
-                    {%- include partials/show_talk_time.html -%}
+                    {%- include show_talk_time.html -%}
                   </td>
                   <td class="pl-2 py-0 align-baseline border-soft-{{ track_color }}">
                     <span class="mr-2">
-                      {%- include partials/show_talk.html -%}
+                      {%- include show_talk.html -%}
                     </span>
-                    {%- include partials/show_live_button.html -%}
+                    {%- include show_live_button.html -%}
                   </td>
                 </tr>
 
@@ -107,5 +107,5 @@
     </a>
   </p>
 
-  {%- include partials/footer.html -%}
+  {%- include footer.html -%}
 {%- endunless -%}
