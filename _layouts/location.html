@@ -1,4 +1,4 @@
-{% include partials/header.html %}
+{% include header.html %}
 
   {% assign this_room = page %}
 
@@ -13,7 +13,7 @@
   {% assign this_room = page %}
 
   {% unless site.conference.location.hide %}
-    {% include partials/navbar_rooms.html %}
+    {% include navbar_rooms.html %}
   {% endunless %}
 
   {{ content }}
@@ -22,4 +22,4 @@
     <div id="map" class="mt-4 mb-3"></div>
   {% endif %}
 
-{% include partials/footer.html %}
+{% include footer.html %}

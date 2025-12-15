@@ -1,13 +1,13 @@
 {%- assign talk = page -%}
 
 {%- unless talk.hide -%}
-  {%- include partials/header.html -%}
+  {%- include header.html -%}
 
   {% if talk.track or talk.tags.size > 0 %}
     <div class="d-flex flex-md-row flex-column container-fluid mb-2 p-0">
       {% if talk.track %}
         <div class="h6 mt-2 mb-0 mr-1 pr-1 pb-1">
-          {% include partials/get_track_properties.html %}
+          {% include get_track_properties.html %}
           <span class="d-block d-sm-inline p-1 pl-2 pr-2 border-soft-{{ track_color }} bg-soft-{{ track_color }} font-weight-normal">
             {{ talk.track }}
           </span>
@@ -17,7 +17,7 @@
       {% if talk.tags.size > 0 %}
         <div class="h6 mt-2 mb-0 ml-1 pr-1 pb-1">
           {% for tag in talk.tags %}
-            {%- include partials/get_tag_icon.html -%}
+            {%- include get_tag_icon.html -%}
             <span class="mr-2">{{ tag_html }}</span>
           {% endfor %}
         </div>
@@ -28,40 +28,40 @@
   <h1 class="font-weight-light text-break">{{ talk.name }}</h1>
 
   <p class="mb-3 font-weight-light">
-    {% include partials/list_speakers.html %}
+    {% include list_speakers.html %}
   </p>
 
   <div class="mb-3 p-0">
     {% for d in site.data.program.days -%}
-      {%- include partials/get_day_hash.html -%}
+      {%- include get_day_hash.html -%}
       {%- for r in d.rooms -%}
         {%- for t in r.talks -%}
           {%- if talk.name == t.name -%}
 
             {%- if site.conference.live -%}
-              {%- include partials/get_talk_timestamp.html -%}
+              {%- include get_talk_timestamp.html -%}
               <span class="live-hide" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
             {%- endif -%}
 
-            {%- include partials/get_time_pronoun.html -%}
-            {%- include partials/get_talk_time.html -%}
+            {%- include get_time_pronoun.html -%}
+            {%- include get_talk_time.html -%}
             <span class="d-none d-sm-inline">
               {{- time_pronoun -}}
-            </span> {% include partials/show_talk_time.html -%}
+            </span> {% include show_talk_time.html -%}
 
             {%- if site.conference.live -%}
               </span>
-              {%- include partials/show_live_button.html -%}
+              {%- include show_live_button.html -%}
             {%- endif -%}
 
             {%- assign room = site.rooms | where: 'name', r.name | first -%}
             <span class="d-none d-sm-inline ml-1">
               {{- site.data.lang[site.conference.lang].pronoun.in | default: "in" -}}
-            </span> {% include partials/show_room.html -%}
+            </span> {% include show_room.html -%}
 
             <span class="d-none d-sm-inline ml-1">
               {{- site.data.lang[site.conference.lang].pronoun.for | default: "for" -}}
-            </span> {% include partials/show_talk_duration.html -%}
+            </span> {% include show_talk_duration.html -%}
 
           {% endif %}
         {% endfor %}
@@ -71,13 +71,13 @@
 
   {{ content }}
 
-  {% include partials/get_link_types.html %}
+  {% include get_link_types.html %}
 
   {% if has_icon_links > 0 %}
     <ul class="list-unstyled">
       {% for link in talk.links %}
         {% assign link_styleclass = "text-reset" %}
-        {% include partials/get_link.html link_type="icon" %}
+        {% include get_link.html link_type="icon" %}
 
         {% if link_valid %}
           <li class="mb-1">
@@ -99,7 +99,7 @@
     <ul class="list-unstyled">
       {% for link in talk.links %}
         {% assign link_styleclass = "text-reset" %}
-        {% include partials/get_link.html link_type="regular" %}
+        {% include get_link.html link_type="regular" %}
 
         {% if link_valid %}
           <li class="mb-1 ml-2 pl-2 border-soft-{{ track_color | default: 'light' }}">
@@ -122,5 +122,5 @@
     </a>
   </p>
 
-  {%- include partials/footer.html -%}
+  {%- include footer.html -%}
 {%- endunless -%}

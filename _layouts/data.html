@@ -3,7 +3,7 @@
     "days": [
         {%- for d in site.data.program.days %}
         {
-            {%- include partials/get_day_hash.html %}
+            {%- include get_day_hash.html %}
             "name": "{{ day_name }}",
             "hash": "{{ day_hash }}",
             "date": "{{ d.date }}"
@@ -15,7 +15,7 @@
     {%- assign first_room = true -%}
     {%- for room in site.rooms %}
         {%- if room.live -%}
-            {%- include partials/get_room_live_href.html -%}
+            {%- include get_room_live_href.html -%}
             {%- unless room_live_href -%}
                 {%- continue -%}
             {%- endunless -%}
@@ -82,7 +82,7 @@
                 "href": "",
                         {%- endunless -%}
 
-                        {%- include partials/get_track_properties.html %}
+                        {%- include get_track_properties.html %}
                 "color": "{{ track_color }}",
                 "speakers": [
                         {%- for speaker_name in talk.speakers %}
@@ -90,15 +90,15 @@
                         {%- endfor %}
                 ],
 
-                        {%- include partials/get_talk_timestamp.html %}
+                        {%- include get_talk_timestamp.html %}
                 "start": {{ timestamp_start }},
                 "end": {{ timestamp_end }}
 
-                        {% include partials/get_link_types.html %}
+                        {% include get_link_types.html %}
                         {%- if has_live_links > 0 -%},
                 "live_links": [
                             {%- for link in talk.links -%}
-                                {%- include partials/get_link.html link_type="live" -%}
+                                {%- include get_link.html link_type="live" -%}
                                 {%- if link_valid %},
                     {
                         "name": "{{ link.name | replace: '"', '\"' }}",

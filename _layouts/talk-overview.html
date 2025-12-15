@@ -1,4 +1,4 @@
-{% include partials/header.html %}
+{% include header.html %}
 
 <h1 class="display-5 mb-4 text-break">
   {%- if page.title -%}
@@ -20,7 +20,7 @@
     <ul class="list-unstyled">
       {% for talk in site.talks -%}
         {% if talk.track == track_prop.name %}
-          {% include partials/get_talk_overview_talk.html %}
+          {% include get_talk_overview_talk.html %}
         {% endif %}
       {%- endfor %}
     </ul>
@@ -28,9 +28,9 @@
 {% else %}
   <ul class="list-unstyled">
     {% for talk in site.talks -%}
-      {% include partials/get_talk_overview_talk.html %}
+      {% include get_talk_overview_talk.html %}
     {%- endfor %}
   </ul>
 {% endif %}
 
-{% include partials/footer.html %}
+{% include footer.html %}

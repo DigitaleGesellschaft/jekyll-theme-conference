@@ -17,7 +17,7 @@
     {%- assign last_end = 0 -%}
 
     {%- for t in r.talks -%}
-      {%- include partials/get_talk_timestamp.html -%}
+      {%- include get_talk_timestamp.html -%}
 
       {%- assign last_pause = timestamp_start | minus: last_end -%}
 

@@ -1,7 +1,7 @@
 {%- assign this_room = page -%}
 
 {%- unless this_room.hide or site.conference.location.hide -%}
-  {%- include partials/header.html -%}
+  {%- include header.html -%}
 
   <!-- title for print: -->
   <h1 class="display-5 mb-3 d-none d-print-inline">
@@ -13,13 +13,13 @@
     {{ site.data.lang[site.conference.lang].location.rooms | default: "Rooms" }}
   </h1>
 
-  {% include partials/navbar_rooms.html %}
+  {% include navbar_rooms.html %}
 
   {{ content }}
 
   {% assign room_talks = false %}
   {% for d in site.data.program.days %}
-    {% include partials/get_day_hash.html %}
+    {% include get_day_hash.html %}
     {% for r in d.rooms %}
       {% if this_room.name == r.name and r.talks.size > 0 %}
         {% unless room_talks %}
@@ -36,24 +36,24 @@
         <table class="list-program">
         {%- for t in r.talks -%}
           {%- assign talk = site.talks | where: 'name', t.name | first -%}
-          {%- include partials/get_track_properties.html %}
+          {%- include get_track_properties.html %}
 
           <tr>
             <td class="pr-2">
-              {%- include partials/get_talk_time.html -%}
+              {%- include get_talk_time.html -%}
               {%- assign talk_day_hide = true -%}
               {%- assign talk_time_styleclass = "w-100" -%}
-              {% include partials/show_talk_time.html %}
+              {% include show_talk_time.html %}
 
               {%- assign live_button_styleclass = "w-100" -%}
-              {% include partials/show_live_button.html %}
+              {% include show_live_button.html %}
             </td>
             <td class="pl-2 border-soft-{{ track_color }}">
               <p class="mb-0">
-                {%- include partials/show_talk.html -%}
+                {%- include show_talk.html -%}
               </p>
               <p class="font-weight-light mb-0">
-                {%- include partials/list_speakers.html -%}
+                {%- include list_speakers.html -%}
               </p>
             </td>
           </tr>
@@ -66,5 +66,5 @@
     {% endfor %}
   {% endfor %}
 
-  {%- include partials/footer.html -%}
+  {%- include footer.html -%}
 {%- endunless -%}

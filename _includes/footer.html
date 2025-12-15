@@ -2,10 +2,10 @@
   </main>
   <footer class="container"></footer>
 
-  {%- include partials/modal_link.html -%}
+  {%- include modal_link.html -%}
 
   {%- if site.conference.live.streaming.enable -%}
-    {%- include partials/modal_live.html -%}
+    {%- include modal_live.html -%}
   {%- endif -%}
 
   <script src="{{ site.baseurl }}/assets/js/conference.bundle.js?t={{ site.time | date: '%s' }}" data-baseurl="{{ site.baseurl }}"></script>

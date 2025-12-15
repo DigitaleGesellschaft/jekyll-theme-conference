@@ -1,6 +1,6 @@
 {% unless site.conference.link_preview.disable -%}
-  {%- include partials/get_page_title.html default=site.title replace_quotes=true -%}
-  {%- include partials/get_page_description.html default=site.title replace_quotes=true -%}
+  {%- include get_page_title.html default=site.title replace_quotes=true -%}
+  {%- include get_page_description.html default=site.title replace_quotes=true -%}
 
   <meta name="description" content="{{ page_description }}" />
 

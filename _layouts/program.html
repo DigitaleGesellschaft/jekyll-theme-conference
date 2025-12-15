@@ -1,4 +1,4 @@
-{% include partials/header.html %}
+{% include header.html %}
   {% assign nbr_days = site.data.program.days | size -%}
 
   <h1 class="display-5 {% if nbr_days > 1 -%} mb-2 {%- else -%} mb-4 {%- endif %} text-break">
@@ -14,9 +14,9 @@
   {%- if nbr_days > 1 %}
     <ul class="nav justify-content-center mb-3 btn-group" id="day-list" role="tablist">
       {%- for d in site.data.program.days -%}
-        {%- include partials/get_day_hash.html %}
+        {%- include get_day_hash.html %}
         <li class="nav-item" role="presentation">
-          <a class="nav-link btn btn-outline-secondary {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-toggle="tab" {%- if d.date -%}{%- include partials/get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
+          <a class="nav-link btn btn-outline-secondary {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
         </li>
       {%- endfor %}
     </ul>
@@ -25,7 +25,7 @@
 
   {%- for d in site.data.program.days -%}
     {%- if nbr_days > 1 -%}
-      {%- include partials/get_day_hash.html %}
+      {%- include get_day_hash.html %}
       <div class="tab-pane {%- if forloop.index == 1 %} active{% endif %}" id="{{ day_hash }}" role="tabpanel" aria-labelledby="tab-{{ day_hash }}">
     {%- endif %}
 
@@ -59,7 +59,7 @@
     <div class="syncscroll overflow-y-hidden" name="sync-table">
       <table class="table mx-auto">
         <tbody>
-          {%- include partials/get_day_time.html -%}
+          {%- include get_day_time.html -%}
 
           {%- if day_end_day > day_start_day -%}
             {%- assign day_end_hour = day_end_day | minus: day_start_day | times: 24 | plus: day_end_hour -%}
@@ -113,7 +113,7 @@
                 {%- for t in r.talks -%}
                   {%- assign talk = site.talks | where: 'name', t.name | first -%}
 
-                  {%- include partials/get_talk_time.html -%}
+                  {%- include get_talk_time.html -%}
 
                   {%- assign d_start_hour = current_day | minus: talk_start_day | times: 24 | plus: current_hour | minus: talk_start_hour -%}
                   {%- assign d_start_min = current_min | minus: talk_start_min -%}
@@ -143,20 +143,20 @@
                   {%- if d_start_hour == 0 and d_start_min == 0 -%}
 
                     {%- assign talk_nbr_steps = talk_duration_min | divided_by: site.conference.program.time_steps -%}
-                    {%- include partials/get_track_properties.html -%}
+                    {%- include get_track_properties.html -%}
                     <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ track_color }} shadow-sm overflow-hidden" style="z-index: {{ z-index-max | minus: i }}">
 
                       {%- assign live_button_styleclass = "mb-2" %}
-                      {%- include partials/show_live_button.html %}
+                      {%- include show_live_button.html %}
 
                       <p class="mb-2">
-                        {%- include partials/show_talk.html %}
+                        {%- include show_talk.html %}
                       </p>
                       <p class="font-weight-light mb-2">
-                        {%- include partials/list_speakers.html %}
+                        {%- include list_speakers.html %}
                       </p>
                       <p class="mb-1">
-                        {%- include partials/list_tags.html %}
+                        {%- include list_tags.html %}
                       </p>
                     </td>
                     {%- assign active_talk = true %}
@@ -198,4 +198,4 @@
       {%- endfor -%}
   {%- endif -%}
 
-{% include partials/footer.html %}
+{% include footer.html %}
