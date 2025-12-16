@@ -19,7 +19,7 @@
 
               {%- if site.conference.live -%}
                 {%- include get_talk_timestamp.html -%}
-                <span class="live-hide" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+                <span class="live-hide d-print-inline" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
               {%- endif -%}
 
               {%- include get_time_pronoun.html -%}
@@ -28,7 +28,7 @@
 
               {%- if site.conference.live -%}
                 </span>
-                {%- include show_live_button.html -%}
+                {%- include show_live_link.html -%}
               {%- endif %}
 
               {{ site.data.lang[site.conference.lang].pronoun.in | default: "in" }} {% include show_room.html -%}
@@ -56,8 +56,7 @@
         {%- for r in d.rooms -%}
           {%- for t in r.talks -%}
             {%- if talk.name == t.name -%}
-              {%- assign live_button_styleclass = "me-1" -%}
-              {%- include show_live_button.html -%}
+              {%- include show_live_link.html -%}
             {%- endif -%}
           {%- endfor -%}
         {%- endfor -%}

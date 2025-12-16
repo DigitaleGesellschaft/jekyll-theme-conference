@@ -68,32 +68,7 @@
   margin-bottom: 0;
 }
 
-// Live icon
-.live-button>object {
-  width: 0.85em;
-  height: 0.85em;
-  color: inherit;
-}
-
 // Map
 #map {
   min-height: 400px;
-}
-
-// Live button font size in navigation bar
-.nav-link .live-button {
-  font-size: 1em;
-}
-
-// Print styles
-@media print {
-
-  // Remove live buttons
-  .live-show {
-    display: none;
-  }
-
-  .live-hide {
-    display: inline-block !important;
-  }
 }
