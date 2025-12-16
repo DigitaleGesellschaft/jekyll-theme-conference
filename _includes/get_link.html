@@ -17,6 +17,10 @@
 {%- assign link_icon = link.icon -%}
 {%- assign link_iframe = link.iframe -%}
 
+{%- assign link_href = "" -%}
+{%- assign link_icon = "" -%}
+{%- assign link_iframe = false -%}
+{%- assign link_disabled = false -%}
 {%- if link.absolute_url -%}
   {%- assign link_href = link.absolute_url -%}
 
@@ -76,7 +80,7 @@
 {%- endif -%}
 
 {%- capture link_tag -%}
-  {%- if link.disabled -%}
+  {%- if link_disabled -%}
     <a class="disabled link-underline link-underline-opacity-0 {{ link_styleclass | default: '' }}" href="#">
 
   {%- elsif link_iframe -%}

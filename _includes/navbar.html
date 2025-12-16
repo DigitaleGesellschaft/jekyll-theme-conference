@@ -31,54 +31,17 @@
           {%- elsif link.live -%}
             {%- include get_live_timestamps.html -%}
 
-            {%- if link.name == blank -%}
-              {%- assign link_name = site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
-            {%- elsif link.name -%}
-              {%- assign link_name = link.name -%}
-            {%- else -%}
-              {%- assign link_name = nil -%}
-            {%- endif -%}
-
-            {%- if link_name -%}
-              <li class="nav-item live-show d-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-                {%- if site.conference.live.streaming.enable %}
-                  <a
-                    class="nav-link"
-                    title="{{ link_name }}"
-                  {%- if site.conference.live.streaming.external %}
-                    href="{{ site.conference.live.streaming.external }}"
-                  {%- else %}
-                    data-bs-toggle="modal" data-bs-target="#stream-modal" data-room="{{ r.name }}" href="#"
-                  {%- endif -%}
-                  >
-                {%- else %}
-                  {%- assign link_styleclass = "nav-link" -%}
-                  {%- include get_link.html %}
-                  {{ link_tag }}
-                {%- endif %}
-
-                  {{ link_name }}
-
-                  <span class="live-button bg-dark text-dark-emphasis py-1 px-2 rounded">
-                    <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml">!</object>
-                    {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
-                  </span>
-                </a>
+            {%- if link.name != nil or link.name_inactive == nil -%}
+              <li class="nav-item live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+                {% assign link_styleclass = "nav-link" %}
+                {% include get_live_link.html %}
               </li>
             {%- endif -%}
 
-            {%- if link.name_inactive == blank -%}
-              {%- assign link_name_inactive = site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
-            {%- elsif link.name_inactive -%}
-              {%- assign link_name_inactive = link.name_inactive -%}
-            {%- else -%}
-              {%- assign link_name_inactive = nil -%}
-            {%- endif -%}
-
             {%- if link_name_inactive -%}
-              <li class="nav-item live-hide" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+              <li class="nav-item live-hide d-print-inline-block" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
-                  {{ link_name_inactive }}
+                  {{ link.name_inactive }}
                 </a>
               </li>
             {%- endif -%}

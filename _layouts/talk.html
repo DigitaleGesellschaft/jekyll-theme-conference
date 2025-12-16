@@ -40,7 +40,7 @@
 
             {%- if site.conference.live -%}
               {%- include get_talk_timestamp.html -%}
-              <span class="live-hide" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+              <span class="live-hide d-print-inline" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
             {%- endif -%}
 
             {%- include get_time_pronoun.html -%}
@@ -51,7 +51,7 @@
 
             {%- if site.conference.live -%}
               </span>
-              {%- include show_live_button.html -%}
+              {%- include show_live_link.html -%}
             {%- endif -%}
 
             {%- assign room = site.rooms | where: 'name', r.name | first -%}
