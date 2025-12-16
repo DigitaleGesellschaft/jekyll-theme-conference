@@ -11,8 +11,11 @@ import * as bootstrap from 'bootstrap';
 // Leaflet and plugins (loaded dynamically when map is enabled)
 import L from 'leaflet';
 import 'leaflet-easybutton';
-import 'leaflet.locatecontrol';
+import { locate as locateControl } from 'leaflet.locatecontrol';
 import 'leaflet-providers';
+
+// Register locate control with Leaflet
+L.control.locate = locateControl;
 
 // Make Bootstrap available globally (for Modal, Tab, etc. access)
 window.bootstrap = bootstrap;

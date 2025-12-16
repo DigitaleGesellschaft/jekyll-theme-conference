@@ -19,8 +19,8 @@
     "bootstrap": "^5.3.3",
     "leaflet": "^1.9.4",
     "leaflet-easybutton": "^2.4.0",
-    "leaflet-providers": "^2.0.0",
-    "leaflet.locatecontrol": "^0.81.1"
+    "leaflet-providers": "^3.0.0",
+    "leaflet.locatecontrol": "^0.85.1"
   }
 }
 
