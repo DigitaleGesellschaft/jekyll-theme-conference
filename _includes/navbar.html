@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-{{ site.conference.navigation.breakpoint | default: 'md' }} navbar-light bg-light mb-3">
+<nav class="navbar navbar-expand-{{ site.conference.navigation.breakpoint | default: 'md' }} bg-secondary-subtle text-secondary-emphasis mb-3">
   <div class="container">
 
     <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
@@ -59,7 +59,7 @@
 
                   {{ link_name }}
 
-                  <span class="live-button badge bg-dark fw-normal text-start">
+                  <span class="live-button bg-dark text-dark-emphasis py-1 px-2 rounded">
                     <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml">!</object>
                     {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
                   </span>

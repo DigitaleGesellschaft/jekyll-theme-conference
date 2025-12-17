@@ -555,9 +555,12 @@ export function createLiveModule(conference) {
       streamInfo.dataset.time = talkNext.start;
       streamInfoTime.dataset.time = talkNext.start;
 
-      // Remove existing border-soft-* classes
-      streamInfoColor.className = streamInfoColor.className.replace(/(^|\s)border-soft-\S+/g, '');
-      streamInfoColor.classList.add('border-soft-' + talkNext.color);
+      // Remove existing border-*-subtle classes
+      streamInfoColor.className = streamInfoColor.className.replace(
+        /(^|\s)border-\S+-subtle/g,
+        "",
+      );
+      streamInfoColor.classList.add("border-" + talkNext.color + "-subtle");
 
       streamInfoTalk.textContent = talkNext.name;
       streamInfoTalk.setAttribute('href', talkNext.href);

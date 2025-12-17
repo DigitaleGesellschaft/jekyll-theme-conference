@@ -13,7 +13,7 @@
 {% if site.conference.talks.tracks %}
   {% for track_prop in site.conference.talks.tracks %}
     <h3 class="mt-4 mb-3">
-      <span class="badge border-soft-{{ track_prop.color | default: 'light' }} bg-soft-{{ track_prop.color | default: 'light' }} text-{{ track_prop.color | default: 'light' }}-emphasis d-block d-sm-inline text-wrap">
+      <span class="badge rounded-0 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-4 border-start border-{{ track_prop.color | default: 'light' }}-subtle d-block d-sm-inline text-wrap">
         {{ track_prop.name }}
       </span>
     </h3>

@@ -1,8 +1,9 @@
-<li class="ps-2 mb-2 border-soft-{{ track_prop.color | default: 'light' }}">
-  <p class="mb-0">
+{% assign track_color = track_prop.color | default: 'light' %}
+<li class="ps-2 mb-2 border-start border-4 border-{{ track_color }}-subtle">
+  <p class="mb-1">
     {% include show_talk.html %}
   </p>
-  <p class="fw-light mb-0">
+  <p class="fw-light mb-1">
     {% include list_speakers.html %}
   </p>
 
@@ -14,7 +15,7 @@
         {%- assign room = site.rooms | where: 'name', r.name | first -%}
         {%- for t in r.talks -%}
           {%- if talk.name == t.name -%}
-            <p class="mb-0">
+            <p class="mb-1 fw-light">
 
               {%- if site.conference.live -%}
                 {%- include get_talk_timestamp.html -%}
@@ -67,11 +68,11 @@
     {%- include get_link_types.html -%}
     {%- if has_icon_links > 0 and site.conference.talks.hide_link_icons != true -%}
       {% for link in talk.links -%}
-        {%- assign link_styleclass = "badge bg-light text-dark fw-normal me-1" -%}
+        {%- assign link_styleclass = "badge bg-secondary-subtle text-secondary-emphasis fw-normal me-1" -%}
         {%- include get_link.html link_type="icon" -%}
         {%- if link_valid -%}
           {{- link_tag -}}
-            <i class="fas fa-{{ link_icon }} text-secondary"></i>
+            <i class="fas fa-{{ link_icon }}"></i>
           </a>
         {%- endif -%}
       {%- endfor %}

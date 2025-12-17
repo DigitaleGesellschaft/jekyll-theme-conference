@@ -12,11 +12,11 @@
   {{ content }}
 
   {%- if nbr_days > 1 %}
-    <ul class="nav justify-content-center mb-3 btn-group" id="day-list" role="tablist">
+    <ul class="nav nav-pills justify-content-center mb-3" id="day-list" role="tablist">
       {%- for d in site.data.program.days -%}
         {%- include get_day_hash.html %}
         <li class="nav-item" role="presentation">
-          <a class="nav-link btn btn-outline-secondary {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
+          <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
         </li>
       {%- endfor %}
     </ul>
@@ -42,7 +42,7 @@
                 {%- if room.hide or site.conference.location.hide -%}
                   {{- room.name -}}
                 {%- else -%}
-                  <a class="text-reset" href="{{ room.url | prepend: site.baseurl }}">
+                  <a class="text-reset link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ room.url | prepend: site.baseurl }}">
                     {{- room.name -}}
                   </a>
                 {%- endif -%}
@@ -192,7 +192,7 @@
   {%- if site.conference.talks.tracks %}
     <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
       {%- for track_prop in site.conference.talks.tracks %}
-        <div class="d-block d-sm-inline-block m-1 p-1 ps-2 pe-2 border-soft-{{ track_prop.color | default: 'light' }} bg-soft-{{ track_prop.color | default: 'light' }} fw-normal">
+        <div class="d-block d-sm-inline-block m-1 p-1 ps-2 pe-2 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-start border-4 border-{{ track_prop.color | default: 'light' }}-subtle fw-normal">
           {{- track_prop.name -}}
         </div>
       {%- endfor -%}

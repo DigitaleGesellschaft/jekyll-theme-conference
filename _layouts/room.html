@@ -29,17 +29,17 @@
           {% assign room_talks = true %}
         {% endunless %}
 
-        <h6 class="mt-1 mb-0">
+        <h6 class="mt-1 mb-2">
           {{- day_name -}}
         </h6>
 
-        <table class="list-program">
+        <div>
         {%- for t in r.talks -%}
           {%- assign talk = site.talks | where: 'name', t.name | first -%}
           {%- include get_track_properties.html %}
 
-          <tr>
-            <td class="pe-2">
+          <div class="d-flex flex-row mb-2">
+            <div class="align-top me-3">
               {%- include get_talk_time.html -%}
               {%- assign talk_day_hide = true -%}
               {%- assign talk_time_styleclass = "w-100" -%}
@@ -47,19 +47,18 @@
 
               {%- assign live_button_styleclass = "w-100" -%}
               {% include show_live_button.html %}
-            </td>
-            <td class="ps-2 border-soft-{{ track_color }}">
+            </div>
+            <div class="flex-grow-1 ps-2 border-4 border-start border-{{ track_color }}-subtle">
               <p class="mb-0">
                 {%- include show_talk.html -%}
               </p>
               <p class="fw-light mb-0">
                 {%- include list_speakers.html -%}
               </p>
-            </td>
-          </tr>
+            </div>
+          </div>
         {%- endfor -%}
-
-        </table>
+        </div>
         {%- break -%}
 
       {% endif %}

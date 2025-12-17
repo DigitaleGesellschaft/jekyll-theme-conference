@@ -26,7 +26,7 @@
           <h4 class="alert-heading">{{ info_bar.title }}</h4>
         {%- endif %}
 
-        {{ info_bar.text | markdownify }}
+        {{ info_bar.text | markdownify | replace: "<a href=", "<a class='alert-link' href=" }}
 
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>

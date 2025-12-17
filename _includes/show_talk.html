@@ -1,5 +1,5 @@
 {%- if talk.hide -%}
   {{ talk.name }}
 {%- else -%}
-  <a class="text-reset" href="{{ talk.url | prepend: site.baseurl }}">{{ talk.name }}</a>
+  <a class="text-reset link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ talk.url | prepend: site.baseurl }}">{{ talk.name }}</a>
 {%- endif -%}
