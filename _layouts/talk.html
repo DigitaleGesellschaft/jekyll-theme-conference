@@ -8,7 +8,7 @@
       {% if talk.track %}
         <div class="h6 mt-2 mb-0 me-1 pe-1 pb-1">
           {% include get_track_properties.html %}
-          <span class="d-block d-sm-inline p-1 ps-2 pe-2 border-soft-{{ track_color }} bg-soft-{{ track_color }} fw-normal">
+          <span class="d-block d-sm-inline p-1 px-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-start border-4 border-{{ track_color }}-subtle fw-normal">
             {{ talk.track }}
           </span>
         </div>
@@ -78,16 +78,8 @@
       {% for link in talk.links %}
         {% assign link_styleclass = "text-reset" %}
         {% include get_link.html link_type="icon" %}
-
         {% if link_valid %}
-          <li class="mb-1">
-            {{ link_tag }}
-              <span class="badge bg-soft-{{ track_color | default: 'light' }} fw-normal me-1">
-                <i class="fas fa-{{ link_icon }} fa-fw"></i>
-              </span>
-              {{- link.name }}
-            </a>
-          </li>
+          {{ link_list_item }}
         {% endif %}
       {% endfor %}
     </ul>
@@ -100,24 +92,19 @@
       {% for link in talk.links %}
         {% assign link_styleclass = "text-reset" %}
         {% include get_link.html link_type="regular" %}
-
         {% if link_valid %}
-          <li class="mb-1 ms-2 ps-2 border-soft-{{ track_color | default: 'light' }}">
-            {{ link_tag }}
-              {{ link.name }}
-            </a>
-          </li>
+          {{ link_list_item }}
         {% endif %}
       {% endfor %}
     </ul>
   {% endif %}
 
   <p class="d-print-none mt-5">
-    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-light">
+    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-secondary">
       <i class="fas fa-bullhorn"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
 
-    <a href="{{ site.conference.program.url | prepend: site.baseurl }}" class="btn btn-light">
+    <a href="{{ site.conference.program.url | prepend: site.baseurl }}" class="btn btn-secondary">
       <i class="far fa-calendar-alt"></i>&nbsp;{{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
     </a>
   </p>

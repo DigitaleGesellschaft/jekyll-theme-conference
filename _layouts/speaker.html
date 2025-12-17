@@ -20,16 +20,8 @@
       {% for link in speaker.links %}
         {% assign link_styleclass = "text-reset" %}
         {% include get_link.html link_type="icon" %}
-
         {% if link_valid %}
-          <li class="mb-1">
-            {{ link_tag }}
-              <span class="badge bg-light text-dark fw-normal me-1">
-                <i class="fas fa-{{ link_icon }} fa-fw"></i>
-              </span>
-              {{- link.name }}
-            </a>
-          </li>
+          {{ link_list_item }}
         {% endif %}
       {% endfor %}
     </ul>
@@ -42,13 +34,8 @@
       {% for link in speaker.links %}
         {% assign link_styleclass = "text-reset" %}
         {% include get_link.html link_type="regular" %}
-
         {% if link_valid %}
-          <li class="mb-1 ms-2 ps-2 border-soft-primary">
-            {{ link_tag }}
-              {{ link.name }}
-            </a>
-          </li>
+          {{ link_list_item }}
         {% endif %}
       {% endfor %}
     </ul>
@@ -65,44 +52,43 @@
   {% endfor %}
 
   {% if active_speaker %}
-    <h5 class="mt-4 mb-0">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
+    <h5 class="mt-4 mb-2">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
 
-    <table class="list-program">
-      {%- for d in site.data.program.days -%}
-        {%- include get_day_hash.html -%}
-        {%- for r in d.rooms -%}
-          {%- for t in r.talks -%}
-            {%- assign talk = site.talks | where: 'name', t.name | first -%}
+    <div>
+    {%- for d in site.data.program.days -%}
+      {%- include get_day_hash.html -%}
+      {%- for r in d.rooms -%}
+        {%- for t in r.talks -%}
+          {%- assign talk = site.talks | where: 'name', t.name | first -%}
 
-            {%- for speaker_name in talk.speakers -%}
-              {%- if speaker_name == speaker.name -%}
+          {%- for speaker_name in talk.speakers -%}
+            {%- if speaker_name == speaker.name -%}
 
-                {%- include get_track_properties.html -%}
+              {%- include get_track_properties.html -%}
 
-                <tr>
-                  <td class="pe-2 py-0">
-                    {%- include get_talk_time.html -%}
-                    {%- assign talk_time_styleclass = "w-100" -%}
-                    {%- include show_talk_time.html -%}
-                  </td>
-                  <td class="ps-2 py-0 align-baseline border-soft-{{ track_color }}">
-                    <span class="me-2">
-                      {%- include show_talk.html -%}
-                    </span>
-                    {%- include show_live_button.html -%}
-                  </td>
-                </tr>
-
+              <div class="d-flex flex-row mb-2">
+                <div class="me-3">
+                  {%- include get_talk_time.html -%}
+                  {%- assign talk_time_styleclass = "w-100" -%}
+                  {% include show_talk_time.html %}
+                </div>
+                <div class="flex-grow-1 ps-2 border-4 border-start border-{{ track_color }}-subtle">
+                  <span class="me-2">
+                    {%- include show_talk.html -%}
+                  </span>
+                  {%- include show_live_button.html -%}
+                </div>
+              </div>
               {%- endif -%}
             {%- endfor -%}
           {%- endfor -%}
         {%- endfor -%}
       {%- endfor -%}
-    </table>
+    </div>
   {% endif %}
 
   <p class="d-print-none mt-5">
-    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-light">
+    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-secondary">
       <i class="fas fa-users"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
   </p>

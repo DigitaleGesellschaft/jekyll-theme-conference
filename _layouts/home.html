@@ -1,6 +1,6 @@
 {% include header.html %}
 
-  <div class="p-4 p-md-5 mb-4 bg-light rounded-3">
+  <div class="bg-secondary-subtle text-secondary-emphasis p-4 p-md-5 mb-4">
     <h1 class="display-3 text-break">
       {% if site.conference.main.logo.img %}
         <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
@@ -74,7 +74,7 @@
 
                 {{ link_name }}
 
-                <span class="live-button badge bg-dark fw-normal text-start">
+                <span class="live-button bg-dark text-dark-emphasis py-1 px-2 rounded">
                   <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml">!</object>
                   {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
                 </span>
@@ -104,7 +104,7 @@
           </a>
         {% endif %}
       {% endfor %}
-      </p>
+      </div>
     {% endif %}
 
   </div>

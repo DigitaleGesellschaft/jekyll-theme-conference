@@ -3,5 +3,5 @@
 {%- for tag in talk.tags -%}
   {%- assign has_tags = true -%}
   {%- include get_tag_icon.html -%}
-  <span class="badge bg-light text-dark fw-normal">{{ tag_html }}</span>&nbsp;
+  <span class="badge bg-secondary-subtle text-reset fw-normal">{{ tag_html }}</span>&nbsp;
 {%- endfor -%}

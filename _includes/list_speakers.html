@@ -9,7 +9,7 @@
   {%- if speaker.hide or include.text_only -%}
     {{- speaker_short -}}
   {%- else -%}
-    <a class="text-reset" href="{{ speaker.url | prepend: site.baseurl }}">
+    <a class="text-reset link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
       {{- speaker_short -}}
     </a>
   {%- endif -%}

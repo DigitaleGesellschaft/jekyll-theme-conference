@@ -5,70 +5,52 @@
  * These styles extend and customize Bootstrap components.
  */
 
-// Alert - left border accent style
-.alert {
-  border-width: 0;
-  border-left-width: $alert-border-width;
-}
+// Speaker Columns
+@mixin generate-col-count-classes($max-cols: 6, $breakpoints: (xs, sm, md, lg, xl, xxl)) {
 
-// Soft color variants for borders and backgrounds
-@each $color, $value in $theme-colors {
-  .border-soft-#{$color} {
-    border-color: tint-color($value, 60%);
-    border-left-width: $alert-border-width;
-    border-left-style: solid;
+  // Generate base classes without breakpoint (col-count-1, col-count-2, etc.)
+  @for $idx from 1 through $max-cols {
+    .col-count-#{$idx} {
+      column-count: $idx;
+    }
   }
 
-  .bg-soft-#{$color} {
-    background-color: tint-color($value, 80%);
-  }
-}
-
-// Button group for lists
-ul.btn-group {
-  > li:not(:first-child) > .btn {
-    margin-left: calc(-1 * var(--bs-btn-border-width));
-    @include border-start-radius(0);
-  }
-
-  > li:not(:last-child) > .btn {
-    @include border-end-radius(0);
+  // Generate responsive classes for each breakpoint
+  @each $breakpoint in $breakpoints {
+    @if $breakpoint !='xs' {
+      @include media-breakpoint-up($breakpoint) {
+        @for $idx from 1 through $max-cols {
+          .col-count-#{$breakpoint}-#{$idx} {
+            column-count: $idx;
+          }
+        }
+      }
+    }
   }
 }
 
-// Extended display heading
-.display-5 {
-  font-size: 3rem;
-  font-weight: $display-font-weight;
-  line-height: $display-line-height;
+// Call the mixin to generate all classes
+@include generate-col-count-classes();
+
+.col-count {
+  break-inside: avoid-column;
 }
 
-// Overflow utility
-.overflow-y-hidden {
-  overflow-y: hidden;
-}
-
-// Extend logo when collapsed navbar is shown
-.navbar-collapse.show + .navbar-logo {
-  width: 100%;
-}
-
-// Keep images in container
-main.container img {
-  max-width: 100%;
-  height: auto;
-}
-
-// No bottom margin on last paragraph in alert
-.alert > p:last-of-type {
+// Remove bottom margin on last paragraph in alert
+.alert>p:last-of-type {
   margin-bottom: 0;
 }
 
 // Live icon
-.live-button > object {
+.live-button>object {
   width: 0.85em;
   height: 0.85em;
   color: inherit;
+}
+
+// Map
+#map {
+  min-height: 400px;
 }
 
 // Live button font size in navigation bar
@@ -82,7 +64,7 @@ main.container img {
   border-collapse: separate;
   border-spacing: 0;
 
-  tbody tr:first-of-type > * {
+  tbody tr:first-of-type>* {
     border-top-width: 0;
   }
 
@@ -98,7 +80,7 @@ main.container img {
   }
 
   // Hide shadow of table cells next to sticky header
-  thead tr > th:last-of-type {
+  thead tr>th:last-of-type {
     box-shadow: 10px 0 0 0 rgba(255, 255, 255, 1);
   }
 }
@@ -130,66 +112,8 @@ main.container img {
   }
 }
 
-// Location nav pills
-.nav-pills .nav-link.active {
-  background-color: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary-text-emphasis);
-}
-
-// Map container
-#map {
-  height: 50vh;
-  min-height: 400px;
-  width: 100%;
-}
-
-// Program per Room
-.list-program {
-  border: 0 none white;
-  border-collapse: separate;
-  border-spacing: 0 0.5em;
-
-  tr {
-    td:first-child {
-      vertical-align: top;
-    }
-
-    td:last-child {
-      width: 100%;
-    }
-  }
-}
-
-// Speaker column layout
-.speakergroup {
-  page-break-inside: avoid;
-  break-inside: avoid-column;
-}
-
-@include media-breakpoint-up(sm) {
-  .speakerlist {
-    column-count: 1;
-  }
-}
-
-@include media-breakpoint-up(md) {
-  .speakerlist {
-    column-count: 2;
-  }
-}
-
-@include media-breakpoint-up(lg) {
-  .speakerlist {
-    column-count: 3;
-  }
-}
-
 // Print styles
 @media print {
-  // Remove underline for links
-  a {
-    text-decoration: none !important;
-  }
 
   // Preserve background colors for table cells
   @each $color, $value in $theme-colors {

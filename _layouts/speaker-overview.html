@@ -10,7 +10,7 @@
 
   {{ content }}
 
-  <div class="speakerlist">
+  <div class="col-count-1 col-count-md-2 col-count-lg-3">
     {% assign cur_letter = false %}
     {% assign speakers = site.speakers | sort_natural: 'last_name' %}
     {% for speaker in speakers %}
@@ -23,7 +23,7 @@
         {% endif %}
 
         {% assign cur_letter = last_letter %}
-        <div class="speakergroup">
+        <div class="col-count">
           <h3>{{ cur_letter }}</h3>
           <ul class="list-unstyled">
       {% endif %}
@@ -32,7 +32,7 @@
         {% if speaker.hide %}
           {{ speaker.first_name }} {{ speaker.last_name }}
         {% else %}
-          <a href="{{ speaker.url | prepend: site.baseurl }}">
+          <a class="link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
             {{ speaker.first_name }} {{ speaker.last_name }}
           </a>
         {% endif %}
