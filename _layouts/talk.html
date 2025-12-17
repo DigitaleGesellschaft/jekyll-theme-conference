@@ -6,28 +6,28 @@
   {% if talk.track or talk.tags.size > 0 %}
     <div class="d-flex flex-md-row flex-column container-fluid mb-2 p-0">
       {% if talk.track %}
-        <div class="h6 mt-2 mb-0 mr-1 pr-1 pb-1">
+        <div class="h6 mt-2 mb-0 me-1 pe-1 pb-1">
           {% include get_track_properties.html %}
-          <span class="d-block d-sm-inline p-1 pl-2 pr-2 border-soft-{{ track_color }} bg-soft-{{ track_color }} font-weight-normal">
+          <span class="d-block d-sm-inline p-1 ps-2 pe-2 border-soft-{{ track_color }} bg-soft-{{ track_color }} fw-normal">
             {{ talk.track }}
           </span>
         </div>
       {% endif %}
 
       {% if talk.tags.size > 0 %}
-        <div class="h6 mt-2 mb-0 ml-1 pr-1 pb-1">
+        <div class="h6 mt-2 mb-0 ms-1 pe-1 pb-1">
           {% for tag in talk.tags %}
             {%- include get_tag_icon.html -%}
-            <span class="mr-2">{{ tag_html }}</span>
+            <span class="me-2">{{ tag_html }}</span>
           {% endfor %}
         </div>
       {% endif %}
     </div>
   {% endif %}
 
-  <h1 class="font-weight-light text-break">{{ talk.name }}</h1>
+  <h1 class="fw-light text-break">{{ talk.name }}</h1>
 
-  <p class="mb-3 font-weight-light">
+  <p class="mb-3 fw-light">
     {% include list_speakers.html %}
   </p>
 
@@ -55,11 +55,11 @@
             {%- endif -%}
 
             {%- assign room = site.rooms | where: 'name', r.name | first -%}
-            <span class="d-none d-sm-inline ml-1">
+            <span class="d-none d-sm-inline ms-1">
               {{- site.data.lang[site.conference.lang].pronoun.in | default: "in" -}}
             </span> {% include show_room.html -%}
 
-            <span class="d-none d-sm-inline ml-1">
+            <span class="d-none d-sm-inline ms-1">
               {{- site.data.lang[site.conference.lang].pronoun.for | default: "for" -}}
             </span> {% include show_talk_duration.html -%}
 
@@ -82,7 +82,7 @@
         {% if link_valid %}
           <li class="mb-1">
             {{ link_tag }}
-              <span class="badge bg-soft-{{ track_color | default: 'light' }} font-weight-normal mr-1">
+              <span class="badge bg-soft-{{ track_color | default: 'light' }} fw-normal me-1">
                 <i class="fas fa-{{ link_icon }} fa-fw"></i>
               </span>
               {{- link.name }}
@@ -102,7 +102,7 @@
         {% include get_link.html link_type="regular" %}
 
         {% if link_valid %}
-          <li class="mb-1 ml-2 pl-2 border-soft-{{ track_color | default: 'light' }}">
+          <li class="mb-1 ms-2 ps-2 border-soft-{{ track_color | default: 'light' }}">
             {{ link_tag }}
               {{ link.name }}
             </a>

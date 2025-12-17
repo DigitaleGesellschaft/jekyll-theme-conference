@@ -7,7 +7,7 @@
     {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
   </p>
 
-  <h1 class="font-weight-light mb-3 text-break">
+  <h1 class="fw-light mb-3 text-break">
     {{ speaker.first_name }} {{ speaker.last_name }}
   </h1>
 
@@ -24,7 +24,7 @@
         {% if link_valid %}
           <li class="mb-1">
             {{ link_tag }}
-              <span class="badge badge-light font-weight-normal mr-1">
+              <span class="badge bg-light text-dark fw-normal me-1">
                 <i class="fas fa-{{ link_icon }} fa-fw"></i>
               </span>
               {{- link.name }}
@@ -44,7 +44,7 @@
         {% include get_link.html link_type="regular" %}
 
         {% if link_valid %}
-          <li class="mb-1 ml-2 pl-2 border-soft-primary">
+          <li class="mb-1 ms-2 ps-2 border-soft-primary">
             {{ link_tag }}
               {{ link.name }}
             </a>
@@ -80,13 +80,13 @@
                 {%- include get_track_properties.html -%}
 
                 <tr>
-                  <td class="pr-2 py-0">
+                  <td class="pe-2 py-0">
                     {%- include get_talk_time.html -%}
                     {%- assign talk_time_styleclass = "w-100" -%}
                     {%- include show_talk_time.html -%}
                   </td>
-                  <td class="pl-2 py-0 align-baseline border-soft-{{ track_color }}">
-                    <span class="mr-2">
+                  <td class="ps-2 py-0 align-baseline border-soft-{{ track_color }}">
+                    <span class="me-2">
                       {%- include show_talk.html -%}
                     </span>
                     {%- include show_live_button.html -%}

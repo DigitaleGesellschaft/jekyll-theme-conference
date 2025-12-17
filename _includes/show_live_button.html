@@ -5,11 +5,11 @@
     <a title="{{ link.name }}" {% if site.conference.live.streaming.external -%}
       href="{{ site.conference.live.streaming.external }}"
     {%- else -%}
-      data-toggle="modal" data-target="#stream-modal" data-room="{{ r.name }}" href="#"
+      data-bs-toggle="modal" data-bs-target="#stream-modal" data-room="{{ r.name }}" href="#"
     {%- endif -%}
   {%- else -%}
     <span
-  {%- endif %} class="live-show live-button badge badge-dark font-weight-normal text-center d-none {{ live_button_styleclass }}" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+  {%- endif %} class="live-show live-button badge bg-dark fw-normal text-center d-none {{ live_button_styleclass }}" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
     <object data="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml">!</object>
     {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
   {%- if site.conference.live.streaming.enable -%}

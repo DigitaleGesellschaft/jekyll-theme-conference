@@ -2,7 +2,7 @@
 
 ![Screenshot](screenshot.png)
 
-This is a responsive [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 4](http://getbootstrap.com) for conferences. It contains
+This is a responsive [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 5](http://getbootstrap.com) for conferences. It contains
 
 - multiday program / schedule,
 - talk and speaker descriptions,
@@ -787,13 +787,13 @@ Each of these pages can include a map at its end (e.g., to point to your venue) 
 
 ## Design
 
-The design is based on [Bootstrap 4](http://getbootstrap.com) and is easily expandable. It uses [FontAwesome 6](https://fontawesome.com/) icons and [Leaflet](https://leafletjs.com/) for maps.
+The design is based on [Bootstrap 5](http://getbootstrap.com) and is easily expandable. It uses [FontAwesome 6](https://fontawesome.com/) icons and [Leaflet](https://leafletjs.com/) for maps.
 
 ### CSS Bundle
 
 The theme includes a pre-built CSS bundle (`assets/css/conference.bundle.css`) which contains:
 
-- Bootstrap 4 framework
+- Bootstrap 5 framework
 - FontAwesome 6 icons (regular and solid)
 - Leaflet map styles
 - Conference theme customizations
@@ -911,7 +911,7 @@ _css/
 ```
 
 The CSS source imports libraries from NPM:
-- `bootstrap` - Bootstrap 4 framework
+- `bootstrap` - Bootstrap 5 framework
 - `@fortawesome/fontawesome-free` - FontAwesome 6 icons
 - `leaflet` and plugins - Map styles
 

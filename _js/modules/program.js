@@ -2,7 +2,7 @@
  * Program Module
  * Handles program navigation and tab management
  */
-export function createProgramModule($) {
+export function createProgramModule() {
   const updateHash = (hash) => {
     const scrollPosition = document.documentElement.scrollTop;
     window.location.hash = hash;
@@ -10,27 +10,35 @@ export function createProgramModule($) {
   };
 
   const init = () => {
-    const $dayList = $('#day-list');
-    if (!$dayList.length) return;
+    const dayList = document.getElementById('day-list');
+    if (!dayList) return;
 
     const hash = window.location.hash;
     if (hash) {
-      $(`a[data-toggle="tab"][href="${hash}"]`).tab('show');
+      const tabTrigger = document.querySelector(`a[data-bs-toggle="tab"][href="${hash}"]`);
+      if (tabTrigger) {
+        const tab = new bootstrap.Tab(tabTrigger);
+        tab.show();
+      }
     } else {
       const tsNow = Date.now() / 1000 | 0;
-      $('a[data-toggle="tab"]').each(function () {
-        const tsMidnight = $(this).data("ts");
+      const tabLinks = document.querySelectorAll('a[data-bs-toggle="tab"]');
+      for (const link of tabLinks) {
+        const tsMidnight = parseInt(link.dataset.ts, 10);
         if (tsMidnight && tsMidnight <= tsNow && tsNow < tsMidnight + 24 * 60 * 60) {
-          $(this).tab('show');
-          updateHash(this.hash);
-          return false;
+          const tab = new bootstrap.Tab(link);
+          tab.show();
+          updateHash(link.hash);
+          break;
         }
-      });
+      }
     }
 
     // Add current selected day as hash to URL while keeping current scrolling position
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
-      updateHash(this.hash);
+    document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(tabLink => {
+      tabLink.addEventListener('shown.bs.tab', function () {
+        updateHash(this.hash);
+      });
     });
   };
 
@@ -38,4 +46,3 @@ export function createProgramModule($) {
     init: init
   };
 }
-
