@@ -893,8 +893,6 @@ _js/
 ├── init.js            # Initialization module
 ├── core/
 │   └── conference.js  # Core conference object
-├── lib/
-│   └── syncscroll.js  # Synchronized scrolling library
 └── modules/
     ├── program.js     # Program navigation
     ├── map.js         # Map functionality
@@ -939,5 +937,3 @@ To modify the theme's source code and rebuild:
 ## License
 
 This project is licensed under the MIT License. You can view [LICENSE.md](LICENSE.md) for more details.
-
-This project redistributes other open source tools and libraries. You can view [REDISTRIBUTED.md](REDISTRIBUTED.md) for third party licenses.

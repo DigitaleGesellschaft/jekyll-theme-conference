@@ -5,6 +5,33 @@
  * These styles extend and customize Bootstrap components.
  */
 
+// Import Bootstrap to access mixins
+@use "bootstrap/scss/bootstrap" as *;
+
+// Program Overview
+.program-table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+
+  // don't use sticky-top as it is placed above dropdown menu
+  // see https://getbootstrap.com/docs/5.3/layout/z-index/
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 910;
+  }
+
+  th:first-of-type {
+    position: sticky;
+    left: 0;
+    z-index: 900;
+  }
+
+  thead th:not(:first-of-type):nth-child(odd) {
+    width: 250px;
+  }
+}
+
 // Speaker Columns
 @mixin generate-col-count-classes($max-cols: 6, $breakpoints: (xs, sm, md, lg, xl, xxl)) {
 
@@ -58,84 +85,8 @@
   font-size: 1em;
 }
 
-// Program table - sticky header and first column
-.table {
-  // Avoid sticky cells without border
-  border-collapse: separate;
-  border-spacing: 0;
-
-  tbody tr:first-of-type>* {
-    border-top-width: 0;
-  }
-
-  // Sticky horizontal positioning
-  th {
-    position: sticky;
-    background-color: var(--bs-body-bg);
-  }
-
-  th:first-of-type {
-    left: 0;
-    z-index: 1;
-  }
-
-  // Hide shadow of table cells next to sticky header
-  thead tr>th:last-of-type {
-    box-shadow: 10px 0 0 0 rgba(255, 255, 255, 1);
-  }
-}
-
-// Table column widths
-.table {
-  // First row defines width for all columns
-  table-layout: fixed;
-  width: auto;
-
-  th,
-  td {
-    // Total available container width is 1110px
-    // Width of columns with content (default)
-    width: 245px;
-    min-width: 245px;
-
-    // Spacing between columns
-    &.col-space {
-      width: 15px;
-      min-width: 15px;
-    }
-
-    // Width of first column containing timestamps
-    &.col-title {
-      width: 70px;
-      min-width: 70px;
-    }
-  }
-}
-
 // Print styles
 @media print {
-
-  // Preserve background colors for table cells
-  @each $color, $value in $theme-colors {
-    .table td.alert-#{$color} {
-      print-color-adjust: exact;
-      -webkit-print-color-adjust: exact;
-      background-color: tint-color($value, 80%) !important;
-      color: black;
-    }
-  }
-
-  .badge {
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-    border: 0 none white;
-    text-decoration: none !important;
-  }
-
-  // Remove sticky position from table to show borders
-  .table th {
-    position: inherit;
-  }
 
   // Remove live buttons
   .live-show {
