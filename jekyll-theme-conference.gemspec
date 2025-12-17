@@ -22,8 +22,8 @@ Gem::Specification.new do |spec|
     css_bundle = "assets/css/conference.bundle.css"
     files << css_bundle if File.exist?(css_bundle)
 
-    #   FontAwesome webfonts
-    Dir.glob("assets/webfonts/fa-*").each do |font_file|
+    # Bootstrap Icons webfonts (built from NPM packages)
+    Dir.glob("assets/webfonts/bootstrap-icons.*").each do |font_file|
       files << font_file if File.exist?(font_file)
     end
 

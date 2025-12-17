@@ -7,6 +7,6 @@ module.exports = {
   output: "_site/assets/css/",
   fontFace: true,
   safelist: {
-    deep: [/^leaflet/, /^fa-/],
+    deep: [/^leaflet/, /^bi-/],
   },
 };

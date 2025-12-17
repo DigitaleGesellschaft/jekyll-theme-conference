@@ -28,7 +28,7 @@
   {%- assign link_href = link.relative_url | prepend: site.baseurl -%}
 
 {%- elsif link.file -%}
-  {%- assign link_icon = link.icon | default: "file-alt" -%}
+  {%- assign link_icon = link.icon | default: "file-earmark-text" -%}
 
   {%- if talk -%}
     {%- assign link_href = link.file | prepend: '/documents/slides/' | prepend: site.baseurl -%}
@@ -43,7 +43,7 @@
 
 {%- elsif link.video -%}
   {%- assign link_href = link.video -%}
-  {%- assign link_icon = link.icon | default: "video" -%}
+  {%- assign link_icon = link.icon | default: "camera-video-fill" -%}
   {%- assign link_iframe = link.iframe | default: true -%}
 
   {%- if talk -%}
@@ -104,7 +104,7 @@
   <li class="mb-1">
     {{ link_tag }}
       <span class="badge rounded-0 border-start border-4 border-{{ track_color | default: 'primary' }}-subtle bg-secondary-subtle text-secondary-emphasis fw-normal me-1">
-        <i class="fas fa-{{ link_icon | default: 'link' }} fa-fw"></i>
+        <i class="bi bi-{{ link_icon | default: 'link-45deg' }}"></i>
       </span>
       {{- link.name }}
     </a>

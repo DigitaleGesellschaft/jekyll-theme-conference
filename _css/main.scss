@@ -8,12 +8,10 @@
 // 1. Bootstrap Framework
 @use "bootstrap/scss/bootstrap" as *;
 
-// 2. FontAwesome Icons
-// FontAwesome 6 expects a path relative to the emitted CSS file.
-$fa-font-path: "../webfonts";
-@use "@fortawesome/fontawesome-free/scss/fontawesome";
-@use "@fortawesome/fontawesome-free/scss/regular";
-@use "@fortawesome/fontawesome-free/scss/solid";
+// 2. Bootstrap Icons
+@use "bootstrap-icons/font/bootstrap-icons" with (
+  $bootstrap-icons-font-dir: "../webfonts"
+);
 
 // 3. Leaflet Map Styles
 @use "leaflet/dist/leaflet.css";
