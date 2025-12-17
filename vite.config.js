@@ -19,13 +19,6 @@ export default defineConfig({
           if (assetInfo.name && assetInfo.name.endsWith(".css")) {
             return "css/conference.bundle.css";
           }
-          // Put font files in webfonts directory
-          if (
-            assetInfo.name &&
-            /\.(woff2?|ttf|eot|svg)$/.test(assetInfo.name)
-          ) {
-            return "webfonts/[name][extname]";
-          }
           return "[name][extname]";
         },
         // Ensure we generate a single file

@@ -460,7 +460,7 @@ To define available tracks, add the `tracks` property under the `talks` property
 Instead of displaying the tag name, you can replace it with an icon. To define tags with icons, add the `tags` property under the `talks property in your configuration file. Each listed tag requires:
 
 - its `name`, which must match the tag specified in the talk's FrontMatter.
-- optionally, an icon to show instead of the tag's name (`icon: ` followed by the [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon name to show).
+- optionally, an icon to show instead of the tag's name (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show).
 
 Talks can also have associated links displayed at the end of their content. If these links have an icon (see _Content_ > _Talks_ below), they will also appear on the talk overview page (e.g., to indicate which talks have video recordings). To prevent icon links from showing on the overview page, set the `hide_link_icons` property to `true` (default is `false`).
 
@@ -536,7 +536,7 @@ window.conference.awaitReady().then(() => {
         let main_station = L.marker([47.37785, 8.54035], {
             icon: L.divIcon({
                 className: '',
-                html: '<span class="fas fa-train"></span> Main Station',
+                html: '<span class="bi bi-train-front"></span> Main Station',
                 iconSize: [120, 56]
             })
         }).addTo(map);
@@ -701,7 +701,7 @@ Links are used at different location throughout the theme: They can either be us
   - pointing to an external _video_: `video:`.
 - optionally, if it is disabled (`disabled: true`),
 - optionally, if it should open in a iframe embedded in a popup-like modal (`iframe: true`), and
-- optionally, an icon to show in front of the title (`icon: ` followed by the [FontAwesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) icon name to show).
+- optionally, an icon to show in front of the title (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show).
 
 Using the `file:` indicator, the
 
@@ -787,14 +787,14 @@ Each of these pages can include a map at its end (e.g., to point to your venue) 
 
 ## Design
 
-The design is based on [Bootstrap 5](http://getbootstrap.com) and is easily expandable. It uses [FontAwesome 6](https://fontawesome.com/) icons and [Leaflet](https://leafletjs.com/) for maps.
+The design is based on [Bootstrap 5](http://getbootstrap.com) and is easily expandable. It uses [Bootstrap Icons](https://icons.getbootstrap.com/) icons and [Leaflet](https://leafletjs.com/) for maps.
 
 ### CSS Bundle
 
 The theme includes a pre-built CSS bundle (`assets/css/conference.bundle.css`) which contains:
 
 - Bootstrap 5 framework
-- FontAwesome 6 icons (regular and solid)
+- Bootstrap Icons
 - Leaflet map styles
 - Conference theme customizations
 
@@ -909,8 +909,8 @@ _css/
 ```
 
 The CSS source imports libraries from NPM:
-- `bootstrap` - Bootstrap 5 framework
-- `@fortawesome/fontawesome-free` - FontAwesome 6 icons
+- `bootstrap` - Bootstrap framework
+- `bootstrap-icons` - Bootstrap Icons
 - `leaflet` and plugins - Map styles
 
 To modify the theme's source code and rebuild:

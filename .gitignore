@@ -12,7 +12,7 @@ vendor/bundle/
 node_modules/
 assets/js/conference.bundle.js
 assets/css/conference.bundle.css
-assets/webfonts/fa-*
+assets/webfonts/bootstrap-icons.*
 
 ### Python ###
 __pycache__/

@@ -12,7 +12,7 @@ export function createMapModule(L) {
 
     L.tileLayer.provider(config.map_provider).addTo(map);
 
-    L.easyButton('far fa-star', () => {
+    L.easyButton('bi bi-star', () => {
       map.flyTo(config.home_coord, config.default_zoom);
     }, lang.focus_conf).addTo(map);
 
