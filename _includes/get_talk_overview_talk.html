@@ -71,7 +71,7 @@
         {%- include get_link.html link_type="icon" -%}
         {%- if link_valid -%}
           {{- link_tag -}}
-            <i class="bi bi-{{ link_icon }}"></i>
+            <i class="bi bi-{{ link_icon }}" aria-hidden="true"></i>
           </a>
         {%- endif -%}
       {%- endfor %}

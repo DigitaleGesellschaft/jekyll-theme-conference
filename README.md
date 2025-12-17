@@ -536,7 +536,7 @@ window.conference.awaitReady().then(() => {
         let main_station = L.marker([47.37785, 8.54035], {
             icon: L.divIcon({
                 className: '',
-                html: '<span class="bi bi-train-front"></span> Main Station',
+                html: '<span class="bi bi-train-front" aria-hidden="true"></span> Main Station',
                 iconSize: [120, 56]
             })
         }).addTo(map);

@@ -1,5 +1,5 @@
 {%- if room.hide or site.conference.location.hide -%}
-  <span class="badge bg-secondary-subtle text-secondary-emphasis fw-normal"><i class="bi bi-square"></i>&nbsp;{{ room.name }}</span>
+  <span class="badge bg-secondary-subtle text-secondary-emphasis fw-normal"><i class="bi bi-square" aria-hidden="true"></i>&nbsp;{{ room.name }}</span>
 {%- else -%}
-  <a href="{{ room.url | prepend: site.baseurl }}" class="badge bg-secondary-subtle text-secondary-emphasis fw-normal link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover"><i class="bi bi-square"></i>&nbsp;{{ room.name }}</a>
+  <a href="{{ room.url | prepend: site.baseurl }}" class="badge bg-secondary-subtle text-secondary-emphasis fw-normal link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover"><i class="bi bi-square" aria-hidden="true"></i>&nbsp;{{ room.name }}</a>
 {%- endif -%}
