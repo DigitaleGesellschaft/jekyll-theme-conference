@@ -7,7 +7,6 @@
 
 // Core libraries
 import * as bootstrap from 'bootstrap';
-import syncscroll from './lib/syncscroll.js';
 
 // Leaflet and plugins (loaded dynamically when map is enabled)
 import L from 'leaflet';
@@ -20,9 +19,6 @@ window.bootstrap = bootstrap;
 
 // Make Leaflet available globally
 window.L = L;
-
-// Initialize syncscroll
-syncscroll.init();
 
 // Import conference modules
 import { createConference } from './core/conference.js';

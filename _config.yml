@@ -10,18 +10,6 @@ markdown: kramdown
 sass:
   style: compressed
 
-# Exclude from processing
-exclude:
-  - .github/
-  - venv/
-  - README.md
-  - LICENSE.md
-  - REDISTRIBUTED.md
-  - screenshot.png
-  - jekyll-theme-conference.gemspec
-  - purgecss.config.js
-  - _config.example.yml
-
 # Collections and their defaults
 collections:
   talks:

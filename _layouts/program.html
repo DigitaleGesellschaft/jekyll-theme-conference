@@ -29,12 +29,12 @@
       <div class="tab-pane {%- if forloop.index == 1 %} active{% endif %}" id="{{ day_hash }}" role="tabpanel" aria-labelledby="tab-{{ day_hash }}">
     {%- endif %}
 
-    <div class="sticky-top syncscroll overflow-hidden" name="sync-table">
-      <table class="table mb-0 mx-auto">
+    <div class="w-100">
+      <table class="table program-table w-auto mx-auto align-top">
         <thead>
           <tr>
-            <th scope="col" class="col-title text-end">#<span class="invisible">I0</span></th>
-            <th class="col-space p-0" scope="col"></th>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col"></th>
             {%- assign nbr_rooms = d.rooms | size -%}
             {%- for r in d.rooms -%}
               {%- assign room = site.rooms | where: 'name', r.name | first %}
@@ -48,16 +48,12 @@
                 {%- endif -%}
               </th>
               {%- unless forloop.last %}
-                <th class="col-space p-0" scope="col"></th>
+                <th scope="col" class="col"></th>
               {%- endunless -%}
             {%- endfor %}
           </tr>
         </thead>
-      </table>
-    </div>
 
-    <div class="syncscroll overflow-y-hidden" name="sync-table">
-      <table class="table mx-auto">
         <tbody>
           {%- include get_day_time.html -%}
 
@@ -67,15 +63,6 @@
 
           {%- assign day_duration_min = day_end_hour | minus: day_start_hour | times: 60 | minus: day_start_min | plus: day_end_min -%}
           {%- assign nbr_steps = day_duration_min | divided_by: site.conference.program.time_steps -%}
-
-          <!--
-          The shadow of a previous program block should be above a later program block, thus
-          the earlier a program block the higher its z-index (opposite to the actual rendering).
-
-          Bootstrap uses as lowest z-index for its overlapping elements a z-index of 1000 (for
-          $zindex-dropdown).
-          -->
-          {%- assign z-index-max = 999 -%}
 
           {%- for i in (1..nbr_steps) -%}
             {%- assign current_day = 0 -%}
@@ -91,20 +78,20 @@
               {%- assign current_time = current_hour | append: ':' | append: current_min -%}
             {%- endif -%}
 
-            <tr>
+            <tr class="h-100">
 
               {%- if current_min == 0 -%}
-                <th scope="row" class="col-title text-end" style="z-index: {{ z-index-max }}">
+                <th scope="row" class="text-end">
                   {{- current_time -}}
                 </th>
               {%- elsif site.conference.program.show_alltimes -%}
-                <th scope="row" class="col-title text-end text-muted fw-normal" style="z-index: {{ z-index-max }}">
+                <th scope="row" class="text-end text-muted fw-normal">
                   :{{ current_min }}
                 </th>
               {%- else -%}
-                <th scope="row" class="col-title" style="z-index: {{ z-index-max }}"></th>
+                <th scope="row"></th>
               {%- endif %}
-              <td class="col-space p-0"></td>
+              <td></td>
 
               {%- for r in d.rooms -%}
                 {%- assign room = site.rooms | where: 'name', r.name | first -%}
@@ -144,20 +131,22 @@
 
                     {%- assign talk_nbr_steps = talk_duration_min | divided_by: site.conference.program.time_steps -%}
                     {%- include get_track_properties.html -%}
-                    <td rowspan="{{ talk_nbr_steps }}" class="alert alert-{{ track_color }} shadow-sm overflow-hidden" style="z-index: {{ z-index-max | minus: i }}">
+                    <td rowspan="{{ talk_nbr_steps }}" class="p-0 h-100">
+                      <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden">
 
-                      {%- assign live_button_styleclass = "mb-2" %}
-                      {%- include show_live_button.html %}
+                        {%- assign live_button_styleclass = "mb-2" %}
+                        {%- include show_live_button.html %}
 
-                      <p class="mb-2">
-                        {%- include show_talk.html %}
-                      </p>
-                      <p class="fw-light mb-2">
-                        {%- include list_speakers.html %}
-                      </p>
-                      <p class="mb-1">
-                        {%- include list_tags.html %}
-                      </p>
+                        <p class="mb-2">
+                          {%- include show_talk.html %}
+                        </p>
+                        <p class="fw-light mb-2">
+                          {%- include list_speakers.html %}
+                        </p>
+                        <p class="mb-1">
+                          {%- include list_tags.html %}
+                        </p>
+                      </div>
                     </td>
                     {%- assign active_talk = true %}
 
@@ -166,11 +155,11 @@
                 {%- endfor %}
 
                 {%- unless active_talk == true %}
-                  <td class="p-0"></td>
+                  <td></td>
                 {%- endunless -%}
 
                 {%- if forloop.last != true %}
-                  <td class="col-space p-0"></td>
+                  <td></td>
                 {%- endif -%}
 
               {%- endfor %}

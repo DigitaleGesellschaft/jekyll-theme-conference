@@ -12,15 +12,6 @@ markdown: kramdown
 sass:
   style: compressed
 
-# Additional exclude from processing
-exclude:
-  - vendor
-  - .github/
-  - README.md
-  - LICENSE.md
-  - REDISTRIBUTED.md
-  - purgecss.config.js
-
 # Collections and their defaults
 collections:
   talks:
