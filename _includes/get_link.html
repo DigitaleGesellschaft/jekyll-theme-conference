@@ -13,14 +13,11 @@
   {%- endif -%}
 {%- endif -%}
 
+{%- assign link_href = "" -%}
 {%- assign link_disabled = link.disabled -%}
 {%- assign link_icon = link.icon -%}
 {%- assign link_iframe = link.iframe -%}
 
-{%- assign link_href = "" -%}
-{%- assign link_icon = "" -%}
-{%- assign link_iframe = false -%}
-{%- assign link_disabled = false -%}
 {%- if link.absolute_url -%}
   {%- assign link_href = link.absolute_url -%}
 
@@ -102,10 +99,8 @@
 
 {%- capture link_list_item -%}
   <li class="mb-1">
-    {{ link_tag }}
-      <span class="badge rounded-0 border-start border-4 border-{{ track_color | default: 'primary' }}-subtle bg-secondary-subtle text-secondary-emphasis fw-normal me-1">
-        <i class="bi bi-{{ link_icon | default: 'link-45deg' }}"></i>
-      </span>
+    {{ link_tag | replace: ' class="', ' class="icon-link '}}
+      <i class="bi bi-{{ link_icon | default: 'link-45deg' }}" aria-hidden="true"></i>
       {{- link.name }}
     </a>
   </li>

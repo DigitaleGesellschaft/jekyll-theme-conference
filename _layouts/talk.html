@@ -101,11 +101,11 @@
 
   <p class="d-print-none mt-5">
     <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-secondary">
-      <i class="bi bi-megaphone"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
+      <i class="bi bi-megaphone" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
 
     <a href="{{ site.conference.program.url | prepend: site.baseurl }}" class="btn btn-secondary">
-      <i class="bi bi-calendar4-week"></i>&nbsp;{{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
+      <i class="bi bi-calendar4-week" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
     </a>
   </p>
 

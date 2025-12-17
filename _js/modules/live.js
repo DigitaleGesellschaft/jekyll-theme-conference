@@ -592,7 +592,7 @@ export function createLiveModule(conference) {
 
           linksStr += '<a href="' + link.href + '" class="btn btn-light m-1 live-past" data-time="' + talkNext.start + '">';
           if (link.icon) {
-            linksStr += '<i class="bi bi-' + link.icon + '"></i>&nbsp;';
+            linksStr += '<i class="bi bi-' + link.icon + '" aria-hidden="true"></i>&nbsp;';
           }
           linksStr += link.name + '</a>';
         }

@@ -6,7 +6,7 @@
     #{{ day_hash }}
   {%- endif -%}
 " class="badge bg-secondary-subtle text-secondary-emphasis fw-normal link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover {{ talk_time_styleclass }}">
-  <i class="bi bi-clock"></i>&nbsp;
+  <i class="bi bi-clock" aria-hidden="true"></i>&nbsp;
   {%- if nbr_days > 1 and day_abbr -%}
     {%- unless talk_day_hide -%} {{ day_abbr }}, {% endunless -%}
     {%- assign talk_day_hide = false -%}
