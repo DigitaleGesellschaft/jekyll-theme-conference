@@ -7,8 +7,9 @@ This is a responsive [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 5](
 - multiday program / schedule,
 - talk and speaker descriptions,
 - maps for directions,
-- real-time indications during the conference, and
-- supports embedded video streaming or recordings.
+- real-time indications during the conference,
+- supports embedded video streaming or recordings, and
+- automatic dark mode support based on system preferences.
 
 All components such as talks, speakers or rooms are represented as collection of files. The schedule is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files. A script and workflows are available for easy import, e.g., of [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible schedules.
 The design is easily customizable and is adapted for mobile uses and printing.
@@ -287,6 +288,7 @@ Optionally, a logo or link of your organization hosting the conference can be sh
 - the text to show (`name`),
 - an absolute link address (`url`), and
 - optionally a logo to show instead of the text (`img`), whereby the path to the image file relative to the `/assets/images/` folder has to be specified.
+- optionally a dark mode logo (`img_dark`), which will be automatically displayed when the user's system is in dark mode. If not specified, the regular `img` will be used in both light and dark modes.
 
 Example:
 
@@ -297,6 +299,7 @@ conference:
     logo:
       name: Magic Organisation
       img: 'logo.svg'  # inside /assets/images/
+      img_dark: 'logo-dark.svg'  # optional: dark mode version
       url: 'https://github.com'
 ```
 
@@ -331,6 +334,7 @@ The main landing page is shown at the root of the website to greet new visitors.
 The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `logo` property under the `main` property containing
 
 - a `img` property specifying the path to the image file relative to the `/assets/images/` folder.
+- optionally a `img_dark` property for a dark mode version of the logo, which will be automatically displayed when the user's system is in dark mode. If not specified, the regular `img` will be used in both light and dark modes.
 
 Example:
 
@@ -339,6 +343,7 @@ conference:
   main:
     logo:
       img: "main_logo.png"
+      img_dark: "main_logo_dark.png"  # optional: dark mode version
 ```
 
 The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of link buttons. See the _Content_ > _Links_ section below for the available properties per link.
@@ -787,7 +792,7 @@ Each of these pages can include a map at its end (e.g., to point to your venue) 
 
 ## Design
 
-The design is based on [Bootstrap 5](http://getbootstrap.com) and is easily expandable. It uses [Bootstrap Icons](https://icons.getbootstrap.com/) icons and [Leaflet](https://leafletjs.com/) for maps.
+The design is based on [Bootstrap 5](http://getbootstrap.com) and is easily expandable. It uses [Bootstrap Icons](https://icons.getbootstrap.com/) icons and [Leaflet](https://leafletjs.com/) for maps. The theme includes automatic dark mode support that adapts to the user's system preferences.
 
 ### CSS Bundle
 

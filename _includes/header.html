@@ -5,6 +5,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <script>
+    // Apply dark mode immediately based on system preference to prevent flash
+    (function() {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-bs-theme', prefersDark ? 'dark' : 'light');
+    })();
+  </script>
+
   {% include get_page_title.html -%}
   <title>
     {{- page_title -}}
