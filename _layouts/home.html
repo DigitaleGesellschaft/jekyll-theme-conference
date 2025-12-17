@@ -3,8 +3,19 @@
   <div class="bg-secondary-subtle text-secondary-emphasis p-4 p-md-5 mb-4">
     <h1 class="display-3 text-break">
       {% if site.conference.main.logo.img %}
-        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
-        <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+        {% if site.conference.main.logo.img_dark %}
+          <div class="mode-light">
+            <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+            <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+          </div>
+          <div class="mode-dark">
+            <img src="{{ site.conference.main.logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+            <img src="{{ site.conference.main.logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+          </div>
+        {% else %}
+          <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+          <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+        {% endif %}
       {% elsif page.title %}
         {{ page.title }}
       {% else %}

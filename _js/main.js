@@ -29,6 +29,7 @@ import { createProgramModule } from './modules/program.js';
 import { createMapModule } from './modules/map.js';
 import { createModalModule } from './modules/modal.js';
 import { createLiveModule } from './modules/live.js';
+import { createDarkModeModule } from './modules/darkmode.js';
 import { init } from './init.js';
 
 // Initialize the conference object
@@ -39,6 +40,11 @@ conference.program = createProgramModule();
 conference.modal = createModalModule();
 conference.map = createMapModule(L);
 conference.live = createLiveModule(conference);
+conference.darkmode = createDarkModeModule();
+
+// Initialize dark mode immediately to avoid flash of wrong theme
+// This runs before other modules since it doesn't need config
+conference.darkmode.init();
 
 // Expose to global scope
 window.conference = conference;

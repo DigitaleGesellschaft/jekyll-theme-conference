@@ -68,6 +68,23 @@
   margin-bottom: 0;
 }
 
+// Dark mode
+.mode-light {
+  display: initial;
+}
+
+.mode-dark {
+  display: none;
+}
+
+[data-bs-theme="dark"] .mode-light {
+  display: none;
+}
+
+[data-bs-theme="dark"] .mode-dark {
+  display: initial;
+}
+
 // Map
 #map {
   min-height: 400px;
