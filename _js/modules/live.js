@@ -2,7 +2,7 @@
  * Live Module
  * Handles live streaming, real-time updates, and conference timing
  */
-export function createLiveModule($, conference) {
+export function createLiveModule(conference) {
   let config;
   let lang;
 
@@ -31,7 +31,7 @@ export function createLiveModule($, conference) {
   let streamVideoTimer;
   let streamInfoTimer;
 
-  let streamModal;
+  let streamModalEl;
 
   const loadData = () => {
     // Load schedule
@@ -430,17 +430,25 @@ export function createLiveModule($, conference) {
 
   const setStreamIframeContent = (content) => {
     // Set stream modal iframe to show given text
-    streamModal.find('iframe').attr('src', '');
-    streamModal.find('iframe').addClass('d-none');
-    streamModal.find('#stream-placeholder > div').text(content);
-    streamModal.find('#stream-placeholder').addClass('d-flex');
+    const iframe = streamModalEl.querySelector('iframe');
+    const placeholder = streamModalEl.querySelector('#stream-placeholder');
+    const placeholderDiv = placeholder.querySelector('div');
+
+    iframe.setAttribute('src', '');
+    iframe.classList.add('d-none');
+    placeholderDiv.textContent = content;
+    placeholder.classList.add('d-flex');
   };
 
   const setStreamIframeSrc = (href) => {
     // Set stream modal iframe to show given URL
-    streamModal.find('iframe').attr('src', href);
-    streamModal.find('#stream-placeholder').addClass('d-none').removeClass('d-flex');
-    streamModal.find('iframe').removeClass('d-none');
+    const iframe = streamModalEl.querySelector('iframe');
+    const placeholder = streamModalEl.querySelector('#stream-placeholder');
+
+    iframe.setAttribute('src', href);
+    placeholder.classList.add('d-none');
+    placeholder.classList.remove('d-flex');
+    iframe.classList.remove('d-none');
   };
 
   const setStreamVideo = (roomName) => {
@@ -536,16 +544,23 @@ export function createLiveModule($, conference) {
       clearInterval(streamInfoTimer);
     }
 
+    const streamInfo = document.getElementById('stream-info');
+    const streamInfoTime = document.getElementById('stream-info-time');
+    const streamInfoColor = streamModalEl.querySelector('#stream-info-color');
+    const streamInfoTalk = streamModalEl.querySelector('#stream-info-talk');
+    const streamInfoSpeakers = streamModalEl.querySelector('#stream-info-speakers');
+    const streamInfoLinks = streamModalEl.querySelector('#stream-info-links');
+
     if (talkNext !== {} && timeNowVal >= talkNext.start - streamPause * 60) {
-      document.getElementById('stream-info').dataset.time = talkNext.start;
-      document.getElementById('stream-info-time').dataset.time = talkNext.start;
+      streamInfo.dataset.time = talkNext.start;
+      streamInfoTime.dataset.time = talkNext.start;
 
-      streamModal.find('#stream-info-color').removeClass((index, className) => {
-        return (className.match(/(^|\s)border-soft-\S+/g) || []).join(' ');
-      });
-      streamModal.find('#stream-info-color').addClass('border-soft-' + talkNext.color);
+      // Remove existing border-soft-* classes
+      streamInfoColor.className = streamInfoColor.className.replace(/(^|\s)border-soft-\S+/g, '');
+      streamInfoColor.classList.add('border-soft-' + talkNext.color);
 
-      streamModal.find('#stream-info-talk').text(talkNext.name).attr('href', talkNext.href);
+      streamInfoTalk.textContent = talkNext.name;
+      streamInfoTalk.setAttribute('href', talkNext.href);
 
       let speakerStr = '';
       for (let i = 0; i < talkNext.speakers.length; i++) {
@@ -560,7 +575,7 @@ export function createLiveModule($, conference) {
         }
       }
       speakerStr = speakerStr.slice(0, -2);
-      streamModal.find('#stream-info-speakers').html(speakerStr);
+      streamInfoSpeakers.innerHTML = speakerStr;
 
       if (talkNext.live_links) {
         let linksStr = '';
@@ -578,19 +593,20 @@ export function createLiveModule($, conference) {
           }
           linksStr += link.name + '</a>';
         }
-        streamModal.find('#stream-info-links').html(linksStr).removeClass('d-none');
+        streamInfoLinks.innerHTML = linksStr;
+        streamInfoLinks.classList.remove('d-none');
       } else {
-        streamModal.find('#stream-info-links').addClass('d-none');
+        streamInfoLinks.classList.add('d-none');
       }
 
-      streamModal.find('#stream-info').removeClass('d-none');
+      streamInfo.classList.remove('d-none');
 
       updateLive();
       if (!freezeTime) {
         streamInfoTimer = setTimeout(setStreamInfo, delayStart(talkNext.end) * 1000, roomName);
       }
     } else {
-      streamModal.find('#stream-info').addClass('d-none');
+      streamInfo.classList.add('d-none');
 
       if (!freezeTime) {
         if (talkNext) {
@@ -607,8 +623,13 @@ export function createLiveModule($, conference) {
 
   const setStream = (roomName) => {
     // Update stream modal (iframe and info bar) for given room
-    streamModal.find('.modal-footer .btn').removeClass('active');
-    streamModal.find('#stream-select').val(0);
+    streamModalEl.querySelectorAll('.modal-footer .btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const streamSelect = streamModalEl.querySelector('#stream-select');
+    if (streamSelect) {
+      streamSelect.value = '0';
+    }
 
     // Recover room name in case of empty default
     const room = getRoom(roomName);
@@ -618,19 +639,26 @@ export function createLiveModule($, conference) {
       setStreamVideo(roomName);
       setStreamInfo(roomName);
 
-      streamModal.find('#stream-button' + room.id).addClass('active');
-      streamModal.find('#stream-select').val(room.id);
+      const activeButton = streamModalEl.querySelector('#stream-button' + room.id);
+      if (activeButton) {
+        activeButton.classList.add('active');
+      }
+      if (streamSelect) {
+        streamSelect.value = room.id;
+      }
     }
   };
 
   const updateStream = () => {
     // Update stream modal for currently active room button
-    if (streamModal.hasClass('show')) {
-      let activeButton = streamModal.find('.modal-footer .btn.active');
-      let roomName = activeButton.data('room');
+    if (streamModalEl.classList.contains('show')) {
+      let activeButton = streamModalEl.querySelector('.modal-footer .btn.active');
+      if (activeButton) {
+        let roomName = activeButton.dataset.room;
 
-      if (typeof roomName !== "undefined") {
-        setStream(roomName);
+        if (typeof roomName !== "undefined") {
+          setStream(roomName);
+        }
       }
     }
   };
@@ -647,40 +675,49 @@ export function createLiveModule($, conference) {
 
   const hideModal = () => {
     // Close stream modal
-    streamModal.find('iframe').attr('src', '');
-    streamModal.find('.modal-footer .btn').removeClass('active');
-    streamModal.find('#stream-select').selectedIndex = -1;
+    streamModalEl.querySelector('iframe').setAttribute('src', '');
+    streamModalEl.querySelectorAll('.modal-footer .btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const streamSelect = streamModalEl.querySelector('#stream-select');
+    if (streamSelect) {
+      streamSelect.selectedIndex = -1;
+    }
   };
 
   const setupStream = () => {
     // Setup events when modal opens/closes
-    streamModal = $('#stream-modal');
+    streamModalEl = document.getElementById('stream-modal');
+    if (!streamModalEl) return;
 
     // configure modal opening buttons
-    streamModal.on('show.bs.modal', (event) => {
-      let button = $(event.relatedTarget);
-      let roomName = button.data('room');
+    streamModalEl.addEventListener('show.bs.modal', (event) => {
+      let button = event.relatedTarget;
+      let roomName = button.dataset.room;
       setStream(roomName);
     });
-    streamModal.on('hide.bs.modal', () => {
+    streamModalEl.addEventListener('hide.bs.modal', () => {
       hideModal();
     });
 
     // configure room selection buttons in modal
-    streamModal.find('.modal-footer .btn').on('click', function (event) {
-      event.preventDefault();
-
-      let roomName = $(this).data('room');
-      setStream(roomName);
+    streamModalEl.querySelectorAll('.modal-footer .btn').forEach(btn => {
+      btn.addEventListener('click', function (event) {
+        event.preventDefault();
+        let roomName = this.dataset.room;
+        setStream(roomName);
+      });
     });
 
     // configure room selection menu in modal
-    streamModal.find('#stream-select').on('change', function (event) {
-      event.preventDefault();
-
-      let roomName = $(this).children('option:selected').text();
-      setStream(roomName);
-    });
+    const streamSelect = streamModalEl.querySelector('#stream-select');
+    if (streamSelect) {
+      streamSelect.addEventListener('change', function (event) {
+        event.preventDefault();
+        let roomName = this.options[this.selectedIndex].text;
+        setStream(roomName);
+      });
+    }
   };
 
   const init = (c, l) => {
@@ -748,4 +785,3 @@ export function createLiveModule($, conference) {
     demo: model.demo
   };
 }
-

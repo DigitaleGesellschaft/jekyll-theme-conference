@@ -39,7 +39,7 @@
           {%- include get_track_properties.html %}
 
           <tr>
-            <td class="pr-2">
+            <td class="pe-2">
               {%- include get_talk_time.html -%}
               {%- assign talk_day_hide = true -%}
               {%- assign talk_time_styleclass = "w-100" -%}
@@ -48,11 +48,11 @@
               {%- assign live_button_styleclass = "w-100" -%}
               {% include show_live_button.html %}
             </td>
-            <td class="pl-2 border-soft-{{ track_color }}">
+            <td class="ps-2 border-soft-{{ track_color }}">
               <p class="mb-0">
                 {%- include show_talk.html -%}
               </p>
-              <p class="font-weight-light mb-0">
+              <p class="fw-light mb-0">
                 {%- include list_speakers.html -%}
               </p>
             </td>

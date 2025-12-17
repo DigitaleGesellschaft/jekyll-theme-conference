@@ -5,55 +5,48 @@
  * These styles extend and customize Bootstrap components.
  */
 
-// Adapt Bootstrap Elements
-
-// Alert
+// Alert - left border accent style
 .alert {
-  border-width: 0px;
+  border-width: 0;
   border-left-width: $alert-border-width;
 }
 
+// Soft color variants for borders and backgrounds
 @each $color, $value in $theme-colors {
   .border-soft-#{$color} {
-    border-color: theme-color-level($color, $alert-border-level);
+    border-color: tint-color($value, 60%);
     border-left-width: $alert-border-width;
     border-left-style: solid;
   }
+
   .bg-soft-#{$color} {
-    @include gradient-bg(theme-color-level($color, $alert-bg-level));
+    background-color: tint-color($value, 80%);
   }
 }
 
 // Button group for lists
 ul.btn-group {
   > li:not(:first-child) > .btn {
-    margin-left: -$btn-border-width;
-    @include border-left-radius(0);
+    margin-left: calc(-1 * var(--bs-btn-border-width));
+    @include border-start-radius(0);
   }
 
   > li:not(:last-child) > .btn {
-    @include border-right-radius(0);
+    @include border-end-radius(0);
   }
 }
 
-// Extend Bootstrap Elements
+// Extended display heading
 .display-5 {
   font-size: 3rem;
-  font-weight: $display4-weight;
+  font-weight: $display-font-weight;
   line-height: $display-line-height;
 }
-.font-normal {
-  .badge {
-    font-size: 0.85em;
-  }
-}
+
+// Overflow utility
 .overflow-y-hidden {
   overflow-y: hidden;
 }
-
-// Custom Styling
-
-// General
 
 // Extend logo when collapsed navbar is shown
 .navbar-collapse.show + .navbar-logo {
@@ -66,7 +59,7 @@ main.container img {
   height: auto;
 }
 
-// No bottom margin on info-bar
+// No bottom margin on last paragraph in alert
 .alert > p:last-of-type {
   margin-bottom: 0;
 }
@@ -83,48 +76,42 @@ main.container img {
   font-size: 1em;
 }
 
-// Program
-
-// Sticky header and first column
+// Program table - sticky header and first column
 .table {
   // Avoid sticky cells without border
   border-collapse: separate;
+  border-spacing: 0;
 
-  // Correct border-width caused by border-collapse
-  border-spacing: 0px;
   tbody tr:first-of-type > * {
-    border-top-width: 0px;
+    border-top-width: 0;
   }
 
   // Sticky horizontal positioning
   th {
     position: sticky;
-    background-color: $body-bg;
+    background-color: var(--bs-body-bg);
   }
+
   th:first-of-type {
-    left: 0px;
+    left: 0;
     z-index: 1;
   }
 
   // Hide shadow of table cells next to sticky header
   thead tr > th:last-of-type {
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 1);
+    box-shadow: 10px 0 0 0 rgba(255, 255, 255, 1);
   }
 }
 
-// Column Width
+// Table column widths
 .table {
   // First row defines width for all columns
   table-layout: fixed;
-
-  // Columns define table width
   width: auto;
 
-  // Column widths
   th,
   td {
     // Total available container width is 1110px
-
     // Width of columns with content (default)
     width: 245px;
     min-width: 245px;
@@ -134,6 +121,7 @@ main.container img {
       width: 15px;
       min-width: 15px;
     }
+
     // Width of first column containing timestamps
     &.col-title {
       width: 70px;
@@ -142,11 +130,13 @@ main.container img {
   }
 }
 
-// Location
+// Location nav pills
 .nav-pills .nav-link.active {
-  background-color: theme-color-level("primary", $alert-bg-level);
-  color: var(--dark);
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary-text-emphasis);
 }
+
+// Map container
 #map {
   height: 50vh;
   min-height: 400px;
@@ -156,7 +146,6 @@ main.container img {
 // Program per Room
 .list-program {
   border: 0 none white;
-
   border-collapse: separate;
   border-spacing: 0 0.5em;
 
@@ -171,47 +160,50 @@ main.container img {
   }
 }
 
-// Speaker
+// Speaker column layout
 .speakergroup {
   page-break-inside: avoid;
   break-inside: avoid-column;
 }
+
 @include media-breakpoint-up(sm) {
   .speakerlist {
     column-count: 1;
   }
 }
+
 @include media-breakpoint-up(md) {
   .speakerlist {
     column-count: 2;
   }
 }
+
 @include media-breakpoint-up(lg) {
   .speakerlist {
     column-count: 3;
   }
 }
 
-// Print
+// Print styles
 @media print {
-  // remove underline for links
+  // Remove underline for links
   a {
     text-decoration: none !important;
   }
 
-  // overwrite bootstrap default white background
-  // works only with Webkit (Chrome, Safari) and Firefox
+  // Preserve background colors for table cells
   @each $color, $value in $theme-colors {
     .table td.alert-#{$color} {
-      color-adjust: exact;
-      background-color: theme-color-level($color, $alert-bg-level) !important;
-
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+      background-color: tint-color($value, 80%) !important;
       color: black;
     }
   }
-  .badge {
-    color-adjust: exact;
 
+  .badge {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
     border: 0 none white;
     text-decoration: none !important;
   }
@@ -225,8 +217,8 @@ main.container img {
   .live-show {
     display: none;
   }
+
   .live-hide {
     display: inline-block !important;
   }
 }
-

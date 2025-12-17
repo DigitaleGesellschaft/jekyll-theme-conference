@@ -6,8 +6,7 @@
  */
 
 // Core libraries
-import $ from 'jquery';
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
 import syncscroll from './lib/syncscroll.js';
 
 // Leaflet and plugins (loaded dynamically when map is enabled)
@@ -16,8 +15,8 @@ import 'leaflet-easybutton';
 import 'leaflet.locatecontrol';
 import 'leaflet-providers';
 
-// Make jQuery available globally for Bootstrap
-window.$ = window.jQuery = $;
+// Make Bootstrap available globally (for Modal, Tab, etc. access)
+window.bootstrap = bootstrap;
 
 // Make Leaflet available globally
 window.L = L;
@@ -37,14 +36,13 @@ import { init } from './init.js';
 const conference = createConference();
 
 // Register modules
-conference.program = createProgramModule($);
-conference.modal = createModalModule($);
+conference.program = createProgramModule();
+conference.modal = createModalModule();
 conference.map = createMapModule(L);
-conference.live = createLiveModule($, conference);
+conference.live = createLiveModule(conference);
 
 // Expose to global scope
 window.conference = conference;
 
 // Start initialization
 init(conference);
-

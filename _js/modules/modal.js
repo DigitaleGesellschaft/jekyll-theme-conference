@@ -2,68 +2,82 @@
  * Modal Module
  * Handles Bootstrap modal popups for links
  */
-export function createModalModule($) {
+export function createModalModule() {
   const show = (el, event) => {
-    const button = $(event.relatedTarget);
+    const button = event.relatedTarget;
 
-    const href = button.data('href');
-    const format = button.data('format');
-    const title = button.data('title');
-    const subtitle = button.data('subtitle');
-    const footer = button.data('footer');
+    const href = button.dataset.href;
+    const format = button.dataset.format;
+    const title = button.dataset.title;
+    const subtitle = button.dataset.subtitle;
+    const footer = button.dataset.footer;
 
-    const modal = $(el);
-    modal.find('iframe').attr('src', href);
+    const modal = el;
+    const iframe = modal.querySelector('iframe');
+    const titleH3 = modal.querySelector('.modal-title h3');
+    const titleH5 = modal.querySelector('.modal-title h5');
+    const footerEl = modal.querySelector('.modal-footer');
+    const footerP = modal.querySelector('.modal-footer p');
+
+    iframe.setAttribute('src', href);
 
     if (title) {
-      if (format == 'html') {
-        modal.find('.modal-title h3').html(title);
+      if (format === 'html') {
+        titleH3.innerHTML = title;
         if (subtitle) {
-          modal.find('.modal-title h5').html(subtitle).removeClass('d-none');
+          titleH5.innerHTML = subtitle;
+          titleH5.classList.remove('d-none');
         } else {
-          modal.find('.modal-title h5').text('').addClass('d-none');
+          titleH5.textContent = '';
+          titleH5.classList.add('d-none');
         }
       } else {
-        modal.find('.modal-title h3').text(title);
+        titleH3.textContent = title;
         if (subtitle) {
-          modal.find('.modal-title h5').text(subtitle).removeClass('d-none');
+          titleH5.textContent = subtitle;
+          titleH5.classList.remove('d-none');
         } else {
-          modal.find('.modal-title h5').text('').addClass('d-none');
+          titleH5.textContent = '';
+          titleH5.classList.add('d-none');
         }
       }
     } else {
-      modal.find('.modal-title h3').text('');
-      modal.find('.modal-title h5').text('').addClass('d-none');
+      titleH3.textContent = '';
+      titleH5.textContent = '';
+      titleH5.classList.add('d-none');
     }
 
     if (footer) {
-      modal.find('.modal-footer').removeClass('d-none');
-      if (format == 'html') {
-        modal.find('.modal-footer p').html(footer);
+      footerEl.classList.remove('d-none');
+      if (format === 'html') {
+        footerP.innerHTML = footer;
       } else {
-        modal.find('.modal-footer p').text(footer);
+        footerP.textContent = footer;
       }
     } else {
-      modal.find('.modal-footer').addClass('d-none');
+      footerEl.classList.add('d-none');
     }
   };
 
   const hide = (el) => {
-    const modal = $(el);
+    const modal = el;
 
-    modal.find('.modal-title h3').text('');
-    modal.find('.modal-title h5').text('').addClass('d-none');
-    modal.find('iframe').attr('src', '');
-    modal.find('.modal-footer p').html('');
+    modal.querySelector('.modal-title h3').textContent = '';
+    const titleH5 = modal.querySelector('.modal-title h5');
+    titleH5.textContent = '';
+    titleH5.classList.add('d-none');
+    modal.querySelector('iframe').setAttribute('src', '');
+    modal.querySelector('.modal-footer p').innerHTML = '';
   };
 
   const init = () => {
-    const elSel = '#link-modal';
+    const modalEl = document.getElementById('link-modal');
+    if (!modalEl) return;
 
-    $(elSel).on('show.bs.modal', function (event) {
+    modalEl.addEventListener('show.bs.modal', function (event) {
       show(this, event);
     });
-    $(elSel).on('hide.bs.modal', function () {
+    modalEl.addEventListener('hide.bs.modal', function () {
       hide(this);
     });
   };
@@ -72,4 +86,3 @@ export function createModalModule($) {
     init: init
   };
 }
-

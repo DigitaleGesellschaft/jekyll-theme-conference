@@ -80,7 +80,7 @@
     <a class="disabled{% if link_styleclass %} {{ link_styleclass }}{% endif %}" href="#">
 
   {%- elsif link_iframe -%}
-    <a {% if link_styleclass %}class="{{ link_styleclass }}"{% endif %} title="{{ link.name }}" data-toggle="modal" data-target="#link-modal" data-href="{{ link_href }}" href="#" {% if modal_title -%}
+    <a {% if link_styleclass %}class="{{ link_styleclass }}"{% endif %} title="{{ link.name }}" data-bs-toggle="modal" data-bs-target="#link-modal" data-href="{{ link_href }}" href="#" {% if modal_title -%}
       data-format='html' data-title="{{ modal_title | strip_newlines | escape }}" {%- if modal_subtitle %} data-subtitle="{{ modal_subtitle | strip_newlines | escape }}"{%- endif -%}
     {%- elsif link.name -%}
       data-format='text' data-title="{{ link.name }}"
