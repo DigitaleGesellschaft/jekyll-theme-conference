@@ -1,6 +1,6 @@
 {
   "name": "jekyll-theme-conference",
-  "version": "3.7.2",
+  "version": "4.0.0",
   "description": "Jekyll template for a conference website",
   "private": true,
   "type": "module",
