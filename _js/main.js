@@ -30,6 +30,7 @@ import { createMapModule } from './modules/map.js';
 import { createModalModule } from './modules/modal.js';
 import { createLiveModule } from './modules/live.js';
 import { createDarkModeModule } from './modules/darkmode.js';
+import { createInfoBarModule } from './modules/infobar.js';
 import { init } from './init.js';
 
 // Initialize the conference object
@@ -41,6 +42,7 @@ conference.modal = createModalModule();
 conference.map = createMapModule(L);
 conference.live = createLiveModule(conference);
 conference.darkmode = createDarkModeModule();
+conference.infobar = createInfoBarModule();
 
 // Initialize dark mode immediately to avoid flash of wrong theme
 // This runs before other modules since it doesn't need config
