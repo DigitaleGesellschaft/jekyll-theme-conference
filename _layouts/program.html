@@ -12,7 +12,7 @@
   {{ content }}
 
   {%- if nbr_days > 1 %}
-    <ul class="nav nav-pills justify-content-center mb-3" id="day-list" role="tablist">
+    <ul class="nav nav-pills justify-content-center mb-3" id="program-tabs" role="tablist">
       {%- for d in site.data.program.days -%}
         {%- include get_day_hash.html %}
         <li class="nav-item" role="presentation">

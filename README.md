@@ -437,10 +437,6 @@ To activate these functionalities, each day in the `program.yml` file must conta
   - how many minutes the stream stays active after a talk (`extend`),
   - how long a pause between two consecutive talks has to be for the stream to pause (`pause`), and
   - an external (absolute) link to which the user will be redirected instead of opening the modal (`external`),
-- optionally, under the `demo` property:
-  - if a demonstration mode should be enabled (`enable`), whereby the JavaScript function cycles continuously through the entire program in a few minutes, and if enabled
-  - how long the demonstration should take (`duration`), and
-  - how long the pause between two demonstration cycles should be (`pause`).
 
 ```yaml
 conference:
@@ -451,10 +447,6 @@ conference:
       pause: 60 # in minutes
       prepend: 5 # in minutes
       extend: 5 # in minutes
-    demo:
-      enable: false
-      duration: 300 # in seconds
-      pause: 10 # in seconds
 ```
 
 ### Map
@@ -561,10 +553,10 @@ The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. Th
 Following an example for `assets/js/main.js` is given adding a simple marker to the map:
 
 ```javascript
-window.conference.awaitReady().then(() => {
-    const map = window.conference.map.getMap();
+window.conference.awaitReady().then(async () => {
+    const map = await window.conference.map.getMap();
 
-    if (typeof map !== 'undefined') {
+    if (map) {
         let main_station = L.marker([47.37785, 8.54035], {
             icon: L.divIcon({
                 className: '',
@@ -885,10 +877,10 @@ To add custom JavaScript, edit the `assets/js/main.js file in your project. This
 
 ```javascript
 // Wait for conference to initialize
-window.conference.awaitReady().then(() => {
-    // Access the map
-    const map = window.conference.map.getMap();
-    if (typeof map !== 'undefined') {
+window.conference.awaitReady().then(async () => {
+    // Access the map (returns a promise)
+    const map = await window.conference.map.getMap();
+    if (map) {
         // Add custom map markers
         L.marker([47.37785, 8.54035]).addTo(map);
     }

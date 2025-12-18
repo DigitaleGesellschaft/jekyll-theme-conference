@@ -1,44 +1,50 @@
-import { resolve } from "path";
-import { defineConfig } from "vite";
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
-    outDir: "assets",
+    outDir: 'assets',
     emptyOutDir: false,
     rollupOptions: {
       input: {
-        "js/conference.bundle": resolve(__dirname, "_js/main.js"),
-        "css/conference.bundle": resolve(__dirname, "_css/main.scss"),
+        'js/conference.bundle': resolve(__dirname, '_js/main.js'),
+        'css/conference.bundle': resolve(__dirname, '_css/main.scss'),
       },
       output: {
-        // JavaScript output configuration
-        entryFileNames: "[name].js",
-        chunkFileNames: "[name].js",
-        // Asset output configuration
+        // Main JavaScript
+        entryFileNames: '[name].js',
+
+        // CSS and other assets
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name && assetInfo.name.endsWith(".css")) {
-            return "css/conference.bundle.css";
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'css/conference.bundle.css';
           }
-          return "[name][extname]";
+          return '[name][extname]';
         },
-        // Ensure we generate a single file
-        inlineDynamicImports: false,
+
+        // Split lazy-loaded modules into separate chunks
+        chunkFileNames: 'js/[name].bundle.js',
+        manualChunks: (id) => {
+          // Leaflet
+          if (id.includes('leaflet')) {
+            return 'leaflet';
+          }
+        },
       },
     },
-    minify: "esbuild",
+    minify: 'esbuild',
     sourcemap: false,
     cssCodeSplit: false,
+    target: 'es2020',
   },
   css: {
     preprocessorOptions: {
       scss: {
-        // Allow importing from node_modules
-        includePaths: ["node_modules"],
+        includePaths: ['node_modules'],
       },
     },
   },
-  // Define globals that will be available
   define: {
-    "process.env.NODE_ENV": JSON.stringify("production"),
+    'process.env.NODE_ENV': JSON.stringify('production'),
   },
 });

@@ -34,12 +34,6 @@
             "pause": {{ site.conference.live.streaming.pause | default: 60 }},
             "prepend": {{ site.conference.live.streaming.prepend | default: 5 }},
             "extend": {{ site.conference.live.streaming.extend | default: 5 }}
-        },
-
-        "demo": {
-            "enable": {{ site.conference.live.demo.enable | default: "false" }},
-            "duration": {{ site.conference.live.demo.duration | default: 300 }},
-            "pause": {{ site.conference.live.demo.pause | default: 10 }}
         }
     },
     {%- endif %}

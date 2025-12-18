@@ -3,40 +3,20 @@
  * Loads configuration and initializes all conference modules
  */
 export function init(conference) {
-  // Load configuration
-  const request = new Request(conference.config.baseurl + '/assets/js/config.json');
-
-  fetch(request)
+  fetch(conference.config.baseurl + '/assets/js/config.json')
     .then(response => response.json())
     .then(config => {
-      // Add configuration to global scope
-      conference.config = Object.assign(conference.config, config);
+      Object.assign(conference.config, config);
 
-      // Execute initialization functions
+      // Initialize each module with its config and lang
       for (const [name, module] of Object.entries(conference)) {
-        if (['config', 'ready', 'awaitReady'].includes(name)) {
-          continue;
-        }
-
-        let c;
-        if (name in config) {
-          c = config[name];
-        }
-        let l;
-        if (config.lang && name in config.lang) {
-          l = config.lang[name];
-        }
-
-        if (module && typeof module.init === 'function') {
-          module.init(c, l);
+        if (name === 'config' || name === 'ready' || name === 'awaitReady') continue;
+        if (module?.init) {
+          module.init(config[name], config.lang?.[name]);
         }
       }
-    })
-    .then(() => {
+
       conference.ready = true;
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch(error => console.error('Failed to load config:', error));
 }
-

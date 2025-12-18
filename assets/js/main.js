@@ -6,14 +6,14 @@
  *
  * The conference bundle provides the following global objects:
  * - window.conference: Main conference object with modules
- * - window.$ / window.jQuery: jQuery library
- * - window.L: Leaflet map library (if map is enabled)
+ * - window.bootstrap: Bootstrap components
+ * - window.L: Leaflet map library (loaded dynamically when map element exists on page)
  *
  * Example: Wait for conference to be ready, then access the map
  *
- * window.conference.awaitReady().then(() => {
- *     const map = window.conference.map.getMap();
- *     if (typeof map !== 'undefined') {
+ * window.conference.awaitReady().then(async () => {
+ *     const map = await window.conference.map?.getMap();
+ *     if (map) {
  *         // Add custom markers, layers, etc.
  *         L.marker([47.37785, 8.54035]).addTo(map);
  *     }

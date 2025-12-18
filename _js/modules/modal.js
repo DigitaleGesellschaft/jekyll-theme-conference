@@ -1,45 +1,27 @@
 /**
- * Modal Module
- * Handles Bootstrap modal popups for links
+ * Modal Module - Handles Bootstrap modal popups for links
  */
 export function createModalModule() {
-  const show = (el, event) => {
-    const button = event.relatedTarget;
+  const show = (modal, event) => {
+    const btn = event.relatedTarget;
+    const { href, format, title, subtitle, footer } = btn.dataset;
+    const isHtml = format === 'html';
 
-    const href = button.dataset.href;
-    const format = button.dataset.format;
-    const title = button.dataset.title;
-    const subtitle = button.dataset.subtitle;
-    const footer = button.dataset.footer;
+    modal.querySelector('iframe').src = href;
 
-    const modal = el;
-    const iframe = modal.querySelector('iframe');
     const titleH3 = modal.querySelector('.modal-title h3');
     const titleH5 = modal.querySelector('.modal-title h5');
     const footerEl = modal.querySelector('.modal-footer');
     const footerP = modal.querySelector('.modal-footer p');
 
-    iframe.setAttribute('src', href);
-
     if (title) {
-      if (format === 'html') {
-        titleH3.innerHTML = title;
-        if (subtitle) {
-          titleH5.innerHTML = subtitle;
-          titleH5.classList.remove('d-none');
-        } else {
-          titleH5.textContent = '';
-          titleH5.classList.add('d-none');
-        }
+      titleH3[isHtml ? 'innerHTML' : 'textContent'] = title;
+      if (subtitle) {
+        titleH5[isHtml ? 'innerHTML' : 'textContent'] = subtitle;
+        titleH5.classList.remove('d-none');
       } else {
-        titleH3.textContent = title;
-        if (subtitle) {
-          titleH5.textContent = subtitle;
-          titleH5.classList.remove('d-none');
-        } else {
-          titleH5.textContent = '';
-          titleH5.classList.add('d-none');
-        }
+        titleH5.textContent = '';
+        titleH5.classList.add('d-none');
       }
     } else {
       titleH3.textContent = '';
@@ -49,24 +31,18 @@ export function createModalModule() {
 
     if (footer) {
       footerEl.classList.remove('d-none');
-      if (format === 'html') {
-        footerP.innerHTML = footer;
-      } else {
-        footerP.textContent = footer;
-      }
+      footerP[isHtml ? 'innerHTML' : 'textContent'] = footer;
     } else {
       footerEl.classList.add('d-none');
     }
   };
 
-  const hide = (el) => {
-    const modal = el;
-
+  const hide = (modal) => {
     modal.querySelector('.modal-title h3').textContent = '';
     const titleH5 = modal.querySelector('.modal-title h5');
     titleH5.textContent = '';
     titleH5.classList.add('d-none');
-    modal.querySelector('iframe').setAttribute('src', '');
+    modal.querySelector('iframe').src = '';
     modal.querySelector('.modal-footer p').innerHTML = '';
   };
 
@@ -74,15 +50,9 @@ export function createModalModule() {
     const modalEl = document.getElementById('link-modal');
     if (!modalEl) return;
 
-    modalEl.addEventListener('show.bs.modal', function (event) {
-      show(this, event);
-    });
-    modalEl.addEventListener('hide.bs.modal', function () {
-      hide(this);
-    });
+    modalEl.addEventListener('show.bs.modal', e => show(modalEl, e));
+    modalEl.addEventListener('hide.bs.modal', () => hide(modalEl));
   };
 
-  return {
-    init: init
-  };
+  return { init };
 }
