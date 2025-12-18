@@ -364,7 +364,7 @@ conference:
 
 ### Information Boxes
 
-One or multiple information banners or boxes can be shown at the top of the website just below the navigation bar. They are prominent but dismissible and can inform your visitors about recent changes. They are activated through the `info_bars` property, which contains a list for each information banner to show. Each banner consists of
+One or multiple information banners can be shown at the top of the website just below the navigation bar. They are prominent and can inform your visitors about important news. They are activated through the `infobars` property, which contains a list for each information banner to show. Each banner consists of
 
 - a title (`title`),
 - a color (`color`) following the Bootstrap color scheme (see below), possible values are:
@@ -377,22 +377,29 @@ One or multiple information banners or boxes can be shown at the top of the webs
   - `light` (white)
   - `dark` (dark grey)
 - an additional text (`text`, markdown supported),
-- the option to show it on all pages, only the main landing page (`main_only: true`), or all pages except the main landing page (`pages_only: true`).
+- the option to show it on all pages, only the main landing page (`main_only: true`), or all pages except the main landing page (`pages_only: true`),
+- optionally, the number of days to keep the info bar dismissed after a user closes it (`dismissal_days`, default: `7`). Each info bar can have its own dismissal period. Setting `dismissal_days: 0` will disable dismissibility entirely (no close button will be shown, and the info bar cannot be dismissed).
 
 Example:
 
 ```yaml
 conference:
-  info_bars:
+  infobars:
     - title: Sold Out!
       color: primary
       main_only: true
+      dismissal_days: 14
       text: |
-        We're truly sorry but we are sold out.
+        We're truly sorry but we are **sold out**.
 
         ---
 
         Try again next year.
+    - title: Important Notice
+      color: warning
+      dismissal_days: 0
+      text: |
+        This is a non-dismissible information banner that will always be visible.
 ```
 
 ### Live Indications & Streaming

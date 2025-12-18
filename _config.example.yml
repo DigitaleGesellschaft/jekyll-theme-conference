@@ -100,10 +100,11 @@ conference:
         absolute_url: ''
 
   # Information boxes
-  info_bars:
+  infobars:
     - title: Welcome to the Conference Theme for Jekyll!
       color: primary
       main_only: true
+      dismissal_days: 14
       text: |
         The Theme was originally made for the [Winterkongress](https://www.digitale-gesellschaft.ch/kongress/), a yearly conference of the [Digital Society Switzerland](https://digitale-gesellschaft.ch/).
 
