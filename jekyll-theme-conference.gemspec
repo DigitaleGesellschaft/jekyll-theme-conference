@@ -14,17 +14,19 @@ Gem::Specification.new do |spec|
     files = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_layouts|_includes|LICENSE|README)!i) }
 
     # Include pre-built files (listed in .gitignore)
-    #   JavaScript bundle
-    js_bundle = "assets/js/conference.bundle.js"
-    files << js_bundle if File.exist?(js_bundle)
+    #   JavaScript modules and bundles
+    Dir.glob("assets/js/*.bundle.js").each do |js_file|
+      files << js_file if File.exist?(js_file) && !files.include?(js_file)
+    end
 
     #   CSS bundle
-    css_bundle = "assets/css/conference.bundle.css"
-    files << css_bundle if File.exist?(css_bundle)
+    Dir.glob("assets/css/*.bundle.css").each do |css_file|
+      files << css_file if File.exist?(css_file) && !files.include?(css_file)
+    end
 
     # Bootstrap Icons webfonts (built from NPM packages)
     Dir.glob("assets/webfonts/bootstrap-icons.*").each do |font_file|
-      files << font_file if File.exist?(font_file)
+      files << font_file if File.exist?(font_file) && !files.include?(font_file)
     end
 
     files

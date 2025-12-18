@@ -138,10 +138,6 @@ conference:
       pause: 60 # in minutes
       prepend: 5 # in minutes
       extend: 5 # in minutes
-    demo:
-      enable: false
-      duration: 300 # in seconds
-      pause: 10 # in seconds
 
   talks:
     # Talk tracks

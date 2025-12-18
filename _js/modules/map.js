@@ -1,47 +1,67 @@
 /**
- * Map Module
- * Handles Leaflet map initialization and controls
+ * Map Module - Handles Leaflet map initialization
  */
-export function createMapModule(L) {
-  let config;
-  let lang;
+export function createMapModule() {
   let map;
+  let leafletPromise = null;
+  let mapReadyPromise = null;
+  let mapReadyResolve = null;
 
-  const setup = (elId) => {
-    map = L.map(elId).setView(config.home_coord, config.default_zoom);
-
-    L.tileLayer.provider(config.map_provider).addTo(map);
-
-    L.easyButton('bi bi-star', () => {
-      map.flyTo(config.home_coord, config.default_zoom);
-    }, lang.focus_conf).addTo(map);
-
-    L.control.locate({
-      flyTo: true,
-      strings: {
-        title: lang.focus_me
-      }
-    }).addTo(map);
+  const loadLeaflet = () => {
+    if (!leafletPromise) {
+      leafletPromise = Promise.all([
+        import('leaflet'),
+        import('leaflet-easybutton'),
+        import('leaflet.locatecontrol'),
+        import('leaflet-providers')
+      ]).then(([L, , locateControl]) => {
+        const leaflet = L.default;
+        leaflet.control.locate = locateControl.locate;
+        window.L = leaflet;
+        return leaflet;
+      });
+    }
+    return leafletPromise;
   };
 
-  const init = (c, l) => {
-    config = c;
-    lang = l;
+  const init = (config, lang) => {
+    if (!config || !document.getElementById('map')) return;
 
-    const elId = 'map';
+    // Prevent double initialization
+    if (map) return;
 
-    if (document.getElementById(elId)) {
-      setup(elId);
-    }
+    mapReadyPromise = new Promise((resolve) => {
+      mapReadyResolve = resolve;
+    });
+
+    loadLeaflet().then((L) => {
+      map = L.map('map').setView(config.home_coord, config.default_zoom);
+      L.tileLayer.provider(config.map_provider).addTo(map);
+
+      L.easyButton('bi bi-star', () => {
+        map.flyTo(config.home_coord, config.default_zoom);
+      }, lang?.focus_conf).addTo(map);
+
+      L.control.locate({
+        flyTo: true,
+        strings: { title: lang?.focus_me }
+      }).addTo(map);
+
+      if (mapReadyResolve) {
+        mapReadyResolve(map);
+      }
+    });
   };
 
   const getMap = () => {
-    return map;
+    if (map) {
+      return Promise.resolve(map);
+    }
+    if (mapReadyPromise) {
+      return mapReadyPromise;
+    }
+    return Promise.resolve(null);
   };
 
-  return {
-    init: init,
-    getMap: getMap
-  };
+  return { init, getMap };
 }
-

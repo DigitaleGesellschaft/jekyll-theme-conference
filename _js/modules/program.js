@@ -1,48 +1,38 @@
 /**
- * Program Module
- * Handles program navigation and tab management
+ * Program Module - Handles program navigation and tab management
  */
 export function createProgramModule() {
   const updateHash = (hash) => {
-    const scrollPosition = document.documentElement.scrollTop;
+    const scrollY = document.documentElement.scrollTop;
     window.location.hash = hash;
-    document.documentElement.scrollTop = scrollPosition;
+    document.documentElement.scrollTop = scrollY;
   };
 
   const init = () => {
-    const dayList = document.getElementById('day-list');
-    if (!dayList) return;
+    if (!document.getElementById('program-tabs')) return;
 
     const hash = window.location.hash;
+    const tabLinks = document.querySelectorAll('a[data-bs-toggle="tab"]');
+
     if (hash) {
       const tabTrigger = document.querySelector(`a[data-bs-toggle="tab"][href="${hash}"]`);
-      if (tabTrigger) {
-        const tab = new bootstrap.Tab(tabTrigger);
-        tab.show();
-      }
+      if (tabTrigger) new bootstrap.Tab(tabTrigger).show();
     } else {
-      const tsNow = Date.now() / 1000 | 0;
-      const tabLinks = document.querySelectorAll('a[data-bs-toggle="tab"]');
+      const now = Date.now() / 1000 | 0;
       for (const link of tabLinks) {
-        const tsMidnight = parseInt(link.dataset.ts, 10);
-        if (tsMidnight && tsMidnight <= tsNow && tsNow < tsMidnight + 24 * 60 * 60) {
-          const tab = new bootstrap.Tab(link);
-          tab.show();
+        const ts = parseInt(link.dataset.ts, 10);
+        if (ts && ts <= now && now < ts + 86400) {
+          new bootstrap.Tab(link).show();
           updateHash(link.hash);
           break;
         }
       }
     }
 
-    // Add current selected day as hash to URL while keeping current scrolling position
-    document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(tabLink => {
-      tabLink.addEventListener('shown.bs.tab', function () {
-        updateHash(this.hash);
-      });
+    tabLinks.forEach(link => {
+      link.addEventListener('shown.bs.tab', () => updateHash(link.hash));
     });
   };
 
-  return {
-    init: init
-  };
+  return { init };
 }

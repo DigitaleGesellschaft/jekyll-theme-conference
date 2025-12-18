@@ -10,8 +10,8 @@ vendor/bundle/
 
 ### Node.js ###
 node_modules/
-assets/js/conference.bundle.js
-assets/css/conference.bundle.css
+assets/js/*.bundle.js
+assets/css/*.bundle.css
 assets/webfonts/bootstrap-icons.*
 
 ### Python ###
