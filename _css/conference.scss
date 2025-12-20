@@ -1,38 +1,14 @@
-
-// Framework Configuration
-
-//   Bootstrap Theme
-$border-radius:                .1rem !default;
-$alert-border-width:           4px !default;
-$alert-color-level:            9 !default;
-$badge-font-size:              .85em !default;
-$enable-responsive-font-sizes: true !default;
-//     Set different default as Bootstrap's choice is a very flashy blue
-$primary:                      #074 !default;
-
-//   FontAwesome
-$fa-font-path: '/assets/webfonts' !default;
-
-
-// Import Sources
-
-//   Style Framework: Bootstrap
-@import 'bootstrap/bootstrap';
-//   Icons: FontAwesome
-@import 'font-awesome/fontawesome';
-@import 'font-awesome/regular';
-@import 'font-awesome/solid';
-//   Map Display Framework: Leaflet
-@import 'leaflet/leaflet';
-@import 'leaflet/leaflet-easybutton';
-@import 'leaflet/leaflet-locatecontrol';
-
+/**
+ * Conference Theme Styles
+ *
+ * Custom styles for the conference theme.
+ * These styles extend and customize Bootstrap components.
+ */
 
 // Adapt Bootstrap Elements
 
-//   Alert
+// Alert
 .alert {
-  //$alert-border-radius
   border-width: 0px;
   border-left-width: $alert-border-width;
 }
@@ -48,7 +24,7 @@ $fa-font-path: '/assets/webfonts' !default;
   }
 }
 
-//   Button group for lists
+// Button group for lists
 ul.btn-group {
   > li:not(:first-child) > .btn {
     margin-left: -$btn-border-width;
@@ -62,13 +38,13 @@ ul.btn-group {
 
 // Extend Bootstrap Elements
 .display-5 {
-  font-size:   3rem;
+  font-size: 3rem;
   font-weight: $display4-weight;
   line-height: $display-line-height;
 }
 .font-normal {
   .badge {
-    font-size:   .85em;
+    font-size: 0.85em;
   }
 }
 .overflow-y-hidden {
@@ -79,37 +55,37 @@ ul.btn-group {
 
 // General
 
-//   Extend logo when collapsed navbar is shown
+// Extend logo when collapsed navbar is shown
 .navbar-collapse.show + .navbar-logo {
   width: 100%;
 }
 
-//   Keep images in container
+// Keep images in container
 main.container img {
   max-width: 100%;
   height: auto;
 }
 
-//   No bottom margin on info-bar
+// No bottom margin on info-bar
 .alert > p:last-of-type {
   margin-bottom: 0;
 }
 
-//   Live icon
+// Live icon
 .live-button > object {
   width: 0.85em;
   height: 0.85em;
   color: inherit;
 }
 
-//   Live button font size in navigation bar
+// Live button font size in navigation bar
 .nav-link .live-button {
   font-size: 1em;
 }
 
 // Program
 
-//   Sticky header and first column
+// Sticky header and first column
 .table {
   // Avoid sticky cells without border
   border-collapse: separate;
@@ -132,11 +108,11 @@ main.container img {
 
   // Hide shadow of table cells next to sticky header
   thead tr > th:last-of-type {
-    box-shadow: 10px 0px 0px 0px rgba(255,255,255,1);
+    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 1);
   }
 }
 
-//   Column Width
+// Column Width
 .table {
   // First row defines width for all columns
   table-layout: fixed;
@@ -145,7 +121,8 @@ main.container img {
   width: auto;
 
   // Column widths
-  th, td {
+  th,
+  td {
     // Total available container width is 1110px
 
     // Width of columns with content (default)
@@ -167,7 +144,7 @@ main.container img {
 
 // Location
 .nav-pills .nav-link.active {
-  background-color: theme-color-level('primary', $alert-bg-level);
+  background-color: theme-color-level("primary", $alert-bg-level);
   color: var(--dark);
 }
 #map {
@@ -176,7 +153,7 @@ main.container img {
   width: 100%;
 }
 
-//   Program per Room
+// Program per Room
 .list-program {
   border: 0 none white;
 
@@ -197,7 +174,7 @@ main.container img {
 // Speaker
 .speakergroup {
   page-break-inside: avoid;
-  break-inside:      avoid-column;
+  break-inside: avoid-column;
 }
 @include media-breakpoint-up(sm) {
   .speakerlist {
@@ -214,7 +191,6 @@ main.container img {
     column-count: 3;
   }
 }
-
 
 // Print
 @media print {
@@ -241,7 +217,7 @@ main.container img {
   }
 
   // Remove sticky position from table to show borders
-  .table  th {
+  .table th {
     position: inherit;
   }
 
@@ -253,3 +229,4 @@ main.container img {
     display: inline-block !important;
   }
 }
+

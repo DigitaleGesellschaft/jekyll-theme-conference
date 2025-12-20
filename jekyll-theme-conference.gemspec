@@ -11,10 +11,22 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.files         = begin
-    files = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_layouts|_includes|_sass|LICENSE|README)!i) }
-    # Include the pre-built JavaScript bundle (not added by default as listed in .gitignore file)
-    bundle_file = "assets/js/conference.bundle.js"
-    files << bundle_file if File.exist?(bundle_file)
+    files = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_layouts|_includes|LICENSE|README|REDISTRIBUTED)!i) }
+
+    # Include pre-built files (listed in .gitignore)
+    #   JavaScript bundle
+    js_bundle = "assets/js/conference.bundle.js"
+    files << js_bundle if File.exist?(js_bundle)
+
+    #   CSS bundle
+    css_bundle = "assets/css/conference.bundle.css"
+    files << css_bundle if File.exist?(css_bundle)
+
+    #   FontAwesome webfonts
+    Dir.glob("assets/webfonts/fa-*").each do |font_file|
+      files << font_file if File.exist?(font_file)
+    end
+
     files
   end
 

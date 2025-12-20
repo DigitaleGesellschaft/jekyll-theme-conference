@@ -11,6 +11,8 @@ vendor/bundle/
 ### Node.js ###
 node_modules/
 assets/js/conference.bundle.js
+assets/css/conference.bundle.css
+assets/webfonts/fa-*
 
 ### Python ###
 __pycache__/
