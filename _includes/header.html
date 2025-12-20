@@ -13,10 +13,9 @@
   </title>
   {% include list_page_meta.html %}
 
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: "%s" }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?t={{ site.time | date: '%s' }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: '%s' }}" />
 
-  <link rel="preload" as="font" href="{{ site.baseurl }}/assets/webfonts/fa-regular-400.woff2" type="font/woff2" crossorigin="anonymous" />
-  <link rel="preload" as="font" href="{{ site.baseurl }}/assets/webfonts/fa-solid-900.woff2" type="font/woff2" crossorigin="anonymous" />
   {%- if site.conference.live %}
   <link rel="prefetch" as="image" href="{{ site.baseurl }}/assets/icons/live.svg" type="image/svg+xml" crossorigin="anonymous" />
   <link rel="prefetch" as="fetch" href="{{ site.baseurl }}/assets/js/data.json" type="application/json" crossorigin="anonymous" />

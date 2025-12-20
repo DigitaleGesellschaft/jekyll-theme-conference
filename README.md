@@ -64,7 +64,7 @@ There are three ways to install: As a [Gem-based theme](https://jekyllrb.com/doc
 
 ### Gem-based Method
 
-With Gem-based themes, directories such as the `assets`, `_layouts`, `_includes`, and `_sass` are stored in the theme’s gem, hidden from your immediate view. Yet all the necessary directories will be read and processed during Jekyll’s build process.
+With Gem-based themes, directories such as the `assets`, `_layouts`, and `_includes` are stored in the theme's gem, hidden from your immediate view. Yet all the necessary directories will be read and processed during Jekyll's build process.
 
 This allows for easier installation and updating as you don't have to manage any of the theme files. To install:
 
@@ -784,26 +784,53 @@ Additional static pages can easily be added as files and linked to via navigatio
 
 Each of these pages can include a map at its end (e.g., to point to your venue) by adding the `map: true` setting to its Front Matter. See the _Map_ section above for more information.
 
+
 ## Design
 
-The design is based on the [Bootstrap 4](http://getbootstrap.com) and thus easily expandable. Furthermore, it makes use of the [FontAwesome Icons](fontawesome.com/) across the theme.
-Custom Bootstrap themes or simple color schemes such as designed with [Bootstrap Magic](https://pikock.github.io/bootstrap-magic/) can be added in the [main](assets/css/main.scss) SASS stylesheet:
+The design is based on [Bootstrap 4](http://getbootstrap.com) and is easily expandable. It uses [FontAwesome 6](https://fontawesome.com/) icons and [Leaflet](https://leafletjs.com/) for maps.
 
-1. Create a new file under `assets/css/main.scss` with the following content (or copy the one of this repository):
+### CSS Bundle
 
-   ```scss
-   ---
-   ---
+The theme includes a pre-built CSS bundle (`assets/css/conference.bundle.css`) which contains:
 
-   $fa-font-path: "{{ site.baseurl }}/assets/webfonts";
+- Bootstrap 4 framework
+- FontAwesome 6 icons (regular and solid)
+- Leaflet map styles
+- Conference theme customizations
 
-   @import "conference";
-   ```
+This bundle is pre-compiled and minified, requiring no build tools for end users.
 
-   Do not skip the `$fa-font-path` variable or modify it as otherwise, the FontAwesome icons will not be able to load.
+### Custom CSS
 
-2. Add your Bootstrap variables in front of the `@import 'conference'` line, e.g., currently the primary color is set internally to green (instead of Bootstrap's default blue): `$primary: #074 !default;`
-3. Add any additional CSS styles after it.
+To add custom styles, create or edit the `assets/css/main.scss` file in your project:
+
+```scss
+---
+---
+/**
+ * Custom styles for your conference website
+ * This file is loaded AFTER the conference bundle.
+ */
+
+// Override Bootstrap variables using CSS custom properties
+:root {
+  --primary: #ff6600;
+}
+
+// Override component styles
+.btn-primary {
+  background-color: #ff6600;
+  border-color: #ff6600;
+}
+
+// Add custom styles
+.navbar {
+  background: linear-gradient(to right, #007744, #00aa66);
+}
+```
+
+The custom CSS file is loaded after the pre-built bundle, allowing you to override any styles. Note that since the bundle is pre-compiled, you cannot change SCSS variables directly. Instead, use CSS overrides as shown above.
+
 
 ## JavaScript
 
@@ -855,10 +882,11 @@ group :jekyll_plugins do
 end
 ```
 
-### JavaScript Development
+### JavaScript & CSS Development
 
-The theme's JavaScript is built using [Vite](https://vitejs.dev/) and modern ES modules. The source files are located in the `_js/` directory:
+The theme's JavaScript and CSS are built using [Vite](https://vitejs.dev/). Source files are located in:
 
+**JavaScript** (`_js/` directory):
 ```
 _js/
 ├── main.js            # Main entry point
@@ -874,21 +902,36 @@ _js/
     └── live.js        # Live streaming
 ```
 
-If you want to modify the theme's JavaScript source code, you'll need to rebuild the bundle:
+**CSS/SCSS** (`_css/` directory):
+```
+_css/
+├── main.scss          # Main entry point
+├── variables.scss     # Theme variables (Bootstrap overrides)
+└── conference.scss    # Conference-specific styles
+```
+
+The CSS source imports libraries from NPM:
+- `bootstrap` - Bootstrap 4 framework
+- `@fortawesome/fontawesome-free` - FontAwesome 6 icons
+- `leaflet` and plugins - Map styles
+
+To modify the theme's source code and rebuild:
 
 1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Build the JavaScript bundle:
+2. Build the bundles:
    ```bash
    npm run build
    ```
-   This will compile all ES modules from `_js/` into a single minified bundle at `assets/js/conference.bundle.js`.
+   This compiles:
+   - `_js/` → `assets/js/conference.bundle.js`
+   - `_css/` → `assets/css/conference.bundle.css`
+   - Webfonts → `assets/webfonts/`
 
-3. Test your changes:
-   After building, test the theme locally:
+3. Test your changes locally:
    ```bash
    bundle exec jekyll serve
    ```

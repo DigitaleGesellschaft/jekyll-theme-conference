@@ -1,0 +1,28 @@
+/**
+ * Conference Theme - Main CSS Entry Point
+ *
+ * This file imports all dependencies and theme styles.
+ * The bundle is pre-built and included in the theme gem.
+ */
+
+// 1. Theme Variables (can be overridden by user)
+@import "./variables";
+
+// 2. Bootstrap Framework
+@import "bootstrap/scss/bootstrap";
+
+// 3. FontAwesome Icons
+// FontAwesome 6 expects a path relative to the emitted CSS file.
+$fa-font-path: "../webfonts";
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/regular";
+@import "@fortawesome/fontawesome-free/scss/solid";
+
+// 4. Leaflet Map Styles
+@import "leaflet/dist/leaflet.css";
+@import "leaflet-easybutton/src/easy-button.css";
+@import "leaflet.locatecontrol/dist/L.Control.Locate.css";
+
+// 5. Conference Theme Styles
+@import "./conference";
+

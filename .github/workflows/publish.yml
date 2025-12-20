@@ -1,8 +1,8 @@
 name: Build & Publish Ruby Gem
 # Performs the following steps:
 #   - Sets the environment up
-#   - Builds JavaScript bundle with Vite
-#   - Builds the gem (including the pre-built bundle)
+#   - Builds JavaScript and CSS bundles with Vite
+#   - Builds the gem (including the pre-built bundles)
 #   - Uploads the gem to RubyGem
 #   - Creates a GitHub release and attaches the gem to it
 
@@ -31,7 +31,7 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Build JavaScript bundle with Vite
+      - name: Build JavaScript and CSS bundles with Vite
         run: npm run build
 
       - name: Set up Ruby 3.3

@@ -1,0 +1,17 @@
+/**
+ * Conference Theme Variables
+ *
+ * These are the default Bootstrap and theme variables.
+ * Users can override these by creating their own variables file.
+ */
+
+// Bootstrap Theme Customization
+$border-radius: 0.1rem !default;
+$alert-border-width: 4px !default;
+$alert-color-level: 9 !default;
+$badge-font-size: 0.85em !default;
+$enable-responsive-font-sizes: true !default;
+
+// Primary color - Set different default as Bootstrap's choice is a very flashy blue
+$primary: #074 !default;
+

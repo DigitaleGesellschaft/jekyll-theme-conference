@@ -3,24 +3,46 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   build: {
-    outDir: "assets/js",
+    outDir: "assets",
     emptyOutDir: false,
-    lib: {
-      entry: resolve(__dirname, "_js/main.js"),
-      name: "Conference",
-      fileName: () => "conference.bundle.js",
-      formats: ["iife"],
-    },
     rollupOptions: {
+      input: {
+        "js/conference.bundle": resolve(__dirname, "_js/main.js"),
+        "css/conference.bundle": resolve(__dirname, "_css/main.scss"),
+      },
       output: {
+        // JavaScript output configuration
+        entryFileNames: "[name].js",
+        chunkFileNames: "[name].js",
+        // Asset output configuration
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && assetInfo.name.endsWith(".css")) {
+            return "css/conference.bundle.css";
+          }
+          // Put font files in webfonts directory
+          if (
+            assetInfo.name &&
+            /\.(woff2?|ttf|eot|svg)$/.test(assetInfo.name)
+          ) {
+            return "webfonts/[name][extname]";
+          }
+          return "[name][extname]";
+        },
         // Ensure we generate a single file
-        inlineDynamicImports: true,
-        // Preserve the global window.conference object
-        extend: true,
+        inlineDynamicImports: false,
       },
     },
     minify: "esbuild",
     sourcemap: false,
+    cssCodeSplit: false,
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Allow importing from node_modules
+        includePaths: ["node_modules"],
+      },
+    },
   },
   // Define globals that will be available
   define: {
