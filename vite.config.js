@@ -1,5 +1,47 @@
+import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
+
+// Plugin to copy font files (woff/woff2) from source directories
+const copyFontFiles = (sourceDirs, targetDir) => {
+  return {
+    name: 'copy-font-files',
+    writeBundle() {
+      const resolvedTargetDir = resolve(__dirname, targetDir);
+
+      // Create target directory if it doesn't exist
+      if (!existsSync(resolvedTargetDir)) {
+        mkdirSync(resolvedTargetDir, { recursive: true });
+      }
+
+      // Process each source directory
+      sourceDirs.forEach(sourceDir => {
+        const resolvedSourceDir = resolve(__dirname, sourceDir);
+
+        if (!existsSync(resolvedSourceDir)) {
+          console.warn(`Source directory does not exist: ${resolvedSourceDir}`);
+          return;
+        }
+
+        // Read all files in the source directory
+        const files = readdirSync(resolvedSourceDir);
+
+        // Filter for woff and woff2 files
+        const fontFiles = files.filter(file =>
+          file.endsWith('.woff') || file.endsWith('.woff2')
+        );
+
+        // Copy each font file
+        fontFiles.forEach(file => {
+          const source = resolve(resolvedSourceDir, file);
+          const target = resolve(resolvedTargetDir, file);
+          copyFileSync(source, target);
+          console.log(`Copied ${file} from ${sourceDir} to ${targetDir}/`);
+        });
+      });
+    },
+  };
+};
 
 export default defineConfig({
   build: {
@@ -41,10 +83,25 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         includePaths: ['node_modules'],
+        // Suppress Bootstrap's Sass deprecation warnings
+        // See https://getbootstrap.com/docs/5.3/getting-started/vite/#configure-vite
+        silenceDeprecations: [
+          'legacy-js-api',
+          'import',
+          'color-functions',
+          'global-builtin',
+        ],
+        quietDeps: true,
       },
     },
   },
   define: {
     'process.env.NODE_ENV': JSON.stringify('production'),
   },
+  plugins: [
+    copyFontFiles(
+      ['node_modules/bootstrap-icons/font/fonts'],
+      'assets/webfonts'
+    ),
+  ],
 });
