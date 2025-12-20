@@ -45,17 +45,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-      - name: Install PurgeCSS and Terser
-        run: |
-          npm install -g purgecss
-          npm install -g terser
+          node-version: "20"
+      - name: Install PurgeCSS
+        run: npm install -g purgecss
       - name: Compress CSS with PurgeCSS
-        run: |
-          purgecss --config purgecss.config.js
-      - name: Compress JavaScript with Terser
-        run: |
-          terser _site/assets/js/main.js --compress ecma=2015,top_retain=window.conference --mangle --comments false --output _site/assets/js/main.js
+        run: purgecss --config _tools/purgecss.config.js
 
       - name: Package generated website
         run: |
