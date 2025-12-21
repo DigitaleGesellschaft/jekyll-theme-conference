@@ -18,6 +18,7 @@ en:
     pre_stream: Live stream has not started yet.
     pause_stream: Live stream is currently paused.
     post_stream: Live stream has ended.
+    offline: offline
     time:
       in: in
       since: since
@@ -66,6 +67,7 @@ de:
     pre_stream: Der Live Stream hat noch nicht begonnen.
     pause_stream: Der Live Stream ist derzeit pausiert.
     post_stream: Der Live Stream ist beendet.
+    offline: offline
     time:
       in: in
       since: seit
@@ -114,6 +116,7 @@ fr:
     pre_stream: La diffusion en direct n'a pas encore commencé.
     pause_stream: La diffusion est actuellement en pause.
     post_stream: La diffusion en direct est terminée.
+    offline: hors ligne
     time:
       in: dans
       since: depuis
@@ -162,6 +165,7 @@ pt:
     pre_stream: A transmissão ao vivo ainda não começou.
     pause_stream: A transmissão está atualmente em pausa.
     post_stream: A transmissão ao vivo terminou.
+    offline: offline
     time:
       in: em
       since: hà

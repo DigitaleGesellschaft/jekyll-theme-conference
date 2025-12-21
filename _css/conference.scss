@@ -89,3 +89,58 @@
 #map {
   min-height: 400px;
 }
+
+// Live Icon
+
+.live-icon {
+  width: 0.8em;
+  height: 0.8em;
+
+  @keyframes live-icon-pulse {
+    0%,
+    6% {
+      opacity: 0;
+    }
+
+    8%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes live-icon-arc-small {
+    0%,
+    8% {
+      opacity: 0;
+    }
+
+    10%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes live-icon-arc-large {
+    0%,
+    10% {
+      opacity: 0;
+    }
+
+    12%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .live-icon-arc-small {
+    animation: live-icon-pulse 8s ease infinite;
+  }
+
+  .live-icon-arc-medium {
+    animation: live-icon-arc-small 8s ease infinite;
+  }
+
+  .live-icon-arc-large {
+    animation: live-icon-arc-large 8s ease infinite;
+  }
+}
