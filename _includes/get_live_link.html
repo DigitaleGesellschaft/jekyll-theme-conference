@@ -1,42 +1,33 @@
 {%- if site.conference.live -%}
+  {%- assign live_label = site.data.lang[site.conference.lang].live.live | default: "Live" -%}
+  {%- assign stream_label = site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
+
   {%- if site.conference.live.streaming.enable -%}
-    <a
-      class="text-decoration-none {{ link_styleclass | default: '' }}"
-      title="{{ link.name | default: site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}"
-    {% if site.conference.live.streaming.external -%}
-      href="{{ site.conference.live.streaming.external }}"
+    {%- if site.conference.live.streaming.external -%}
+      <a class="text-decoration-none {{ link_styleclass }}" href="{{ site.conference.live.streaming.external }}" title="{{ stream_label }}">
     {%- else -%}
-      data-bs-toggle="modal" data-bs-target="#stream-modal" data-room="{{ r.name }}" href="#"
+      <a class="text-decoration-none {{ link_styleclass }}" href="#" title="{{ stream_label }}" data-bs-toggle="modal" data-bs-target="#stream-modal" data-room="{{ r.name }}">
     {%- endif -%}
-    >
   {%- elsif link -%}
-    {%- include get_link.html %}
+    {%- include get_link.html -%}
     {{ link_tag }}
   {%- endif -%}
 
-    {{ link.name | default: '' }}
+  {{ link.name | default: '' }}
 
-    <span class="live-button text-bg-dark py-1 px-2 rounded {{ live_link_styleclass | default: '' }}">
+  <span class="live-button text-bg-dark py-1 px-2 rounded {{ live_link_styleclass }}">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 11 11" class="live-icon align-baseline bi" aria-hidden="true">
       <!--
         The following SVG icon is based on https://github.com/twbs/icons/blob/main/icons/rss.svg
         Copyright (c) 2019-2024 The Bootstrap Authors
         MIT License: https://github.com/twbs/icons/blob/main/LICENSE
       -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="bi bi-rss" aria-hidden="true">
-        <style>
-          @keyframes animation-dot { 6% { opacity: 0; } 8% { opacity: 1; } 100% { opacity: 1; } }
-          @keyframes animation-arc-small { 8% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 1; } }
-          @keyframes animation-arc-large { 10% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 1; } }
-          .live-icon #li-arc-small { animation: animation-dot 8s ease infinite; }
-          .live-icon #li-arc-medium { animation: animation-arc-small 8s ease infinite; }
-          .live-icon #li-arc-large { animation: animation-arc-large 8s ease infinite; }
-        </style>
-        <path id="li-arc-small" d="m 5.5,12 c 0,1.999999 -3,1.999999 -3,0 0,-1.999999 3,-1.999999 3,0" />
-        <path id="li-arc-medium" d="m 2.5,7.5 c 0,-0.5522847 0.4477153,-1 1,-1 3.3137085,0 6,2.6862915 6,6 0,1.333333 -2,1.333333 -2,0 0,-2.209139 -1.790861,-4 -4,-4 -0.5522847,0 -1,-0.4477153 -1,-1" />
-        <path id="li-arc-large" d="m 2.5,3.5 c 0,-0.5522847 0.4477153,-1 1,-1 5.523,0 10,4.477 10,10 0,1.333333 -2,1.333333 -2,0 0,-4.418278 -3.581722,-8 -8,-8 -0.5522847,0 -1,-0.4477153 -1,-1" />
-      </svg>
-      {{ site.data.lang[site.conference.lang].live.live | default: "Live" }}
-    </span>
+      <path class="live-icon-arc-small" d="m 3,9.5 c 0,2 -3,2 -3,0 0,-2 3,-2 3,0" />
+      <path class="live-icon-arc-medium" d="M 0,5 C 0,4.4477153 0.4477153,4 1,4 4.3137085,4 7,6.6862915 7,10 7,11.333333 5,11.333333 5,10 5,7.790861 3.209139,6 1,6 0.4477153,6 0,5.5522847 0,5" />
+      <path class="live-icon-arc-large" d="M 0,1 C 0,0.4477153 0.4477153,0 1,0 6.523,0 11,4.477 11,10 11,11.333333 9,11.333333 9,10 9,5.581722 5.418278,2 1,2 0.4477153,2 0,1.5522847 0,1" />
+    </svg>
+    {{ live_label }}
+  </span>
 
   {%- if site.conference.live.streaming.enable or link -%}
   </a>

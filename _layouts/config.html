@@ -10,6 +10,7 @@
 
     {% if site.conference.live -%}
     "live": {
+        "tz": "{{ site.tz | default: '+00:00' }}",
         "time": {
             {% assign d = site.data.program.days | first -%}
             {%- include get_day_time.html -%}
@@ -52,6 +53,7 @@
             "pre_stream": "{{ site.data.lang[site.conference.lang].live.pre_stream | default: "Live stream has not started yet." }}",
             "post_stream": "{{ site.data.lang[site.conference.lang].live.post_stream | default: "Live stream has ended." }}",
             "pause_stream": "{{ site.data.lang[site.conference.lang].live.pause_stream | default: "Live stream is currently paused." }}",
+            "offline": "{{ site.data.lang[site.conference.lang].live.offline | default: "offline" }}",
             "time": {
                 "soon": "{{ site.data.lang[site.conference.lang].live.time.soon | default: "soon" }}",
                 "now": "{{ site.data.lang[site.conference.lang].live.time.now | default: "now" }}",

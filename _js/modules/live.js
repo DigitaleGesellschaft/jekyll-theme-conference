@@ -1,381 +1,662 @@
 /**
  * Live Module - Handles live streaming, real-time updates, and conference timing
+ *
+ * Features:
+ * - Time-based visibility for .live-show and .live-hide elements
+ * - Relative time display for .live-time elements
+ * - Past state styling for .live-past elements
+ * - Live streaming modal with room switching and offline detection
+ * - Time debugging controls (pause, set, reset)
  */
 export function createLiveModule(config) {
   const baseurl = config.baseurl || '';
-  let lang, data = {};
-  let confStart, confEnd, confDur;
-  let stream, streamPause, streamPrepend, streamExtend;
-  let freezeTime = false, timeFrozen = 0, timeOffset = 0;
-  let liveTimer, streamVideoTimer, streamInfoTimer;
-  let streamModalEl;
 
-  const timeNow = () => Math.floor(Date.now() / 1000);
-  const timeCont = () => timeNow() - timeOffset;
+  // ==========================================================================
+  // State
+  // ==========================================================================
 
-  const time = () => freezeTime ? timeFrozen : timeCont();
-  const timeUnit = () => 60;
-
-  const delayStart = (startTime) => {
-    const tNow = time();
-    return startTime > tNow ? startTime - tNow : timeUnit() - (tNow % timeUnit());
+  const state = {
+    data: {},
+    lang: null,
+    tz: '',
+    confStart: 0,
+    confEnd: 0,
+    streaming: {
+      enabled: false,
+      pauseMinutes: 60,
+      prependMinutes: 5,
+      extendMinutes: 5
+    },
+    frozen: false,
+    frozenTime: 0,
+    timeOffset: 0,
+    updateTimer: null
   };
 
-  const loadData = () => {
-    fetch(baseurl + '/assets/js/data.json')
-      .then(r => r.json())
-      .then(d => { data = d; })
-      .catch(e => console.error('Failed to load data:', e));
+  // ==========================================================================
+  // Time Utilities
+  // ==========================================================================
+
+  const UPDATE_INTERVAL = 60;
+
+  const realTime = () => Math.floor(Date.now() / 1000);
+  const adjustedTime = () => realTime() - state.timeOffset;
+  const now = () => state.frozen ? state.frozenTime : adjustedTime();
+
+  const secondsUntil = (targetTime) => {
+    const current = now();
+    return (targetTime && targetTime > current)
+      ? targetTime - current
+      : UPDATE_INTERVAL - (current % UPDATE_INTERVAL);
   };
 
-  const getData = () => data;
+  const formatRelativeTime = (timestamp) => {
+    const { lang } = state;
+    if (!lang?.time) return '';
 
-  const pauseTime = () => {
-    if (!freezeTime) {
-      timeFrozen = time();
-      freezeTime = true;
-      stopUpdate();
+    let diff = now() - timestamp;
+
+    if (diff >= -60 && diff < 0) return lang.time.soon;
+    if (diff >= 0 && diff < 60) return lang.time.now;
+
+    const prefix = diff < 0 ? lang.time.in : lang.time.since;
+    diff = Math.abs(diff);
+
+    const weeks = Math.floor(diff / 604800);
+    const days = Math.floor(diff / 86400);
+    const hours = Math.floor(diff / 3600);
+    const minutes = Math.floor(diff / 60);
+
+    if (weeks > 4) return '';
+    if (weeks > 1) return `${prefix}${weeks} ${lang.time.weeks}`;
+    if (weeks === 1) return `${prefix}1 ${lang.time.week}`;
+    if (days > 1) return `${prefix}${days} ${lang.time.days}`;
+    if (days === 1) return `${prefix}1 ${lang.time.day}`;
+    if (hours > 1) return `${prefix}${hours} ${lang.time.hours}`;
+    if (hours === 1) return `${prefix}1 ${lang.time.hour}`;
+    if (minutes > 1) return `${prefix}${minutes} ${lang.time.minutes}`;
+    return `${prefix}1 ${lang.time.minute}`;
+  };
+
+  // ==========================================================================
+  // Data Access
+  // ==========================================================================
+
+  const loadData = async () => {
+    try {
+      const response = await fetch(`${baseurl}/assets/js/data.json`);
+      state.data = await response.json();
+    } catch (error) {
+      console.error('Failed to load live data:', error);
     }
-  };
-
-  const continueTime = () => {
-    if (freezeTime) {
-      freezeTime = false;
-      timeOffset += time() - timeFrozen;
-      startUpdate();
-    }
-  };
-
-  const resetTime = () => {
-    timeOffset = 0;
-    freezeTime = false;
-    startUpdate();
-  };
-
-  const setTime = (newTime, newDay) => {
-    pauseTime();
-    if (!data.days) return console.error('Data not loaded');
-
-    let dayIdx = 0;
-    if (Number.isInteger(newDay)) dayIdx = newDay - 1;
-    else if (newDay) dayIdx = data.days.findIndex(o => o.name === newDay);
-
-    const d = new Date(data.days[dayIdx].date);
-    const [h, m] = newTime.split(':');
-    d.setHours(h, m);
-    timeFrozen = Math.floor(d.getTime() / 1000);
-    update();
-  };
-
-  const getTime = () => {
-    const d = new Date(time() * 1000);
-    return `${d.toISOString().slice(0, 10)} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
   };
 
   const getRoom = (roomName) => {
-    if (!data.rooms || !Object.keys(data.rooms).length) return null;
-    return data.rooms[roomName] || data.rooms[Object.keys(data.rooms)[0]];
+    const { rooms } = state.data;
+    if (!rooms || !Object.keys(rooms).length) return null;
+    return rooms[roomName] || rooms[Object.keys(rooms)[0]];
   };
 
-  const getAllTalks = () => data.talks && Object.keys(data.talks).length ? data.talks : {};
-
   const getTalks = (roomName) => {
-    const talks = getAllTalks();
-    if (!talks[roomName]) return [];
-    return talks[roomName].map(t => ({
-      ...t,
-      end: t.live_links?.length ? t.end + streamExtend * 60 : t.end
+    const { talks } = state.data;
+    if (!talks?.[roomName]) return [];
+
+    const extendSeconds = state.streaming.extendMinutes * 60;
+    return talks[roomName].map(talk => ({
+      ...talk,
+      end: talk.live_links?.length ? talk.end + extendSeconds : talk.end
     }));
   };
 
   const getNextTalk = (roomName) => {
-    const t = time();
     const talks = getTalks(roomName);
-    if (talks.length && t < talks[talks.length - 1].end) {
-      return talks.find(talk => t < talk.end) || {};
-    }
-    return {};
+    const current = now();
+    if (!talks.length || current >= talks[talks.length - 1].end) return null;
+    return talks.find(talk => current < talk.end) || null;
   };
 
-  const getSpeaker = (name) => data.speakers?.[name] || {};
+  const getSpeaker = (name) => state.data.speakers?.[name] || { name };
 
   const getNextPause = (roomName) => {
-    const t = time();
     const talks = getTalks(roomName);
-    if (!talks.length || t >= talks[talks.length - 1].end) return null;
+    const current = now();
+    const pauseThreshold = state.streaming.pauseMinutes * 60;
+
+    if (!talks.length || current >= talks[talks.length - 1].end) return null;
 
     for (let i = 1; i < talks.length; i++) {
-      if (t < talks[i].start && streamPause * 60 <= talks[i].start - talks[i - 1].end) {
+      const gap = talks[i].start - talks[i - 1].end;
+      if (current < talks[i].start && gap >= pauseThreshold) {
         return { start: talks[i - 1].end, end: talks[i].start };
       }
     }
     return null;
   };
 
-  const updateLive = () => {
-    const t = time();
+  // ==========================================================================
+  // Live Element Updates
+  // ==========================================================================
 
-    // Show/hide elements based on time range
+  const isInTimeRange = (startData, endData) => {
+    const current = now();
+    const starts = startData.split(',');
+    const ends = endData.split(',');
+    return starts.some((start, i) => current >= start && current < ends[i]);
+  };
+
+  const updateLiveElements = () => {
+    const current = now();
+
     document.querySelectorAll('.live-show').forEach(el => {
-      const starts = el.dataset.start.split(',');
-      const ends = el.dataset.end.split(',');
-      const visible = starts.some((s, i) => t >= s && t < ends[i]);
-      el.classList.toggle('d-none', !visible);
+      el.classList.toggle('d-none', !isInTimeRange(el.dataset.start, el.dataset.end));
     });
 
     document.querySelectorAll('.live-hide').forEach(el => {
-      const starts = el.dataset.start.split(',');
-      const ends = el.dataset.end.split(',');
-      const hidden = starts.some((s, i) => t >= s && t < ends[i]);
-      el.classList.toggle('d-none', hidden);
+      el.classList.toggle('d-none', isInTimeRange(el.dataset.start, el.dataset.end));
     });
 
-    // Update time strings
     document.querySelectorAll('.live-time').forEach(el => {
-      const ts = el.dataset.time;
-      if (!ts) return;
-      let rel = t - ts;
-
-      let str;
-      if (rel >= -60 && rel < 0) str = lang.time.soon;
-      else if (rel >= 0 && rel < 60) str = lang.time.now;
-      else {
-        str = rel < 0 ? lang.time.in : lang.time.since;
-        rel = Math.abs(rel);
-        const weeks = Math.floor(rel / 604800);
-        const days = Math.floor(rel / 86400);
-        const hours = Math.floor(rel / 3600);
-        const mins = Math.floor(rel / 60);
-
-        if (weeks > 4) return;
-        else if (weeks > 1) str += `${weeks} ${lang.time.weeks}`;
-        else if (weeks === 1) str += `1 ${lang.time.week}`;
-        else if (days > 1) str += `${days} ${lang.time.days}`;
-        else if (days === 1) str += `1 ${lang.time.day}`;
-        else if (hours > 1) str += `${hours} ${lang.time.hours}`;
-        else if (hours === 1) str += `1 ${lang.time.hour}`;
-        else if (mins > 1) str += `${mins} ${lang.time.minutes}`;
-        else str += `1 ${lang.time.minute}`;
+      if (el.dataset.time) {
+        el.textContent = formatRelativeTime(parseInt(el.dataset.time, 10));
       }
-      el.innerHTML = str;
     });
 
-    // Disable past elements
     document.querySelectorAll('.live-past').forEach(el => {
-      const ts = el.dataset.time;
-      if (!ts) return;
-      const isPast = t - ts < 0;
+      const timestamp = parseInt(el.dataset.time, 10);
+      if (!timestamp) return;
+      const isPast = current >= timestamp;
       if (el.nodeName === 'A' || el.nodeName === 'BUTTON') {
-        el.classList.toggle('disabled', isPast);
+        el.classList.toggle('disabled', !isPast);
       } else {
-        el.classList.toggle('text-secondary', isPast);
+        el.classList.toggle('text-secondary', !isPast);
       }
     });
-
-    if (t > confEnd) stopUpdateLive();
   };
 
-  const startUpdateLive = () => {
-    stopUpdateLive();
-    updateLive();
-    setTimeout(() => {
-      liveTimer = setInterval(updateLive, timeUnit() * 1000);
-      updateLive();
-    }, delayStart(confStart) * 1000);
+  // ==========================================================================
+  // Stream Main Window (Placeholder/iFrame)
+  // ==========================================================================
+
+  const createStreamPlayer = (modalEl) => {
+    const iframe = modalEl.querySelector('iframe');
+    const placeholder = modalEl.querySelector('#stream-placeholder');
+    const placeholderText = placeholder.querySelector('div');
+
+    // Player state
+    let currentUrl = null;
+    let pendingUrl = null;
+    let isOffline = !navigator.onLine;
+
+    // Display modes
+    const showIframe = () => {
+      iframe.classList.remove('d-none');
+      placeholder.classList.add('d-none');
+      placeholder.classList.remove('d-flex');
+    };
+
+    const showPlaceholder = () => {
+      iframe.classList.add('d-none');
+      placeholder.classList.remove('d-none');
+      placeholder.classList.add('d-flex');
+    };
+
+    // Core display methods
+    const displayStream = (url) => {
+      if (isOffline) {
+        pendingUrl = url;
+        const offlineText = state.lang?.offline || 'offline';
+        placeholderText.innerHTML = `<i class="bi bi-wifi-off" aria-hidden="true"></i> ${offlineText}`;
+        showPlaceholder();
+        return;
+      }
+
+      pendingUrl = null;
+      if (iframe.src !== url) {
+        iframe.src = url;
+      }
+      currentUrl = url;
+      showIframe();
+    };
+
+    const displayMessage = (message) => {
+      pendingUrl = null;
+      currentUrl = null;
+      iframe.src = '';
+      placeholderText.textContent = message;
+      showPlaceholder();
+    };
+
+    const clear = () => {
+      currentUrl = null;
+      pendingUrl = null;
+      iframe.src = '';
+    };
+
+    // Offline handling
+    const handleOnline = () => {
+      isOffline = false;
+      if (pendingUrl) {
+        displayStream(pendingUrl);
+      }
+    };
+
+    const handleOffline = () => {
+      isOffline = true;
+      if (currentUrl) {
+        pendingUrl = currentUrl;
+        const offlineText = state.lang?.offline || 'offline';
+        placeholderText.innerHTML = `<i class="bi bi-wifi-off" aria-hidden="true"></i> ${offlineText}`;
+        showPlaceholder();
+      }
+    };
+
+    // Register network listeners
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return {
+      displayStream,
+      displayMessage,
+      clear,
+      isOffline: () => isOffline
+    };
   };
 
-  const stopUpdateLive = () => { if (liveTimer) clearInterval(liveTimer); };
+  // ==========================================================================
+  // Stream State
+  // ==========================================================================
 
-  const setStreamIframeContent = (content) => {
-    const iframe = streamModalEl.querySelector('iframe');
-    const placeholder = streamModalEl.querySelector('#stream-placeholder');
-    iframe.src = '';
-    iframe.classList.add('d-none');
-    placeholder.querySelector('div').textContent = content;
-    placeholder.classList.add('d-flex');
-  };
-
-  const setStreamIframeSrc = (href) => {
-    const iframe = streamModalEl.querySelector('iframe');
-    const placeholder = streamModalEl.querySelector('#stream-placeholder');
-    iframe.src = href;
-    placeholder.classList.add('d-none');
-    placeholder.classList.remove('d-flex');
-    iframe.classList.remove('d-none');
-  };
-
-  const setStreamVideo = (roomName) => {
-    const t = time();
+  const getStreamBounds = (roomName) => {
     let talks = getTalks(roomName);
-    let roomStart = 0, roomEnd = 0;
 
-    if (talks.length) {
-      roomStart = talks[0].start;
-      roomEnd = talks[talks.length - 1].end;
-    } else {
-      for (const rn in getAllTalks()) {
-        const rt = getTalks(rn);
-        if (rt.length) {
-          const rs = rt[0].start, re = rt[rt.length - 1].end;
-          if (!roomStart || roomStart > rs) roomStart = rs;
-          if (!roomEnd || roomEnd < re) roomEnd = re;
+    if (!talks.length) {
+      const allTalks = state.data.talks || {};
+      let earliest = Infinity, latest = 0;
+
+      for (const rn of Object.keys(allTalks)) {
+        const roomTalks = getTalks(rn);
+        if (roomTalks.length) {
+          earliest = Math.min(earliest, roomTalks[0].start);
+          latest = Math.max(latest, roomTalks[roomTalks.length - 1].end);
         }
       }
+
+      if (earliest === Infinity) return { start: 0, end: 0 };
+      return { start: earliest, end: latest };
     }
 
-    if (streamVideoTimer) clearInterval(streamVideoTimer);
-
-    const prepend = streamPrepend * 60, extend = streamExtend * 60;
-
-    if (t <= roomStart - prepend) {
-      setStreamIframeContent(lang.pre_stream);
-      if (!freezeTime) streamVideoTimer = setTimeout(() => setStreamVideo(roomName), delayStart(roomStart - prepend) * 1000);
-    } else if (t >= roomEnd + extend) {
-      setStreamIframeContent(lang.post_stream);
-    } else {
-      const pause = getNextPause(roomName);
-      if (pause && t >= pause.start + extend && t <= pause.end - prepend) {
-        setStreamIframeContent(lang.pause_stream);
-        if (!freezeTime) streamVideoTimer = setTimeout(() => setStreamVideo(roomName), delayStart(pause.end - prepend) * 1000);
-      } else {
-        const room = getRoom(roomName);
-        if (room) {
-          setStreamIframeSrc(room.href);
-          if (!freezeTime) {
-            const nextTime = pause ? pause.start + extend : roomEnd + extend;
-            streamVideoTimer = setTimeout(() => setStreamVideo(roomName), delayStart(nextTime) * 1000);
-          }
-        }
-      }
-    }
+    return {
+      start: talks[0].start,
+      end: talks[talks.length - 1].end
+    };
   };
 
-  const setStreamInfo = (roomName) => {
-    const t = time();
-    const talk = getNextTalk(roomName);
-    if (streamInfoTimer) clearInterval(streamInfoTimer);
+  /** Determine current stream state for a room */
+  const getStreamState = (roomName) => {
+    const current = now();
+    const bounds = getStreamBounds(roomName);
+    const prependSec = state.streaming.prependMinutes * 60;
+    const extendSec = state.streaming.extendMinutes * 60;
 
-    const info = document.getElementById('stream-info');
-    const infoTime = document.getElementById('stream-info-time');
-    const infoColor = streamModalEl.querySelector('#stream-info-color');
-    const infoTalk = streamModalEl.querySelector('#stream-info-talk');
-    const infoSpeakers = streamModalEl.querySelector('#stream-info-speakers');
-    const infoLinks = streamModalEl.querySelector('#stream-info-links');
+    // Before stream starts
+    if (current < bounds.start - prependSec) {
+      return { type: 'pre' };
+    }
 
-    if (talk.start && t >= talk.start - streamPause * 60) {
-      info.dataset.time = talk.start;
-      infoTime.dataset.time = talk.start;
+    // After stream ends
+    if (current >= bounds.end + extendSec) {
+      return { type: 'post' };
+    }
 
-      infoColor.className = infoColor.className.replace(/(^|\s)border-\S+-subtle/g, '');
-      infoColor.classList.add(`border-${talk.color}-subtle`);
+    // Check for pause
+    const pause = getNextPause(roomName);
+    if (pause && current >= pause.start + extendSec && current <= pause.end - prependSec) {
+      return { type: 'pause' };
+    }
 
-      infoTalk.textContent = talk.name;
-      infoTalk.href = talk.href;
-      infoTalk.className = infoTalk.className.replace(/(^|\s)link-underline-[a-z]+($|\s)/g, '');
-      infoTalk.classList.add(`link-underline-${talk.color}`);
+    // Stream is live
+    const room = getRoom(roomName);
+    return room?.href ? { type: 'live', url: room.href } : { type: 'unavailable' };
+  };
 
-      infoSpeakers.innerHTML = talk.speakers.map(s => {
-        const sp = getSpeaker(s);
-        return sp.href ? `<a class="text-reset link-underline-${talk.color} link-underline-opacity-0 link-underline-opacity-100-hover" href="${sp.href}">${sp.name}</a>` : (sp.name || s);
+  // ==========================================================================
+  // Stream Info Panel (Next Talk)
+  // ==========================================================================
+
+  const createStreamInfo = (modalEl) => {
+    const container = modalEl.querySelector('#stream-info');
+    const timeEl = modalEl.querySelector('#stream-info-time');
+    const colorEl = modalEl.querySelector('#stream-info-color');
+    const talkEl = modalEl.querySelector('#stream-info-talk');
+    const speakersEl = modalEl.querySelector('#stream-info-speakers');
+    const linksEl = modalEl.querySelector('#stream-info-links');
+
+    const show = () => container.classList.remove('d-none');
+    const hide = () => container.classList.add('d-none');
+
+    const update = (roomName) => {
+      const talk = getNextTalk(roomName);
+      const current = now();
+      const showThreshold = state.streaming.pauseMinutes * 60;
+
+      if (!talk || current < talk.start - showThreshold) {
+        hide();
+        return;
+      }
+
+      // Set timing data
+      container.dataset.time = talk.start;
+      timeEl.dataset.time = talk.start;
+
+      // Update color
+      colorEl.className = colorEl.className.replace(/border-\w+-subtle/g, '');
+      colorEl.classList.add(`border-${talk.color}-subtle`);
+
+      // Update talk link
+      talkEl.textContent = talk.name;
+      talkEl.href = talk.href || '#';
+      talkEl.className = talkEl.className.replace(/link-underline-\w+/g, '');
+      talkEl.classList.add(`link-underline-${talk.color}`);
+
+      // Update speakers
+      speakersEl.innerHTML = talk.speakers.map(name => {
+        const speaker = getSpeaker(name);
+        return speaker.href
+          ? `<a class="text-reset link-underline-${talk.color} link-underline-opacity-0 link-underline-opacity-100-hover" href="${speaker.href}">${speaker.name}</a>`
+          : speaker.name;
       }).join(', ');
 
+      // Update live links
       if (talk.live_links?.length) {
-        infoLinks.innerHTML = talk.live_links
-          .filter(l => (l.name || l.icon) && l.href)
-          .map(l => `<a href="${l.href}" class="btn btn-secondary m-1 live-past" data-time="${talk.start}">${l.icon ? `<i class="bi bi-${l.icon}" aria-hidden="true"></i>&nbsp;` : ''}${l.name}</a>`)
+        linksEl.innerHTML = talk.live_links
+          .filter(link => (link.name || link.icon) && link.href)
+          .map(link => {
+            const icon = link.icon ? `<i class="bi bi-${link.icon}" aria-hidden="true"></i>&nbsp;` : '';
+            return `<a href="${link.href}" class="btn btn-secondary m-1 live-past" data-time="${talk.start}">${icon}${link.name || ''}</a>`;
+          })
           .join('');
-        infoLinks.classList.remove('d-none');
+        linksEl.classList.remove('d-none');
       } else {
-        infoLinks.classList.add('d-none');
+        linksEl.classList.add('d-none');
       }
 
-      info.classList.remove('d-none');
-      updateLive();
-      if (!freezeTime) streamInfoTimer = setTimeout(() => setStreamInfo(roomName), delayStart(talk.end) * 1000);
-    } else {
-      info.classList.add('d-none');
-      if (!freezeTime && talk.start) {
-        streamInfoTimer = setTimeout(() => setStreamInfo(roomName), delayStart(talk.start - streamPause * 60) * 1000);
+      show();
+    };
+
+    return { update, hide };
+  };
+
+  // ==========================================================================
+  // Stream Room Selector
+  // ==========================================================================
+
+  const createRoomSelector = (modalEl, onRoomChange) => {
+    const buttons = modalEl.querySelectorAll('.modal-footer .btn[data-room]');
+    const select = modalEl.querySelector('#stream-select');
+
+    let currentRoom = null;
+
+    const setActive = (room) => {
+      currentRoom = room;
+
+      buttons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.room === room?.name);
+      });
+
+      if (select && room) {
+        select.value = room.id;
       }
-    }
-  };
+    };
 
-  const setStream = (roomName) => {
-    streamModalEl.querySelectorAll('.modal-footer .btn').forEach(b => b.classList.remove('active'));
-    const select = streamModalEl.querySelector('#stream-select');
-    if (select) select.value = '0';
+    const clear = () => {
+      currentRoom = null;
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (select) select.selectedIndex = -1;
+    };
 
-    const room = getRoom(roomName);
-    if (room) {
-      setStreamVideo(room.name);
-      setStreamInfo(room.name);
-      const btn = streamModalEl.querySelector(`#stream-button${room.id}`);
-      if (btn) btn.classList.add('active');
-      if (select) select.value = room.id;
-    }
-  };
+    const getCurrent = () => currentRoom;
 
-  const updateStream = () => {
-    if (!streamModalEl.classList.contains('show')) return;
-    const btn = streamModalEl.querySelector('.modal-footer .btn.active');
-    if (btn?.dataset.room) setStream(btn.dataset.room);
-  };
-
-  const stopUpdateStream = () => {
-    if (streamVideoTimer) clearInterval(streamVideoTimer);
-    if (streamInfoTimer) clearInterval(streamInfoTimer);
-  };
-
-  const hideModal = () => {
-    streamModalEl.querySelector('iframe').src = '';
-    streamModalEl.querySelectorAll('.modal-footer .btn').forEach(b => b.classList.remove('active'));
-    const select = streamModalEl.querySelector('#stream-select');
-    if (select) select.selectedIndex = -1;
-  };
-
-  const setupStream = () => {
-    streamModalEl = document.getElementById('stream-modal');
-    if (!streamModalEl) return;
-
-    streamModalEl.addEventListener('show.bs.modal', e => setStream(e.relatedTarget.dataset.room));
-    streamModalEl.addEventListener('hide.bs.modal', hideModal);
-
-    streamModalEl.querySelectorAll('.modal-footer .btn').forEach(btn => {
-      btn.addEventListener('click', e => { e.preventDefault(); setStream(btn.dataset.room); });
+    // Event listeners
+    buttons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const room = getRoom(btn.dataset.room);
+        if (room) {
+          setActive(room);
+          onRoomChange(room);
+        }
+      });
     });
 
-    const select = streamModalEl.querySelector('#stream-select');
     if (select) {
-      select.addEventListener('change', e => { e.preventDefault(); setStream(select.options[select.selectedIndex].text); });
+      select.addEventListener('change', (e) => {
+        e.preventDefault();
+        const room = getRoom(select.options[select.selectedIndex].text);
+        if (room) {
+          setActive(room);
+          onRoomChange(room);
+        }
+      });
+    }
+
+    return { setActive, clear, getCurrent };
+  };
+
+  // ==========================================================================
+  // Stream Modal Controller
+  // ==========================================================================
+
+  let streamModal = null;
+
+  const setupStreamModal = () => {
+    const modalEl = document.getElementById('stream-modal');
+    if (!modalEl) return;
+
+    const player = createStreamPlayer(modalEl);
+    const info = createStreamInfo(modalEl);
+
+    const updateRoom = (room) => {
+      if (!room) return;
+
+      const streamState = getStreamState(room.name);
+
+      switch (streamState.type) {
+        case 'live':
+          player.displayStream(streamState.url);
+          break;
+        case 'pre':
+          player.displayMessage(state.lang.pre_stream);
+          break;
+        case 'post':
+          player.displayMessage(state.lang.post_stream);
+          break;
+        case 'pause':
+          player.displayMessage(state.lang.pause_stream);
+          break;
+        default:
+          player.displayMessage(state.lang.post_stream);
+      }
+
+      info.update(room.name);
+      updateLiveElements(); // Update live-past buttons in info panel
+    };
+
+    const roomSelector = createRoomSelector(modalEl, updateRoom);
+
+    // Modal events
+    modalEl.addEventListener('show.bs.modal', (e) => {
+      const room = getRoom(e.relatedTarget?.dataset.room);
+      roomSelector.setActive(room);
+      updateRoom(room);
+    });
+
+    modalEl.addEventListener('hide.bs.modal', () => {
+      player.clear();
+      info.hide();
+      roomSelector.clear();
+    });
+
+    streamModal = {
+      isOpen: () => modalEl.classList.contains('show'),
+      update: () => {
+        const room = roomSelector.getCurrent();
+        if (room) updateRoom(room);
+      }
+    };
+  };
+
+  // ==========================================================================
+  // Update Loop
+  // ==========================================================================
+
+  const update = () => {
+    updateLiveElements();
+    if (state.streaming.enabled && streamModal?.isOpen()) {
+      streamModal.update();
     }
   };
 
-  const update = () => { updateLive(); if (stream) updateStream(); };
-  const startUpdate = () => { startUpdateLive(); if (stream) updateStream(); };
-  const stopUpdate = () => { stopUpdateLive(); if (stream) stopUpdateStream(); };
+  const startUpdates = () => {
+    stopUpdates();
+    update();
 
-  const init = (c, l) => {
-    const liveConfig = c;
-    lang = l;
+    const scheduleNext = () => {
+      state.updateTimer = setTimeout(() => {
+        update();
+        scheduleNext();
+      }, secondsUntil() * 1000);
+    };
+    scheduleNext();
+  };
+
+  const stopUpdates = () => {
+    if (state.updateTimer) {
+      clearTimeout(state.updateTimer);
+      state.updateTimer = null;
+    }
+  };
+
+  // ==========================================================================
+  // Debug API
+  // ==========================================================================
+
+  const pauseTime = () => {
+    if (state.frozen) return;
+    state.frozenTime = now();
+    state.frozen = true;
+    stopUpdates();
+  };
+
+  const continueTime = () => {
+    if (!state.frozen) return;
+    state.timeOffset += adjustedTime() - state.frozenTime;
+    state.frozen = false;
+    startUpdates();
+  };
+
+  const resetTime = () => {
+    state.timeOffset = 0;
+    state.frozen = false;
+    startUpdates();
+  };
+
+  /** Convert UTC timestamp (seconds) to conference timezone date string */
+  const tsToDate = (timestamp) => {
+    const date = new Date(timestamp * 1000);
+    const tzOffset = parseTimezoneOffset(state.tz);
+    const tzTime = date.getTime() + (date.getTimezoneOffset() * 60000) + (tzOffset * 60000);
+    const tzDate = new Date(tzTime);
+    return tzDate.toISOString().slice(0, 10); // YYYY-MM-DD
+  };
+
+  /** Convert UTC timestamp (seconds) to conference timezone time string */
+  const tsToTime = (timestamp) => {
+    const date = new Date(timestamp * 1000);
+    const tzOffset = parseTimezoneOffset(state.tz);
+    const tzTime = date.getTime() + (date.getTimezoneOffset() * 60000) + (tzOffset * 60000);
+    const tzDate = new Date(tzTime);
+    const hours = String(tzDate.getHours()).padStart(2, '0');
+    const minutes = String(tzDate.getMinutes()).padStart(2, '0');
+    return `${tzDate.toISOString().slice(0, 10)} ${hours}:${minutes}`;
+  };
+
+  /** Parse timezone offset string (e.g., "+02:00") to minutes */
+  const parseTimezoneOffset = (tz) => {
+    if (!tz) return 0;
+    const match = tz.match(/^([+-])(\d{2}):(\d{2})$/);
+    if (!match) return 0;
+    const sign = match[1] === '+' ? 1 : -1;
+    return sign * (parseInt(match[2], 10) * 60 + parseInt(match[3], 10));
+  };
+
+  const setTime = (timeStr, day) => {
+    pauseTime();
+
+    const { days } = state.data;
+    if (!days?.length) {
+      console.error('Conference data not loaded');
+      return;
+    }
+
+    // Determine which day to use
+    let dayData;
+    if (Number.isInteger(day)) {
+      // 0-based index
+      dayData = days[day] || days[0];
+    } else if (typeof day === 'string') {
+      // Try as date string first (YYYY-MM-DD), then as name
+      dayData = days.find(d => d.date === day) || days.find(d => d.name === day) || days[0];
+    } else {
+      // No day specified: use current day from frozen time in conference timezone
+      const currentDate = tsToDate(state.frozenTime);
+      dayData = days.find(d => d.date === currentDate) || days[0];
+    }
+
+    // Parse time in conference timezone: "YYYY-MM-DDTHH:MM:SS+TZ"
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const isoString = `${dayData.date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00${state.tz}`;
+    const date = new Date(isoString);
+
+    // Store as UTC timestamp in seconds
+    state.frozenTime = Math.floor(date.getTime() / 1000);
+    update();
+  };
+
+  const getTime = () => tsToTime(now());
+
+  // ==========================================================================
+  // Initialization
+  // ==========================================================================
+
+  const init = (liveConfig, langStrings) => {
     if (!liveConfig?.time) return;
 
-    confStart = liveConfig.time.start;
-    confEnd = liveConfig.time.end;
-    confDur = confEnd - confStart;
+    state.lang = langStrings;
+    state.tz = liveConfig.tz || '+00:00';
+    state.confStart = liveConfig.time.start;
+    state.confEnd = liveConfig.time.end;
 
-    stream = liveConfig.streaming.enable;
-    streamPause = liveConfig.streaming.pause;
-    streamPrepend = liveConfig.streaming.prepend;
-    streamExtend = liveConfig.streaming.extend;
+    state.streaming = {
+      enabled: liveConfig.streaming.enable,
+      pauseMinutes: liveConfig.streaming.pause,
+      prependMinutes: liveConfig.streaming.prepend,
+      extendMinutes: liveConfig.streaming.extend
+    };
 
     loadData();
-    startUpdateLive();
-    if (stream) setupStream();
+    startUpdates();
+
+    if (state.streaming.enabled) {
+      setupStreamModal();
+    }
   };
+
+  // ==========================================================================
+  // Public API
+  // ==========================================================================
 
   return {
     init,
-    getData,
     pauseTime,
     continueTime,
     resetTime,
