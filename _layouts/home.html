@@ -2,19 +2,19 @@
 
   <div class="bg-secondary-subtle text-secondary-emphasis p-4 p-md-5 mb-4">
     <h1 class="display-3 text-break">
-      {% if site.conference.main.logo.img %}
-        {% if site.conference.main.logo.img_dark %}
+      {% if page.header.img %}
+        {% if page.header.img_dark %}
           <div class="mode-light">
-            <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
-            <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
           </div>
           <div class="mode-dark">
-            <img src="{{ site.conference.main.logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
-            <img src="{{ site.conference.main.logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+            <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+            <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
           </div>
         {% else %}
-          <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
-          <img src="{{ site.conference.main.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
+          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
+          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
         {% endif %}
       {% elsif page.title %}
         {{ page.title }}
@@ -32,10 +32,10 @@
 
     {{ content }}
 
-    {% if site.conference.main.links %}
+    {% if page.links %}
       <div class="lead d-print-none">
       {% assign btn_default = 'btn btn-outline-primary btn-lg mt-2 ms-1' %}
-      {% for link in site.conference.main.links %}
+      {% for link in page.links %}
 
         {% if link.menu %}
           <div class="dropdown d-inline">
