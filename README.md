@@ -41,7 +41,6 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Live Indications & Streaming](#live-indications--streaming)
   - [Progressive Web App (PWA)](#progressive-web-app-pwa)
   - [Talk Settings](#talk-settings)
-  - [Speaker Settings](#speaker-settings)
   - [Location Settings](#location-settings)
   - [Program Settings](#program-settings)
 - [Content](#content)
@@ -571,7 +570,7 @@ Instead of displaying the tag name, you can replace it with an icon. To define t
 - its `name`, which must match the tag specified in the talk's FrontMatter.
 - optionally, an icon to show instead of the tag's name (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show).
 
-Talks can also have associated links displayed at the end of their content. If these links have an icon (see _Content_ > _Talks_ below), they will also appear on the talk overview page (e.g., to indicate which talks have video recordings). To prevent icon links from showing on the overview page, set the `hide_link_icons` property to `true` (default is `false`).
+Talks can also have associated links displayed at the end of their content. If these links have an icon (see _Content_ > _Talks_ below), they will also appear on the talk overview page (e.g., to indicate which talks have video recordings).
 
 Example:
 
@@ -589,21 +588,6 @@ conference:
     tags:
       - name: No recording
         icon: video-slash
-
-    # Hide link icons on talk overview page
-    hide_link_icons: false
-```
-
-### Speaker Settings
-
-In the program as well as the speaker's overview the speaker's first name can be abbreviated to its first letter if present. To do so, add the `show_firstname: true` setting (default: `false`) to the `speakers` property.
-
-Example:
-
-```yaml
-conference:
-  speakers:
-    show_firstname: false
 ```
 
 ### Location Settings

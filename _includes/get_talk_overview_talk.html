@@ -65,7 +65,7 @@
     {%- include list_tags.html -%}
 
     {%- include get_link_types.html -%}
-    {%- if has_icon_links > 0 and site.conference.talks.hide_link_icons != true -%}
+    {%- if has_icon_links > 0 -%}
       {% for link in talk.links -%}
         {%- assign link_styleclass = "badge bg-secondary-subtle text-secondary-emphasis fw-normal me-1" -%}
         {%- include get_link.html link_type="icon" -%}
