@@ -1,5 +1,6 @@
+{%- include get_location_config.html -%}
 {% assign all_hidden = true -%}
-{% unless site.conference.location.hide %}
+{% unless location_hide %}
   {% for room in site.rooms %}
     {% unless room.hide %}
       {% assign all_hidden = false %}
@@ -11,17 +12,17 @@
 {% unless all_hidden %}
   <ul class="nav nav-pills d-print-none mb-3">
     <li class="nav-item">
-      <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.conference.location.url | default: "/location" | prepend: site.baseurl }}">
-        {% if site.conference.location.navbar_title -%}
-          {{- site.conference.location.navbar_title -}}
+      <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ location_url | prepend: site.baseurl }}">
+        {% if location_page.title -%}
+          {{- location_page.title -}}
         {%- else -%}
-          {{- site.data.lang[site.conference.lang].location.directions | default: "Directions" -}}
+          {{- site.data.lang[site.conference.lang].location.name | default: "Location" -}}
         {%- endif %}
       </a>
     </li>
     {% for room in site.rooms -%}
       <li class="nav-item">
-        {% if room.hide or site.conference.location.hide -%}
+        {% if room.hide or location_hide -%}
           <span class="nav-item nav-link disabled">
             {{ room.name }}
           </span>

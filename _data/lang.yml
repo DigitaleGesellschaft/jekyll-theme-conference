@@ -1,4 +1,4 @@
-version: 9
+version: 10
 
 en:
   pronoun:
@@ -34,7 +34,7 @@ en:
       now: now
   location:
     rooms: Rooms
-    directions: Directions
+    name: Location
     talks: Talks in this room
     focus_conf: Center map on conference location
     focus_me: Show my current location
@@ -83,7 +83,7 @@ de:
       now: jetzt
   location:
     rooms: Räume
-    directions: Anreise
+    name: Ort
     talks: Vorträge in diesem Raum
     focus_conf: Karte auf den Konferenz-Ort zentrieren
     focus_me: Meinen aktuellen Standort anzeigen
@@ -132,7 +132,7 @@ fr:
       now: maintenant
   location:
     rooms: Salles
-    directions: Directions
+    name: Lieu
     talks: Présentations dans cette salle
     focus_conf: Centrer la carte sur le lieu de la conférence
     focus_me: Afficher ma localisation actuelle
@@ -181,7 +181,7 @@ pt:
       now: agora
   location:
     rooms: Salas
-    directions: Direções
+    name: Local
     talks: Apresentações nesta sala
     focus_conf: Centralizar o mapa para o local da conferência
     focus_me: Mostrar minha localização atual

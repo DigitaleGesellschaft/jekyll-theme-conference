@@ -40,7 +40,6 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Information Boxes](#information-boxes--modals)
   - [Live Indications & Streaming](#live-indications--streaming)
   - [Progressive Web App (PWA)](#progressive-web-app-pwa)
-  - [Map](#map)
   - [Talk Settings](#talk-settings)
   - [Speaker Settings](#speaker-settings)
   - [Location Settings](#location-settings)
@@ -561,21 +560,6 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
    These icons will be used when users install the app on their devices. You can generate these from a single high-resolution logo using a tool like:
    - [PWA Asset Generator](https://github.com/onderceylan/pwa-asset-generator)
 
-### Map
-
-To help users finding your venue, an [OpenStreetMap](https://www.openstreetmap.org/) container displaying a map can be shown on any page. The map's initial position is globally defined and thus the same for all map containers. You can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
-The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitors current location (has to be manually activated and granted by the visitor).
-
-The map can be added to any page by setting `map: true` in its Front Matter or on the location main page by setting `conference.location.map: true` (see _Location Settings_ section below).
-
-```yaml
-conference:
-  map:
-    default_zoom: 17
-    home_coord: 47.37808, 8.53935
-    map_provider: "OpenStreetMap.Mapnik"
-```
-
 ### Talk Settings
 
 Talks can optionally be organized into tracks, where each track groups talks under a common subject. Tracks are visually distinct across the website, especially in the program, by a unique color. Additionally, each talk can have one or more associated tags. Both tracks and tags are linked via the talk's FrontMatter (refer to the _Individual Pages: Talks_ section for more details).
@@ -635,38 +619,46 @@ conference:
 
 ### Location Settings
 
-If the location of your rooms is obvious (e.g., on a campus) you can decide to disable the location page and links to all the rooms. You still need to create the different rooms as files in the `_rooms/` directory, since they are needed as a reference. But there will not be any link pointing to it (effectively hiding them).
-To hide all rooms add the `hide: true` setting (default: `false`) to the `location` property.
+To help users find your venue, an [OpenStreetMap](https://www.openstreetmap.org/) container displaying a map can be shown on the location page as well as the address of the venue. You can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
+The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitor's current location (has to be manually activated and granted by the visitor).
 
-If your `location` overview file is not located under `/location` you can indicate an alternative path by setting the `url` property (default: `/location`) under the `location` property.
+Location settings are configured directly in the Front Matter of the location page (the page with `layout: location`). The location page's Front Matter supports the following properties:
 
-The location main page shows a navigation bar listing all the different rooms by name. Due to the quirks of Jekyll, the main page itself cannot be listed by title as defined in its Front Matter. Instead, the title of the main landing page for the navigation bar is taken from the language files and defaults to "Directions". To change this, you can either change the language files directly (see the _Language_ section above), or you provide an alternative title by setting the `navbar_title` to the desired title under the `location` property.
-
-The `location` layout can include a venue name (`name`) and a postal address (`postal_address`) that is automatically formatted in machine readable way. Both properties also used in the schema.org structured data (if enabled, see the _Meta Data for Search Engines and Link Previews_ section above for more information). The postal address can contain the following optional properties:
+- `title`: The title shown in the navigation bar for the location section (defaults to "Location")
+- `hide`: Set to `true` to hide the location page and all room links (default: `false`). Hidden rooms still need to exist in the `_rooms/` directory as references.
+- `map`: Map configuration object with the following properties:
+  - `home_coord`: Center coordinates of the map (e.g., `47.37808, 8.53935`)
+  - `default_zoom`: Initial zoom level (e.g., `17`)
+  - `map_provider`: Tile provider (default: `"OpenStreetMap.Mapnik"`)
+- `postal_address`: Postal address displayed on the location page and used in schema.org structured data. Can contain:
+  - `name`: Venue name (e.g., "Zentralwäscherei")
   - `street`: Street address (e.g., "Neue Hard 12")
   - `locality`: City or locality (e.g., "Zurich")
   - `postal_code`: Postal or ZIP code (e.g., "8005")
   - `region`: State, province, or region (e.g., "ZH", "Zurich")
   - `country`: ISO 3166-1 alpha-2 country code (e.g., "CH")
 
-The `location` layout can include a map to point to your venue by adding the `map: true` setting (default: `true`) to the `location` property. See the _Map_ section above for more information.
-
-Example:
+Example location page (`location/index.md`):
 
 ```yaml
-conference:
-  location:
-    hide: false
-    url: "/location"
-    navbar_title: "Location"
-    map: true
-    name: "Zentralwäscherei"  # Location name
-    postal_address:  # Postal address
-      street: "Neue Hard 12"
-      locality: "Zurich"
-      postal_code: "8005"
-      region: "ZH"  # State or province
-      country: "CH"  # ISO 3166-1 alpha-2 country code
+---
+layout: location
+title: Conference Venue
+hide: false
+postal_address:
+  name: "Zentralwäscherei"
+  street: "Neue Hard 12"
+  locality: "Zurich"
+  postal_code: "8005"
+  region: "ZH"
+  country: "CH"
+map:
+  default_zoom: 17
+  home_coord: 47.37808, 8.53935
+  map_provider: "OpenStreetMap.Mapnik"
+---
+
+Welcome to our conference venue!
 ```
 
 The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. The map object can be customized by adding additional layers with markers, text, or shapes. To do so, edit the `assets/js/main.js` file in your project:

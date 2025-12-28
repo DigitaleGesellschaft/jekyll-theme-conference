@@ -4,9 +4,11 @@
 {%- endcomment -%}
 {%- assign room = page -%}
 {%- assign room_url = page.url | prepend: site.baseurl | prepend: site.url -%}
-{%- assign location_url = site.conference.location.url | default: "/location" | prepend: site.baseurl | prepend: site.url -%}
 
-{%- unless site.conference.meta.schema_org.disable or site.conference.location.hide or room.hide -%}
+{%- include get_location_config.html -%}
+{%- assign schema_location_url = location_url | prepend: site.baseurl | prepend: site.url -%}
+
+{%- unless site.conference.meta.schema_org.disable or location_hide or room.hide -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -14,9 +16,9 @@
   "name": {{ room.name | jsonify }},
   "url": "{{ room_url }}",
   "containedInPlace": {
-    "@type": "Place"{% if site.conference.location.name %},
-    "name": {{ site.conference.location.name | jsonify }}{% endif %},
-    "url": "{{ location_url }}"
+    "@type": "Place"{% if location_postal_address.name %},
+    "name": {{ location_postal_address.name | jsonify }}{% endif %},
+    "url": "{{ schema_location_url }}"
   }
 }
 </script>
