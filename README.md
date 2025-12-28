@@ -384,37 +384,26 @@ conference:
 
 ### Main Landing Page
 
-The main landing page is shown at the root of the website to greet new visitors. To show it you need to create a `index.md` file in the root of your website's folder and specify its layout as `layout: main`. The remaining customizations are specified in the `_config.yml` file.
+The main landing page is shown at the root of the website to greet new visitors. To show it you need to create a `index.md` file in the root of your website's folder and specify its layout as `layout: main`.
 
-The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `logo` property under the `main` property containing
+The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `header` property of the main page's FrontMatter containing
 
 - a `img` property specifying the path to the image file relative to the `/assets/images/` folder.
 - optionally a `img_dark` property for a dark mode version of the logo, which will be automatically displayed when the user's system is in dark mode. If not specified, the regular `img` will be used in both light and dark modes.
 
-Example:
-
-```yaml
-conference:
-  main:
-    logo:
-      img: "main_logo.png"
-      img_dark: "main_logo_dark.png"  # optional: dark mode version
-```
-
 The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of link buttons. See the _Content_ > _Links_ section below for the available properties per link.
 
-Example:
-
 ```yaml
-conference:
-  main:
-    ...
-    links:
-      - name: Program
-        relative_url: /program/
-      - name: Tickets
-        disabled: true
-        absolute_url: ''
+layout: home
+header:
+  img: "main_logo.png"
+  img_dark: "main_logo_dark.png"  # optional: dark mode version
+links:
+  - name: Program
+    relative_url: /program/
+  - name: Tickets
+    disabled: true
+    absolute_url: ''
 ```
 
 ### Information Boxes & Modals

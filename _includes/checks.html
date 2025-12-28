@@ -59,6 +59,10 @@ For more details, refer to the [Talk Settings](https://github.com/DigitaleGesell
   {%- assign errors = errors | push: "Your page's FrontMatter contains an outdated property name. Maps are no longer supported on individual pages and can only included on pages with " -%}
 {%- endif -%}
 
+{%- if site.conference.main -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any main configuration from `conference.main` to the your home file (with `layout: home`). For more details, refer to the [Main Landing Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#main-landing-page) section in the theme's README." -%}
+{%- endif -%}
+
 {%- if site.conference.talks.hide_icons == true -%}
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.talks.hide_icons` to `conference.talks.hide_link_icons` in your configuration. For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README." -%}
 {%- endif -%}
