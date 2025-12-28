@@ -1,0 +1,29 @@
+{%- assign location_page = nil -%}
+{%- assign location_title = nil -%}
+{%- assign location_url = nil -%}
+{%- assign location_hide = false -%}
+{%- assign location_map = nil -%}
+{%- assign location_postal_address = nil -%}
+
+{%- for p in site.pages -%}
+  {%- if p.layout == 'location' -%}
+    {%- assign location_page = p -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if location_page -%}
+  {%- assign location_title = location_page.title -%}
+  {%- assign location_url = location_page.url -%}
+  {%- if location_page.hide -%}
+    {%- assign location_hide = location_page.hide -%}
+  {%- endif -%}
+
+  {%- if location_page.map -%}
+    {%- assign location_map = location_page.map -%}
+  {%- endif -%}
+  {%- if location_page.postal_address -%}
+    {%- assign location_postal_address = location_page.postal_address -%}
+  {%- endif -%}
+{%- endif -%}
+

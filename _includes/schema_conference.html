@@ -2,6 +2,7 @@
   Generate Schema.org JSON-LD structured data for the conference (ConferenceEvent)
   Usage: {% include schema_conference.html %}
 {%- endcomment -%}
+{%- include get_location_config.html -%}
 
 {%- assign conference_url = site.url | append: site.baseurl -%}
 
@@ -111,11 +112,11 @@
   "endDate": "{{ end_date }}"{% endif %},
   "eventStatus": "https://schema.org/{{ event_status }}",
   "eventAttendanceMode": "https://schema.org/{{ event_attendance_mode }}"{% if site.conference.lang %},
-  "inLanguage": "{{ site.conference.lang }}"{% endif %}{% unless site.conference.location.hide %},
+  "inLanguage": "{{ site.conference.lang }}"{% endif %}{% unless location_hide %},
   "location": {
-    "@type": "Place"{% if site.conference.location.name %},
-    "name": {{ site.conference.location.name | jsonify }}{% endif %},
-    "url": "{{ site.conference.location.url | default: "/location" | prepend: site.baseurl | prepend: site.url }}"
+    "@type": "Place"{% if location_postal_address.name %},
+    "name": {{ location_postal_address.name | jsonify }}{% endif %},
+    "url": "{{ location_url | prepend: site.baseurl | prepend: site.url }}"
   }{% endunless %}{% if site.conference.meta.schema_org.has_participation_offer and site.conference.meta.schema_org.has_participation_offer.url %},
   "hasParticipationOffer": {
     "@type": "Offer",

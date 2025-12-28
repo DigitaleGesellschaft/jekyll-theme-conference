@@ -1,3 +1,4 @@
+{%- include get_location_config.html -%}
 {% include header.html %}
   {% assign nbr_days = site.data.program.days | size -%}
 
@@ -39,7 +40,7 @@
             {%- for r in d.rooms -%}
               {%- assign room = site.rooms | where: 'name', r.name | first %}
               <th scope="col" class="text-center">
-                {%- if room.hide or site.conference.location.hide -%}
+                {%- if room.hide or location_hide -%}
                   {{- room.name -}}
                 {%- else -%}
                   <a class="text-reset link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ room.url | prepend: site.baseurl }}">

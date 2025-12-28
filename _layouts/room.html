@@ -1,6 +1,7 @@
+{%- include get_location_config.html -%}
 {%- assign this_room = page -%}
 
-{%- unless this_room.hide or site.conference.location.hide -%}
+{%- unless this_room.hide or location_hide -%}
   {%- include header.html -%}
 
   <!-- title for print: -->

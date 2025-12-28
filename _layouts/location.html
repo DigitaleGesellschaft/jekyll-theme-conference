@@ -6,41 +6,37 @@
     {% if page.title %}
       {{ page.title }}
     {% else %}
-      {{ site.data.lang[site.conference.lang].location.directions | default: "Directions" }}
+      {{ site.data.lang[site.conference.lang].location.name | default: "Location" }}
     {% endif %}
   </h1>
 
-  {% unless site.conference.location.hide %}
+  {% unless page.hide %}
     {% include navbar_rooms.html %}
   {% endunless %}
 
-  {% if site.conference.location.postal_address %}
+  {% if page.postal_address %}
     <address>
-      {%- if site.conference.location.name %}
-      <strong>{{ site.conference.location.name }}</strong><br />
+      {%- if page.postal_address.name %}
+      <strong>{{ page.postal_address.name }}</strong><br />
       {%- endif %}
-      {%- if site.conference.location.postal_address.street %}
-      {{ site.conference.location.postal_address.street }}<br />
+      {%- if page.postal_address.street %}
+      {{ page.postal_address.street }}<br />
       {%- endif %}
-      {%- if site.conference.location.postal_address.region %}
-      {{ site.conference.location.postal_address.region }}
+      {%- if page.postal_address.region %}
+      {{ page.postal_address.region }}
       {%- endif %}
-      {%- if site.conference.location.postal_address.postal_code %}
-      {{ site.conference.location.postal_address.postal_code }}
+      {%- if page.postal_address.postal_code %}
+      {{ page.postal_address.postal_code }}
       {%- endif %}
-      {%- if site.conference.location.postal_address.locality %}
-      {{ site.conference.location.postal_address.locality }}
+      {%- if page.postal_address.locality %}
+      {{ page.postal_address.locality }}
       {%- endif %}
     </address>
-  {% elsif site.conference.location.name %}
-    <p>
-      <strong>{{ site.conference.location.name }}</strong>
-    </p>
   {% endif %}
 
   {{ content }}
 
-  {% if site.conference.location.map %}
+  {% if page.map %}
     <div id="map" class="w-100 rounded shadow-sm"></div>
   {% endif %}
 

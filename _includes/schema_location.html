@@ -2,8 +2,9 @@
   Generate Schema.org JSON-LD structured data for location (Place)
   Usage: {% include schema_location.html %}
 {%- endcomment -%}
+{%- include get_location_config.html -%}
 {%- assign conference_url = site.url | append: site.baseurl -%}
-{%- assign location_url = site.conference.location.url | default: "/location" | prepend: site.baseurl | prepend: site.url -%}
+{%- assign location_url = location_url | prepend: site.baseurl | prepend: site.url -%}
 
 {%- assign contains_places = "" -%}
 {%- assign first_room = true -%}
@@ -19,21 +20,21 @@
   {%- endunless -%}
 {%- endfor -%}
 
-{%- unless site.conference.meta.schema_org.disable or site.conference.location.hide -%}
+{%- unless site.conference.meta.schema_org.disable or location_hide -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Place"{% if site.conference.location.name %},
-  "name": {{ site.conference.location.name | jsonify }}{% endif %}{% if site.conference.location.postal_address %},
-  "url": "{{ location_url }}"{% if site.conference.location.map %},
+  "@type": "Place"{% if location_postal_address.name %},
+  "name": {{ location_postal_address.name | jsonify }}{% endif %}{% if location_postal_address %},
+  "url": "{{ location_url }}"{% if location_map %},
   "hasMap": "{{ location_url }}"{% endif %},
   "address": {
-    "@type": "PostalAddress"{% if site.conference.location.postal_address.street %},
-    "streetAddress": {{ site.conference.location.postal_address.street | jsonify }}{% endif %}{% if site.conference.location.postal_address.locality %},
-    "addressLocality": {{ site.conference.location.postal_address.locality | jsonify }}{% endif %}{% if site.conference.location.postal_address.postal_code %},
-    "postalCode": {{ site.conference.location.postal_address.postal_code | jsonify }}{% endif %}{% if site.conference.location.postal_address.region %},
-    "addressRegion": {{ site.conference.location.postal_address.region | jsonify }}{% endif %}{% if site.conference.location.postal_address.country %},
-    "addressCountry": {{ site.conference.location.postal_address.country | jsonify }}{% endif %}
+    "@type": "PostalAddress"{% if location_postal_address.street %},
+    "streetAddress": {{ location_postal_address.street | jsonify }}{% endif %}{% if location_postal_address.locality %},
+    "addressLocality": {{ location_postal_address.locality | jsonify }}{% endif %}{% if location_postal_address.postal_code %},
+    "postalCode": {{ location_postal_address.postal_code | jsonify }}{% endif %}{% if location_postal_address.region %},
+    "addressRegion": {{ location_postal_address.region | jsonify }}{% endif %}{% if location_postal_address.country %},
+    "addressCountry": {{ location_postal_address.country | jsonify }}{% endif %}
   }{% endif %}{% if contains_places != "" %},
   "containsPlace": [
     {{ contains_places }}
