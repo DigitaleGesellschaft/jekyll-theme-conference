@@ -37,11 +37,7 @@
     "speakers": {
     {%- for speaker in site.speakers %}
         "{{ speaker.name }}" : {
-        {%- if site.conference.speakers.show_firstname %}
             "name": "{{ speaker.first_name | append: ' ' | append: speaker.last_name }}",
-        {%- else %}
-            "name": "{{ speaker.first_name | slice: 0 | append : '. ' | append: speaker.last_name }}",
-        {%- endif -%}
         {%- if speaker.hide %}
             "href": ""
         {%- else %}

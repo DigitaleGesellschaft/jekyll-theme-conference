@@ -1,16 +1,11 @@
 {% for speaker_name in talk.speakers -%}
   {%- assign speaker = site.speakers | where: 'name', speaker_name | first -%}
-  {%- if site.conference.speakers.show_firstname -%}
-    {%- assign speaker_short = speaker.first_name | append: ' ' | append: speaker.last_name -%}
-  {%- else -%}
-    {%- assign speaker_short = speaker.first_name | slice: 0 | append: '. ' | append: speaker.last_name -%}
-  {%- endif -%}
 
   {%- if speaker.hide or include.text_only -%}
-    {{- speaker_short -}}
+    {{- speaker_name -}}
   {%- else -%}
     <a class="text-reset link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
-      {{- speaker_short -}}
+      {{- speaker_name -}}
     </a>
   {%- endif -%}
 
