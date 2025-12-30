@@ -28,7 +28,7 @@
 
               {%- if site.conference.live -%}
                 </span>
-                {%- include show_live_link.html -%}
+                {%- include show_live_icon.html -%}
               {%- endif %}
 
               {{ site.data.lang[site.conference.lang].pronoun.in | default: "in" }} {% include show_room.html -%}
@@ -56,7 +56,7 @@
         {%- for r in d.rooms -%}
           {%- for t in r.talks -%}
             {%- if talk.name == t.name -%}
-              {%- include show_live_link.html -%}
+              {%- include show_live_icon.html -%}
             {%- endif -%}
           {%- endfor -%}
         {%- endfor -%}
@@ -67,8 +67,7 @@
     {%- include get_link_types.html -%}
     {%- if has_icon_links > 0 -%}
       {% for link in talk.links -%}
-        {%- assign link_styleclass = "badge bg-secondary-subtle text-secondary-emphasis fw-normal me-1" -%}
-        {%- include get_link.html link_type="icon" -%}
+        {%- include get_link.html type="icon" class="badge bg-secondary-subtle text-secondary-emphasis fw-normal me-1" color=track_color -%}
         {%- if link_valid -%}
           {{- link_tag -}}
             <i class="bi bi-{{ link_icon }}" aria-hidden="true"></i>

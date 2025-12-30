@@ -43,11 +43,10 @@
             <div class="align-top me-3">
               {%- include get_talk_time.html -%}
               {%- assign talk_day_hide = true -%}
-              {%- assign talk_time_styleclass = "w-100" -%}
+              {%- assign talk_time_styleclass = "d-block" -%}
               {% include show_talk_time.html %}
 
-              {%- assign live_link_styleclass = "w-100" -%}
-              {% include show_live_link.html %}
+              {% include show_live_icon.html class="d-block mt-1" %}
             </div>
             <div class="flex-grow-1 ps-2 border-4 border-start border-{{ track_color }}-subtle">
               <p class="mb-0">

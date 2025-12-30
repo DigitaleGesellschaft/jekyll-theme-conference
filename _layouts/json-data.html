@@ -94,7 +94,7 @@
                         {%- if has_live_links > 0 -%},
                 "live_links": [
                             {%- for link in talk.links -%}
-                                {%- include get_link.html link_type="live" -%}
+                                {%- include get_link.html type="live" color=track_color -%}
                                 {%- if link_valid %},
                     {
                         "name": "{{ link.name | replace: '"', '\"' }}",

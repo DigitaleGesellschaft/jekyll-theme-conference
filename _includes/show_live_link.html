@@ -1,8 +1,0 @@
-{%- if site.conference.live -%}
-  {%- include get_talk_timestamp.html -%}
-
-  <span class="live-show d-none d-print-none" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
-    {% assign live_link_styleclass = live_link_styleclass | prepend: 'badge ' %}
-    {%- include get_live_link.html -%}
-  </span>
-{%- endif -%}
