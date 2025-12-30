@@ -45,8 +45,7 @@
             <div class="dropdown-menu" aria-labelledby="main-dropdown{{ forloop.index0 }}">
               {% assign parent_link = link %}
               {% for link in parent_link.menu %}
-                {% assign link_styleclass = "dropdown-item" %}
-                {% include get_link.html %}
+                {% include get_link.html class="dropdown-item" %}
                 {{ link_tag }}
                   {{ link.name }}
                 </a>
@@ -55,24 +54,30 @@
           </div>
 
         {% elsif link.live %}
-          {%- include get_live_timestamps.html -%}
+          {% if site.conference.live %}
+            {%- include get_live_timestamps.html -%}
 
-          {%- if link.name != nil or link.name_inactive == nil -%}
             <span class="live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-              {% assign link_styleclass = btn_default %}
-              {% include get_live_link.html %}
+              {%- include get_link.html class=btn_default -%}
+              {{ link_tag }}
+                {%- if link.name -%}
+                  {{ link.name }}
+                {%- else -%}
+                  {% include get_live_icon.html %}
+                {%- endif -%}
+              </a>
             </span>
-          {%- endif -%}
 
-          {%- if link.name_inactive -%}
-            <span class="live-hide d-print-inline {{ btn_default }} disabled" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-              {{ link.name_inactive }}
-            </span>
+            {%- if link.name_inactive -%}
+              <span class="live-hide d-print-inline {{ btn_default }} disabled" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+                {{ link.name_inactive }}
+              </span>
+            {%- endif -%}
+
           {%- endif -%}
 
         {% else %}
-          {% assign link_styleclass = btn_default %}
-          {% include get_link.html %}
+          {% include get_link.html class=btn_default %}
           {{ link_tag }}
             {{ link.name }}
           </a>

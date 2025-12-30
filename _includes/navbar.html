@@ -19,8 +19,7 @@
               <div class="dropdown-menu" aria-labelledby="navbar-dropdown{{ forloop.index0 }}">
                 {%- assign parent_link = link -%}
                 {%- for link in parent_link.menu -%}
-                  {%- assign link_styleclass = "dropdown-item" -%}
-                  {%- include get_link.html %}
+                  {%- include get_link.html class="dropdown-item" %}
                   {{ link_tag }}
                     {{ link.name }}
                   </a>
@@ -29,27 +28,33 @@
             </li>
 
           {%- elsif link.live -%}
-            {%- include get_live_timestamps.html -%}
+            {% if site.conference.live %}
+              {%- include get_live_timestamps.html -%}
 
-            {%- if link.name != nil or link.name_inactive == nil -%}
               <li class="nav-item live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-                {% assign link_styleclass = "nav-link" %}
-                {% include get_live_link.html %}
-              </li>
-            {%- endif -%}
-
-            {%- if link_name_inactive -%}
-              <li class="nav-item live-hide d-print-inline-block" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
-                  {{ link.name_inactive }}
+                {%- include get_link.html class="nav-link" -%}
+                {{ link_tag }}
+                  {%- if link.name -%}
+                    {{ link.name }}
+                  {%- else -%}
+                    {% include get_live_icon.html %}
+                  {%- endif -%}
                 </a>
               </li>
+
+              {%- if link.name_inactive -%}
+                <li class="nav-item live-hide d-print-inline-block" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+                  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
+                    {{ link.name_inactive }}
+                  </a>
+                </li>
+              {%- endif -%}
+
             {%- endif -%}
 
           {%- else %}
             <li class="nav-item {% if page.url contains link.relative_url %}active{% endif %}">
-              {%- assign link_styleclass = "nav-link" -%}
-              {%- include get_link.html -%}
+              {%- include get_link.html class="nav-link" -%}
               {{ link_tag }}
                 {{ link.name }}
               </a>

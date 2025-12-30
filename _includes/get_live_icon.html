@@ -1,0 +1,14 @@
+{%- assign live_label = site.data.lang[site.conference.lang].live.live | default: "Live" -%}
+<span class="live-button text-bg-dark py-1 px-2 rounded {{ include.class }}">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 11 11" class="live-icon align-baseline bi" aria-hidden="true" focusable="false" role="img">
+    <!--
+      The following SVG icon is based on https://github.com/twbs/icons/blob/main/icons/rss.svg
+      Copyright (c) 2019-2024 The Bootstrap Authors
+      MIT License: https://github.com/twbs/icons/blob/main/LICENSE
+    -->
+    <path class="live-icon-arc-small" d="m 3,9.5 c 0,2 -3,2 -3,0 0,-2 3,-2 3,0" />
+    <path class="live-icon-arc-medium" d="M 0,5 C 0,4.4477153 0.4477153,4 1,4 4.3137085,4 7,6.6862915 7,10 7,11.333333 5,11.333333 5,10 5,7.790861 3.209139,6 1,6 0.4477153,6 0,5.5522847 0,5" />
+    <path class="live-icon-arc-large" d="M 0,1 C 0,0.4477153 0.4477153,0 1,0 6.523,0 11,4.477 11,10 11,11.333333 9,11.333333 9,10 9,5.581722 5.418278,2 1,2 0.4477153,2 0,1.5522847 0,1" />
+  </svg>
+  <span>{{ live_label }}</span>
+</span>

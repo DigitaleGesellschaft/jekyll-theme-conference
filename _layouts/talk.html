@@ -51,7 +51,7 @@
 
             {%- if site.conference.live -%}
               </span>
-              {%- include show_live_link.html -%}
+              {%- include show_live_icon.html -%}
             {%- endif -%}
 
             {%- assign room = site.rooms | where: 'name', r.name | first -%}
@@ -76,8 +76,7 @@
   {% if has_icon_links > 0 %}
     <ul class="list-unstyled">
       {% for link in talk.links %}
-        {% assign link_styleclass = "text-reset" %}
-        {% include get_link.html link_type="icon" %}
+        {% include get_link.html type="icon" color=track_color %}
         {% if link_valid %}
           {{ link_list_item }}
         {% endif %}
@@ -90,8 +89,7 @@
 
     <ul class="list-unstyled">
       {% for link in talk.links %}
-        {% assign link_styleclass = "text-reset" %}
-        {% include get_link.html link_type="regular" %}
+        {% include get_link.html color=track_color %}
         {% if link_valid %}
           {{ link_list_item }}
         {% endif %}
@@ -100,7 +98,7 @@
   {% endif %}
 
   <p class="d-print-none mt-5">
-    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-secondary">
+    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-secondary me-2">
       <i class="bi bi-megaphone" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
 
