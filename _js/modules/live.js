@@ -353,13 +353,13 @@ export function createLiveModule(config) {
       timeEl.dataset.time = talk.start;
 
       // Update color
-      colorEl.className = colorEl.className.replace(/border-\w+-subtle/g, '');
+      colorEl.className = colorEl.className.replace(/(?:^|\s+)border-[a-z]+-subtle(?=\s|$)/g, '').trim();
       colorEl.classList.add(`border-${talk.color}-subtle`);
 
       // Update talk link
       talkEl.textContent = talk.name;
       talkEl.href = talk.href || '#';
-      talkEl.className = talkEl.className.replace(/link-underline-\w+/g, '');
+      talkEl.className = talkEl.className.replace(/(?:^|\s+)link-underline-[a-z]+(?=\s|$)/g, '').trim();
       talkEl.classList.add(`link-underline-${talk.color}`);
 
       // Update speakers

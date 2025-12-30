@@ -115,7 +115,28 @@
   min-height: 400px;
 }
 
-// Live Icon
+// Live Button and Icon
+.live-button {
+  // corresponds to text-bg-dark, see
+  // https://github.com/twbs/bootstrap/blob/main/scss/helpers/_color-bg.scss
+  color: color-contrast($dark);
+  background-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1));
+
+  &:hover {
+    color: shade-color(color-contrast($dark), $link-shade-percentage);
+  }
+}
+
+[data-bs-theme="dark"] .live-button {
+  // corresponds to text-bg-light, see
+  // https://github.com/twbs/bootstrap/blob/main/scss/helpers/_color-bg.scss
+  color: color-contrast($light);
+  background-color: RGBA(var(--bs-light-rgb), var(--bs-bg-opacity, 1));
+
+  &:hover {
+    color: shade-color(color-contrast($light), $link-shade-percentage);
+  }
+}
 
 .live-icon {
   width: 0.8em;
