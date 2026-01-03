@@ -63,16 +63,16 @@
           {%- endif -%}
 
           {%- assign day_duration_min = day_end_hour | minus: day_start_hour | times: 60 | minus: day_start_min | plus: day_end_min -%}
-          {%- assign nbr_steps = day_duration_min | divided_by: site.conference.program.time_steps -%}
+          {%- assign nbr_steps = day_duration_min | divided_by: page.time_steps -%}
 
           {%- for i in (1..nbr_steps) -%}
             {%- assign current_day = 0 -%}
-            {%- assign current_hour = i | minus: 1 | times: site.conference.program.time_steps | plus: day_start_min | divided_by: 60 | floor | plus: day_start_hour -%}
+            {%- assign current_hour = i | minus: 1 | times: page.time_steps | plus: day_start_min | divided_by: 60 | floor | plus: day_start_hour -%}
             {%- if current_hour >= 24 -%}
               {%- assign current_day = current_hour | divided_by: 24 | floor -%}
               {%- assign current_hour = current_hour | modulo: 24 -%}
             {%- endif -%}
-            {%- assign current_min = i | minus: 1 | times: site.conference.program.time_steps | plus: day_start_min | modulo: 60 -%}
+            {%- assign current_min = i | minus: 1 | times: page.time_steps | plus: day_start_min | modulo: 60 -%}
             {%- if current_min < 10 -%}
               {%- assign current_time = current_hour | append: ':0' | append: current_min -%}
             {%- else -%}
@@ -85,7 +85,7 @@
                 <th scope="row" class="text-end">
                   {{- current_time -}}
                 </th>
-              {%- elsif site.conference.program.show_alltimes -%}
+              {%- elsif page.show_alltimes -%}
                 <th scope="row" class="text-end text-muted fw-normal">
                   :{{ current_min }}
                 </th>
@@ -130,7 +130,7 @@
 
                   {%- if d_start_hour == 0 and d_start_min == 0 -%}
 
-                    {%- assign talk_nbr_steps = talk_duration_min | divided_by: site.conference.program.time_steps -%}
+                    {%- assign talk_nbr_steps = talk_duration_min | divided_by: page.time_steps -%}
                     {%- include get_track_properties.html -%}
                     <td rowspan="{{ talk_nbr_steps }}" class="p-0 h-100">
                       <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden">

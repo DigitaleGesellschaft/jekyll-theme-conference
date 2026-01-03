@@ -1,0 +1,18 @@
+{%- assign program_page = nil -%}
+{%- assign program_url = nil -%}
+{%- assign program_time_steps = 15 -%}
+
+{%- for p in site.pages -%}
+  {%- if p.layout == 'program' -%}
+    {%- assign program_page = p -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if program_page -%}
+  {%- assign program_url = program_page.url -%}
+  {%- if program_page.time_steps -%}
+    {%- assign program_time_steps = program_page.time_steps -%}
+  {%- endif -%}
+{%- endif -%}
+

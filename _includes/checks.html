@@ -52,6 +52,10 @@ For more details, refer to the [Talk Settings](https://github.com/DigitaleGesell
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.link_preview` to `conference.meta.link_preview` in your configuration. For more details, refer to the [Meta Data for Search Engines and Link Previews](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#meta-data-for-search-engines-and-link-previews) section in the theme's README." -%}
 {%- endif -%}
 
+{%- if site.conference.program -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any program configuration from `conference.program` to the your program file (with `layout: program`). For more details, refer to the [Program Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#program-settings) section in the theme's README." -%}
+{%- endif -%}
+
 {%- if site.conference.location -%}
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any location configuration from `conference.location` to the your location file (with `layout: location`). For more details, refer to the [Location Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#location-settings) section in the theme's README." -%}
 {%- endif -%}

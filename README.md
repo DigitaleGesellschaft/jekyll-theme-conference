@@ -677,19 +677,19 @@ window.conference.awaitReady().then(async () => {
 
 ### Program Settings
 
-The schedule shown as program can be slightly customized:
+Program settings are configured directly in the Front Matter of the program page (the page with `layout: program`). The program page's Front Matter supports the following properties:
 
-- The time steps shown with a new line can be adapted with the `time_steps` setting given in minute (default: `15` minutes)
-- Besides the full hour the individual time steps can be hidden by setting `show_alltimes: false` (default: `true`)
-
-If your `program` file is not located under `/program` you can indicate an alternative path by setting the `url` property (default: `/program`) under the `program` property.
-Example:
+- `title`: The title shown on the program page (defaults to "Program")
+- `time_steps`: The time interval in minutes for each row in the schedule grid (default: `15`)
+- `show_alltimes`: Show time labels for all intervals, not just full hours (default: `false`)
 
 ```yaml
-conference:
-  program:
-    time_steps: 15 # in minutes
-    show_alltimes: true
+---
+layout: program
+title: Conference Program
+time_steps: 15
+show_alltimes: true
+---
 ```
 
 
