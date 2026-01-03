@@ -34,31 +34,12 @@
           {{- day_name -}}
         </h6>
 
-        <div>
+        <table class="mw-100">
         {%- for t in r.talks -%}
           {%- assign talk = site.talks | where: 'name', t.name | first -%}
-          {%- include get_track_properties.html %}
-
-          <div class="d-flex flex-row mb-2">
-            <div class="align-top me-3">
-              {%- include get_talk_time.html -%}
-              {%- assign talk_day_hide = true -%}
-              {%- assign talk_time_styleclass = "d-block" -%}
-              {% include show_talk_time.html %}
-
-              {% include show_live_icon.html class="d-block mt-1" %}
-            </div>
-            <div class="flex-grow-1 ps-2 border-4 border-start border-{{ track_color }}-subtle">
-              <p class="mb-0">
-                {%- include show_talk.html -%}
-              </p>
-              <p class="fw-light mb-0">
-                {%- include list_speakers.html -%}
-              </p>
-            </div>
-          </div>
+          {%- include show_talk_listed.html hide_day=true -%}
         {%- endfor -%}
-        </div>
+        </table>
         {%- break -%}
 
       {% endif %}

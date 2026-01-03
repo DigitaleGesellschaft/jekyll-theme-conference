@@ -52,7 +52,7 @@
   {% if active_speaker %}
     <h5 class="mt-4 mb-2">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
 
-    <div>
+    <table class="mw-100">
     {%- for d in site.data.program.days -%}
       {%- include get_day_hash.html -%}
       {%- for r in d.rooms -%}
@@ -61,28 +61,14 @@
 
           {%- for speaker_name in talk.speakers -%}
             {%- if speaker_name == speaker.name -%}
-
-              {%- include get_track_properties.html -%}
-
-              <div class="d-flex flex-row mb-2">
-                <div class="me-3">
-                  {%- include get_talk_time.html -%}
-                  {%- assign talk_time_styleclass = "w-100" -%}
-                  {% include show_talk_time.html %}
-                </div>
-                <div class="flex-grow-1 ps-2 border-4 border-start border-{{ track_color }}-subtle">
-                  <span class="me-2">
-                    {%- include show_talk.html -%}
-                  </span>
-                  {%- include show_live_icon.html -%}
-                </div>
-              </div>
-              {%- endif -%}
-            {%- endfor -%}
+              {%- include show_talk_listed.html hide_speakers=true -%}
+              {%- break -%}
+            {%- endif -%}
           {%- endfor -%}
         {%- endfor -%}
       {%- endfor -%}
-    </div>
+    {%- endfor -%}
+    </table>
   {% endif %}
 
   <p class="d-print-none mt-5">
