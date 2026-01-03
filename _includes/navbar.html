@@ -1,13 +1,14 @@
-<nav class="navbar navbar-expand-{{ site.conference.navigation.breakpoint | default: 'md' }} bg-secondary-subtle text-secondary-emphasis mb-3" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
+{% assign breakpoint = site.conference.navigation.breakpoint | default: 'md' %}
+<nav class="navbar navbar-expand-{{ breakpoint }} bg-body-secondary mb-3" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
   <div class="container">
 
-    <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
+    <a class="navbar-brand order-0" href="{{ site.baseurl }}/">{{ site.title }}</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ site.data.lang[site.conference.lang].navigation.toggle | default: 'Toggle navigation menu' }}">
+    <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ site.data.lang[site.conference.lang].navigation.toggle | default: 'Toggle navigation menu' }}">
       <span class="navbar-toggler-icon" aria-hidden="true"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse order-3 order-md-1" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto">
         {%- for link in site.conference.navigation.links -%}
 
@@ -65,7 +66,7 @@
     </div>
 
     {%- if site.conference.navigation.logo %}
-      <div class="navbar-brand navbar-logo me-0 ms-1 text-end overflow-hidden">
+      <div class="navbar-brand navbar-logo order-2 ms-1 me-0 text-end overflow-hidden">
         <a href="{{ site.conference.navigation.logo.url }}">
           {%- if site.conference.navigation.logo.img %}
             {%- if site.conference.navigation.logo.img_dark %}
