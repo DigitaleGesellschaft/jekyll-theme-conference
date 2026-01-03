@@ -35,7 +35,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Navigation Bar](#navigation-bar)
   - [Open Graph Link Preview](#open-graph-link-preview)
   - [Main Landing Page](#main-landing-page)
-  - [Information Boxes](#information-boxes)
+  - [Information Boxes](#information-boxes--modals)
   - [Live Indications & Streaming](#live-indications--streaming)
   - [Map](#map)
   - [Talk Settings](#talk-settings)
@@ -362,9 +362,11 @@ conference:
         absolute_url: ''
 ```
 
-### Information Boxes
+### Information Boxes & Modals
 
-One or multiple information banners can be shown at the top of the website just below the navigation bar. They are prominent and can inform your visitors about important news. They are activated through the `infobars` property, which contains a list for each information banner to show. Each banner consists of
+The theme supports two types of information displays: banners at the top of the page (`bars`) and dialog popups (`modals`). Both can be used to inform your visitors about important news and announcements.
+
+One or multiple information banners can be shown at the top of the website just below the navigation bar. They are prominent and can inform your visitors about important news. They are activated through the `info.bars` property, which contains a list for each information banner to show. Each banner consists of
 
 - a title (`title`),
 - a color (`color`) following the Bootstrap color scheme (see below), possible values are:
@@ -380,26 +382,44 @@ One or multiple information banners can be shown at the top of the website just 
 - the option to show it on all pages, only the main landing page (`main_only: true`), or all pages except the main landing page (`pages_only: true`),
 - optionally, the number of days to keep the info bar dismissed after a user closes it (`dismissal_days`, default: `7`). Each info bar can have its own dismissal period. Setting `dismissal_days: 0` will disable dismissibility entirely (no close button will be shown, and the info bar cannot be dismissed).
 
+Information modals appear as modal dialog popups that overlay the page content, dimming the background. They are useful for displaying important announcements that require user attention. Modals are activated through the `info.modals` property, which contains a list for each information modal to show. Each modal consists of
+
+- a title (`title`),
+- an additional text (`text`, markdown supported),
+- the option to show it on all pages, only the main landing page (`main_only: true`), or all pages except the main landing page (`pages_only: true`),
+- optionally, the number of days to keep the info modal dismissed after a user closes it (`dismissal_days`, default: `7`). Each modal can have its own dismissal period. Setting `dismissal_days: 0` will disable dismissibility entirely (cannot be closed).
+
+Modals automatically appear when a page loads. The dismissal state is persisted in the browser's localStorage, so users won't see dismissed modals again until the dismissal period expires.
+
 Example:
 
 ```yaml
 conference:
-  infobars:
-    - title: Sold Out!
-      color: primary
-      main_only: true
-      dismissal_days: 14
-      text: |
-        We're truly sorry but we are **sold out**.
+  info:
+    # Information modals (shown as modal dialogs)
+    modals:
+      - title: Important Announcement
+        main_only: true
+        dismissal_days: 7
+        text: This is an information modal that appears as a dialog.
 
-        ---
+    # Information bars (shown as alerts at the top of the page)
+    bars:
+      - title: Sold Out!
+        color: primary
+        main_only: true
+        dismissal_days: 14
+        text: |
+          We're truly sorry but we are **sold out**.
 
-        Try again next year.
-    - title: Important Notice
-      color: warning
-      dismissal_days: 0
-      text: |
-        This is a non-dismissible information banner that will always be visible.
+          ---
+
+          Try again next year.
+      - title: Important Notice
+        color: warning
+        dismissal_days: 0
+        text: |
+          This is a non-dismissible information banner that will always be visible.
 ```
 
 ### Live Indications & Streaming
