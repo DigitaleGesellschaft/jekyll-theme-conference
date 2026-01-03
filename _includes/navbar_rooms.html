@@ -19,9 +19,9 @@
         {%- endif %}
       </a>
     </li>
-    {% for room in site.rooms or site.conference.location.hide -%}
+    {% for room in site.rooms -%}
       <li class="nav-item">
-        {% if room.hide -%}
+        {% if room.hide or site.conference.location.hide -%}
           <span class="nav-item nav-link disabled">
             {{ room.name }}
           </span>

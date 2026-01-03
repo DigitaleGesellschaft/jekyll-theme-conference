@@ -3,7 +3,7 @@
   {%- if site.conference.speakers.show_firstname -%}
     {%- assign speaker_short = speaker.first_name | append: ' ' | append: speaker.last_name -%}
   {%- else -%}
-    {%- assign speaker_short = speaker.first_name | slice: 0 | append : '. ' | append: speaker.last_name -%}
+    {%- assign speaker_short = speaker.first_name | slice: 0 | append: '. ' | append: speaker.last_name -%}
   {%- endif -%}
 
   {%- if speaker.hide or include.text_only -%}
