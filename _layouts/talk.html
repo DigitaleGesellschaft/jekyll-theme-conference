@@ -37,32 +37,7 @@
       {%- for r in d.rooms -%}
         {%- for t in r.talks -%}
           {%- if talk.name == t.name -%}
-
-            {%- if site.conference.live -%}
-              {%- include get_talk_timestamp.html -%}
-              <span class="live-hide d-print-inline" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
-            {%- endif -%}
-
-            {%- include get_time_pronoun.html -%}
-            {%- include get_talk_time.html -%}
-            <span class="d-none d-sm-inline">
-              {{- time_pronoun -}}
-            </span> {% include show_talk_time.html -%}
-
-            {%- if site.conference.live -%}
-              </span>
-              {%- include show_live_icon.html -%}
-            {%- endif -%}
-
-            {%- assign room = site.rooms | where: 'name', r.name | first -%}
-            <span class="d-none d-sm-inline ms-1">
-              {{- site.data.lang[site.conference.lang].pronoun.in | default: "in" -}}
-            </span> {% include show_room.html -%}
-
-            <span class="d-none d-sm-inline ms-1">
-              {{- site.data.lang[site.conference.lang].pronoun.for | default: "for" -}}
-            </span> {% include show_talk_duration.html -%}
-
+            {%- include show_talk_info.html -%}
           {% endif %}
         {% endfor %}
       {% endfor %}

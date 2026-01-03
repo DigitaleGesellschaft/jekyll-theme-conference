@@ -1,0 +1,22 @@
+{%- include get_track_properties.html %}
+
+<tr>
+  <td class="align-top">
+    <div class="me-3">
+      {%- include get_talk_time.html -%}
+      {%- include show_talk_time.html hide_day=include.hide_day -%}
+    </div>
+  </td>
+  <td>
+    <div class="ps-2 mb-2 border-4 border-start border-{{ track_color }}-subtle">
+      <p class="mb-0">
+        {%- include show_talk.html -%}
+      </p>
+      {% unless include.hide_speakers %}
+      <p class="fw-light mb-0">
+        {%- include list_speakers.html -%}
+      </p>
+      {% endunless %}
+    </div>
+  </td>
+</tr>

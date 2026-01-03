@@ -16,22 +16,7 @@
         {%- for t in r.talks -%}
           {%- if talk.name == t.name -%}
             <p class="mb-1 fw-light">
-
-              {%- if site.conference.live -%}
-                {%- include get_talk_timestamp.html -%}
-                <span class="live-hide d-print-inline" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
-              {%- endif -%}
-
-              {%- include get_time_pronoun.html -%}
-              {%- include get_talk_time.html -%}
-              {{- time_pronoun }} {% include show_talk_time.html %}
-
-              {%- if site.conference.live -%}
-                </span>
-                {%- include show_live_icon.html -%}
-              {%- endif %}
-
-              {{ site.data.lang[site.conference.lang].pronoun.in | default: "in" }} {% include show_room.html -%}
+              {%- include show_talk_info.html hide_duration=true -%}
             </p>
 
             {%- assign talk_scheduled = true -%}

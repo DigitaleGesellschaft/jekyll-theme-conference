@@ -1,0 +1,24 @@
+{%- include get_time_pronoun.html -%}
+{%- include get_talk_time.html -%}
+{%- include get_talk_timestamp.html -%}
+
+<span class="d-none d-sm-inline">
+  {%- if site.conference.live -%}
+    <span class="live-hide d-inline-block" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
+  {%- endif -%}
+  {{- time_pronoun -}}
+  {%- if site.conference.live -%}
+    </span>
+  {%- endif -%}
+</span> {% include show_talk_time.html -%}
+
+{%- assign room = site.rooms | where: 'name', r.name | first -%}
+<span class="d-none d-sm-inline ms-1">
+  {{- site.data.lang[site.conference.lang].pronoun.in | default: "in" -}}
+</span> {% include show_room.html -%}
+
+{% unless include.hide_duration %}
+<span class="d-none d-sm-inline ms-1">
+  {{- site.data.lang[site.conference.lang].pronoun.for | default: "for" -}}
+</span> {% include show_talk_duration.html -%}
+{% endunless %}
