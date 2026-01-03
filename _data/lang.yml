@@ -1,4 +1,4 @@
-version: 8
+version: 9
 
 en:
   pronoun:
@@ -10,6 +10,7 @@ en:
     on_: "on"
   overview: Overview
   more_information: More Information
+  close: Close
   live:
     live: Live
     stream: Live Stream
@@ -57,6 +58,7 @@ de:
     on_: am
   overview: Übersicht
   more_information: Weitere Informationen
+  close: Schließen
   live:
     live: Live
     stream: Live Stream
@@ -104,6 +106,7 @@ fr:
     on_: le
   overview: Aperçu
   more_information: Plus d'informations
+  close: Fermer
   live:
     live: En direct
     stream: Diffusion en direct
@@ -151,6 +154,7 @@ pt:
     on_: "no"
   overview: Visão geral
   more_information: Mais informações
+  close: Fechar
   live:
     live: Ao vivo
     stream: Transmissão ao vivo
