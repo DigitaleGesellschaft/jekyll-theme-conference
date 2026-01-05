@@ -1,44 +1,85 @@
-import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
-import { resolve } from 'path';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { basename, dirname, join, resolve } from 'path';
 import { defineConfig } from 'vite';
 
-// Plugin to copy font files (woff/woff2) from source directories
-const copyFontFiles = (sourceDirs, targetDir) => {
+const copy = (source, target, filter = () => true) => {
+  if (!existsSync(source)) {
+    console.warn(`Source does not exist: ${source}`);
+    return;
+  }
+
+  const stat = statSync(source);
+
+  if (stat.isDirectory()) {
+    if (!existsSync(target)) {
+      mkdirSync(target, { recursive: true });
+    }
+
+    for (const entry of readdirSync(source)) {
+      if (entry === '.DS_Store') continue;
+      copy(join(source, entry), join(target, entry), filter);
+    }
+  } else if (filter(basename(source))) {
+    const targetDir = dirname(target);
+    if (!existsSync(targetDir)) {
+      mkdirSync(targetDir, { recursive: true });
+    }
+    copyFileSync(source, target);
+  }
+};
+
+// Plugin to copy all required assets (fonts and sass sources)
+const copyAssetsPlugin = () => {
   return {
-    name: 'copy-font-files',
+    name: 'copy-assets',
     writeBundle() {
-      const resolvedTargetDir = resolve(__dirname, targetDir);
+      const nodeModules = resolve(__dirname, 'node_modules');
+      const sassDir = resolve(__dirname, '_sass');
+      const cssDir = resolve(__dirname, '_css');
+      const webfontsDir = resolve(__dirname, 'assets/webfonts');
 
-      // Create target directory if it doesn't exist
-      if (!existsSync(resolvedTargetDir)) {
-        mkdirSync(resolvedTargetDir, { recursive: true });
+      // Font files (woff/woff2)
+      copy(
+        join(nodeModules, 'bootstrap-icons/font/fonts'),
+        webfontsDir,
+        (file) => file.endsWith('.woff') || file.endsWith('.woff2')
+      );
+
+      // Sass files from _css
+      for (const file of ['bootstrap.scss', 'theme.scss']) {
+        copy(join(cssDir, file), join(sassDir, file));
       }
+      copy(join(cssDir, 'main.scss'), join(sassDir, 'conference.scss'));
 
-      // Process each source directory
-      sourceDirs.forEach(sourceDir => {
-        const resolvedSourceDir = resolve(__dirname, sourceDir);
+      // Bootstrap SCSS
+      copy(
+        join(nodeModules, 'bootstrap/scss'),
+        join(sassDir, 'bootstrap/scss'),
+        (file) => file.endsWith('.scss')
+      );
 
-        if (!existsSync(resolvedSourceDir)) {
-          console.warn(`Source directory does not exist: ${resolvedSourceDir}`);
-          return;
-        }
+      // Bootstrap Icons SCSS/CSS
+      copy(
+        join(nodeModules, 'bootstrap-icons/font'),
+        join(sassDir, 'bootstrap-icons/font'),
+        (file) => file.endsWith('.scss') || file.endsWith('.css')
+      );
 
-        // Read all files in the source directory
-        const files = readdirSync(resolvedSourceDir);
+      // Leaflet CSS files
+      copy(
+        join(nodeModules, 'leaflet/dist/leaflet.css'),
+        join(sassDir, 'leaflet/dist/leaflet.css')
+      );
+      copy(
+        join(nodeModules, 'leaflet-easybutton/src/easy-button.css'),
+        join(sassDir, 'leaflet-easybutton/src/easy-button.css')
+      );
+      copy(
+        join(nodeModules, 'leaflet.locatecontrol/dist/L.Control.Locate.css'),
+        join(sassDir, 'leaflet.locatecontrol/dist/L.Control.Locate.css')
+      );
 
-        // Filter for woff and woff2 files
-        const fontFiles = files.filter(file =>
-          file.endsWith('.woff') || file.endsWith('.woff2')
-        );
-
-        // Copy each font file
-        fontFiles.forEach(file => {
-          const source = resolve(resolvedSourceDir, file);
-          const target = resolve(resolvedTargetDir, file);
-          copyFileSync(source, target);
-          console.log(`Copied ${file} from ${sourceDir} to ${targetDir}/`);
-        });
-      });
+      console.log('Assets copied successfully');
     },
   };
 };
@@ -49,17 +90,19 @@ export default defineConfig({
     emptyOutDir: false,
     rollupOptions: {
       input: {
-        'js/conference.bundle': resolve(__dirname, '_js/main.js'),
-        'css/conference.bundle': resolve(__dirname, '_css/main.scss'),
+        'js/conference': resolve(__dirname, '_js/main.js'),
+        'css/conference': resolve(__dirname, '_css/main.scss'),
+        'css/conference-only': resolve(__dirname, '_css/main-only.scss'),
       },
       output: {
         // Main JavaScript
-        entryFileNames: '[name].js',
+        entryFileNames: '[name].bundle.js',
 
         // CSS and other assets
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.css')) {
-            return 'css/conference.bundle.css';
+            // Store any CSS (from SCSS) as .bundle.css
+            return '[name].bundle.css';
           }
           return '[name][extname]';
         },
@@ -76,7 +119,7 @@ export default defineConfig({
     },
     minify: 'esbuild',
     sourcemap: false,
-    cssCodeSplit: false,
+    cssCodeSplit: true,
     target: 'es2020',
   },
   css: {
@@ -99,9 +142,6 @@ export default defineConfig({
     'process.env.NODE_ENV': JSON.stringify('production'),
   },
   plugins: [
-    copyFontFiles(
-      ['node_modules/bootstrap-icons/font/fonts'],
-      'assets/webfonts'
-    ),
+    copyAssetsPlugin(),
   ],
 });

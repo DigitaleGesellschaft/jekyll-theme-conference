@@ -30,7 +30,14 @@
     {%- endfor -%}
   ],
   "assets": [
+    {% if site.conference.custom_style == "bootstrap" -%}
+    {%- comment %} Conference bundle with separate Bootstrap {% endcomment -%}
+    "{{ site.baseurl }}/assets/css/bootstrap.min.css",
+    "{{ site.baseurl }}/assets/css/conference-only.bundle.css",
+    {% elsif site.conference.custom_style != "full" -%}
+    {%- comment %} Full conference bundle {% endcomment -%}
     "{{ site.baseurl }}/assets/css/conference.bundle.css",
+    {% endif -%}
     "{{ site.baseurl }}/assets/css/main.css",
     "{{ site.baseurl }}/assets/js/conference.bundle.js",
     "{{ site.baseurl }}/assets/js/leaflet.bundle.js",

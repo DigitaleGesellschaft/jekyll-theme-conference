@@ -10,9 +10,6 @@ vendor/bundle/
 
 ### Node.js ###
 node_modules/
-assets/js/*.bundle.js
-assets/css/*.bundle.css
-assets/webfonts/bootstrap-icons.*
 
 ### Python ###
 __pycache__/
@@ -20,3 +17,9 @@ __pycache__/
 
 ### MacOS ###
 .DS_Store
+
+### Build Output ###
+assets/js/*.bundle.js
+assets/css/*.bundle.css
+assets/webfonts/bootstrap-icons.*
+_sass/**/*
