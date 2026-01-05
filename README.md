@@ -19,6 +19,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
 
 - [Demo: Winterkongress](https://digitale-gesellschaft.ch/kongress/)
 
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -166,6 +167,7 @@ To get started, simply copy the desired workflow file to your repository and ada
 - `_tools/build.yml` -> `.github/workflows/build.yml`
 
 Please note that the `Gemfile.lock` of your project must be adapted to include specific versions required by Github's workflow server, i.e., run `bundle lock --add-platform x86_64-linux` to add support for them.
+
 
 ## Configuration
 
@@ -936,49 +938,105 @@ Each of these pages can include a map at its end (e.g., to point to your venue) 
 
 ## Design
 
-The design is based on [Bootstrap 5](http://getbootstrap.com) and is easily expandable. It uses [Bootstrap Icons](https://icons.getbootstrap.com/) icons and [Leaflet](https://leafletjs.com/) for maps. The theme includes automatic dark mode support that adapts to the user's system preferences.
+The design is based on [Bootstrap 5](http://getbootstrap.com) and is highly customizable. It integrates [Bootstrap Icons](https://icons.getbootstrap.com/) and [Leaflet](https://leafletjs.com/) for mapping. The theme also features automatic dark mode, adapting to user system preferences.
 
-### CSS Bundle
+The theme offers three distinct approaches to Bootstrap integration, allowing you to choose the level of customization that suits your needs:
 
-The theme includes a pre-built CSS bundle (`assets/css/conference.bundle.css`) which contains:
+### Pre-compiled Bundle (Default)
 
-- Bootstrap 5 framework
-- Bootstrap Icons
-- Leaflet map styles
-- Conference theme customizations
+This is the default option and requires no setup. As the Bootstrap framework is pre-compiled, direct modifications to its core (e.g., theme colors) are not possible. However, you can add custom styles to `assets/css/main.scss`; these will be loaded last and override existing styles.
 
-This bundle is pre-compiled and minified, requiring no build tools for end users.
+```yaml
+conference:
+  custom_style: "none"  # or omit this line (default)
+```
 
-### Custom CSS
+The `assets/css/` directory contains:
 
-To add custom styles, create or edit the `assets/css/main.scss` file in your project:
+- `conference.bundle.css`: Complete bundle containing:
+  - Pre-compiled Bootstrap 5 framework
+  - Bootstrap Icons
+  - Leaflet map styles
+  - Conference theme customizations
+- `main.scss`: For user-modifiable custom styles.
+
+Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [FrontMatter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
+
 
 ```scss
 ---
 ---
-/**
- * Custom styles for your conference website
- * This file is loaded AFTER the conference bundle.
- */
 
-// Override Bootstrap variables using CSS custom properties
-:root {
-  --primary: #ff6600;
-}
-
-// Override component styles
-.btn-primary {
-  background-color: #ff6600;
-  border-color: #ff6600;
-}
-
-// Add custom styles
-.navbar {
-  background: linear-gradient(to right, #007744, #00aa66);
-}
+// Custom styles
+// ...
 ```
 
-The custom CSS file is loaded after the pre-built bundle, allowing you to override any styles. Note that since the bundle is pre-compiled, you cannot change SCSS variables directly. Instead, use CSS overrides as shown above.
+### Split Bundle (Custom Bootstrap CSS)
+
+Integrate your own Bootstrap file, such as a theme from [Bootswatch](https://bootswatch.com/). Similar to the default option, `assets/css/main.scss` can be used for additional custom styles, which will override previous styles.
+
+```yaml
+conference:
+  custom_style: "bootstrap"
+```
+
+The `assets/css/` directory contains:
+
+- `bootstrap.min.css`: Your custom Bootstrap framework (user-provided).
+- `conference-only.bundle.css`: Complete bundle containing:
+  - Bootstrap Icons
+  - Leaflet map styles
+  - Conference theme customizations
+- `main.scss`: For additional custom styles.
+
+Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [FrontMatter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
+
+```scss
+---
+---
+
+// Custom styles
+// ...
+```
+
+#### Custom SCSS
+
+Compile your Bootstrap framework by modifying [Bootstrap variables](https://getbootstrap.com/docs/5.3/customize/sass/#variable-defaults). This provides complete control over Bootstrap's SCSS variables, enabling source-level customization.
+
+The theme simplifies this by including all Bootstrap SCSS source files. These are located in the Gem's `_sass` folder and are automatically overlaid with your project's `_sass` folder.
+
+While offering the most flexibility, this setup requires several steps:
+
+1. Configure Jekyll's [SASS compiler](https://jekyllrb.com/docs/assets/#sassscss) in `_config.yml`. Ensure `sass_dir` is either unset (using the default) or points to the `_sass` folder. Output compression is recommended.
+    ```yaml
+    sass:
+        sass_dir: _sass    # or omit this line
+        style: compressed
+    ```
+2. Configure the theme to use the full custom style setup:
+     ```yaml
+    conference:
+      custom_style: "full"
+    ```
+3. Create `_sass/bootstrap-variables.scss` to override Bootstrap variables.
+    ```scss
+    // If needed, include Bootstrap functions first
+    @use "bootstrap/functions" as *;
+
+    // Override Bootstrap variables
+    $green: #4ea93f;
+    $primary: $green;
+    ```
+4. Include the compiled conference bundle, incorporating your Bootstrap modifications, in `assets/css/main.scss`:
+    ```scss
+    ---
+    ---
+
+    @use "conference";
+
+    // Custom styles
+    // ...
+    ```
 
 
 ## JavaScript
@@ -1052,9 +1110,11 @@ _js/
 **CSS/SCSS** (`_css/` directory):
 ```
 _css/
-├── main.scss          # Main entry point
-├── variables.scss     # Theme variables (Bootstrap overrides)
-└── conference.scss    # Conference-specific styles
+├── main.scss                 # Main entry point (with Bootstrap)
+├── main-only.scss            # Alternative entry point (without Bootstrap)
+├── bootstrap.scss            # Adapted Bootstrap Framework
+├── bootstrap-variables.scss  # Placeholder for custom build of Bootstrap Framework
+└── theme.scss                # Conference-specific styles
 ```
 
 The CSS source imports libraries from NPM:

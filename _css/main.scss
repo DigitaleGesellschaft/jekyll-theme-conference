@@ -1,12 +1,9 @@
 /**
- * Conference Theme Main Entry Point
- *
- * This file imports all dependencies and theme styles.
- * The bundle is pre-built and included in the theme gem.
+ * Conference Entry Point
  */
 
 // 1. Bootstrap Framework
-@use "bootstrap/scss/bootstrap" as *;
+@use "./bootstrap";
 
 // 2. Bootstrap Icons
 @use "bootstrap-icons/font/bootstrap-icons" with (
@@ -19,4 +16,4 @@
 @use "leaflet.locatecontrol/dist/L.Control.Locate.css";
 
 // 4. Conference Theme Styles
-@use "./conference";
+@use "./theme";

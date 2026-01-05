@@ -1,12 +1,12 @@
 /**
  * Conference Theme Styles
- *
- * Custom styles for the conference theme.
- * These styles extend and customize Bootstrap components.
  */
 
-// Import Bootstrap to access mixins
-@use "bootstrap/scss/bootstrap" as *;
+// Import Bootstrap functions, variables, and mixins for responsive utilities
+@import "bootstrap/scss/functions";
+@import "bootstrap-variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
 
 // Program Overview
 .program-table {
@@ -33,7 +33,7 @@
 }
 
 // Speaker Columns
-@mixin generate-col-count-classes($max-cols: 6, $breakpoints: (xs, sm, md, lg, xl, xxl)) {
+@mixin generate-col-count-classes($max-cols: 6) {
 
   // Generate base classes without breakpoint (col-count-1, col-count-2, etc.)
   @for $idx from 1 through $max-cols {
@@ -42,9 +42,9 @@
     }
   }
 
-  // Generate responsive classes for each breakpoint
-  @each $breakpoint in $breakpoints {
-    @if $breakpoint !='xs' {
+  // Generate responsive classes for each breakpoint using Bootstrap's $grid-breakpoints
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @if $breakpoint != 'xs' {
       @include media-breakpoint-up($breakpoint) {
         @for $idx from 1 through $max-cols {
           .col-count-#{$breakpoint}-#{$idx} {

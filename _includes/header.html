@@ -29,7 +29,15 @@
   </title>
   {% include list_header_meta.html %}
 
+  {% if site.conference.custom_style == "bootstrap" %}
+  {% comment %} Conference bundle with separate Bootstrap {% endcomment %}
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css?t={{ site.time | date: '%s' }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference-only.bundle.css?t={{ site.time | date: '%s' }}" />
+  {% elsif site.conference.custom_style != "full" %}
+  {% comment %} Full conference bundle {% endcomment %}
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?t={{ site.time | date: '%s' }}" />
+  {% endif %}
+  {% comment %} User stylesheet (can include full custom conference bundle) {% endcomment %}
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: '%s' }}" />
 
   {% include list_header_live.html %}
