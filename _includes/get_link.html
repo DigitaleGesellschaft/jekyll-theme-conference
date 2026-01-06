@@ -142,9 +142,12 @@
 
   {%- else -%}
     <a
-      class="{{ link_class }}"
+      class="{{ link_class }}{% if include.is_active %} active{% endif %}"
       href="{{ link_href }}"
       title="{{ link.name }}"
+      {%- if include.is_active %}
+      aria-current="page"
+      {%- endif %}
     >
 
   {%- endif -%}

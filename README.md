@@ -253,7 +253,7 @@ conference:
 
 ### Navigation Bar
 
-The navigation bar is located at the top and visible on every site. On the right, it shows the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the _Content_ > _Links_ section below for the available properties per link.
+The navigation bar is located at the top and visible on every site. On the right, it shows the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the _Content_ > _Links_ section below for the available properties per link. Please note that icons are ignored for the navigation bar.
 
 Example:
 
@@ -293,6 +293,20 @@ conference:
 ```
 
 The navigation bar automatically collapses when the available space is too small (e.g. on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/4.6/layout/overview/#responsive-breakpoints). The default breakpoint is `md` (collapsing if the screen width is smaller than 992px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
+
+When installed as a progressive web application (see the _Progressive Web App (PWA)_ section below), the navigation bar moves to the bottom. In PWA mode, it displays link icons and ignores links with `live: true`. Please note that the navigation bar has a limited width and no vertical scrolling. To hide an entry in this mode, set `pwa_hide: true` on its link.
+
+```yaml
+conference:
+  navigation:
+    links:
+      - name: Program
+        icon: calendar4-week
+        relative_url: /program/
+      - name: Supporters
+        pwa_hide: true
+        relative_url: /supporters/
+```
 
 ### Meta Data for Search Engines and Link Previews
 
@@ -547,6 +561,8 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
 
    These icons will be used when users install the app on their devices. You can generate these from a single high-resolution logo using a tool like:
    - [PWA Asset Generator](https://github.com/onderceylan/pwa-asset-generator)
+
+Please note that when installed as a PWA, the navigation bar moves to the bottom and includes icons. See the _Navigation Bar_ section above for more information.
 
 ### Talk Settings
 

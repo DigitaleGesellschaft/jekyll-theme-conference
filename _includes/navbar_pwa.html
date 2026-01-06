@@ -1,0 +1,46 @@
+{%- if site.conference.pwa and site.conference.pwa.enable -%}
+<nav class="navbar navbar-expand-sm navbar-pwa d-pwa-block bg-body-secondary pb-4" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
+  <div class="container">
+    <div class="navbar-nav flex-row w-100 align-items-end justify-content-around">
+      {%- for link in site.conference.navigation.links -%}
+        {%- if link.pwa_hide %}
+          {% comment %} Skip hidden entries {% endcomment %}
+
+        {%- elsif link.live -%}
+          {% comment %} Live links are not shown in app like menu to keep it static {% endcomment %}
+
+        {%- elsif link.menu %}
+          <div class="dropup px-2">
+            <a class="nav-link dropdown-toggle" href="#" id="navbar-dropup{{ forloop.index0 }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ link.name }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbar-dropup{{ forloop.index0 }}">
+              {%- assign parent_link = link -%}
+              {%- for link in parent_link.menu -%}
+                {%- include get_link.html class="dropdown-item" %}
+                {{ link_tag }}
+                  {{ link.name }}
+                </a>
+              {%- endfor %}
+            </div>
+          </div>
+
+        {%- else %}
+          <div class="px-2">
+            {% if page.url contains link.relative_url %}
+              {% assign is_active = true %}
+            {% else %}
+              {% assign is_active = false %}
+            {% endif %}
+            {%- include get_link.html class="nav-link icon-link flex-column flex-md-row text-center" is_active=is_active -%}
+            {{ link_tag }}
+              <i class="bi bi-{{ link_icon | default: 'link-45deg' }}" aria-hidden="true"></i>
+              <span>{{ link.name }}</span>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endfor %}
+    </div>
+  </div>
+</nav>
+{%- endif -%}
