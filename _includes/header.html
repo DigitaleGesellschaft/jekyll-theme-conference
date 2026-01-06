@@ -45,7 +45,7 @@
   {% include list_header_pwa.html %}
 </head>
 
-<body class="pb-4">
+<body class="min-vh-100">
   <a href="#main" class="visually-hidden-focusable position-absolute top-0 start-0">
     {{ site.data.lang[site.conference.lang].navigation.skip_to_content | default: "Skip to content" }}
   </a>
@@ -63,6 +63,6 @@
     {%- endunless -%}
 
   </header>
-  <main id="main" class="container" role="main" tabindex="-1">
+  <main id="main" class="container my-3" role="main" tabindex="-1">
 
     {%- include infobox.html -%}

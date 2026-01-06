@@ -1,5 +1,5 @@
 {% assign breakpoint = site.conference.navigation.breakpoint | default: 'md' %}
-<nav class="navbar navbar-expand-{{ breakpoint }} bg-body-tertiary mb-3" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
+<nav class="navbar navbar-expand-{{ breakpoint }} d-pwa-none bg-body-tertiary mb-3" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
   <div class="container">
 
     <a class="navbar-brand order-0" href="{{ site.baseurl }}/">{{ site.title }}</a>
@@ -54,8 +54,13 @@
             {%- endif -%}
 
           {%- else %}
-            <li class="nav-item {% if page.url contains link.relative_url %}active{% endif %}">
-              {%- include get_link.html class="nav-link" -%}
+            <li class="nav-item">
+              {% if page.url contains link.relative_url %}
+                {% assign is_active = true %}
+              {% else %}
+                {% assign is_active = false %}
+              {% endif %}
+              {%- include get_link.html class="nav-link" is_active=is_active -%}
               {{ link_tag }}
                 {{ link.name }}
               </a>

@@ -71,7 +71,7 @@
     </table>
   {% endif %}
 
-  <p class="d-print-none mt-5">
+  <p class="d-print-none d-pwa-none mt-5">
     <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-outline-secondary">
       <i class="bi bi-people" aria-hidden="true"></i>&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
