@@ -32,16 +32,16 @@
       <div class="tab-pane {%- if forloop.index == 1 %} active{% endif %}" id="{{ day_hash }}" role="tabpanel" aria-labelledby="tab-{{ day_hash }}">
     {%- endif %}
 
-    <div class="w-100">
-      <table class="table program-table w-auto mx-auto align-top" role="grid" aria-label="{{ site.data.lang[site.conference.lang].program.schedule | default: 'Conference schedule' }}{% if nbr_days > 1 %} - {{ day_name }}{% endif %}">
+    <div class="program-table-container w-100 overflow-x-scroll">
+      <table class="table program-table w-auto mx-auto align-top mb-0" role="grid" aria-label="{{ site.data.lang[site.conference.lang].program.schedule | default: 'Conference schedule' }}{% if nbr_days > 1 %} - {{ day_name }}{% endif %}">
         <thead>
           <tr>
-            <th scope="col" class="text-center" aria-label="{{ site.data.lang[site.conference.lang].program.time | default: 'Time' }}">#</th>
-            <th scope="col"></th>
+            <th scope="col" class="program-time text-center" aria-label="{{ site.data.lang[site.conference.lang].program.time | default: 'Time' }}">#</th>
+            <th scope="col" class="program-space"></th>
             {%- assign nbr_rooms = d.rooms | size -%}
             {%- for r in d.rooms -%}
               {%- assign room = site.rooms | where: 'name', r.name | first %}
-              <th scope="col" class="text-center" id="room-{{ day_hash }}-{{ forloop.index }}">
+              <th scope="col" class="program-talk text-center" id="room-{{ day_hash }}-{{ forloop.index }}">
                 {%- if room.hide or location_hide -%}
                   {{- room.name -}}
                 {%- else -%}
@@ -51,7 +51,7 @@
                 {%- endif -%}
               </th>
               {%- unless forloop.last %}
-                <th scope="col" class="col" aria-hidden="true"></th>
+                <th scope="col" class="program-space" aria-hidden="true"></th>
               {%- endunless -%}
             {%- endfor %}
           </tr>
@@ -84,11 +84,11 @@
             <tr class="h-100">
 
               {%- if current_min == 0 -%}
-                <th scope="row" class="text-end">
+                <th scope="row" class="program-time text-end">
                   {{- current_time -}}
                 </th>
               {%- elsif page.show_alltimes -%}
-                <th scope="row" class="text-end text-muted fw-normal">
+                <th scope="row" class="program-time text-end text-muted fw-normal">
                   :{{ current_min }}
                 </th>
               {%- else -%}
@@ -134,7 +134,7 @@
 
                     {%- assign talk_nbr_steps = talk_duration_min | divided_by: page.time_steps -%}
                     {%- include get_track_properties.html -%}
-                    <td rowspan="{{ talk_nbr_steps }}" class="p-0 h-100">
+                    <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-0 h-100">
                       <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden">
 
                         {%- include show_live_icon.html class="mb-2" %}
@@ -157,11 +157,11 @@
                 {%- endfor %}
 
                 {%- unless active_talk == true %}
-                  <td></td>
+                  <td class="program-talk"></td>
                 {%- endunless -%}
 
                 {%- if forloop.last != true %}
-                  <td></td>
+                  <td class="program-space"></td>
                 {%- endif -%}
 
               {%- endfor %}
