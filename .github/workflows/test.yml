@@ -32,6 +32,56 @@ jobs:
           ruby-version: "3.3"
           bundler-cache: true
 
-      - name: Build website
+      - name: Create minimal test site
         run: |
+          mkdir -p test_site
+          cd test_site
+          cat > Gemfile << 'EOF'
+          source "https://rubygems.org"
+          gem "jekyll", "~> 4.0"
+          gem "jekyll-theme-conference", path: ".."
+          EOF
+          cat > _config.yml << 'EOF'
+          theme: jekyll-theme-conference
+          collections:
+            talks:
+              output: true
+            speakers:
+              output: true
+            rooms:
+              output: true
+          defaults:
+            - scope:
+                path: ""
+                type: talks
+              values:
+                layout: talk
+            - scope:
+                path: ""
+                type: speakers
+              values:
+                layout: speaker
+            - scope:
+                path: ""
+                type: rooms
+              values:
+                layout: room
+          EOF
+          mkdir -p _data
+          cp ../_data/program.yml _data/ 2>/dev/null || echo "program: []" > _data/program.yml
+          mkdir -p _talks _speakers _rooms
+          echo "---\n---" > _talks/test.md
+          echo "---\n---" > _speakers/test.md
+          echo "---\n---" > _rooms/test.md
+
+      - name: Install test site dependencies
+        run: |
+          cd test_site
+          bundle install
+
+      - name: Build test site
+        run: |
+          cd test_site
           bundle exec jekyll build -d _site/
+        env:
+          JEKYLL_ENV: production

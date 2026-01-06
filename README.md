@@ -128,21 +128,6 @@ The schedule defining when and in which room a talk takes place is stored as a [
 
 :warning: Please note that the generated website can be large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g., with [minify](https://github.com/tdewolff/minify)).
 
-### Jump Start
-
-To be up and running simply use the default content of this repository as an initial base for your new website. After having set up a new Jekyll website copy the following files and folders into the website's folder:
-
-- `_config.example.yml` -> `_config.yml`
-- `_data/`
-- `_rooms/`
-- `_speakers/`
-- `_talks/`
-- `index.md`
-- `location/`
-- `program/`
-- `speakers/`
-- `talks/`
-
 ### Automatic Import
 
 In this repository, you'll find the Python file `_tools/import_schedule.py`. This script allows you to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction)-compatible JSON file, such as those exported from [pretalx.com](https://pretalx.com/p/about/)."
@@ -239,7 +224,7 @@ _Note:_ While you might want to change the URLs, the name of the three collectio
 
 ### Language
 
-To adapt the language of the theme set the `lang` property. If you change it from its default, make sure you have copied the internationalization file from this repository to `_data/lang.yml`. The following languages are supported:
+To set the theme's language, use the `lang` property. The following languages are supported:
 
 - English: `en` (Default)
 - German: `de`
@@ -252,6 +237,8 @@ Example:
 conference:
   lang: en
 ```
+
+To add more languages, copy the internationalization file from this repository to `_data/lang.yml`, modify it, and store it in your own repository at the same path.
 
 ### Timezone
 
