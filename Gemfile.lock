@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     jekyll-theme-conference (3.7.2)
-      jekyll (~> 4.0)
+      jekyll (~> 4.3)
 
 GEM
   remote: https://rubygems.org/

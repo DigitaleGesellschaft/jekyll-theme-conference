@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.files         = begin
-    files = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_layouts|_includes|LICENSE|README)!i) }
+    files = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_layouts|_includes|_data|LICENSE|README)!i) }
 
     # Include pre-built files (listed in .gitignore)
     #   JavaScript modules and bundles
@@ -32,5 +32,5 @@ Gem::Specification.new do |spec|
     files
   end
 
-  spec.add_runtime_dependency "jekyll", "~> 4.0"
+  spec.add_runtime_dependency "jekyll", "~> 4.3"
 end

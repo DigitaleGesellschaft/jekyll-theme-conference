@@ -1,25 +1,12 @@
 days:
-- name: Monday
-  abbr: Mo
-  date: 2020-01-31
-  rooms:
-  - name: Room A
-    talks:
-      - name: Vim Impetus Placerat Cotidieque Ad
-        time_start: '12:00'
-        time_end: '12:45'
-      - name: Condimentum Vitae Sapien Pellentesque
-        time_start: '12:45'
-        time_end: '13:30'
-
-  - name: Room B
-    talks:
-      - name: Arcu Non Odio
-        time_start: '12:00'
-        time_end: '13:00'
-
-  - name: Room C
-    talks:
-      - name: Eu Nisl Nunc Mi Ipsum Faucibus
-        time_start: '13:30'
-        time_end: '14:30'
+# Add your conference days here
+# Example:
+# - name: Monday
+#   abbr: Mo
+#   date: 2020-01-31
+#   rooms:
+#   - name: Room A
+#     talks:
+#       - name: Talk Title
+#         time_start: '12:00'
+#         time_end: '12:45'
