@@ -46,6 +46,9 @@
 </head>
 
 <body class="pb-4">
+  <a href="#main" class="visually-hidden-focusable position-absolute top-0 start-0">
+    {{ site.data.lang[site.conference.lang].navigation.skip_to_content | default: "Skip to content" }}
+  </a>
   <header>
     <!-- navigation bar (web only): -->
     {%- include navbar.html -%}
@@ -60,6 +63,6 @@
     {%- endunless -%}
 
   </header>
-  <main class="container">
+  <main id="main" class="container" role="main" tabindex="-1">
 
     {%- include infobox.html -%}

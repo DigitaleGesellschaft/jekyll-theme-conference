@@ -1,4 +1,4 @@
-<div class="modal fade" id="stream-modal" tabindex="-1" aria-labelledby="stream-modal-title" aria-hidden="true">
+<div class="modal fade" id="stream-modal" tabindex="-1" aria-labelledby="stream-modal-title" aria-describedby="stream-modal-desc" aria-hidden="true" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
@@ -10,9 +10,9 @@
       </div>
 
       <div class="modal-body ratio ratio-16x9">
-        <iframe src="" allowfullscreen></iframe>
-        <div id="stream-placeholder" class="d-none justify-content-center align-items-center">
-          <div></div>
+        <iframe src="" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}"></iframe>
+        <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
+          <div id="stream-modal-desc"></div>
         </div>
       </div>
 

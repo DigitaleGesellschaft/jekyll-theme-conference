@@ -157,7 +157,11 @@ export function createLiveModule(config) {
 
     document.querySelectorAll('.live-time').forEach(el => {
       if (el.dataset.time) {
-        el.textContent = formatRelativeTime(parseInt(el.dataset.time, 10));
+        const newText = formatRelativeTime(parseInt(el.dataset.time, 10));
+        // Only update if content changed to avoid unnecessary screen reader announcements
+        if (el.textContent !== newText) {
+          el.textContent = newText;
+        }
       }
     });
 

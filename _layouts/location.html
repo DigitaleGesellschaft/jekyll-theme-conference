@@ -37,7 +37,7 @@
   {{ content }}
 
   {% if page.map %}
-    <div id="map" class="w-100 rounded shadow-sm"></div>
+    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ site.data.lang[site.conference.lang].location.map_label | default: 'Interactive conference location map' }}"></div>
   {% endif %}
 
 {% include footer.html %}

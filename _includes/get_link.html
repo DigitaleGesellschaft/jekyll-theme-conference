@@ -78,10 +78,10 @@
 
 {%- capture link_tag -%}
   {%- if link_disabled -%}
-    <a class="disabled link-underline link-underline-opacity-0 {{ link_styleclass | default: '' }}" href="#">
+    <a class="disabled link-underline link-underline-opacity-0 {{ link_styleclass | default: '' }}" href="#" aria-disabled="true">
 
   {%- elsif link_iframe -%}
-    <a class="link-underline link-underline-opacity-0 link-underline-opacity-100-hover {{ link_styleclass | default: '' }}" title="{{ link.name }}" data-bs-toggle="modal" data-bs-target="#link-modal" data-href="{{ link_href }}" href="#" {% if modal_title -%}
+    <a class="link-underline link-underline-opacity-0 link-underline-opacity-100-hover {{ link_styleclass | default: '' }}" title="{{ link.name }}" data-bs-toggle="modal" data-bs-target="#link-modal" data-href="{{ link_href }}" href="#" aria-haspopup="dialog" {% if modal_title -%}
       data-format='html' data-title="{{ modal_title | strip_newlines | escape }}" {%- if modal_subtitle %} data-subtitle="{{ modal_subtitle | strip_newlines | escape }}"{%- endif -%}
     {%- elsif link.name -%}
       data-format='text' data-title="{{ link.name }}"
