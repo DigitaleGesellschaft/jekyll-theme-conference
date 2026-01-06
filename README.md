@@ -4,7 +4,7 @@
 
 This is a responsive [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 5](http://getbootstrap.com) for conferences. It contains
 
-- multiday program / schedule,
+- multi-day program / schedule,
 - talk and speaker descriptions,
 - maps for directions,
 - real-time indications during the conference,
@@ -12,12 +12,12 @@ This is a responsive [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 5](
 - support for an all offline progressive web app, and
 - automatic dark mode support based on system preferences.
 
-All components such as talks, speakers or rooms are represented as collection of files. The schedule is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files. A script and workflows are available for easy import, e.g., of [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible schedules.
+All components such as talks, speakers or rooms are represented as a collection of files. The schedule is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files. A script and workflows are available for easy import, e.g., of [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible schedules.
 The design is easily customizable and is adapted for mobile uses and printing.
 
 The theme was created for the yearly Winterkongress conference of the [Digital Society Switzerland](https://digitale-gesellschaft.ch/). You can see this theme active here:
 
-- [Demo: Winterkongress](https://digitale-gesellschaft.ch/kongress/)
+- [Demo: Winterkongress](https://winterkongress.ch/)
 
 
 ## Table of Contents
@@ -26,7 +26,6 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Gem-based Method](#gem-based-method)
   - [Remote Theme Method](#remote-theme-method)
 - [Setup](#setup)
-  - [Jump Start](#jump-start)
   - [Automatic Import](#automatic-import)
   - [Automatic Build](#automatic-build)
 - [Configuration](#configuration)
@@ -37,7 +36,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Navigation Bar](#navigation-bar)
   - [Meta Data for Search Engines and Link Previews](#meta-data-for-search-engines-and-link-previews)
   - [Main Landing Page](#main-landing-page)
-  - [Information Boxes](#information-boxes--modals)
+  - [Information Boxes & Modals](#information-boxes--modals)
   - [Live Indications & Streaming](#live-indications--streaming)
   - [Progressive Web App (PWA)](#progressive-web-app-pwa)
   - [Talk Settings](#talk-settings)
@@ -49,24 +48,29 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Speakers](#speakers)
   - [Rooms](#rooms)
   - [Links](#links)
-- [Overview Pages](#overview-pages)
-  - [Location / Room Overview](#location--room-overview)
-  - [Live Stream Overview](#live-stream-overview)
+  - [Overview Pages](#overview-pages)
   - [Additional Pages](#additional-pages)
 - [Design](#design)
+  - [Pre-compiled Bundle (Default)](#pre-compiled-bundle-default)
+  - [Split Bundle (Custom Bootstrap CSS)](#split-bundle-custom-bootstrap-css)
 - [JavaScript](#javascript)
 - [Development](#development)
   - [Jekyll Theme Development](#jekyll-theme-development)
-  - [JavaScript Development](#javascript-development)
+  - [JavaScript & CSS Development](#javascript--css-development)
 - [License](#license)
+
 
 ## Installation
 
-There are three ways to install: As a [Gem-based theme](https://jekyllrb.com/docs/themes/#understanding-gem-based-themes), as a [remote theme](https://github.blog/2017-11-29-use-any-theme-with-github-pages/) (GitHub Pages compatible), or by cloning/forking this repository and reference to it directly.
+There are three ways to install this theme:
+
+1. **Gem-based method**: Install as a [Gem-based theme](https://jekyllrb.com/docs/themes/#understanding-gem-based-themes) (recommended for most users)
+2. **Remote theme method**: Use as a [remote theme](https://github.blog/2017-11-29-use-any-theme-with-github-pages/) (ideal for GitHub Pages)
+3. **Local development**: Clone or fork this repository for local development and customization (see [Development](#development) section)
 
 ### Gem-based Method
 
-With Gem-based themes, directories such as the `assets`, `_layouts`, and `_includes` are stored in the theme's gem, hidden from your immediate view. Yet all the necessary directories will be read and processed during Jekyll's build process.
+With Gem-based themes, directories such as `assets`, `_layouts`, and `_includes` are stored in the theme's gem, hidden from your immediate view. All necessary directories will be read and processed during Jekyll's build process.
 
 This allows for easier installation and updating as you don't have to manage any of the theme files. To install:
 
@@ -88,17 +92,17 @@ This allows for easier installation and updating as you don't have to manage any
    theme: jekyll-theme-conference
    ```
 
-4. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
+4. Continue with the [_Setup_](#setup) section below to customize the theme and add content for your conference.
 
-To update the theme run `bundle update`.
+To update the theme, run `bundle update jekyll-theme-conference`.
 
 ### Remote Theme Method
 
-Remote themes are similar to Gem-based themes, but do not require `Gemfile` changes or whitelisting making them ideal for sites hosted with GitHub Pages.
+Remote themes are similar to Gem-based themes but are ideal for sites hosted with GitHub Pages, as they don't require theme whitelisting.
 
 To install:
 
-1. Create/replace the contents of your `Gemfile` with the following:
+1. Create or replace the contents of your `Gemfile` with the following:
 
    ```ruby
    source "https://rubygems.org"
@@ -107,7 +111,12 @@ To install:
    gem "jekyll-include-cache", group: :jekyll_plugins
    ```
 
-2. Add `jekyll-include-cache` to the `plugins` array of your `_config.yml`.
+2. Add `jekyll-include-cache` to the `plugins` array in your `_config.yml`:
+
+   ```yaml
+   plugins:
+     - jekyll-include-cache
+   ```
 
 3. Fetch and update bundled gems by running the following [Bundler](http://bundler.io/) command:
 
@@ -115,21 +124,29 @@ To install:
    bundle
    ```
 
-4. Add `remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@v3.6.3"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
+4. Add `remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@3.7.2"` to your `_config.yml` file. Remove any other `theme:` or `remote_theme:` entry.
 
-5. Continue with the _Setup_ section further below to customize the theme and add some content for your conference
+   ```yaml
+   remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@3.7.2"
+   ```
+
+5. Continue with the [_Setup_](#setup) section below to customize the theme and add content for your conference.
+
+To update the theme, change the version tag in the `remote_theme` value (e.g., `@3.7.2` to `@3.8.0`).
+
 
 ## Setup
 
-The different talks, speakers and rooms are stored as a collection of files. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) used to store additional information beside a description. Their exact use and meaning is described further below in the section _Content_. Additional configuration options can be found in the section _Configuration_.
+The different talks, speakers and rooms are stored as a collection of files. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) used to store additional information beside a description. Their exact use and meaning is described further below in the section [_Content_](#content). Additional configuration options can be found in the section [_Configuration_](#configuration).
 
-The schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/) under `_data/program.yml`. For further details about it see below in the section _Content_.
+The schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/) under `_data/program.yml`. For further details about it see below in the section [_Content_](#content).
 
-:warning: Please note that the generated website can be large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g., with [minify](https://github.com/tdewolff/minify)).
+> [!TIP]
+> Please note that the generated website can be large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g., with [minify](https://github.com/tdewolff/minify)).
 
 ### Automatic Import
 
-In this repository, you'll find the Python file `_tools/import_schedule.py`. This script allows you to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction)-compatible JSON file, such as those exported from [pretalx.com](https://pretalx.com/p/about/)."
+In this repository, you'll find the Python file `_tools/import_schedule.py`. This script allows you to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction)-compatible JSON file, such as those exported from [pretalx.com](https://pretalx.com/p/about/).
 
 1. Copy the files `_tools/import_schedule.py` and `_tools/requirements.txt` from this repository
 
@@ -156,7 +173,7 @@ In this repository, you'll find the Python file `_tools/import_schedule.py`. Thi
 
 If you prefer not to install the full Ruby/Jekyll toolchain locally, you can leverage [GitHub Actions](https://github.com/features/actions), GitHub's continuous integration platform. This repository includes several example GitHub Actions configuration files in the `_tools/` folder:
 
-- `build.yml`: This workflow automatically builds and optimizes the website whenever a new tag starting with `v` (e.g., `v2020.01.01`) is added. It then attaches the generated website as an archive to a release for easy download. Note that `purgecss.config.js` must also be copied to the project's root for this to work.
+- `build.yml`: This workflow automatically builds and optimizes the website whenever a new tag starting with `v` (e.g., `v2020.01.01`) is added. It then attaches the generated website as an archive to a release for easy download.
 - `test.yml`: This workflow automatically attempts to build the website upon a new pull request, making it suitable for use as a status check before merging.
 - `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (refer to the 'Automatic Import' section for details). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports.
 
@@ -164,7 +181,8 @@ To get started, simply copy the desired workflow file to your repository and ada
 
 - `_tools/build.yml` -> `.github/workflows/build.yml`
 
-Please note that the `Gemfile.lock` of your project must be adapted to include specific versions required by Github's workflow server, i.e., run `bundle lock --add-platform x86_64-linux` to add support for them.
+> [!IMPORTANT]
+> Please note that the `Gemfile.lock` of your project must be adapted to include specific versions required by GitHub's workflow server, i.e., run `bundle lock --add-platform x86_64-linux` to add support for them.
 
 
 ## Configuration
@@ -173,7 +191,7 @@ All configurations and customization for this theme are stored under the `confer
 
 ### Theme Verification
 
-Upon building, the theme runs some basic verification to check if all necessary files and configurations are in place. If it encounters an error it shows so in adding an information bar on all your sites. You can disable this, e.g., in a production environment, by setting `show_errors` to `false` (default: `true`).
+Upon building, the theme runs some basic verification to check if all necessary files and configurations are in place. If it encounters an error it shows this by adding an information bar on all your sites. You can disable this, e.g., in a production environment, by setting `show_errors` to `false` (default: `true`).
 
 Example:
 
@@ -182,11 +200,12 @@ conference:
   show_errors: false
 ```
 
-:warning: Please be sure to disable this parameter for your production system.
+> [!WARNING]
+> Please be sure to disable this parameter for your production system.
 
 ### Collection URLs
 
-The three required collections containing the files for the talks, speakers and rooms have to be specified in the `_config.yml` file. The first block declares them and sets the URL under which they will later be accessed. The second block defines the default layout for each of the collection.
+The three required collections containing the files for the talks, speakers and rooms have to be specified in the `_config.yml` file. The first block declares them and sets the URL under which they will later be accessed. The second block defines the default layout for each collection.
 
 ```yaml
 collections:
@@ -218,9 +237,10 @@ defaults:
       layout: room
 ```
 
-To change the URL of the collection, simply edit the `permalink` property and replace the `:collection` tag (which translates to `talks`, `speakers` and `rooms`) with your desired value. Please note that the talk and speaker overview pages should residue in a folder of the same name.
+To change the URL of the collection, simply edit the `permalink` property and replace the `:collection` tag (which translates to `talks`, `speakers` and `rooms`) with your desired value. Please note that the talk and speaker overview pages should reside in a folder of the same name.
 
-_Note:_ While you might want to change the URLs, the name of the three collections (`talks`, `speakers` and `rooms`) is fixed and cannot be changed.
+> [!NOTE]
+> Please note that while you might want to change the URLs, the name of the three collections (`talks`, `speakers` and `rooms`) is fixed and cannot be changed.
 
 ### Language
 
@@ -253,7 +273,7 @@ conference:
 
 ### Navigation Bar
 
-The navigation bar is located at the top and visible on every site. On the right, it shows the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the _Content_ > _Links_ section below for the available properties per link. Please note that icons are ignored for the navigation bar.
+The navigation bar is located at the top and visible on every site. On the left, it shows the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the [_Content_](#content) > [_Links_](#links) section below for the available properties per link. Please note that icons are ignored for the navigation bar.
 
 Example:
 
@@ -292,9 +312,9 @@ conference:
       url: 'https://github.com'
 ```
 
-The navigation bar automatically collapses when the available space is too small (e.g. on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/4.6/layout/overview/#responsive-breakpoints). The default breakpoint is `md` (collapsing if the screen width is smaller than 992px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
+The navigation bar automatically collapses when the available space is too small (e.g., on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/5.3/layout/breakpoints/). The default breakpoint is `md` (collapsing if the screen width is smaller than 992px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
 
-When installed as a progressive web application (see the _Progressive Web App (PWA)_ section below), the navigation bar moves to the bottom. In PWA mode, it displays link icons and ignores links with `live: true`. Please note that the navigation bar has a limited width and no vertical scrolling. To hide an entry in this mode, set `pwa_hide: true` on its link.
+When installed as a progressive web application (see the [_Progressive Web App (PWA)_](#progressive-web-app-pwa) section below), the navigation bar moves to the bottom. In PWA mode, it displays link icons and ignores links with `live: true`. Please note that the navigation bar has a limited width and no vertical scrolling. To hide an entry in this mode, set `pwa_hide: true` on its link.
 
 ```yaml
 conference:
@@ -310,7 +330,7 @@ conference:
 
 ### Meta Data for Search Engines and Link Previews
 
-The theme automatically includes the necessary `<meta>` tags to ease link previewing when sharing links based on the [Open Graph protocol](https://ogp.me/) (used by all major social networks and messenger apps) and [Twitter Cards](https://developer.x.com/en/docs/x-for-websites/cards/overview/abouts-cards) (used by X). These tags control how a link is shown when shared via different platform and apps. The theme also includes [Schema.org](https://schema.org/) JSON-LD structured data to help search engines better understand and display the conference and its talks, potentially showing event cards, speaker information, and enhanced search listings.
+The theme automatically includes the necessary `<meta>` tags to ease link previewing when sharing links based on the [Open Graph protocol](https://ogp.me/) (used by all major social networks and messenger apps) and [Twitter Cards](https://developer.x.com/en/docs/x-for-websites/cards/overview/abouts-cards) (used by X). These tags control how a link is shown when shared via different platforms and apps. The theme also includes [Schema.org](https://schema.org/) JSON-LD structured data to help search engines better understand and display the conference and its talks, potentially showing event cards, speaker information, and enhanced search listings.
 
 Both configurations are organized under the `meta` property.
 
@@ -345,7 +365,8 @@ Support for [Schema.org](https://schema.org/) JSON-LD structured data is organiz
 - `Place` (location and room pages)
 - `Person` (speaker pages)
 
-Please note that any talk, room, or speaker set to `hide: true` will not be included in the generated schemas or their relations.
+> [!NOTE]
+> Please note that any talk, room, or speaker set to `hide: true` will not be included in the generated schemas or their relations.
 
 Optionally, the following properties can be added under the `schema_org` property to provide further information about the conference:
 - Event Status (`event_status`):
@@ -373,7 +394,7 @@ Optionally, the following properties can be added under the `schema_org` propert
     - `online_only`
     - `in_store_only`
   - `price`
-  - `currency`: Currency code (ISO 4217, e.g., `"USD"`, `"EUR"`, `"CHF"`)
+  - `priceCurrency`: Currency code (ISO 4217, e.g., `"USD"`, `"EUR"`, `"CHF"`)
 - Image file path (`img`) relative to the `/assets/images/`
 
 ```yaml
@@ -397,14 +418,14 @@ conference:
 
 ### Main Landing Page
 
-The main landing page is shown at the root of the website to greet new visitors. To show it you need to create a `index.md` file in the root of your website's folder and specify its layout as `layout: main`.
+The main landing page is shown at the root of the website to greet new visitors. To show it you need to create a `index.md` file in the root of your website's folder and specify its layout as `layout: home`.
 
 The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `header` property of the main page's FrontMatter containing
 
 - a `img` property specifying the path to the image file relative to the `/assets/images/` folder.
 - optionally a `img_dark` property for a dark mode version of the logo, which will be automatically displayed when the user's system is in dark mode. If not specified, the regular `img` will be used in both light and dark modes.
 
-The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of link buttons. See the _Content_ > _Links_ section below for the available properties per link.
+The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of link buttons. See the [_Content_](#content) > [_Links_](#links) section below for the available properties per link.
 
 ```yaml
 layout: home
@@ -430,7 +451,7 @@ One or multiple information banners can be shown at the top of the website just 
   - `primary` (your website's main color, normally blue)
   - `secondary` (your website's secondary color, normally grey)
   - `success` (green)
-  - `alert` (red)
+  - `danger` (red)
   - `warning` (yellow)
   - `info` (blue)
   - `light` (white)
@@ -481,11 +502,11 @@ conference:
 
 ### Live Indications & Streaming
 
-To help users navigating the program during the conference, a _Live_ indication can be shown next to talks, which are currently taking place. A small JavaScript functions keeps the site automatically up-to-date (without the need to refresh) showing the indication as soon as the talk has started and hiding it once it is over (according to the timetable indicated in the `_data/program.yml` file).
+To help users navigate the program during the conference, a _Live_ indication can be shown next to talks that are currently taking place. A small JavaScript function keeps the site automatically up-to-date (without the need to refresh) showing the indication as soon as the talk has started and hiding it once it is over (according to the timetable indicated in the `_data/program.yml` file).
 
-This can be further extended if some talks have an associated live stream: Upon clicking one of the live indications a modal will open containing the corresponding embedded live stream. The URL to the live stream has to be set via `live` property in each room (see the _Content_ > _Room_ section below). Instead of opening the modal an external link can also be used.
+This can be further extended if some talks have an associated live stream: When clicking one of the live indications, a modal will open containing the corresponding embedded live stream. The URL to the live stream has to be set via `live` property in each room (see the [_Content_](#content) > [_Rooms_](#rooms) section below). Instead of opening the modal an external link can also be used.
 
-To activate these functionalities, each day in the `program.yml` file must contain a `date` property (see section _Content_ > _Schedule / Program_ below) and the `live` property has to be set in the configuration file containing
+To activate these functionalities, each day in the `program.yml` file must contain a `date` property (see section [_Content_](#content) > [Schedule / Program](#schedule--program) below) and the `live` property has to be set in the configuration file containing
 
 - how long a pause between two consecutive talks has to be for the live indication to pause (`stop`),
 - optionally, under the `streaming` property:
@@ -504,6 +525,7 @@ conference:
       pause: 60 # in minutes
       prepend: 5 # in minutes
       extend: 5 # in minutes
+      external: "https://example.com/stream" # optional: external link instead of modal
 ```
 
 ### Progressive Web App (PWA)
@@ -562,31 +584,32 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
    These icons will be used when users install the app on their devices. You can generate these from a single high-resolution logo using a tool like:
    - [PWA Asset Generator](https://github.com/onderceylan/pwa-asset-generator)
 
-Please note that when installed as a PWA, the navigation bar moves to the bottom and includes icons. See the _Navigation Bar_ section above for more information.
+> [!NOTE]
+> Please note that when installed as a PWA, the navigation bar moves to the bottom and includes icons. See the [_Navigation Bar_](#navigation-bar) section above for more information.
 
 ### Talk Settings
 
-Talks can optionally be organized into tracks, where each track groups talks under a common subject. Tracks are visually distinct across the website, especially in the program, by a unique color. Additionally, each talk can have one or more associated tags. Both tracks and tags are linked via the talk's FrontMatter (refer to the _Individual Pages: Talks_ section for more details).
+Talks can optionally be organized into tracks, where each track groups talks under a common subject. Tracks are visually distinct across the website, especially in the program, by a unique color. Additionally, each talk can have one or more associated tags. Both tracks and tags are linked via the talk's Front Matter (refer to the [_Content_](#content) > [_Talks_](#talks) >  section below for more details).
 
 To define available tracks, add the `tracks` property under the `talks` property in the configuration file. This property is a list of tracks, with each track requiring:
 
-- its `name`, which must match the track specified in the talk's FrontMatter.
+- its `name`, which must match the track specified in the talk's Front Matter.
 - a color (`color`) following the Bootstrap color scheme (see below), possible values include:
   - `primary` (your website's main color, normally blue)
   - `secondary` (your website's secondary color, normally grey)
   - `success` (green)
-  - `alert` (red)
+  - `danger` (red)
   - `warning` (yellow)
   - `info` (blue)
   - `light` (white)
   - `dark` (dark grey)
 
-Instead of displaying the tag name, you can replace it with an icon. To define tags with icons, add the `tags` property under the `talks property in your configuration file. Each listed tag requires:
+Instead of displaying the tag name, you can replace it with an icon. To define tags with icons, add the `tags` property under the `talks` property in your configuration file. Each listed tag requires:
 
-- its `name`, which must match the tag specified in the talk's FrontMatter.
+- its `name`, which must match the tag specified in the talk's Front Matter.
 - optionally, an icon to show instead of the tag's name (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show).
 
-Talks can also have associated links displayed at the end of their content. If these links have an icon (see _Content_ > _Talks_ below), they will also appear on the talk overview page (e.g., to indicate which talks have video recordings).
+Talks can also have associated links displayed at the end of their content. If these links have an icon (see [_Content_](#content) > [_Talks_](#talks) below), they will also appear on the talk overview page (e.g., to indicate which talks have video recordings).
 
 Example:
 
@@ -654,10 +677,10 @@ The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. Th
 
 1. The conference JavaScript bundle (`conference.bundle.js`) is automatically loaded and provides all necessary libraries
 2. Await the initialization of the theme's object using `window.conference.awaitReady()`
-3. Fetch the map object and verify it is set (while the JavaScript code is executed on each page, the map object will only exist on the location site)
+3. Fetch the map object and verify it is set (while the JavaScript code is executed on each page, the map object will only exist on the location page)
 4. Modify the map.
 
-Following an example for `assets/js/main.js` is given adding a simple marker to the map:
+The following example for `assets/js/main.js` adds a simple marker to the map:
 
 ```javascript
 window.conference.awaitReady().then(async () => {
@@ -700,26 +723,26 @@ The schedule defining when and in which room a talk takes place is stored as a [
 
 ### Schedule / Program
 
-The schedule of the conference linking the talks with the rooms and indicating when each talk talks place and how long it goes, is set in the `_data/program.yml` file. It contains a list of days, whereby each day contains a list of rooms, whereby each room contains a list of talks.
+The schedule of the conference linking the talks with the rooms and indicating when each talk takes place and how long it lasts, is set in the `_data/program.yml` file. It contains a list of days, whereby each day contains a list of rooms, whereby each room contains a list of talks.
 
 Each day consists of
 
 - a list of rooms (`rooms`) in which talks are taking place on that day
 - optionally, the day's `name`, e.g., the weekday
 - optionally, the short form of the day's name (`abbr`), and
-- optionally and only if no live indications are active, a `date` in the format `YYYY-MM-DD`.
+- a `date` in the format `YYYY-MM-DD` (required if live indications are enabled, optional otherwise)
 
 Each room consists of
 
-- the room's `name` (must correspond to one of the room identifier), and
+- the room's `name` (must correspond to one of the room identifiers), and
 - a list of talks (`talks`) which also can be empty `[]`.
 
 The order of the rooms in the list defines the order of the rooms as shown in the schedule on the program page. For the live-streaming or the room overview the order of the rooms is alphabetical but can be adapted via the [main configuration file](https://jekyllrb.com/docs/collections/#sort-by-front-matter-key).
 
 Each talk consists of
 
-- a `name` (must correspond to one of the talk identifier),
-- a starting time `time_start` given as `H:M` ([`strftime`](http://www.strfti.me) formated) or `H:M +∆` whereby ∆ is the day offset in relation to the date given for the given day, and
+- a `name` (must correspond to one of the talk identifiers),
+- a starting time `time_start` given as `H:M` ([`strftime`](http://www.strfti.me) formatted) or `H:M +∆` whereby ∆ is the day offset in relation to the date given for the given day, and
 - an end time `time_end`.
 
 The list of talks should (manually) be ordered by time, i.e., the first occurring talk should be listed first.
@@ -756,7 +779,7 @@ Each talk is represented by a file in the `_talks/` directory. It must begin wit
 - one or more existing `speakers` name(s),
 - optionally, a `track` which should match the tracks defined in the site's configuration,
 - optionally, a list of `tags`
-- optionally, a list of `links` (see the _Links_ subsection below for the available properties):
+- optionally, a list of `links` (see the [_Links_](#links) subsection below for the available properties):
   - Links with an `icon` are treated separately and are also included on the talk overview page.
   - Links with `live: true` are only shown below the live stream for the given talk in form of buttons.
 - optionally, `hide: true` if the talk's page should not be linked to.
@@ -781,11 +804,11 @@ Each speaker is represented by a file in the `_speakers/` directory. It must beg
 - the speaker's `name` (used as identifier), as well as its
 - `first_name`,
 - `last_name`,
-- optionally, a list of `links` (see the _Links_ subsection below for the available properties):
+- optionally, a list of `links` (see the [_Links_](#links) subsection below for the available properties):
   - Links with an `icon` are treated separately and are also included on the speaker overview page.
 - optionally, `hide: true` if the speaker's page should not be linked to.
 
-If the speaker's name consists only out of one word, populate the `last_name` property and leave the `first_name` property empty. The last name is generally used for sorting the speakers.
+If the speaker's name consists of only one word, populate the `last_name` property and leave the `first_name` property empty. The last name is generally used for sorting the speakers.
 
 Example:
 
@@ -806,7 +829,7 @@ Each room is represented by a file in the `_rooms/` directory. It must begin wit
 
 - the room's `name`
 - optionally, `hide: true` if the room's page should not be linked to, and
-- optionally under the `live` property, a URL pointing to a live stream for the given room during the conference (see the section _Live Indications & Streaming_ above), either:
+- optionally under the `live` property, a URL pointing to a live stream for the given room during the conference (see the section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above), either:
   - as an `absolute_url`, or
   - a `relative_url`.
 
@@ -823,7 +846,7 @@ live:
 
 ### Links
 
-Links are used at different location throughout the theme: They can either be used in the configuration file (for the landing page or the navigation bar), or in talks and for speakers. A link can thereby have the following properties:
+Links are used at different locations throughout the theme: They can either be used in the configuration file (for the landing page or the navigation bar), or in talks and for speakers. A link can thereby have the following properties:
 
 - the text to show (`name`),
 - the link address:
@@ -832,7 +855,7 @@ Links are used at different location throughout the theme: They can either be us
   - pointing to a _file_ uploaded to the `/documents` folder: `file:`, or
   - pointing to an external _video_: `video:`.
 - optionally, if it is disabled (`disabled: true`),
-- optionally, if it should open in a iframe embedded in a popup-like modal (`iframe: true`), and
+- optionally, if it should open in an iframe embedded in a popup-like modal (`iframe: true`), and
 - optionally, an icon to show in front of the title (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show).
 
 Using the `file:` indicator, the
@@ -846,7 +869,7 @@ Using the `file:` indicator, the
 Using the `video:` indicator, the
 
 - link address is set to an absolute address as given by the value.
-- the link's `iframe:` attribute is set to `true` top embed the video in a popup-like modal having a default iframe ratio of 24:11.
+- the link's `iframe:` attribute is set to `true` to embed the video in a popup-like modal having a default iframe ratio of 24:11.
 - the link's `icon:` is set to `video`.
 
 Additionally, a _talk_ link can also have the following property:
@@ -857,8 +880,8 @@ Additionally, a _navigation bar_ or _main landing page_ link can also have the f
 
 - `live: true` making the link only visible during the conference and adds a live indication.
   - The link is only shown if `name` is set. If `name` is an empty string, "Live Stream" is shown instead.
-  - If `name_inactive` is set, its value is used to be shown as a placeholder text, while the conference is **not** live. If `name_inactive` is an empty string, "Live Stream" is shown instead.
-  - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section _Live Indications_ above).
+  - If `name_inactive` is set, its value is used as a placeholder text while the conference is **not** live. If `name_inactive` is an empty string, "Live Stream" is shown instead.
+  - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above).
 - `menu` containing another list of links. This creates a dropdown menu of multiple sublinks, while the URL of the parent link is ignored. The sublinks have the same properties as regular links.
 
 #### Import link files
@@ -886,35 +909,25 @@ There exists a Python file in this repository, `_tools/import_resources.py`, whi
    python _tools/import_resources.py --help
    ```
 
-## Overview Pages
+### Overview Pages
 
-For each of the three collections there exist a dedicated layout giving an overview among all items of the collection. Furthermore, there exists a layout to show the program as a time schedule. Simply create an empty page and associate the corresponding layout with it:
+For each of the three collections, there exists a dedicated layout giving an overview of all items in the collection. Furthermore, there exists a layout to show the program as a time schedule. Simply create an empty page and associate the corresponding layout with it:
 
 - `talks/index.md` with `layout: talk-overview`
 - `speakers/index.md` with `layout: speaker-overview`
 - `location/index.md` with `layout: location`
 - `program/index.md` with `layout: program`
 
-They can be empty but should contain the `layout` property in the FrontMatter header.
+They can be empty but should contain the `layout` property in the Front Matter header.
 
 If you choose a different location for the overview pages you must:
 
-- if of the `talks` and `speaker` overview file, adapt the URL of the two collections as described further above in the section _Collection URLs_, and
-- if of the `location` and `program` file, adapt the corresponding `url` parameter as described further above in the sections _Location Settings_ and _Program Settings_.
-
-### Location / Room Overview
-
-The `location` layout can include a map container (if not disabled, see the _Location Settings_ section above) which can be customized (see the _Map_ section above).
-
-### Live Stream Overview
-
-The `stream-overview` layout contains all active streams on a single page (see the section _Live Indications & Streaming_ above).
+- for the `talks` and `speakers` overview files, adapt the URL of the two collections as described further above in the section [_Configuration_](#configuration) > [_Collection URLs_](#collection-urls), and
+- for the `location` and `program` files, adapt the corresponding `url` parameter as described further above in the sections [_Configuration_](#configuration) > [_Location Settings_](#location-settings) and [_Configuration_](#configuration) > [_Program Settings_](#program-settings).
 
 ### Additional Pages
 
-Additional static pages can easily be added as files and linked to via navigation bar or main landing page (see above on how to).
-
-Each of these pages can include a map at its end (e.g., to point to your venue) by adding the `map: true` setting to its Front Matter. See the _Map_ section above for more information.
+Additional static pages can easily be added as files and linked to via navigation bar or main landing page.
 
 
 ## Design
@@ -1024,7 +1037,7 @@ While offering the most flexibility, this setup requires several steps:
 
 The theme includes a pre-built JavaScript bundle (`assets/js/conference.bundle.js`). This bundle is automatically included in the theme gem, pre-compiled, and minified, requiring no build tools for end users. Please do not modify this file directly.
 
-To add custom JavaScript, edit the `assets/js/main.js file in your project. This file loads after the conference bundle, giving you full access to all theme functionality.
+To add custom JavaScript, edit the `assets/js/main.js` file in your project. This file loads after the conference bundle, giving you full access to all theme functionality.
 
 **Available Global Objects:**
 
@@ -1098,7 +1111,7 @@ _css/
 └── theme.scss                # Conference-specific styles
 ```
 
-The CSS source imports libraries from NPM:
+The CSS source imports libraries from npm:
 - `bootstrap` - Bootstrap framework
 - `bootstrap-icons` - Bootstrap Icons
 - `leaflet` and plugins - Map styles
@@ -1116,13 +1129,16 @@ To modify the theme's source code and rebuild:
    ```
    This compiles:
    - `_js/` → `assets/js/conference.bundle.js`
-   - `_css/` → `assets/css/conference.bundle.css`
+   - `_css/` → `assets/css/conference.bundle.css` and `assets/css/conference-only.bundle.css`
+   This copies:
+   - `_css/` + any SASS file from the different framework libraries → `_sass`
    - Webfonts → `assets/webfonts/`
 
 3. Test your changes locally:
    ```bash
    bundle exec jekyll serve
    ```
+
 
 ## License
 
