@@ -38,7 +38,7 @@
       {{ infobar.text | markdownify | replace: "<a href=", "<a class='alert-link' href=" }}
 
       {%- if dismissal_days > 0 -%}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
       {%- endif -%}
       </div>
     {%- endif -%}
@@ -64,6 +64,9 @@
       <div
         class="modal fade infomodal"
         tabindex="-1"
+        role="dialog"
+        aria-labelledby="infomodal-title-{{ forloop.index }}"
+        aria-describedby="infomodal-body-{{ forloop.index }}"
         {% if dismissal_days == 0 %}
           data-bs-backdrop="static"
           data-bs-keyboard="false"
@@ -78,17 +81,17 @@
             {%- if infomodal.title or dismissal_days > 0 -%}
               <div class="modal-header">
                 {%- if infomodal.title -%}
-                  <h5 class="modal-title">
+                  <h5 class="modal-title" id="infomodal-title-{{ forloop.index }}">
                     {{ infomodal.title }}
                   </h5>
                 {%- endif -%}
                 {%- if dismissal_days > 0 -%}
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
                 {%- endif -%}
               </div>
             {%- endif -%}
 
-            <div class="modal-body">
+            <div class="modal-body" id="infomodal-body-{{ forloop.index }}">
 
               {{ infomodal.text | markdownify }}
 

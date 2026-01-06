@@ -11,6 +11,10 @@ en:
   overview: Overview
   more_information: More Information
   close: Close
+  navigation:
+    main: Main navigation
+    toggle: Toggle navigation menu
+    skip_to_content: Skip to content
   live:
     live: Live
     stream: Live Stream
@@ -33,14 +37,19 @@ en:
       soon: soon
       now: now
   location:
-    rooms: Rooms
     name: Location
+    navigation: Room navigation
+    map_label: Interactive conference location map
+    rooms: Rooms
     talks: Talks in this room
     focus_conf: Center map on conference location
     focus_me: Show my current location
   program:
     title: Program
     legend: Caption
+    schedule: Conference schedule
+    days: Days
+    time: Time
   speaker:
     overview: Speakers
     title: Speaker
@@ -60,6 +69,10 @@ de:
   overview: Übersicht
   more_information: Weitere Informationen
   close: Schließen
+  navigation:
+    main: Hauptnavigation
+    toggle: Navigationsmenü umschalten
+    skip_to_content: Zum Inhalt springen
   live:
     live: Live
     stream: Live Stream
@@ -82,14 +95,19 @@ de:
       soon: demnächst
       now: jetzt
   location:
-    rooms: Räume
     name: Ort
+    navigation: Raumnavigation
+    map_label: Interaktive Karte des Konferenzortes
+    rooms: Räume
     talks: Vorträge in diesem Raum
     focus_conf: Karte auf den Konferenz-Ort zentrieren
     focus_me: Meinen aktuellen Standort anzeigen
   program:
     title: Programm
     legend: Legende
+    schedule: Konferenzprogramm
+    days: Konferenztage
+    time: Zeit
   speaker:
     overview: Redner:innen
     title: Redner:in
@@ -109,6 +127,10 @@ fr:
   overview: Aperçu
   more_information: Plus d'informations
   close: Fermer
+  navigation:
+    main: Navigation principale
+    toggle: Basculer le menu de navigation
+    skip_to_content: Aller au contenu
   live:
     live: En direct
     stream: Diffusion en direct
@@ -131,14 +153,19 @@ fr:
       soon: à venir
       now: maintenant
   location:
-    rooms: Salles
     name: Lieu
+    navigation: Navigation des salles
+    map_label: Carte interactive du lieu de la conférence
+    rooms: Salles
     talks: Présentations dans cette salle
     focus_conf: Centrer la carte sur le lieu de la conférence
     focus_me: Afficher ma localisation actuelle
   program:
     title: Programme
     legend: Légende
+    schedule: Programme de la conférence
+    days: Jours de la conférence
+    time: Heure
   speaker:
     overview: Intervenants
     title: Intervenant
@@ -158,6 +185,10 @@ pt:
   overview: Visão geral
   more_information: Mais informações
   close: Fechar
+  navigation:
+    main: Navegação principal
+    toggle: Alternar menu de navegação
+    skip_to_content: Ir para o conteúdo
   live:
     live: Ao vivo
     stream: Transmissão ao vivo
@@ -180,14 +211,19 @@ pt:
       soon: em breve
       now: agora
   location:
-    rooms: Salas
     name: Local
+    navigation: Navegação das salas
+    map_label: Mapa interativo do local da conferência
+    rooms: Salas
     talks: Apresentações nesta sala
     focus_conf: Centralizar o mapa para o local da conferência
     focus_me: Mostrar minha localização atual
   program:
     title: Programa
     legend: Legenda
+    schedule: Programação da conferência
+    days: Dias da conferência
+    time: Hora
   speaker:
     overview: Palestrantes
     title: Palestrante

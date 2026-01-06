@@ -13,14 +13,16 @@
   {{ content }}
 
   {%- if nbr_days > 1 %}
-    <ul class="nav nav-pills justify-content-center mb-3" id="program-tabs" role="tablist">
-      {%- for d in site.data.program.days -%}
-        {%- include get_day_hash.html %}
-        <li class="nav-item" role="presentation">
-          <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
-        </li>
-      {%- endfor %}
-    </ul>
+    <nav aria-label="{{ site.data.lang[site.conference.lang].program.days | default: 'Conference days' }}">
+      <ul class="nav nav-pills justify-content-center mb-3" id="program-tabs" role="tablist">
+        {%- for d in site.data.program.days -%}
+          {%- include get_day_hash.html %}
+          <li class="nav-item" role="presentation">
+            <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
+          </li>
+        {%- endfor %}
+      </ul>
+    </nav>
     <div class="tab-content" id="day-content">
   {%- endif %}
 
@@ -31,15 +33,15 @@
     {%- endif %}
 
     <div class="w-100">
-      <table class="table program-table w-auto mx-auto align-top">
+      <table class="table program-table w-auto mx-auto align-top" role="grid" aria-label="{{ site.data.lang[site.conference.lang].program.schedule | default: 'Conference schedule' }}{% if nbr_days > 1 %} - {{ day_name }}{% endif %}">
         <thead>
           <tr>
-            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center" aria-label="{{ site.data.lang[site.conference.lang].program.time | default: 'Time' }}">#</th>
             <th scope="col"></th>
             {%- assign nbr_rooms = d.rooms | size -%}
             {%- for r in d.rooms -%}
               {%- assign room = site.rooms | where: 'name', r.name | first %}
-              <th scope="col" class="text-center">
+              <th scope="col" class="text-center" id="room-{{ day_hash }}-{{ forloop.index }}">
                 {%- if room.hide or location_hide -%}
                   {{- room.name -}}
                 {%- else -%}
@@ -49,7 +51,7 @@
                 {%- endif -%}
               </th>
               {%- unless forloop.last %}
-                <th scope="col" class="col"></th>
+                <th scope="col" class="col" aria-hidden="true"></th>
               {%- endunless -%}
             {%- endfor %}
           </tr>

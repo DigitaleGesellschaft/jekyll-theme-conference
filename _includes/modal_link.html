@@ -1,12 +1,12 @@
-<div class="modal fade" id="link-modal" tabindex="-1" aria-labelledby="link-modal-label" aria-hidden="true">
+<div class="modal fade" id="link-modal" tabindex="-1" aria-labelledby="link-modal-label" aria-describedby="link-modal-description" aria-hidden="true" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title" id="link-modal-label">
           <h3 class="mb-2 fw-light"></h3>
-          <h5 class="mb-0 fw-light"></h5>
+          <h5 class="mb-0 fw-light" id="link-modal-description"></h5>
         </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
       </div>
       <div class="modal-body ratio ratio-16x9">
         <iframe src="" allowfullscreen></iframe>

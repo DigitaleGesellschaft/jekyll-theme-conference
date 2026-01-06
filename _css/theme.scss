@@ -168,4 +168,12 @@
   .live-icon-arc-large {
     animation: live-icon-arc-large 8s ease infinite;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-icon-arc-small,
+    .live-icon-arc-medium,
+    .live-icon-arc-large {
+      animation: none;
+    }
+  }
 }

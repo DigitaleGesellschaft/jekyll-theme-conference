@@ -1,10 +1,10 @@
-<nav class="navbar navbar-expand-{{ site.conference.navigation.breakpoint | default: 'md' }} bg-secondary-subtle text-secondary-emphasis mb-3">
+<nav class="navbar navbar-expand-{{ site.conference.navigation.breakpoint | default: 'md' }} bg-secondary-subtle text-secondary-emphasis mb-3" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
   <div class="container">
 
     <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ site.data.lang[site.conference.lang].navigation.toggle | default: 'Toggle navigation menu' }}">
+      <span class="navbar-toggler-icon" aria-hidden="true"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
