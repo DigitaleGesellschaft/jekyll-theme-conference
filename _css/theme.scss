@@ -13,22 +13,32 @@
   border-collapse: separate !important;
   border-spacing: 0 !important;
 
-  // don't use sticky-top as it is placed above dropdown menu
-  // see https://getbootstrap.com/docs/5.3/layout/z-index/
-  thead {
-    position: sticky;
-    top: 0;
-    z-index: 910;
-  }
-
-  th:first-of-type {
+  .program-time {
     position: sticky;
     left: 0;
     z-index: 900;
+
+    width: 4rem;
+    min-width: 4rem;
   }
 
-  thead th:not(:first-of-type):nth-child(odd) {
-    width: 250px;
+  .program-talk {
+    width: 15rem;
+    min-width: 15rem;
+  }
+
+  .program-space {
+    width: 1rem;
+    min-width: 1rem;
+  }
+}
+
+.program-table-container {
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 4rem;
+
+  tbody .program-talk {
+    scroll-snap-align: start;
   }
 }
 
@@ -44,7 +54,7 @@
 
   // Generate responsive classes for each breakpoint using Bootstrap's $grid-breakpoints
   @each $breakpoint in map-keys($grid-breakpoints) {
-    @if $breakpoint != 'xs' {
+    @if $breakpoint !='xs' {
       @include media-breakpoint-up($breakpoint) {
         @for $idx from 1 through $max-cols {
           .col-count-#{$breakpoint}-#{$idx} {
@@ -143,6 +153,7 @@
   height: 0.75em;
 
   @keyframes live-icon-pulse {
+
     0%,
     6% {
       opacity: 0;
@@ -155,6 +166,7 @@
   }
 
   @keyframes live-icon-arc-small {
+
     0%,
     8% {
       opacity: 0;
@@ -167,6 +179,7 @@
   }
 
   @keyframes live-icon-arc-large {
+
     0%,
     10% {
       opacity: 0;
@@ -191,6 +204,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+
     .live-icon-arc-small,
     .live-icon-arc-medium,
     .live-icon-arc-large {
