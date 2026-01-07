@@ -8,7 +8,8 @@ This is a responsive [Jekyll](http://jekyllrb.com) theme based on [Bootstrap 5](
 - talk and speaker descriptions,
 - maps for directions,
 - real-time indications during the conference,
-- supports embedded video streaming or recordings, and
+- support for embedded video streaming or recordings
+- support for an all offline progressive web app, and
 - automatic dark mode support based on system preferences.
 
 All components such as talks, speakers or rooms are represented as collection of files. The schedule is defined via a simple structure stored in a [YAML](https://en.wikipedia.org/wiki/YAML) file. There is no need for databases and once generated the website consists only of static files. A script and workflows are available for easy import, e.g., of [frab](https://github.com/frab/frab/wiki/Manual#introduction) compatible schedules.
@@ -37,6 +38,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Main Landing Page](#main-landing-page)
   - [Information Boxes](#information-boxes--modals)
   - [Live Indications & Streaming](#live-indications--streaming)
+  - [Progressive Web App (PWA)](#progressive-web-app-pwa)
   - [Map](#map)
   - [Talk Settings](#talk-settings)
   - [Speaker Settings](#speaker-settings)
@@ -514,6 +516,62 @@ conference:
       extend: 5 # in minutes
 ```
 
+### Progressive Web App (PWA)
+
+The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
+
+1. Enable and optionally customize the functionality in your `_config.yml`:
+   ```yaml
+   conference:
+     pwa:
+       enable: true
+
+       # Theme color for the PWA (default: Bootstrap primary color, #0d6efd)
+       theme_color: "#0d6efd"
+
+       # Background color for the PWA (default: Bootstrap primary color, #ffffff)
+       background_color: "#ffffff"
+
+       # PWA icons configuration
+       icons:
+         - img: "icons/icon-192.png"
+           sizes: "192x192"
+           type: "image/png"
+         - img: "icons/icon-512.png"
+           sizes: "512x512"
+           type: "image/png"
+         - img: "icons/maskable-512.png"
+           sizes: "512x512"
+           type: "image/png"
+           purpose: "maskable"
+   ```
+
+   Icons can be configured as an array of objects containing:
+     - `img`: Path to the icon file relative to `/assets/images/` (required)
+     - `sizes`: Optional, icon size in format `"WIDTHxHEIGHT"` (e.g., `"192x192"`)
+     - `type`: Optional, MIME type (e.g., `"image/png"`)
+     - `purpose`: Defaults to `"any"`, see [mdn Manifest Reference](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/icons#purpose) for alternative values
+
+2. Create a manifest file in the root of your project, `manifest.json` with the following content:
+   ```yaml
+   ---
+   layout: manifest
+   ---
+   ```
+3. Create a service worker JavaScript file in the root of your project, `sw.js` with the following content:
+   ```yaml
+   ---
+   layout: sw
+   ---
+   ```
+4. Create specified icon files. It is recommended to have at least icons for the following three settings:
+   - `size: "192x192"`
+   - `size: "512x512"`
+   - `size: "512x512", purpose: "maskable"`
+
+   These icons will be used when users install the app on their devices. You can generate these from a single high-resolution logo using a tool like:
+   - [PWA Asset Generator](https://github.com/onderceylan/pwa-asset-generator)
+
 ### Map
 
 To help users finding your venue, an [OpenStreetMap](https://www.openstreetmap.org/) container displaying a map can be shown on any page. The map's initial position is globally defined and thus the same for all map containers. You can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
@@ -663,6 +721,7 @@ conference:
     time_steps: 15 # in minutes
     show_alltimes: true
 ```
+
 
 ## Content
 

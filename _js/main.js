@@ -24,6 +24,7 @@ import { createLiveModule } from './modules/live.js';
 import { createMapModule } from './modules/map.js';
 import { createModalModule } from './modules/modal.js';
 import { createProgramModule } from './modules/program.js';
+import { createPWAModule } from './modules/pwa.js';
 
 // Initialize the conference object and expose it immediately
 const conference = createConference();
@@ -41,8 +42,14 @@ conference.live = createLiveModule(conference.config);
 
 // Lazy-load map module only when map element exists
 if (document.getElementById('map')) {
-    conference.map = createMapModule();
+  conference.map = createMapModule();
 }
 
 // Start initialization
-init(conference);
+init(conference).then(() => {
+  // Initialize PWA module if enabled
+  if (conference.config.pwa && conference.config.pwa.enable) {
+    conference.pwa = createPWAModule(conference.config);
+    conference.pwa.init();
+  }
+});
