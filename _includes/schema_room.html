@@ -1,0 +1,23 @@
+{%- comment -%}
+  Generate Schema.org JSON-LD structured data for a room (Place)
+  Usage: {% include schema_room.html %}
+{%- endcomment -%}
+{%- assign room = page -%}
+{%- assign room_url = page.url | prepend: site.baseurl | prepend: site.url -%}
+{%- assign location_url = site.conference.location.url | default: "/location" | prepend: site.baseurl | prepend: site.url -%}
+
+{%- unless site.conference.meta.schema_org.disable or site.conference.location.hide or room.hide -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Place",
+  "name": {{ room.name | jsonify }},
+  "url": "{{ room_url }}",
+  "containedInPlace": {
+    "@type": "Place"{% if site.conference.location.name %},
+    "name": {{ site.conference.location.name | jsonify }}{% endif %},
+    "url": "{{ location_url }}"
+  }
+}
+</script>
+{%- endunless -%}

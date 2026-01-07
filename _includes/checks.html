@@ -52,6 +52,10 @@ For more details, refer to the [Talk Settings](https://github.com/DigitaleGesell
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.info_bars` to `conference.info.bars` in your configuration. For more details, refer to the [Information Boxes](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#information-boxes--modals) section in the theme's README." -%}
 {%- endif -%}
 
+{%- if site.conference.link_preview -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.link_preview` to `conference.meta.link_preview` in your configuration. For more details, refer to the [Meta Data for Search Engines and Link Previews](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#meta-data-for-search-engines-and-link-previews) section in the theme's README." -%}
+{%- endif -%}
+
 {%- if site.conference.talks.hide_icons == true -%}
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.talks.hide_icons` to `conference.talks.hide_link_icons` in your configuration. For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README." -%}
 {%- endif -%}

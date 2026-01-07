@@ -1,0 +1,151 @@
+{%- comment -%}
+  Generate Schema.org JSON-LD structured data for a talk (Event)
+  Usage: {% include schema_talk.html %}
+{%- endcomment -%}
+{%- assign talk = page -%}
+{%- assign talk_found = false -%}
+{%- assign schema_data = "" -%}
+
+{%- for d in site.data.program.days -%}
+  {%- if talk_found -%}{%- break -%}{%- endif -%}
+  {%- for r in d.rooms -%}
+    {%- if talk_found -%}{%- break -%}{%- endif -%}
+    {%- for t in r.talks -%}
+      {%- if talk.name == t.name -%}
+        {%- assign talk_found = true -%}
+        {%- assign talk_start = t.time_start | default: "00:00" -%}
+        {%- assign talk_end = t.time_end | default: "00:00" -%}
+
+        {%- if talk_start contains ' +' -%}
+          {%- assign talk_start_day = talk_start | split: ' +' | last | plus: 0 -%}
+          {%- assign talk_start = talk_start | split: ' +' | first -%}
+        {%- else -%}
+          {%- assign talk_start_day = 0 -%}
+        {%- endif -%}
+        {%- if talk_end contains ' +' -%}
+          {%- assign talk_end_day = talk_end | split: ' +' | last | plus: 0 -%}
+          {%- assign talk_end = talk_end | split: ' +' | first -%}
+        {%- else -%}
+          {%- assign talk_end_day = 0 -%}
+        {%- endif -%}
+
+        {%- assign datetime_start = d.date | append: "T" | append: talk_start | append: ":00" -%}
+        {%- assign datetime_end = d.date | append: "T" | append: talk_end | append: ":00" -%}
+        {%- if site.conference.tz -%}
+          {%- assign datetime_start = datetime_start | append: site.conference.tz -%}
+          {%- assign datetime_end = datetime_end | append: site.conference.tz -%}
+        {%- else -%}
+          {%- assign datetime_start = datetime_start | append: "+00:00" -%}
+          {%- assign datetime_end = datetime_end | append: "+00:00" -%}
+        {%- endif -%}
+
+        {%- assign room = site.rooms | where: 'name', r.name | first -%}
+        {%- assign talk_url = page.url | prepend: site.baseurl | prepend: site.url -%}
+        {%- include get_page_description.html default=site.title replace_quotes=true -%}
+        {%- assign talk_description = page_description | default: talk.name -%}
+
+        {%- comment -%} Get EventStatus from config, default to EventScheduled {%- endcomment -%}
+        {%- if site.conference.meta.schema_org.event_status -%}
+          {%- assign event_status = site.conference.event_status -%}
+        {%- else -%}
+          {%- assign event_status = "EventScheduled" -%}
+        {%- endif -%}
+
+        {%- comment -%} Get EventAttendanceMode from config, default to MixedEventAttendanceMode {%- endcomment -%}
+        {%- if site.conference.meta.schema_org.event_attendance_mode -%}
+          {%- assign event_attendance_mode = site.conference.event_attendance_mode -%}
+        {%- else -%}
+          {%- assign event_attendance_mode = "MixedEventAttendanceMode" -%}
+        {%- endif -%}
+
+        {%- comment -%} Calculate duration in ISO 8601 format (PT45M for 45 minutes) {%- endcomment -%}
+        {%- assign start_time_parts = talk_start | split: ':' -%}
+        {%- assign end_time_parts = talk_end | split: ':' -%}
+        {%- assign start_hours = start_time_parts[0] | plus: 0 -%}
+        {%- assign start_minutes = start_time_parts[1] | plus: 0 -%}
+        {%- assign end_hours = end_time_parts[0] | plus: 0 -%}
+        {%- assign end_minutes = end_time_parts[1] | plus: 0 -%}
+        {%- assign start_total_minutes = start_hours | times: 60 | plus: start_minutes -%}
+        {%- assign end_total_minutes = end_hours | times: 60 | plus: end_minutes -%}
+        {%- assign duration_minutes = end_total_minutes | minus: start_total_minutes -%}
+        {%- if duration_minutes < 0 -%}
+          {%- assign duration_minutes = duration_minutes | plus: 1440 -%}
+        {%- endif -%}
+        {%- assign duration = "PT" | append: duration_minutes | append: "M" -%}
+
+        {%- comment -%} Build keywords from track and tags {%- endcomment -%}
+        {%- assign keywords_count = 0 -%}
+        {%- if talk.track -%}
+          {%- assign keywords_count = keywords_count | plus: 1 -%}
+        {%- endif -%}
+        {%- if talk.tags and talk.tags.size > 0 -%}
+          {%- assign keywords_count = keywords_count | plus: talk.tags.size -%}
+        {%- endif -%}
+
+        {%- comment -%} Get conference URL for superEvent {%- endcomment -%}
+        {%- assign conference_url = site.url | append: site.baseurl -%}
+
+        {%- comment -%} Find video link if present {%- endcomment -%}
+        {%- assign video_url = "" -%}
+        {%- if talk.links -%}
+          {%- for link in talk.links -%}
+            {%- if link.video -%}
+              {%- assign video_url = link.video -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- unless site.conference.meta.schema_org.disable or talk.hide -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": {{ talk.name | jsonify }},
+  "description": {{ talk_description | jsonify }},
+  "startDate": "{{ datetime_start }}",
+  "endDate": "{{ datetime_end }}",
+  "duration": "{{ duration }}",
+  "eventStatus": "https://schema.org/{{ event_status }}",
+  "eventAttendanceMode": "https://schema.org/{{ event_attendance_mode }}",
+  "location": {
+    "@type": "Place"{% unless room.hide %},
+    "name": {{ r.name | jsonify }}{% endunless %}{% if room.url %},
+    "url": "{{ room.url | prepend: site.baseurl | prepend: site.url }}"{% endif %}
+  },
+  "url": "{{ talk_url }}"{% if keywords_count > 0 %},
+  "keywords": [{% if talk.track %}{{ talk.track | jsonify }}{% if talk.tags and talk.tags.size > 0 %}, {% endif %}{% endif %}{% if talk.tags and talk.tags.size > 0 %}{% for tag in talk.tags %}{{ tag | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}]{% endif %}{% if talk.speakers.size > 0 %},
+  "performer": [
+    {%- for speaker_name in talk.speakers -%}
+      {%- assign speaker = site.speakers | where: 'name', speaker_name | first -%}
+      {%- if speaker -%}
+    {
+      "@type": "Person",
+      "url": "{{ speaker.url | prepend: site.baseurl | prepend: site.url }}"
+    }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  ]{%- endif %},
+  "superEvent": {
+    "@type": "ConferenceEvent",
+    "url": "{{ conference_url }}"
+  }{% if site.conference.meta.link_preview.img and site.conference.meta.link_preview.img.open_graph %},
+  "image": "{{ site.conference.meta.schema_org.img | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}"{% endif %}{% if video_url != "" %},
+  "video": {
+    "@type": "VideoObject",
+    "name": {{ talk.name | jsonify }},
+    "description": {{ talk_description | jsonify }},
+    "contentUrl": "{{ video_url }}",
+    "recordedAt": {
+      "@type": "Event",
+      "@id": "{{ talk_url }}"
+    }
+  }{% endif %}
+}
+</script>
+        {%- endunless -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endfor -%}

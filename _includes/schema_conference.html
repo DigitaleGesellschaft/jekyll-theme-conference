@@ -1,0 +1,143 @@
+{%- comment -%}
+  Generate Schema.org JSON-LD structured data for the conference (ConferenceEvent)
+  Usage: {% include schema_conference.html %}
+{%- endcomment -%}
+
+{%- assign conference_url = site.url | append: site.baseurl -%}
+
+{%- if site.data.program and site.data.program.days.size > 0 -%}
+  {%- assign first_day = site.data.program.days | first -%}
+  {%- assign start_date = first_day.date -%}
+  {%- assign last_day = site.data.program.days | last -%}
+  {%- assign end_date = last_day.date -%}
+
+  {%- assign sub_events = "" -%}
+  {%- assign first_sub_event = true -%}
+  {%- for d in site.data.program.days -%}
+    {%- for r in d.rooms -%}
+      {%- for t in r.talks -%}
+        {%- assign talk = site.talks | where: 'name', t.name | first -%}
+        {%- if talk -%}
+          {%- assign talk_start = t.time_start | default: "00:00" -%}
+          {%- assign talk_end = t.time_end | default: "00:00" -%}
+
+          {%- if talk_start contains ' +' -%}
+            {%- assign talk_start = talk_start | split: ' +' | first -%}
+          {%- endif -%}
+          {%- if talk_end contains ' +' -%}
+            {%- assign talk_end = talk_end | split: ' +' | first -%}
+          {%- endif -%}
+
+          {%- assign talk_date = d.date -%}
+          {%- comment -%} Note: Day offsets in time (e.g., "12:00 +1") are not handled here for date calculation {%- endcomment -%}
+
+          {%- assign talk_datetime_start = talk_date | append: "T" | append: talk_start | append: ":00" -%}
+          {%- assign talk_datetime_end = talk_date | append: "T" | append: talk_end | append: ":00" -%}
+          {%- if site.conference.tz -%}
+            {%- assign talk_datetime_start = talk_datetime_start | append: site.conference.tz -%}
+            {%- assign talk_datetime_end = talk_datetime_end | append: site.conference.tz -%}
+          {%- else -%}
+            {%- assign talk_datetime_start = talk_datetime_start | append: "+00:00" -%}
+            {%- assign talk_datetime_end = talk_datetime_end | append: "+00:00" -%}
+          {%- endif -%}
+
+          {%- assign talk_url = talk.url | prepend: site.baseurl | prepend: site.url -%}
+          {%- assign talk_description = talk.name -%}
+
+          {%- unless first_sub_event -%}
+            {%- assign sub_events = sub_events | append: "," -%}
+          {%- else -%}
+            {%- assign first_sub_event = false -%}
+          {%- endunless -%}
+
+          {%- assign sub_events = sub_events | append: '{"@type":"Event","url":"' | append: talk_url | append: '"}' -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- assign event_status_raw = site.conference.meta.schema_org.event_status | default: "scheduled" -%}
+{%- if event_status_raw == "scheduled" -%}
+  {%- assign event_status = "EventScheduled" -%}
+{%- elsif event_status_raw == "cancelled" -%}
+  {%- assign event_status = "EventCancelled" -%}
+{%- elsif event_status_raw == "postponed" -%}
+  {%- assign event_status = "EventPostponed" -%}
+{%- elsif event_status_raw == "moved_online" -%}
+  {%- assign event_status = "EventMovedOnline" -%}
+{%- else -%}
+  {%- assign event_status = "EventScheduled" -%}
+{%- endif -%}
+
+{%- assign event_attendance_mode_raw = site.conference.meta.schema_org.event_attendance_mode | default: "offline" -%}
+{%- if event_attendance_mode_raw == "offline" -%}
+  {%- assign event_attendance_mode = "OfflineEventAttendanceMode" -%}
+{%- elsif event_attendance_mode_raw == "online" -%}
+  {%- assign event_attendance_mode = "OnlineEventAttendanceMode" -%}
+{%- elsif event_attendance_mode_raw == "mixed" -%}
+  {%- assign event_attendance_mode = "MixedEventAttendanceMode" -%}
+{%- else -%}
+  {%- assign event_attendance_mode = "OfflineEventAttendanceMode" -%}
+{%- endif -%}
+
+{%- if site.conference.meta.schema_org.tickets and site.conference.meta.schema_org.tickets.availability -%}
+  {%- assign availability_raw = site.conference.meta.schema_org.tickets.availability -%}
+  {%- if availability_raw == "in_stock" -%}
+    {%- assign ticket_availability = "InStock" -%}
+  {%- elsif availability_raw == "pre_order" -%}
+    {%- assign ticket_availability = "PreOrder" -%}
+  {%- elsif availability_raw == "sold_out" -%}
+    {%- assign ticket_availability = "SoldOut" -%}
+  {%- elsif availability_raw == "limited_availability" -%}
+    {%- assign ticket_availability = "LimitedAvailability" -%}
+  {%- elsif availability_raw == "out_of_stock" -%}
+    {%- assign ticket_availability = "OutOfStock" -%}
+  {%- elsif availability_raw == "online_only" -%}
+    {%- assign ticket_availability = "OnlineOnly" -%}
+  {%- elsif availability_raw == "in_store_only" -%}
+    {%- assign ticket_availability = "InStoreOnly" -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- unless site.conference.meta.schema_org.disable -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ConferenceEvent",
+  "name": {{ site.title | jsonify }},
+  "description": {{ site.description | jsonify }}{% if start_date %},
+  "startDate": "{{ start_date }}"{% endif %}{% if end_date %},
+  "endDate": "{{ end_date }}"{% endif %},
+  "eventStatus": "https://schema.org/{{ event_status }}",
+  "eventAttendanceMode": "https://schema.org/{{ event_attendance_mode }}"{% if site.conference.lang %},
+  "inLanguage": "{{ site.conference.lang }}"{% endif %}{% unless site.conference.location.hide %},
+  "location": {
+    "@type": "Place"{% if site.conference.location.name %},
+    "name": {{ site.conference.location.name | jsonify }}{% endif %},
+    "url": "{{ site.conference.location.url | default: "/location" | prepend: site.baseurl | prepend: site.url }}"
+  }{% endunless %}{% if site.conference.meta.schema_org.has_participation_offer and site.conference.meta.schema_org.has_participation_offer.url %},
+  "hasParticipationOffer": {
+    "@type": "Offer",
+    "url": "{{ site.conference.meta.schema_org.has_participation_offer.url }}"
+  }{% endif %}{% if site.conference.meta.schema_org.tickets %},
+  "offers": {
+    "@type": "Offer"{% if site.conference.meta.schema_org.tickets.url %},
+    "url": "{{ site.conference.meta.schema_org.tickets.url }}"{% endif %}{% if ticket_availability %},
+    "availability": "https://schema.org/{{ ticket_availability }}"{% endif %}{% if site.conference.meta.schema_org.tickets.price %},
+    "price": "{{ site.conference.meta.schema_org.tickets.price }}"{% endif %}{% if site.conference.meta.schema_org.tickets.priceCurrency %},
+    "priceCurrency": "{{ site.conference.meta.schema_org.tickets.priceCurrency }}"{% endif %}
+  }{% endif %}{% if site.conference.meta.schema_org.organizer %},
+  "organizer": {
+    "@type": "Organization"{% if site.conference.meta.schema_org.organizer.name %},
+    "name": {{ site.conference.meta.schema_org.organizer.name | jsonify }}{% endif %}{% if site.conference.meta.schema_org.organizer.url %},
+    "url": "{{ site.conference.meta.schema_org.organizer.url }}"{% endif %}
+  }{% endif %}{% if sub_events != "" %},
+  "subEvent": [
+    {{ sub_events }}
+  ]{% endif %},
+  "url": "{{ conference_url }}"{% if site.conference.meta.schema_org.img %},
+  "image": "{{ site.conference.meta.schema_org.img | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}"{% endif %}
+}
+</script>
+{%- endunless -%}
