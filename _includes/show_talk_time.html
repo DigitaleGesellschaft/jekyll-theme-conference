@@ -11,7 +11,7 @@
   {%- if nbr_days > 1 and day_hash -%}
     #{{ day_hash }}
   {%- endif -%}
-" class="badge bg-secondary-subtle text-secondary-emphasis fw-normal link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover {{ include.class }}">
+" class="badge fw-normal bg-body-secondary text-reset link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover {{ include.class }}">
   <i class="bi bi-clock" aria-hidden="true"></i>&nbsp;
   {%- if nbr_days > 1 and day_abbr -%}
     {%- unless include.hide_day -%} {{ day_abbr }}, {% endunless -%}

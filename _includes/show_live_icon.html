@@ -3,7 +3,7 @@
   {% assign live_icon_class = include.class | prepend: 'badge ' %}
 
   <span class="live-show d-none d-print-none" data-start="{{ timestamp_start }}" data-end="{{ timestamp_end }}">
-    {% include get_link_tag_streaming.html class="text-decoration-none" %}
+    {% include get_link_tag_streaming.html %}
       {%- include get_live_icon.html class=live_icon_class -%}
     </a>
   </span>
