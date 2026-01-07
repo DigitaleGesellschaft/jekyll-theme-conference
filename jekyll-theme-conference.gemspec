@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-theme-conference"
-  spec.version       = "4.0.0"
+  spec.version       = "4.0.1"
   spec.authors       = ["Lorenz Schmid"]
   spec.email         = ["lorenzschmid@users.noreply.github.com"]
 
@@ -24,7 +24,12 @@ Gem::Specification.new do |spec|
       files << css_file if File.exist?(css_file) && !files.include?(css_file)
     end
 
-    # Bootstrap Icons webfonts (built from NPM packages)
+    #   Sass files copied by Vite build
+    Dir.glob("_sass/**/*.{scss,css}").each do |sass_file|
+      files << sass_file if File.exist?(sass_file) && !files.include?(sass_file)
+    end
+
+    #   Bootstrap Icons webfonts (built from NPM packages)
     Dir.glob("assets/webfonts/bootstrap-icons.*").each do |font_file|
       files << font_file if File.exist?(font_file) && !files.include?(font_file)
     end
