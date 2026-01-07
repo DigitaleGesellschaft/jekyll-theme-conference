@@ -1,0 +1,47 @@
+{%- comment -%}
+  Generate Schema.org JSON-LD structured data for location (Place)
+  Usage: {% include schema_location.html %}
+{%- endcomment -%}
+{%- assign conference_url = site.url | append: site.baseurl -%}
+{%- assign location_url = site.conference.location.url | default: "/location" | prepend: site.baseurl | prepend: site.url -%}
+
+{%- assign contains_places = "" -%}
+{%- assign first_room = true -%}
+{%- for r in site.rooms -%}
+  {%- unless r.hide -%}
+    {%- unless first_room -%}
+      {%- assign contains_places = contains_places | append: "," -%}
+    {%- else -%}
+      {%- assign first_room = false -%}
+    {%- endunless -%}
+    {%- assign r_url = r.url | prepend: site.baseurl | prepend: site.url -%}
+    {%- assign contains_places = contains_places | append: '{"@type":"Place","url":"' | append: r_url | append: '"}' -%}
+  {%- endunless -%}
+{%- endfor -%}
+
+{%- unless site.conference.meta.schema_org.disable or site.conference.location.hide -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Place"{% if site.conference.location.name %},
+  "name": {{ site.conference.location.name | jsonify }}{% endif %}{% if site.conference.location.postal_address %},
+  "url": "{{ location_url }}"{% if site.conference.location.map %},
+  "hasMap": "{{ location_url }}"{% endif %},
+  "address": {
+    "@type": "PostalAddress"{% if site.conference.location.postal_address.street %},
+    "streetAddress": {{ site.conference.location.postal_address.street | jsonify }}{% endif %}{% if site.conference.location.postal_address.locality %},
+    "addressLocality": {{ site.conference.location.postal_address.locality | jsonify }}{% endif %}{% if site.conference.location.postal_address.postal_code %},
+    "postalCode": {{ site.conference.location.postal_address.postal_code | jsonify }}{% endif %}{% if site.conference.location.postal_address.region %},
+    "addressRegion": {{ site.conference.location.postal_address.region | jsonify }}{% endif %}{% if site.conference.location.postal_address.country %},
+    "addressCountry": {{ site.conference.location.postal_address.country | jsonify }}{% endif %}
+  }{% endif %}{% if contains_places != "" %},
+  "containsPlace": [
+    {{ contains_places }}
+  ]{% endif %},
+  "event": {
+    "@type": "ConferenceEvent",
+    "url": "{{ conference_url }}"
+  }
+}
+</script>
+{%- endunless -%}

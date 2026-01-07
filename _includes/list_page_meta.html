@@ -1,23 +1,46 @@
-{% unless site.conference.link_preview.disable -%}
-  {%- include get_page_title.html default=site.title replace_quotes=true -%}
-  {%- include get_page_description.html default=site.title replace_quotes=true -%}
+{%- include get_page_title.html default=site.title replace_quotes=true -%}
+{%- include get_page_description.html default=site.title replace_quotes=true -%}
 
-  <meta name="description" content="{{ page_description }}" />
+<meta name="description" content="{{ page_description }}" />
 
+{%- comment -%} Canonical URL {%- endcomment -%}
+<link rel="canonical" href="{{ page.url | prepend: site.baseurl | prepend: site.url }}" />
+
+{% unless site.conference.meta.link_preview.disable -%}
+  {%- comment -%} Twitter Card tags {%- endcomment -%}
+  {%- if site.conference.meta.link_preview.img and site.conference.meta.link_preview.img.twitter %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="{{ site.conference.meta.link_preview.img.twitter | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}" />
+  {%- else %}
   <meta name="twitter:card" content="summary" />
-  {%- if site.conference.link_preview.img and site.conference.link_preview.img.twitter %}
-  <meta name="twitter:image" content="{{ site.conference.link_preview.img.twitter | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}" />
   {%- endif %}
   <meta name="twitter:title" content="{{ page_title }}" />
   <meta name="twitter:description" content="{{ page_description }}" />
 
+  {%- comment -%} Open Graph tags {%- endcomment -%}
   <meta property="og:site_name" content="{{ site.title }}" />
-  {%- if site.conference.link_preview.img and site.conference.link_preview.img.open_graph %}
-  <meta property="og:image" content="{{ site.conference.link_preview.img.open_graph | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}" />
+  {%- if site.conference.meta.link_preview.img and site.conference.meta.link_preview.img.open_graph %}
+  {%- assign og_image_url = site.conference.meta.link_preview.img.open_graph | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url -%}
+  <meta property="og:image" content="{{ og_image_url }}" />
+  <meta property="og:image:alt" content="{{ page_title }}" />
   {%- endif %}
   <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}" />
   <meta property="og:title" content="{{ page_title }}" />
   <meta property="og:description" content="{{ page_description }}" />
   <meta property="og:type" content="website" />
-
 {%- endunless %}
+
+{%- comment -%} Schema.org JSON-LD structured data {%- endcomment -%}
+{%- unless site.conference.meta.schema_org.disable -%}
+  {%- if page.layout == 'talk' -%}
+    {%- include schema_talk.html -%}
+  {%- elsif page.layout == 'speaker' -%}
+    {%- include schema_speaker.html -%}
+  {%- elsif page.layout == 'room' -%}
+    {%- include schema_room.html -%}
+  {%- elsif page.layout == 'location' -%}
+    {%- include schema_location.html -%}
+  {%- elsif page.layout == 'home' or page.layout == 'main' or page.layout == 'program' or page.url == '/' or page.url == '' -%}
+    {%- include schema_conference.html -%}
+  {%- endif -%}
+{%- endunless -%}

@@ -11,7 +11,7 @@
 {% unless all_hidden %}
   <ul class="nav nav-pills d-print-none mb-3">
     <li class="nav-item">
-      <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.conference.location.url | prepend: site.baseurl }}">
+      <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ site.conference.location.url | default: "/location" | prepend: site.baseurl }}">
         {% if site.conference.location.navbar_title -%}
           {{- site.conference.location.navbar_title -}}
         {%- else -%}

@@ -1,0 +1,44 @@
+{%- comment -%}
+  Generate Schema.org JSON-LD structured data for a speaker (Person)
+  Usage: {% include schema_speaker.html %}
+{%- endcomment -%}
+{%- assign speaker = page -%}
+{%- assign speaker_url = page.url | prepend: site.baseurl | prepend: site.url -%}
+
+{%- assign performer_in = "" -%}
+{%- assign first_talk = true -%}
+{%- for talk in site.talks -%}
+  {%- for speaker_name in talk.speakers -%}
+    {%- if speaker_name == speaker.name -%}
+      {%- unless first_talk -%}
+        {%- assign performer_in = performer_in | append: "," -%}
+      {%- else -%}
+        {%- assign first_talk = false -%}
+      {%- endunless -%}
+      {%- assign talk_url = talk.url | prepend: site.baseurl | prepend: site.url -%}
+      {%- assign performer_in = performer_in | append: '{"@type":"Event","url":"' | append: talk_url | append: '"}' -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}
+
+{%- unless site.conference.meta.schema_org.disable or speaker.hide -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ speaker.first_name | append: " " | append: speaker.last_name | jsonify }}",
+  "givenName": {{ speaker.first_name | jsonify }},
+  "familyName": {{ speaker.last_name | jsonify }},
+  "url": "{{ speaker_url }}",
+  "performerIn": [
+    {% if performer_in -%}
+      {{ performer_in }}
+    {%- else -%}
+      {%- comment -%} Link to conference event {%- endcomment -%}
+      {"@type":"Event","url":"{{ site.url | append: site.baseurl }}"}
+    {%- endif %}
+  ]
+}
+</script>
+{%- endunless -%}

@@ -10,11 +10,33 @@
     {% endif %}
   </h1>
 
-  {% assign this_room = page %}
-
   {% unless site.conference.location.hide %}
     {% include navbar_rooms.html %}
   {% endunless %}
+
+  {% if site.conference.location.postal_address %}
+    <address>
+      {%- if site.conference.location.name %}
+      <strong>{{ site.conference.location.name }}</strong><br />
+      {%- endif %}
+      {%- if site.conference.location.postal_address.street %}
+      {{ site.conference.location.postal_address.street }}<br />
+      {%- endif %}
+      {%- if site.conference.location.postal_address.region %}
+      {{ site.conference.location.postal_address.region }}
+      {%- endif %}
+      {%- if site.conference.location.postal_address.postal_code %}
+      {{ site.conference.location.postal_address.postal_code }}
+      {%- endif %}
+      {%- if site.conference.location.postal_address.locality %}
+      {{ site.conference.location.postal_address.locality }}
+      {%- endif %}
+    </address>
+  {% elsif site.conference.location.name %}
+    <p>
+      <strong>{{ site.conference.location.name }}</strong>
+    </p>
+  {% endif %}
 
   {{ content }}
 

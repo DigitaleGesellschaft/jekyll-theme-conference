@@ -33,7 +33,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Language](#language)
   - [Timezone](#timezone)
   - [Navigation Bar](#navigation-bar)
-  - [Open Graph Link Preview](#open-graph-link-preview)
+  - [Meta Data for Search Engines and Link Previews](#meta-data-for-search-engines-and-link-previews)
   - [Main Landing Page](#main-landing-page)
   - [Information Boxes](#information-boxes--modals)
   - [Live Indications & Streaming](#live-indications--streaming)
@@ -305,26 +305,91 @@ conference:
 
 The navigation bar automatically collapses when the available space is too small (e.g. on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/4.6/layout/overview/#responsive-breakpoints). The default breakpoint is `md` (collapsing if the screen width is smaller than 992px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
 
-### Open Graph Link Preview
+### Meta Data for Search Engines and Link Previews
 
-The theme automatically includes the necessary `<meta>` tags to ease link previewing when sharing links based on the [Open Graph protocol](https://ogp.me/) and [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards). These tags control how a link is shown when shared via different platform and apps. To disable these `<meta>` tags add the `disable: true` setting (default: `false`) to the `link_preview` property.
+The theme automatically includes the necessary `<meta>` tags to ease link previewing when sharing links based on the [Open Graph protocol](https://ogp.me/) (used by all major social networks and messenger apps) and [Twitter Cards](https://developer.x.com/en/docs/x-for-websites/cards/overview/abouts-cards) (used by X). These tags control how a link is shown when shared via different platform and apps. The theme also includes [Schema.org](https://schema.org/) JSON-LD structured data to help search engines better understand and display the conference and its talks, potentially showing event cards, speaker information, and enhanced search listings.
 
-To generate a meaningful description for each of the links, the preposition for the conference title as given under the `title` property can be defined by using the `preposition` property. For example, if `title` is set to "Conference 2020" the corresponding `preposition` would be "at". The template can then use it to generate descriptions such as "Talk _at_ Conference 2020".
+Both configurations are organized under the `meta` property.
 
-Optionally, an image that is shown as preview for all links can be specified. For sharing via Open Graph an image ratio of 1.91:1 and an ideal size of 1200x630 pixel is recommended. For sharing via Twitter an image ratio of 1:1 and a minimal size of 600x600 pixel (better 1200x1200 pixel) is recommended. SVG image files are not supported. It is activated through the `img` property under the `link_preview` property containing an image file shown for Open Graph (`open_graph`) and on the Twitter Cards (`twitter`), whereby the path to the image file relative to the `/assets/images/` folder has to be specified.
+To generate a meaningful description for each of the schemas and links, the preposition for the conference title as given under the `title` property can be defined by using the `preposition` property. For example, if `title` is set to "Conference 2020" the corresponding `preposition` would be "at". The template can then use it to generate descriptions such as "Talk _at_ Conference 2020".
 
 ```yaml
 title: Conference 2020
 preposition: "at"
+```
 
-...
+#### Link Previews
 
+Support for link preview is organized under the `link_preview` property part of the `meta` property. It can be disabled by setting `disable` to `true`.
+
+Optionally, an image that is shown as preview for all links can be specified. For sharing via Open Graph an image ratio of 1.91:1 and an ideal size of 1200x630 pixel is recommended. For sharing via Twitter an image ratio of 1.91:1 and a minimal size of 300x157 pixel (better 1200x628 pixel) is recommended. SVG image files are not supported. It is activated through the `img` property under the `link_preview` property containing an image file shown for Open Graph (`open_graph`) and on the Twitter Cards (`twitter`), whereby the path to the image file relative to the `/assets/images/` folder has to be specified.
+
+```yaml
 conference:
-  link_preview:
-    disable: false
-    img:
-      twitter: "twitter_preview.png" # inside /assets/images/
-      open_graph: "facebook_preview.png" # inside /assets/images/
+  meta:
+    link_preview:
+      disable: false  # Set to true to disable Open Graph and Twitter Card meta tags
+      img:
+        twitter: "twitter_preview.png"  # inside /assets/images/
+        open_graph: "facebook_preview.png"  # inside /assets/images/
+```
+
+#### Meta Data for Search Engines
+
+Support for [Schema.org](https://schema.org/) JSON-LD structured data is organized under the `schema_org` property part of the `meta` property. It can be disabled by setting `disable` to `true`. Different schemas are generated depending on the page type, and these schemas are interconnected. The following schemas are generated:
+- `ConferenceEvent` (main and program page)
+- `Event` (talk pages)
+- `Place` (location and room pages)
+- `Person` (speaker pages)
+
+Please note that any talk, room, or speaker set to `hide: true` will not be included in the generated schemas or their relations.
+
+Optionally, the following properties can be added under the `schema_org` property to provide further information about the conference:
+- Event Status (`event_status`):
+  - `scheduled` (default)
+  - `cancelled`
+  - `postponed`
+  - `moved_online`
+- Event Attendance Mode (`event_attendance_mode`):
+  - `offline` (default)
+  - `online`
+  - `mixed`
+- Organizer hosting the conference (`organizer`) with the following properties
+  - `name`
+  - `url`
+- Call for Participation (`has_participation_offer`) with the following property
+  - `url`
+- Ticket offer (`tickets`) with the following optional properties
+  - `url`
+  - `availability`:
+    - `in_stock`
+    - `pre_order`
+    - `sold_out`
+    - `limited_availability`
+    - `out_of_stock`
+    - `online_only`
+    - `in_store_only`
+  - `price`
+  - `currency`: Currency code (ISO 4217, e.g., `"USD"`, `"EUR"`, `"CHF"`)
+- Image file path (`img`) relative to the `/assets/images/`
+
+```yaml
+conference:
+    schema_org:
+      disable: false  # Set to true to disable Schema.org JSON-LD structured data
+      event_status: "scheduled"  # Options: scheduled, cancelled, postponed, moved_online
+      event_attendance_mode: "offline"  # Options: offline, online, mixed
+      organizer:  # Organization hosting the conference
+        name: "Your Organization Name"  # Organization name
+        url: "https://example.com"  # Organization website URL (optional, can use name or url)
+      has_participation_offer:  # Call for participation
+        url: "https://example.com/register"  # URL for participation offer
+      tickets:  # Ticket offer
+        url: "https://example.com/tickets"  # URL to purchase tickets
+        availability: "in_stock"  # Options: in_stock, pre_order, sold_out, limited_availability, out_of_stock, online_only, in_store_only
+        price: "50.00"  # Price as a string (e.g., "50.00")
+        priceCurrency: "USD"  # Currency code (ISO 4217, e.g., "USD", "EUR", "CHF")
+      img: "conference.png"  # inside /assets/images/
 ```
 
 ### Main Landing Page
@@ -530,6 +595,13 @@ If your `location` overview file is not located under `/location` you can indica
 
 The location main page shows a navigation bar listing all the different rooms by name. Due to the quirks of Jekyll, the main page itself cannot be listed by title as defined in its Front Matter. Instead, the title of the main landing page for the navigation bar is taken from the language files and defaults to "Directions". To change this, you can either change the language files directly (see the _Language_ section above), or you provide an alternative title by setting the `navbar_title` to the desired title under the `location` property.
 
+The `location` layout can include a venue name (`name`) and a postal address (`postal_address`) that is automatically formatted in machine readable way. Both properties also used in the schema.org structured data (if enabled, see the _Meta Data for Search Engines and Link Previews_ section above for more information). The postal address can contain the following optional properties:
+  - `street`: Street address (e.g., "Neue Hard 12")
+  - `locality`: City or locality (e.g., "Zurich")
+  - `postal_code`: Postal or ZIP code (e.g., "8005")
+  - `region`: State, province, or region (e.g., "ZH", "Zurich")
+  - `country`: ISO 3166-1 alpha-2 country code (e.g., "CH")
+
 The `location` layout can include a map to point to your venue by adding the `map: true` setting (default: `true`) to the `location` property. See the _Map_ section above for more information.
 
 Example:
@@ -541,6 +613,13 @@ conference:
     url: "/location"
     navbar_title: "Location"
     map: true
+    name: "Zentralwäscherei"  # Location name
+    postal_address:  # Postal address
+      street: "Neue Hard 12"
+      locality: "Zurich"
+      postal_code: "8005"
+      region: "ZH"  # State or province
+      country: "CH"  # ISO 3166-1 alpha-2 country code
 ```
 
 The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. The map object can be customized by adding additional layers with markers, text, or shapes. To do so, edit the `assets/js/main.js` file in your project:
