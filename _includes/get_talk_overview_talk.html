@@ -52,7 +52,7 @@
     {%- include get_link_types.html -%}
     {%- if has_icon_links > 0 -%}
       {% for link in talk.links -%}
-        {%- include get_link.html type="icon" class="badge bg-secondary-subtle text-secondary-emphasis fw-normal me-1" color=track_color -%}
+        {%- include get_link.html type="icon" class="badge bg-body-secondary text-body-secondary fw-normal me-1" color=track_color -%}
         {%- if link_valid -%}
           {{- link_tag -}}
             <i class="bi bi-{{ link_icon }}" aria-hidden="true"></i>
