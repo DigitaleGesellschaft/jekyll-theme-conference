@@ -39,6 +39,13 @@
     },
     {%- endif %}
 
+    {% if site.conference.pwa -%}
+    "pwa": {
+        "enable": {{ site.conference.pwa.enable | default: false }},
+        "theme_color": "{{ site.conference.pwa.theme_color | default: '#0d6efd' }}"
+    },
+    {%- endif %}
+
     "lang": {
         {%- if enable_map %}
         "map": {

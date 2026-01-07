@@ -1,0 +1,43 @@
+{
+  "name": "{{ site.title }}",
+  "baseurl": "{{ site.baseurl }}",
+  "pages": [
+    {%- assign first_page = true -%}
+    {%- for page in site.pages -%}
+      {%- unless page.output == false or page.url == nil or page.url == '' -%}
+        {%- unless first_page -%},{%- endunless -%}
+        "{{ page.url | prepend: site.baseurl }}"
+        {%- assign first_page = false -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- for collection in site.collections -%}
+      {%- if collection.first.output -%}
+        {%- for item in collection.first.docs -%}
+          {%- unless item.output == false or item.url == nil or item.url == '' -%}
+            {%- unless first_page -%},{%- endunless -%}
+            "{{ item.url | prepend: site.baseurl }}"
+            {%- assign first_page = false -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- for post in site.posts -%}
+      {%- unless post.url == nil or post.url == '' -%}
+        {%- unless first_page -%},{%- endunless -%}
+        "{{ post.url | prepend: site.baseurl }}"
+        {%- assign first_page = false -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  ],
+  "assets": [
+    "{{ site.baseurl }}/assets/css/conference.bundle.css",
+    "{{ site.baseurl }}/assets/css/main.css",
+    "{{ site.baseurl }}/assets/js/conference.bundle.js",
+    "{{ site.baseurl }}/assets/js/leaflet.bundle.js",
+    "{{ site.baseurl }}/assets/js/main.js",
+    "{{ site.baseurl }}/assets/js/config.json",
+    "{{ site.baseurl }}/assets/js/data.json",
+    "{{ site.baseurl }}/assets/webfonts/bootstrap-icons.woff",
+    "{{ site.baseurl }}/assets/webfonts/bootstrap-icons.woff2"
+  ]
+}

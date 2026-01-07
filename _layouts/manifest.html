@@ -1,0 +1,50 @@
+{%- if site.conference.pwa and site.conference.pwa.enable -%}
+{
+  "name": "{{ site.title }}",
+  "short_name": "{{ site.title }}",
+  "description": "{{ site.description }}",
+  "lang": "{{ site.conference.lang | default: 'en' }}",
+  "start_url": "{{ site.baseurl | prepend: site.url }}/",
+  "scope": "{{ site.baseurl | prepend: site.url }}/",
+  "display": "standalone",
+  "background_color": "{{ site.conference.pwa.background_color | default: '#ffffff' }}",
+  "theme_color": "{{ site.conference.pwa.theme_color | default: '#0d6efd' }}",
+  "orientation": "portrait-primary",
+  {%- if site.conference.pwa.icons %}
+  "icons": [
+  {%- for icon in site.conference.pwa.icons %}
+    {
+      {%- if icon.first == nil -%}
+        {%- assign icon_src = icon -%}
+      {%- else -%}
+        {%- assign icon_src = icon.img -%}
+      {%- endif %}
+      "src": "{{ icon_src | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}",
+      {%- if icon.sizes %}
+      "sizes": "{{ icon.sizes }}",
+      {%- endif -%}
+      {%- if icon.type %}
+      "type": "{{ icon.type }}",
+      {%- endif %}
+      "purpose": "{{ icon.purpose | default: "any" }}",
+    }
+    {%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor %}
+  ],
+  {%- endif %}
+  "shortcuts": [
+  {%- for link in site.conference.navigation.links -%}
+    {%- unless link.pwa_hide or link.live or link.menu -%}
+      {%- include get_link.html %}
+    {
+      "name": "{{ link.name }}",
+      "url": "{{link_href}}"
+    }
+      {%- unless forloop.last -%},{%- endunless -%}
+    {%- endunless -%}
+  {%- endfor %}
+  ]
+}
+{%- else -%}
+{}
+{%- endif -%}

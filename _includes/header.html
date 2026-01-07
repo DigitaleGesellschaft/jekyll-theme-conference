@@ -11,6 +11,14 @@
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.setAttribute('data-bs-theme', prefersDark ? 'dark' : 'light');
     })();
+
+    {%- if site.conference.pwa and site.conference.pwa.enable %}
+    // Apply PWA styles for iOS immediately to prevent flash
+    (function() {
+      const isStandalone = (navigator.standalone || window.matchMedia("(display-mode: standalone)").matches);
+      document.documentElement.setAttribute('data-pwa', isStandalone ? 'true' : 'false');
+    })();
+    {%- endif -%}
   </script>
 
   {% include get_page_title.html -%}
@@ -19,25 +27,14 @@
     {%- unless page_title == empty %} - {% endunless -%}
     {{- site.title -}}
   </title>
-  {% include list_page_meta.html %}
+  {% include list_header_meta.html %}
 
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?t={{ site.time | date: '%s' }}" />
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: '%s' }}" />
 
-  {%- if site.conference.live %}
-  <link rel="prefetch" as="fetch" href="{{ site.baseurl }}/assets/js/data.json" type="application/json" crossorigin="anonymous" />
-  {%- endif %}
+  {% include list_header_live.html %}
 
-  {%- if site.conference.live.streaming.enable %}
-    {%- for room in site.rooms %}
-      {%- if room.live %}
-        {%- include get_room_live_href.html %}
-        {%- if room_live_href %}
-  <link rel="preconnect" href="{{ room_live_href }}" />
-        {%- endif %}
-      {%- endif %}
-    {%- endfor %}
-  {%- endif %}
+  {% include list_header_pwa.html %}
 </head>
 
 <body class="pb-4">

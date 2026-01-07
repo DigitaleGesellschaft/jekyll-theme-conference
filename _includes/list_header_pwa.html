@@ -1,0 +1,21 @@
+{%- if site.conference.pwa and site.conference.pwa.enable -%}
+  {%- assign pwa_theme_color = site.conference.pwa.theme_color | default: "#0d6efd" -%}
+  {%- assign pwa_icon = site.conference.pwa.icons | first -%}
+
+  <link rel="manifest" href="{{ site.baseurl }}/manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="{{ pwa_theme_color }}" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="{{ pwa_theme_color }}" />
+  <meta name="apple-mobile-web-app-title" content="{{ site.title }}" />
+
+  {% if site.conference.pwa.icons -%}
+    {%- assign icon = site.conference.pwa.icons | first -%}
+    {%- if icon.first == nil -%}
+      {%- assign icon_src = icon -%}
+    {%- else -%}
+      {%- assign icon_src = icon.img -%}
+    {%- endif -%}
+    <link rel="apple-touch-icon" href="{{ icon_src | prepend: '/assets/images/' | prepend: site.baseurl }}" />
+  {%- endif -%}
+{%- endif -%}

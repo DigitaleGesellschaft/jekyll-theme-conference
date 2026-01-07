@@ -85,6 +85,31 @@
   display: initial;
 }
 
+// PWA
+.d-pwa-block {
+  display: none;
+}
+
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  .d-pwa-none {
+    display: none;
+  }
+
+  .d-pwa-block {
+    display: block;
+  }
+}
+
+[data-pwa="true"] {
+  .d-pwa-none {
+    display: none;
+  }
+
+  .d-pwa-block {
+    display: block;
+  }
+}
+
 // Map
 #map {
   min-height: 400px;
