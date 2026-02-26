@@ -1,0 +1,65 @@
+title: NYDBER Conference 2026
+description: A 1.5-day gathering of STEM education researchers and practitioners at Cornell University to explore interdisciplinary DBER collaborations across upstate New York.
+preposition: "at"
+
+remote_theme: "DigitaleGesellschaft/jekyll-theme-conference@4.0.1"
+
+plugins:
+  - jekyll-include-cache
+
+collections:
+  talks:
+    output: true
+    permalink: /:collection/:title/
+  speakers:
+    output: true
+    permalink: /:collection/:title/
+  rooms:
+    output: true
+    permalink: /:collection/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talk
+  - scope:
+      path: ""
+      type: speakers
+    values:
+      layout: speaker
+  - scope:
+      path: ""
+      type: rooms
+    values:
+      layout: room
+
+conference:
+  show_errors: true  # set to false before going live
+  lang: en
+  tz: "-05:00"  # Eastern Time
+
+  navigation:
+    links:
+      - name: Program
+        relative_url: /program/
+      - name: Speakers
+        relative_url: /speakers/
+      - name: Location
+        relative_url: /location/
+
+  talks:
+    tracks:
+      - name: Poster Session
+        color: info
+      - name: Working Group
+        color: success
+      - name: Keynote
+        color: primary
+      - name: Networking
+        color: warning
+
+  meta:
+    link_preview:
+      disable: false
