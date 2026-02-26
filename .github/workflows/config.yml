@@ -1,0 +1,46 @@
+title: NYDBER Conference 2026
+preposition: "at"
+description: A 1.5-day gathering of STEM education researchers and practitioners at Cornell University, June 11–12, 2026.
+
+theme: jekyll-theme-conference
+
+collections:
+  talks:
+    output: true
+    permalink: /:collection/:title/
+  speakers:
+    output: true
+    permalink: /:collection/:title/
+  rooms:
+    output: true
+    permalink: /:collection/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talk
+  - scope:
+      path: ""
+      type: speakers
+    values:
+      layout: speaker
+  - scope:
+      path: ""
+      type: rooms
+    values:
+      layout: room
+
+conference:
+  lang: en
+  tz: "-05:00"
+  show_errors: true
+  navigation:
+    links:
+      - name: Program
+        relative_url: /program/
+      - name: Speakers
+        relative_url: /speakers/
+      - name: Location
+        relative_url: /location/
