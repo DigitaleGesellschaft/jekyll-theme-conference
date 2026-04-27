@@ -708,6 +708,7 @@ Program settings are configured directly in the Front Matter of the program page
 - `title`: The title shown on the program page (defaults to "Program")
 - `time_steps`: The time interval in minutes for each row in the schedule grid (default: `15`)
 - `show_alltimes`: Show time labels for all intervals, not just full hours (default: `false`)
+- `show_first_hour`: Always show hour in time label of first row (default: `false`)
 
 ```yaml
 ---

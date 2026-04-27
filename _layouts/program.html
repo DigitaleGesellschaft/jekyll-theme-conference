@@ -67,29 +67,42 @@
           {%- assign day_duration_min = day_end_hour | minus: day_start_hour | times: 60 | minus: day_start_min | plus: day_end_min -%}
           {%- assign nbr_steps = day_duration_min | divided_by: page.time_steps -%}
 
-          {%- for i in (1..nbr_steps) -%}
+          {%- for step_idx in (1..nbr_steps) -%}
             {%- assign current_day = 0 -%}
-            {%- assign current_hour = i | minus: 1 | times: page.time_steps | plus: day_start_min | divided_by: 60 | floor | plus: day_start_hour -%}
+
+            {%- assign current_hour = step_idx | minus: 1 | times: page.time_steps | plus: day_start_min | divided_by: 60 | floor | plus: day_start_hour -%}
             {%- if current_hour >= 24 -%}
               {%- assign current_day = current_hour | divided_by: 24 | floor -%}
               {%- assign current_hour = current_hour | modulo: 24 -%}
             {%- endif -%}
-            {%- assign current_min = i | minus: 1 | times: page.time_steps | plus: day_start_min | modulo: 60 -%}
-            {%- if current_min < 10 -%}
-              {%- assign current_time = current_hour | append: ':0' | append: current_min -%}
-            {%- else -%}
-              {%- assign current_time = current_hour | append: ':' | append: current_min -%}
-            {%- endif -%}
+
+            {%- assign current_min = step_idx | minus: 1 | times: page.time_steps | plus: day_start_min | modulo: 60 -%}
 
             <tr class="h-100">
 
               {%- if current_min == 0 -%}
                 <th scope="row" class="program-time text-end">
-                  {{- current_time -}}
+                  {%- if current_min < 10 -%}
+                    {{- current_hour | append: ':0' | append: current_min -}}
+                  {%- else -%}
+                    {{- current_hour | append: ':' | append: current_min -}}
+                  {%- endif -%}
                 </th>
               {%- elsif page.show_alltimes -%}
                 <th scope="row" class="program-time text-end text-muted fw-normal">
-                  :{{ current_min }}
+                  {%- if page.show_first_hour and step_idx == 1 -%}
+                    {%- if current_min < 10 -%}
+                      {{- current_hour | append: ':0' | append: current_min -}}
+                    {%- else -%}
+                      {{- current_hour | append: ':' | append: current_min -}}
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- if current_min < 10 -%}
+                      {{- ':0' | append: current_min -}}
+                    {%- else -%}
+                      {{- ':' | append: current_min -}}
+                    {%- endif -%}
+                  {%- endif -%}
                 </th>
               {%- else -%}
                 <th scope="row"></th>
