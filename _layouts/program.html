@@ -223,12 +223,14 @@
   {%- endif -%}
 
   {%- if site.conference.talks.tracks %}
-    <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
+    {%- unless page.hide_legend -%}
+      <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
       {%- for track_prop in site.conference.talks.tracks %}
         <div class="d-block d-sm-inline-block m-1 p-1 ps-2 pe-2 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-start border-4 border-{{ track_prop.color | default: 'light' }}-subtle fw-normal">
           {{- track_prop.name -}}
         </div>
       {%- endfor -%}
+    {%- endunless -%}
   {%- endif -%}
 
 {% include footer.html %}

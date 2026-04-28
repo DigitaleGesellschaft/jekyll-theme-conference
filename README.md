@@ -709,6 +709,7 @@ Program settings are configured directly in the Front Matter of the program page
 - `time_steps`: The time interval in minutes for each row in the schedule grid or `start` to show only the intervals that correspond to a talk start time (default: `15`)
 - `show_alltimes`: Show time labels for all intervals, not just full hours (default: `false`)
 - `show_first_hour`: Always show hour in time label of first row (default: `false`)
+- `hide_legend`: Hide track legends at the bottom of program table (default: `false`)
 
 ```yaml
 ---
