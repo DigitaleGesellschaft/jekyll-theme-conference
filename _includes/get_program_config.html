@@ -12,7 +12,11 @@
 {%- if program_page -%}
   {%- assign program_url = program_page.url -%}
   {%- if program_page.time_steps -%}
-    {%- assign program_time_steps = program_page.time_steps -%}
+    {%- if program_page.time_steps == "start" -%}
+      {%- assign program_time_steps = 1 -%}
+    {%- else -%}
+      {%- assign program_time_steps = program_page.time_steps -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endif -%}
 

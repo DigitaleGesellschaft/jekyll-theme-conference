@@ -1,0 +1,12 @@
+{%- assign selected_day = site.data.program.days | where: "date", d.date | first -%}
+{%- assign start_times = "" | split: "," -%}
+
+{%- if selected_day -%}
+  {%- for room in selected_day.rooms -%}
+    {%- for talk in room.talks -%}
+      {%- unless start_times contains talk.time_start -%}
+        {%- assign start_times = start_times | push: talk.time_start -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endif -%}

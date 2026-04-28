@@ -706,7 +706,7 @@ window.conference.awaitReady().then(async () => {
 Program settings are configured directly in the Front Matter of the program page (the page with `layout: program`). The program page's Front Matter supports the following properties:
 
 - `title`: The title shown on the program page (defaults to "Program")
-- `time_steps`: The time interval in minutes for each row in the schedule grid (default: `15`)
+- `time_steps`: The time interval in minutes for each row in the schedule grid or `start` to show only the intervals that correspond to a talk start time (default: `15`)
 - `show_alltimes`: Show time labels for all intervals, not just full hours (default: `false`)
 - `show_first_hour`: Always show hour in time label of first row (default: `false`)
 

@@ -64,23 +64,33 @@
             {%- assign day_end_hour = day_end_day | minus: day_start_day | times: 24 | plus: day_end_hour -%}
           {%- endif -%}
 
-          {%- assign day_duration_min = day_end_hour | minus: day_start_hour | times: 60 | minus: day_start_min | plus: day_end_min -%}
-          {%- assign nbr_steps = day_duration_min | divided_by: page.time_steps -%}
+          {%- unless page.time_steps == "start" -%}
+            {%- assign time_steps = page.time_steps | default: 15 -%}
+
+            {%- assign day_duration_min = day_end_hour | minus: day_start_hour | times: 60 | minus: day_start_min | plus: day_end_min -%}
+            {%- assign nbr_steps = day_duration_min | divided_by: time_steps -%}
+          {%- else -%}
+            {%- assign time_steps = 1 -%}
+            {%- include get_start_times.html -%}
+            {%- assign nbr_steps = start_times.size %}
+          {%- endunless -%}
 
           {%- for step_idx in (1..nbr_steps) -%}
-            {%- assign current_day = 0 -%}
 
-            {%- assign current_hour = step_idx | minus: 1 | times: page.time_steps | plus: day_start_min | divided_by: 60 | floor | plus: day_start_hour -%}
-            {%- if current_hour >= 24 -%}
-              {%- assign current_day = current_hour | divided_by: 24 | floor -%}
-              {%- assign current_hour = current_hour | modulo: 24 -%}
-            {%- endif -%}
+            {%- unless page.time_steps == "start" -%}
+              {%- assign current_hour = step_idx | minus: 1 | times: time_steps | plus: day_start_min | divided_by: 60 | floor | plus: day_start_hour | modulo: 24 -%}
+              {%- assign current_min = step_idx | minus: 1 | times: time_steps | plus: day_start_min | modulo: 60 -%}
+            {%- else -%}
+              {% assign start_time_idx = step_idx | minus: 1 %}
+              {% assign current_time = start_times[start_time_idx] %}
 
-            {%- assign current_min = step_idx | minus: 1 | times: page.time_steps | plus: day_start_min | modulo: 60 -%}
+              {% assign current_hour = current_time | split: ":" | first | plus: 0 %}
+              {% assign current_min = current_time | split: ":" | last | plus: 0 %}
+            {%- endunless -%}
 
             <tr class="h-100">
 
-              {%- if current_min == 0 -%}
+              {%- if current_min == 0 or page.time_steps == "start" -%}
                 <th scope="row" class="program-time text-end">
                   {%- if current_min < 10 -%}
                     {{- current_hour | append: ':0' | append: current_min -}}
@@ -118,24 +128,26 @@
 
                   {%- include get_talk_time.html -%}
 
-                  {%- assign d_start_hour = current_day | minus: talk_start_day | times: 24 | plus: current_hour | minus: talk_start_hour -%}
+                  {%- assign d_start_hour = current_hour | minus: talk_start_hour -%}
                   {%- assign d_start_min = current_min | minus: talk_start_min -%}
-                  {%- assign d_end_hour = current_day | minus: talk_end_day | times: 24 | plus: current_hour | minus: talk_end_hour -%}
+                  {%- assign d_end_hour = current_hour | minus: talk_end_hour -%}
                   {%- assign d_end_min = current_min | minus: talk_end_min -%}
 
-                  {%- assign has_started = false -%}
-                  {%- if d_start_hour == 0 and d_start_min > 0 -%}
-                    {%- assign has_started = true -%}
+                  {%- if talk_start_hour > talk_end_hour -%}
+                    {%- if current_hour >= talk_start_hour -%}
+                      {%- assign d_end_hour = current_hour | minus: 24 | minus: talk_end_hour -%}
+                    {%- else -%}
+                      {%- assign d_start_hour = current_hour | plus: 24 | minus: talk_start_hour -%}
+                    {%- endif -%}
                   {%- endif -%}
-                  {%- if d_start_hour > 0 -%}
+
+                  {%- assign has_started = false -%}
+                  {%- if d_start_hour > 0 or d_start_hour == 0 and d_start_min >= 0 -%}
                     {%- assign has_started = true -%}
                   {%- endif -%}
 
                   {%- assign has_ended = false -%}
-                  {%- if d_end_hour == 0 and d_end_min >= 0 -%}
-                    {%- assign has_ended = true -%}
-                  {%- endif -%}
-                  {%- if d_end_hour > 0 -%}
+                  {%- if d_end_hour > 0 or d_end_hour == 0 and d_end_min >= 0 -%}
                     {%- assign has_ended = true -%}
                   {%- endif -%}
 
@@ -145,7 +157,24 @@
 
                   {%- if d_start_hour == 0 and d_start_min == 0 -%}
 
-                    {%- assign talk_nbr_steps = talk_duration_min | divided_by: page.time_steps -%}
+                    {%- unless page.time_steps == "start" -%}
+                      {%- assign talk_nbr_steps = talk_duration_min | divided_by: time_steps -%}
+                    {%- else -%}
+                      {%- assign talk_nbr_steps = 0 -%}
+                      {%- for start_time in start_times -%}
+                        {%- assign start_hour = start_time | split: ":" | first | plus: 0 -%}
+                        {%- assign start_min = start_time | split: ":" | last | plus: 0 -%}
+                        {%- assign d_start_hour = start_hour | minus: talk_start_hour -%}
+                        {%- if talk_start_hour > talk_end_hour and start_hour < talk_start_hour -%}
+                          {%- assign d_start_hour = d_start_hour | plus: 24 -%}
+                        {%- endif -%}
+                        {%- assign start_ts = d_start_hour | times: 60 | plus: start_min | minus: talk_start_min -%}
+                        {%- if start_ts >= 0 and start_ts < talk_duration_min -%}
+                          {%- assign talk_nbr_steps = talk_nbr_steps | plus: 1 -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endunless -%}
+
                     {%- include get_track_properties.html -%}
                     <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-0 h-100">
                       <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden">
