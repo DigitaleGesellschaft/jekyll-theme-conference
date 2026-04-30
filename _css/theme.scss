@@ -9,38 +9,48 @@
 @import "bootstrap/scss/mixins";
 
 // Program Overview
-.program-table {
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-
-  .program-time {
-    position: sticky;
-    left: 0;
-    z-index: 900;
-
-    width: 4rem;
-    min-width: 4rem;
-    max-width: 4rem;
-  }
-
-  .program-talk {
-    width: 15rem;
-    min-width: 15rem;
-    max-width: 15rem;
-  }
-
-  .program-space {
-    width: 1rem;
-    min-width: 1rem;
-    max-width: 1rem;
-  }
+.program-grid {
+  display: grid;
+  column-gap: 1rem;
 }
 
-.program-table-container {
+.program-grid-header {
+  position: sticky;
+  top: 0;
+  z-index: 920;
+  background-color: var(--bs-body-bg, #fff);
+  padding: 0.5rem 0.25rem;
+  font-weight: bold;
+}
+
+.program-grid-time {
+  position: sticky;
+  left: 0;
+  z-index: 900;
+  background-color: var(--bs-body-bg, #fff);
+  width: 4rem;
+  min-width: 4rem;
+  max-width: 4rem;
+  padding-top: 0.25rem;
+  padding-right: 0.5rem;
+  white-space: nowrap;
+}
+
+// Header cell in the time column gets highest z-index (sticky in both directions)
+.program-grid-header.program-grid-time {
+  z-index: 930;
+}
+
+.program-grid-talk {
+  min-width: 15rem;
+  padding: 0;
+}
+
+.program-grid-container {
   scroll-snap-type: x mandatory;
   scroll-padding-left: 4rem;
 
-  tbody .program-talk {
+  .program-grid-talk {
     scroll-snap-align: start;
   }
 }
