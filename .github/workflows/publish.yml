@@ -17,6 +17,10 @@ jobs:
     name: Build + Publish
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write # needed for creating the GitHub release
+      id-token: write # needed for RubyGems trusted publishing (OIDC)
+
     steps:
       - name: Checkout code
         id: checkout_code
@@ -41,16 +45,12 @@ jobs:
           ruby-version: "3.3"
           bundler-cache: true
 
+      - name: Configure RubyGems credentials
+        uses: rubygems/configure-rubygems-credentials@v1
+
       - name: Publish to RubyGems
         id: publish_rubygems
-        env:
-          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
         run: |
-          mkdir -p $HOME/.gem
-          touch $HOME/.gem/credentials
-          chmod 0600 $HOME/.gem/credentials
-          echo "---" >> $HOME/.gem/credentials
-          echo ":rubygems_api_key: ${RUBYGEMS_API_KEY}" >> $HOME/.gem/credentials
           gem build *.gemspec
           gem push *.gem
           mv *.gem jekyll-theme-conference.gem
