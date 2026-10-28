@@ -37,7 +37,22 @@
   {{ content }}
 
   {% if page.map %}
-    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ site.data.lang[site.conference.lang].location.map_label | default: 'Interactive conference location map' }}"></div>
+    {%- assign map_lang = site.data.lang[site.conference.lang].location -%}
+    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ map_lang.map_label | default: 'Interactive conference location map' }}">
+      {%- unless page.map.click_to_load == false %}
+        {%- comment -%} Privacy: tiles are only requested from the provider after consent {%- endcomment %}
+        <div class="map-consent d-flex flex-column justify-content-center align-items-center text-center h-100 p-4 bg-body-tertiary rounded">
+          <p class="mb-3">
+            {{ map_lang.map_privacy | default: "The map is loaded from an external provider, which receives your IP address:" }}
+            {{ page.map.map_provider | default: "OpenStreetMap.Mapnik" | split: "." | first | escape }}
+          </p>
+          <button type="button" class="btn btn-primary" data-map-load>
+            <i class="bi bi-map" aria-hidden="true"></i>
+            {{ map_lang.map_load | default: "Load map" }}
+          </button>
+        </div>
+      {%- endunless %}
+    </div>
   {% endif %}
 
 {% include footer.html %}

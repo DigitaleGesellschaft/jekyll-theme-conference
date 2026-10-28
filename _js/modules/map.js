@@ -24,33 +24,47 @@ export function createMapModule() {
     return leafletPromise;
   };
 
+  const createMap = (L, config, lang) => {
+    map = L.map('map').setView(config.home_coord, config.default_zoom);
+    L.tileLayer.provider(config.map_provider).addTo(map);
+
+    L.easyButton('bi bi-star', () => {
+      map.flyTo(config.home_coord, config.default_zoom);
+    }, lang?.focus_conf).addTo(map);
+
+    L.control.locate({
+      flyTo: true,
+      strings: { title: lang?.focus_me }
+    }).addTo(map);
+
+    mapReadyResolve(map);
+  };
+
   const init = (config, lang) => {
-    if (!config || !document.getElementById('map')) return;
+    const mapEl = document.getElementById('map');
+    if (!config || !mapEl) return;
 
     // Prevent double initialization
-    if (map) return;
+    if (mapReadyPromise) return;
 
     mapReadyPromise = new Promise((resolve) => {
       mapReadyResolve = resolve;
     });
 
-    loadLeaflet().then((L) => {
-      map = L.map('map').setView(config.home_coord, config.default_zoom);
-      L.tileLayer.provider(config.map_provider).addTo(map);
+    const load = () => loadLeaflet().then((L) => createMap(L, config, lang));
 
-      L.easyButton('bi bi-star', () => {
-        map.flyTo(config.home_coord, config.default_zoom);
-      }, lang?.focus_conf).addTo(map);
+    // Privacy: contact the tile provider only once the visitor asks for the
+    // map (consent button is omitted with `click_to_load: false`)
+    const loadButton = mapEl.querySelector('[data-map-load]');
+    if (!loadButton) {
+      load();
+      return;
+    }
 
-      L.control.locate({
-        flyTo: true,
-        strings: { title: lang?.focus_me }
-      }).addTo(map);
-
-      if (mapReadyResolve) {
-        mapReadyResolve(map);
-      }
-    });
+    loadButton.addEventListener('click', () => {
+      mapEl.querySelector('.map-consent')?.remove();
+      load();
+    }, { once: true });
   };
 
   const getMap = () => {
