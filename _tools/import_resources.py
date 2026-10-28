@@ -5,12 +5,30 @@ from pathlib import Path
 from unicodedata import normalize
 from urllib.parse import urljoin
 import re
+from typing import Optional
+
+# Seconds to wait for the pretalx server
+REQUEST_TIMEOUT = 30
+
+# Resources are served from the conference's domain: only allow document
+# formats, never active content such as .html or .svg
+ALLOWED_EXTENSIONS = {
+    ".pdf", ".odp", ".odt", ".ods", ".ppt", ".pptx", ".doc", ".docx",
+    ".xls", ".xlsx", ".key", ".txt", ".md", ".zip", ".png", ".jpg", ".jpeg",
+}
+
+
+def get_file_ext(resource_path: str) -> Optional[str]:
+    """Lower-case file extension if allowed, e.g. "/a/slides.PDF" -> ".pdf"."""
+    ext = Path(resource_path).suffix.lower()
+    return ext if ext in ALLOWED_EXTENSIONS else None
 
 
 def get_token(base_url: str, username: str, password: str) -> str:
     r = requests.post(
         urljoin(base_url, "/api/auth/"),
         data={"username": username, "password": password},
+        timeout=REQUEST_TIMEOUT,
     )
     r.raise_for_status()
     return r.json()["token"]
@@ -47,6 +65,7 @@ def get_all_talks(base_url: str, token: str, event: str) -> Dict[str, Any]:
         urljoin(base_url, f"/api/events/{event}/talks"),
         params={"state": "confirmed"},
         headers=get_header(token),
+        timeout=REQUEST_TIMEOUT,
     )
     r.raise_for_status()
 
@@ -69,7 +88,7 @@ def get_all_resources(
 
 def download_file(url: str, path: Path) -> None:
     print(f'Download "{url}"')
-    with requests.get(url, stream=True) as r:
+    with requests.get(url, stream=True, timeout=REQUEST_TIMEOUT) as r:
         r.raise_for_status()
         with open(path, "wb") as f:
             for chunk in r.iter_content(chunk_size=8192):
@@ -86,13 +105,17 @@ def download_all_resource(
 
     for talk_id, talk_resources in resources.items():
         for resource_id, resource in enumerate(talk_resources):
+            file_ext = get_file_ext(resource["resource"])
+            if file_ext is None:
+                print(f'Skip "{resource["resource"]}": file type not allowed')
+                continue
+
             # Create file name
             filename = talk_id
 
             if len(talk_resources) > 1:
                 filename += "_" + get_id(resource["description"])
 
-            file_ext = Path(resource["resource"]).suffix
             filename += file_ext
 
             file_path = folder / filename
@@ -117,7 +140,9 @@ def update_talk(
     talk = frontmatter.load(str(file))
 
     # Reshuffle resources
-    file_links = {res["filename"]: res["description"] for res in resources}
+    file_links = {
+        res["filename"]: res["description"] for res in resources if "filename" in res
+    }
 
     # Delete any existing file link
     if "links" in talk:

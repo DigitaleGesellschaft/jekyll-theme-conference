@@ -31,6 +31,29 @@ def get_id(string: str) -> str:
     return string
 
 
+# HTML tag, e.g. "<b>" or "</script>"
+HTML_TAG = re.compile(r"<[^>]*>")
+
+# Start of a raw HTML tag in Markdown, but not an autolink such as <https://...>
+HTML_TAG_START = re.compile(r"<(?=[A-Za-z/!?])(?!(?:https?|mailto):)")
+
+
+def clean_text(text: str) -> str:
+    """Strip HTML tags from single-line fields (names, titles), as the theme
+    escapes them anyway, e.g. "Eve <i>Evil</i>" -> "Eve Evil"."""
+    cleaned = " ".join(HTML_TAG.sub("", text).split())
+    if cleaned != text.strip():
+        print(f'Warning: removed markup from "{text}"')
+
+    return cleaned
+
+
+def neutralise_html(text: str) -> str:
+    """Prevent raw HTML in Markdown descriptions from being rendered,
+    e.g. "<img onerror=...>" -> "&lt;img onerror=...>"."""
+    return HTML_TAG_START.sub("&lt;", text)
+
+
 def escape_markdown(text: str) -> str:
     # escape pipes
     new_text = text.replace("|", "\\|")
@@ -45,7 +68,10 @@ def get_room(room_data: Dict[str, Any]) -> Dict[str, str]:
         else ""
     ).strip()
 
-    room = {"name": room_data.get("name", ""), "description": description}
+    room = {
+        "name": clean_text(room_data.get("name", "")),
+        "description": neutralise_html(description),
+    }
 
     if not description:
         room["hide"] = True
@@ -61,10 +87,10 @@ def get_speaker(speaker_data: Dict[str, Any]) -> Dict[str, str]:
     ).strip()
 
     speaker = {
-        "name": speaker_data.get("public_name", "Anonymous"),
+        "name": clean_text(speaker_data.get("public_name", "Anonymous")),
         "first_name": "",
         "last_name": "",
-        "description": description,
+        "description": neutralise_html(description),
     }
 
     if not description:
@@ -86,6 +112,9 @@ def format_talk_description(abstract: str, description: str) -> str:
 
     has_abstract = len(abstract.split()) > 1
     has_description = bool(description)
+
+    abstract = neutralise_html(abstract)
+    description = neutralise_html(description)
 
     if has_description and has_abstract:
         return f"{{:.lead}}\n{abstract}\n\n{description}"
@@ -123,6 +152,7 @@ def parse_frab(data: str) -> Dict[str, List[Dict[str, str]]]:
 
     for day in data["schedule"]["conference"]["days"]:
         for room_name, talks in day["rooms"].items():
+            room_name = clean_text(room_name)
             talks = sorted(talks, key=lambda t: t["start"])
 
             for talk in talks:
@@ -131,10 +161,11 @@ def parse_frab(data: str) -> Dict[str, List[Dict[str, str]]]:
                     content["speakers"].append(get_speaker(speaker_data))
 
                 # Talks
+                title = clean_text(talk["title"])
                 new_talk = {
-                    "name": talk["title"],
-                    "speakers": [s["public_name"] for s in talk["persons"]],
-                    "track": talk.get("track", ""),
+                    "name": title,
+                    "speakers": [clean_text(s["public_name"]) for s in talk["persons"]],
+                    "track": clean_text(talk.get("track") or ""),
                     "tags": [],
                     "description": format_talk_description(
                         talk.get("abstract", ""), talk.get("description", "")
@@ -142,7 +173,7 @@ def parse_frab(data: str) -> Dict[str, List[Dict[str, str]]]:
                 }
 
                 if talk.get("type"):
-                    new_talk["tags"].append(talk.get("type"))
+                    new_talk["tags"].append(clean_text(talk.get("type")))
 
                 #   Add "do not record" indication as tag
                 if talk.get("do_not_record"):
@@ -155,7 +186,7 @@ def parse_frab(data: str) -> Dict[str, List[Dict[str, str]]]:
 
                 content["program"].append(
                     {
-                        "name": talk["title"],
+                        "name": title,
                         "date": day["date"],
                         "time_start": talk["start"],
                         "time_end": time_end,
