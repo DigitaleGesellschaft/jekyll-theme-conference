@@ -8,6 +8,8 @@
  * - Live streaming modal with room switching and offline detection
  * - Time debugging controls (pause, set, reset)
  */
+import { formatDate, formatTime, toTimestamp } from "../core/time.js";
+
 export function createLiveModule(config) {
   const baseurl = config.baseurl || '';
 
@@ -18,7 +20,7 @@ export function createLiveModule(config) {
   const state = {
     data: {},
     lang: null,
-    tz: '',
+    timeZone: '',
     confStart: 0,
     confEnd: 0,
     streaming: {
@@ -38,6 +40,9 @@ export function createLiveModule(config) {
   // ==========================================================================
 
   const UPDATE_INTERVAL = 60;
+
+  // Names and links in data.json are user content, e.g. "<b>" -> "&#60;b&#62;"
+  const escapeHtml = (text) => String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
   const realTime = () => Math.floor(Date.now() / 1000);
   const adjustedTime = () => realTime() - state.timeOffset;
@@ -215,7 +220,9 @@ export function createLiveModule(config) {
       }
 
       pendingUrl = null;
-      if (iframe.src !== url) {
+      // Compare with the last URL, not iframe.src: the browser normalizes the
+      // latter (e.g. "https://host" -> "https://host/"), causing reloads
+      if (currentUrl !== url) {
         iframe.src = url;
       }
       currentUrl = url;
@@ -366,8 +373,8 @@ export function createLiveModule(config) {
       speakersEl.innerHTML = talk.speakers.map(name => {
         const speaker = getSpeaker(name);
         return speaker.href
-          ? `<a class="text-reset link-underline-${talk.color} link-underline-opacity-0 link-underline-opacity-100-hover" href="${speaker.href}">${speaker.name}</a>`
-          : speaker.name;
+          ? `<a class="text-reset link-underline-${talk.color} link-underline-opacity-0 link-underline-opacity-100-hover" href="${escapeHtml(speaker.href)}">${escapeHtml(speaker.name)}</a>`
+          : escapeHtml(speaker.name);
       }).join(', ');
 
       // Update live links
@@ -375,8 +382,8 @@ export function createLiveModule(config) {
         linksEl.innerHTML = talk.live_links
           .filter(link => (link.name || link.icon) && link.href)
           .map(link => {
-            const icon = link.icon ? `<i class="bi bi-${link.icon}" aria-hidden="true"></i>&nbsp;` : '';
-            return `<a href="${link.href}" class="btn btn-secondary m-1 live-past" data-time="${talk.start}">${icon}${link.name || ''}</a>`;
+            const icon = link.icon ? `<i class="bi bi-${escapeHtml(link.icon)}" aria-hidden="true"></i>&nbsp;` : '';
+            return `<a href="${escapeHtml(link.href)}" class="btn btn-secondary m-1 live-past" data-time="${talk.start}">${icon}${escapeHtml(link.name || '')}</a>`;
           })
           .join('');
         linksEl.classList.remove('d-none');
@@ -564,35 +571,6 @@ export function createLiveModule(config) {
     startUpdates();
   };
 
-  /** Convert UTC timestamp (seconds) to conference timezone date string */
-  const tsToDate = (timestamp) => {
-    const date = new Date(timestamp * 1000);
-    const tzOffset = parseTimezoneOffset(state.tz);
-    const tzTime = date.getTime() + (date.getTimezoneOffset() * 60000) + (tzOffset * 60000);
-    const tzDate = new Date(tzTime);
-    return tzDate.toISOString().slice(0, 10); // YYYY-MM-DD
-  };
-
-  /** Convert UTC timestamp (seconds) to conference timezone time string */
-  const tsToTime = (timestamp) => {
-    const date = new Date(timestamp * 1000);
-    const tzOffset = parseTimezoneOffset(state.tz);
-    const tzTime = date.getTime() + (date.getTimezoneOffset() * 60000) + (tzOffset * 60000);
-    const tzDate = new Date(tzTime);
-    const hours = String(tzDate.getHours()).padStart(2, '0');
-    const minutes = String(tzDate.getMinutes()).padStart(2, '0');
-    return `${tzDate.toISOString().slice(0, 10)} ${hours}:${minutes}`;
-  };
-
-  /** Parse timezone offset string (e.g., "+02:00") to minutes */
-  const parseTimezoneOffset = (tz) => {
-    if (!tz) return 0;
-    const match = tz.match(/^([+-])(\d{2}):(\d{2})$/);
-    if (!match) return 0;
-    const sign = match[1] === '+' ? 1 : -1;
-    return sign * (parseInt(match[2], 10) * 60 + parseInt(match[3], 10));
-  };
-
   const setTime = (timeStr, day) => {
     pauseTime();
 
@@ -612,21 +590,16 @@ export function createLiveModule(config) {
       dayData = days.find(d => d.date === day) || days.find(d => d.name === day) || days[0];
     } else {
       // No day specified: use current day from frozen time in conference timezone
-      const currentDate = tsToDate(state.frozenTime);
+      const currentDate = formatDate(state.frozenTime, state.timeZone);
       dayData = days.find(d => d.date === currentDate) || days[0];
     }
 
-    // Parse time in conference timezone: "YYYY-MM-DDTHH:MM:SS+TZ"
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    const isoString = `${dayData.date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00${state.tz}`;
-    const date = new Date(isoString);
-
-    // Store as UTC timestamp in seconds
-    state.frozenTime = Math.floor(date.getTime() / 1000);
+    // Parse wall-clock time in conference timezone, e.g. setTime("09:30", "2026-02-20")
+    state.frozenTime = toTimestamp(dayData.date, timeStr, state.timeZone);
     update();
   };
 
-  const getTime = () => tsToTime(now());
+  const getTime = () => formatTime(now(), state.timeZone);
 
   // ==========================================================================
   // Initialization
@@ -636,7 +609,7 @@ export function createLiveModule(config) {
     if (!liveConfig?.time) return;
 
     state.lang = langStrings;
-    state.tz = liveConfig.tz || '+00:00';
+    state.timeZone = liveConfig.timezone || '';
     state.confStart = liveConfig.time.start;
     state.confEnd = liveConfig.time.end;
 
@@ -647,12 +620,14 @@ export function createLiveModule(config) {
       extendMinutes: liveConfig.streaming.extend
     };
 
-    loadData();
     startUpdates();
 
     if (state.streaming.enabled) {
       setupStreamModal();
     }
+
+    // Conference is ready once the data is loaded (e.g. for setTime())
+    return loadData();
   };
 
   // ==========================================================================

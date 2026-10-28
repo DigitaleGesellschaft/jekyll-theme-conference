@@ -13,31 +13,10 @@
     {%- for t in r.talks -%}
       {%- if talk.name == t.name -%}
         {%- assign talk_found = true -%}
-        {%- assign talk_start = t.time_start | default: "00:00" -%}
-        {%- assign talk_end = t.time_end | default: "00:00" -%}
-
-        {%- if talk_start contains ' +' -%}
-          {%- assign talk_start_day = talk_start | split: ' +' | last | plus: 0 -%}
-          {%- assign talk_start = talk_start | split: ' +' | first -%}
-        {%- else -%}
-          {%- assign talk_start_day = 0 -%}
-        {%- endif -%}
-        {%- if talk_end contains ' +' -%}
-          {%- assign talk_end_day = talk_end | split: ' +' | last | plus: 0 -%}
-          {%- assign talk_end = talk_end | split: ' +' | first -%}
-        {%- else -%}
-          {%- assign talk_end_day = 0 -%}
-        {%- endif -%}
-
-        {%- assign datetime_start = d.date | append: "T" | append: talk_start | append: ":00" -%}
-        {%- assign datetime_end = d.date | append: "T" | append: talk_end | append: ":00" -%}
-        {%- if site.conference.tz -%}
-          {%- assign datetime_start = datetime_start | append: site.conference.tz -%}
-          {%- assign datetime_end = datetime_end | append: site.conference.tz -%}
-        {%- else -%}
-          {%- assign datetime_start = datetime_start | append: "+00:00" -%}
-          {%- assign datetime_end = datetime_end | append: "+00:00" -%}
-        {%- endif -%}
+        {%- comment -%} Timestamps in the site's timezone (Jekyll `timezone`), e.g. 2026-02-20T09:00:00+01:00 {%- endcomment -%}
+        {%- include get_talk_timestamp.html -%}
+        {%- assign datetime_start = timestamp_start | date: "%Y-%m-%dT%H:%M:%S%:z" -%}
+        {%- assign datetime_end = timestamp_end | date: "%Y-%m-%dT%H:%M:%S%:z" -%}
 
         {%- assign room = site.rooms | where: 'name', r.name | first -%}
         {%- assign talk_url = page.url | prepend: site.baseurl | prepend: site.url -%}
@@ -101,8 +80,8 @@
 {
   "@context": "https://schema.org",
   "@type": "Event",
-  "name": {{ talk.name | jsonify }},
-  "description": {{ talk_description | jsonify }},
+  "name": {{ talk.name | jsonify | replace: "<", "\u003c" }},
+  "description": {{ talk_description | jsonify | replace: "<", "\u003c" }},
   "startDate": "{{ datetime_start }}",
   "endDate": "{{ datetime_end }}",
   "duration": "{{ duration }}",
@@ -110,11 +89,11 @@
   "eventAttendanceMode": "https://schema.org/{{ event_attendance_mode }}",
   "location": {
     "@type": "Place"{% unless room.hide %},
-    "name": {{ r.name | jsonify }}{% endunless %}{% if room.url %},
+    "name": {{ r.name | jsonify | replace: "<", "\u003c" }}{% endunless %}{% if room.url %},
     "url": "{{ room.url | prepend: site.baseurl | prepend: site.url }}"{% endif %}
   },
   "url": "{{ talk_url }}"{% if keywords_count > 0 %},
-  "keywords": [{% if talk.track %}{{ talk.track | jsonify }}{% if talk.tags and talk.tags.size > 0 %}, {% endif %}{% endif %}{% if talk.tags and talk.tags.size > 0 %}{% for tag in talk.tags %}{{ tag | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}]{% endif %}{% if talk.speakers.size > 0 %},
+  "keywords": [{% if talk.track %}{{ talk.track | jsonify | replace: "<", "\u003c" }}{% if talk.tags and talk.tags.size > 0 %}, {% endif %}{% endif %}{% if talk.tags and talk.tags.size > 0 %}{% for tag in talk.tags %}{{ tag | jsonify | replace: "<", "\u003c" }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}]{% endif %}{% if talk.speakers.size > 0 %},
   "performer": [
     {%- for speaker_name in talk.speakers -%}
       {%- assign speaker = site.speakers | where: 'name', speaker_name | first -%}
@@ -133,8 +112,8 @@
   "image": "{{ site.conference.meta.schema_org.img | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}"{% endif %}{% if video_url != "" %},
   "video": {
     "@type": "VideoObject",
-    "name": {{ talk.name | jsonify }},
-    "description": {{ talk_description | jsonify }},
+    "name": {{ talk.name | jsonify | replace: "<", "\u003c" }},
+    "description": {{ talk_description | jsonify | replace: "<", "\u003c" }},
     "contentUrl": "{{ video_url }}",
     "recordedAt": {
       "@type": "Event",

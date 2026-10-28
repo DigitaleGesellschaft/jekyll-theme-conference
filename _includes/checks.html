@@ -10,7 +10,11 @@
 {%- assign missing_tracks = "" | split: "," -%}
 {%- assign talks_with_categories = 0 -%}
 {%- for talk in site.talks -%}
-  {%- assign missing_track = 1 -%}
+  {%- comment -%} The track is optional {%- endcomment -%}
+  {%- assign missing_track = 0 -%}
+  {%- if talk.track -%}
+    {%- assign missing_track = 1 -%}
+  {%- endif -%}
   {%- for track_prop in site.conference.talks.tracks -%}
     {%- if talk.track == track_prop.name -%}
       {%- assign missing_track = 0 -%}
@@ -125,4 +129,11 @@ For more details, refer to the [Talk Settings](https://github.com/DigitaleGesell
       {%- assign errors = errors | push: error_msg -%}
     {%- endif -%}
   {%- endfor -%}
+{%- endif -%}
+
+{%- if site.conference.tz -%}
+  {%- assign errors = errors | push: "The `conference.tz` setting is no longer supported. Use Jekyll's `timezone` setting instead, e.g. `timezone: Europe/Zurich` (see the upgrade guide)." -%}
+{%- endif -%}
+{%- if site.conference.live and site.timezone == nil -%}
+  {%- assign errors = errors | push: "Live indications require the `timezone` setting in your `_config.yml`, e.g. `timezone: Europe/Zurich`." -%}
 {%- endif -%}
