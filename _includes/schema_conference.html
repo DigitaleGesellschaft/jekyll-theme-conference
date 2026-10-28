@@ -19,29 +19,6 @@
       {%- for t in r.talks -%}
         {%- assign talk = site.talks | where: 'name', t.name | first -%}
         {%- if talk -%}
-          {%- assign talk_start = t.time_start | default: "00:00" -%}
-          {%- assign talk_end = t.time_end | default: "00:00" -%}
-
-          {%- if talk_start contains ' +' -%}
-            {%- assign talk_start = talk_start | split: ' +' | first -%}
-          {%- endif -%}
-          {%- if talk_end contains ' +' -%}
-            {%- assign talk_end = talk_end | split: ' +' | first -%}
-          {%- endif -%}
-
-          {%- assign talk_date = d.date -%}
-          {%- comment -%} Note: Day offsets in time (e.g., "12:00 +1") are not handled here for date calculation {%- endcomment -%}
-
-          {%- assign talk_datetime_start = talk_date | append: "T" | append: talk_start | append: ":00" -%}
-          {%- assign talk_datetime_end = talk_date | append: "T" | append: talk_end | append: ":00" -%}
-          {%- if site.conference.tz -%}
-            {%- assign talk_datetime_start = talk_datetime_start | append: site.conference.tz -%}
-            {%- assign talk_datetime_end = talk_datetime_end | append: site.conference.tz -%}
-          {%- else -%}
-            {%- assign talk_datetime_start = talk_datetime_start | append: "+00:00" -%}
-            {%- assign talk_datetime_end = talk_datetime_end | append: "+00:00" -%}
-          {%- endif -%}
-
           {%- assign talk_url = talk.url | prepend: site.baseurl | prepend: site.url -%}
           {%- assign talk_description = talk.name -%}
 
@@ -106,8 +83,8 @@
 {
   "@context": "https://schema.org",
   "@type": "ConferenceEvent",
-  "name": {{ site.title | jsonify }},
-  "description": {{ site.description | jsonify }}{% if start_date %},
+  "name": {{ site.title | jsonify | replace: "<", "\u003c" }},
+  "description": {{ site.description | jsonify | replace: "<", "\u003c" }}{% if start_date %},
   "startDate": "{{ start_date }}"{% endif %}{% if end_date %},
   "endDate": "{{ end_date }}"{% endif %},
   "eventStatus": "https://schema.org/{{ event_status }}",
@@ -115,7 +92,7 @@
   "inLanguage": "{{ site.conference.lang }}"{% endif %}{% unless location_hide %},
   "location": {
     "@type": "Place"{% if location_postal_address.name %},
-    "name": {{ location_postal_address.name | jsonify }}{% endif %},
+    "name": {{ location_postal_address.name | jsonify | replace: "<", "\u003c" }}{% endif %},
     "url": "{{ location_url | prepend: site.baseurl | prepend: site.url }}"
   }{% endunless %}{% if site.conference.meta.schema_org.has_participation_offer and site.conference.meta.schema_org.has_participation_offer.url %},
   "hasParticipationOffer": {
@@ -131,7 +108,7 @@
   }{% endif %}{% if site.conference.meta.schema_org.organizer %},
   "organizer": {
     "@type": "Organization"{% if site.conference.meta.schema_org.organizer.name %},
-    "name": {{ site.conference.meta.schema_org.organizer.name | jsonify }}{% endif %}{% if site.conference.meta.schema_org.organizer.url %},
+    "name": {{ site.conference.meta.schema_org.organizer.name | jsonify | replace: "<", "\u003c" }}{% endif %}{% if site.conference.meta.schema_org.organizer.url %},
     "url": "{{ site.conference.meta.schema_org.organizer.url }}"{% endif %}
   }{% endif %}{% if sub_events != "" %},
   "subEvent": [
