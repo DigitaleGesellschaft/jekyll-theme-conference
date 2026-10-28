@@ -1,23 +1,26 @@
-name: Test Jekyll Build
+name: Test
 
+# Builds the fixture site (test/fixture) with the theme and checks the
+# generated output, the JavaScript in a browser and the import scripts
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
-    name: Generate Website
+  test:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          lfs: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
       - name: Install Node.js dependencies
@@ -31,57 +34,29 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+          working-directory: test/fixture
 
-      - name: Create minimal test site
-        run: |
-          mkdir -p test_site
-          cd test_site
-          cat > Gemfile << 'EOF'
-          source "https://rubygems.org"
-          gem "jekyll", "~> 4.0"
-          gem "jekyll-theme-conference", path: ".."
-          EOF
-          cat > _config.yml << 'EOF'
-          theme: jekyll-theme-conference
-          collections:
-            talks:
-              output: true
-            speakers:
-              output: true
-            rooms:
-              output: true
-          defaults:
-            - scope:
-                path: ""
-                type: talks
-              values:
-                layout: talk
-            - scope:
-                path: ""
-                type: speakers
-              values:
-                layout: speaker
-            - scope:
-                path: ""
-                type: rooms
-              values:
-                layout: room
-          EOF
-          mkdir -p _data
-          cp ../_data/program.yml _data/ 2>/dev/null || echo "program: []" > _data/program.yml
-          mkdir -p _talks _speakers _rooms
-          echo "---\n---" > _talks/test.md
-          echo "---\n---" > _speakers/test.md
-          echo "---\n---" > _rooms/test.md
+      - name: Test generated site
+        run: npm test
 
-      - name: Install test site dependencies
-        run: |
-          cd test_site
-          bundle install
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
 
-      - name: Build test site
-        run: |
-          cd test_site
-          bundle exec jekyll build -d _site/
+      - name: Test in browser
+        run: npm run test:e2e
         env:
-          JEKYLL_ENV: production
+          SKIP_BUILD: "1"
+
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Test import scripts
+        run: uv run --no-project --with-requirements _tools/requirements.txt python -m unittest discover test/tools

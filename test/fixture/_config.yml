@@ -1,0 +1,95 @@
+# Test site exercising the theme's features and edge cases (quotes, HTML,
+# overnight talks, hidden entries, live streaming, PWA, map)
+
+title: Test Conference
+description: A "test" conference & more
+baseurl: /conf
+url: https://example.org
+timezone: Europe/Zurich
+theme: jekyll-theme-conference
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+
+collections:
+  talks:
+    output: true
+    permalink: /:collection/:title/
+  speakers:
+    output: true
+    permalink: /:collection/:title/
+  rooms:
+    output: true
+    permalink: /:collection/:title/
+    sort_by: order
+
+defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talk
+  - scope:
+      path: ""
+      type: speakers
+    values:
+      layout: speaker
+  - scope:
+      path: ""
+      type: rooms
+    values:
+      layout: room
+
+conference:
+  lang: en
+  show_errors: true
+
+  live:
+    streaming:
+      enable: true
+
+  pwa:
+    enable: true
+    theme_color: "#4ea93f"
+    icons:
+      - img: icon.png
+        sizes: 192x192
+        type: image/png
+
+  navigation:
+    links:
+      - name: Home
+        relative_url: /
+        pwa_hide: true
+      - name: Program
+        icon: calendar4-week
+        relative_url: /program/
+      - name: Talks
+        icon: megaphone
+        relative_url: /talks/
+      - name: Speakers
+        icon: people
+        relative_url: /speakers/
+      - name: Location
+        icon: geo-alt
+        relative_url: /location/
+      - live: true
+        name_inactive: Offline
+
+  talks:
+    tracks:
+      - name: Main
+        color: info
+      - name: Side & "B"
+        color: warning
+    tags:
+      - name: No Recording
+        icon: camera-video-off-fill
+
+  info:
+    bars:
+      - title: Notice
+        text: Hello from the info bar
+        color: info
