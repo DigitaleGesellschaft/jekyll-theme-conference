@@ -2,67 +2,49 @@
  * Info Box Module - Handles dismissal persistence for info bars and modals using localStorage
  */
 export function createInfoboxModule() {
-  const STORAGE_KEYS = {
-    bar: 'infobar_dismissed',
-    modal: 'infomodal_dismissed'
-  };
   const DEFAULT_DISMISS_MS = 7 * 86400 * 1000; // 7 days
 
-  // Generic dismissal manager
+  // Dismissals per type, stored as { id: expiration timestamp (ms) }, e.g.
+  // the bar <div data-infobar-id="sold-out" data-infobar-dismiss="86400">
   const createDismissalManager = (type) => {
-    const storageKey = STORAGE_KEYS[type];
-    const idAttr = `data-${type === 'bar' ? 'infobar' : 'infomodal'}-id`;
-    const dismissAttr = `data-${type === 'bar' ? 'infobar' : 'infomodal'}-dismiss`;
+    const storageKey = `${type}_dismissed`;
 
-    const getDismissedDict = () => {
+    // Storage may be unavailable (e.g. blocked cookies) or hold corrupt data
+    const load = () => {
       try {
-        const data = localStorage.getItem(storageKey);
-        return data ? JSON.parse(data) : {};
+        return JSON.parse(localStorage.getItem(storageKey)) || {};
       } catch {
-        localStorage.removeItem(storageKey);
         return {};
       }
     };
 
-    const saveDismissedDict = (dict) => {
-      localStorage.setItem(storageKey, JSON.stringify(dict));
-    };
-
-    const getDismissPeriod = (el) => {
-      const sec = el.dataset[type === 'bar' ? 'infobarDismiss' : 'infomodalDismiss'];
-      return sec ? parseInt(sec, 10) * 1000 : DEFAULT_DISMISS_MS;
-    };
-
     const isDismissed = (el) => {
-      const id = el.dataset[type === 'bar' ? 'infobarId' : 'infomodalId'];
-      if (!id) return false;
-
-      const dismissedDict = getDismissedDict();
-      const expirationTimestamp = dismissedDict[id];
-      if (!expirationTimestamp) return false;
-
-      return Date.now() < parseInt(expirationTimestamp, 10);
+      const id = el.dataset[`${type}Id`];
+      return !!id && Date.now() < (load()[id] || 0);
     };
 
-    const saveDismiss = (id) => {
-      const selector = `[${idAttr}="${id}"]`;
-      const el = document.querySelector(selector);
-      if (!el || !el.hasAttribute(dismissAttr)) return;
+    const saveDismiss = (el) => {
+      const id = el.dataset[`${type}Id`];
+      const seconds = el.dataset[`${type}Dismiss`];
+      if (!id || !seconds) return;
 
-      const dismissPeriod = getDismissPeriod(el);
-      const dismissedDict = getDismissedDict();
-      dismissedDict[id] = Date.now() + dismissPeriod;
-      saveDismissedDict(dismissedDict);
+      const dismissed = load();
+      dismissed[id] = Date.now() + (parseInt(seconds, 10) * 1000 || DEFAULT_DISMISS_MS);
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(dismissed));
+      } catch {
+        // Dismissal is then not remembered
+      }
     };
 
     return { isDismissed, saveDismiss };
   };
 
-  const barManager = createDismissalManager('bar');
-  const modalManager = createDismissalManager('modal');
+  const barManager = createDismissalManager('infobar');
+  const modalManager = createDismissalManager('infomodal');
 
   const init = () => {
-    // Initialize info bars
+    // Info bars
     document.querySelectorAll('.alert[data-infobar-id]').forEach(el => {
       if (barManager.isDismissed(el)) {
         el.style.display = 'none';
@@ -70,30 +52,14 @@ export function createInfoboxModule() {
       }
     });
 
-    document.addEventListener('close.bs.alert', e => {
-      const id = e.target.dataset?.infobarId;
-      if (id && e.target.dataset?.infobarDismiss) {
-        barManager.saveDismiss(id);
-      }
-    });
+    document.addEventListener('close.bs.alert', e => barManager.saveDismiss(e.target));
 
-    // Initialize info modals
+    // Info modals
     document.querySelectorAll('.modal.infomodal').forEach(el => {
-      const id = el.dataset.infomodalId;
+      if (modalManager.isDismissed(el)) return;
 
-      // Skip if dismissed
-      if (id && modalManager.isDismissed(el)) return;
-
-      // Show modal
-      const modal = new window.bootstrap.Modal(el);
-      modal.show();
-
-      // Track dismissal on close
-      if (id && el.dataset.infomodalDismiss) {
-        el.addEventListener('hidden.bs.modal', () => {
-          modalManager.saveDismiss(id);
-        }, { once: true });
-      }
+      new window.bootstrap.Modal(el).show();
+      el.addEventListener('hidden.bs.modal', () => modalManager.saveDismiss(el), { once: true });
     });
   };
 

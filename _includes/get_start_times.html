@@ -1,12 +1,29 @@
 {%- assign selected_day = site.data.program.days | where: "date", d.date | first -%}
-{%- assign start_times = "" | split: "," -%}
+{%- assign start_keys = "" | split: "," -%}
 
+{%- comment -%}
+  Sortable keys "<minutes since day start, fixed width>|<time>",
+  e.g. "100570|09:30" or "101500|01:00 +1" (after midnight)
+{%- endcomment -%}
 {%- if selected_day -%}
   {%- for room in selected_day.rooms -%}
     {%- for talk in room.talks -%}
-      {%- unless start_times contains talk.time_start -%}
-        {%- assign start_times = start_times | push: talk.time_start -%}
+      {%- assign time = talk.time_start | split: " +" -%}
+      {%- assign day_offset = time[1] | default: 0 | plus: 0 -%}
+      {%- assign hour = time[0] | split: ":" | first | plus: 0 -%}
+      {%- assign min = time[0] | split: ":" | last | plus: 0 -%}
+      {%- assign day_minutes = day_offset | times: 1440 -%}
+      {%- assign key = hour | times: 60 | plus: min | plus: day_minutes | plus: 100000 | append: "|" | append: talk.time_start -%}
+      {%- unless start_keys contains key -%}
+        {%- assign start_keys = start_keys | push: key -%}
       {%- endunless -%}
     {%- endfor -%}
   {%- endfor -%}
 {%- endif -%}
+
+{%- assign start_times = "" | split: "," -%}
+{%- assign start_keys = start_keys | sort -%}
+{%- for key in start_keys -%}
+  {%- assign start_time = key | split: "|" | last -%}
+  {%- assign start_times = start_times | push: start_time -%}
+{%- endfor -%}

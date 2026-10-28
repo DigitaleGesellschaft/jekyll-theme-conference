@@ -29,6 +29,12 @@
     max-width: 15rem;
   }
 
+  // Talk: coloured bar on the left, gap to a directly following talk
+  td.program-talk[rowspan] {
+    border-width: 0 0 2px 0.25rem !important;
+    border-bottom-color: var(--bs-body-bg) !important;
+  }
+
   .program-space {
     width: 1rem;
     min-width: 1rem;

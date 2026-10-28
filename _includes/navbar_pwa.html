@@ -27,7 +27,7 @@
 
         {%- else %}
           <div class="px-2">
-            {% if page.url contains link.relative_url %}
+            {% if page.url == link.relative_url or link.relative_url != "/" and page.url contains link.relative_url %}
               {% assign is_active = true %}
             {% else %}
               {% assign is_active = false %}
