@@ -22,7 +22,7 @@ Tests build the fixture site `test/fixture/` (edge cases: quotes/markup in names
 ```bash
 (cd test/fixture && bundle install)  # once
 npm test                             # node:test: generated output (build.test.js), style setups (styles.test.js, extra builds via _config.style-*.yml), unit tests (unit/)
-npm run test:e2e                     # Playwright (test/e2e/), serves the build via test/support/serve.js
+npm run test:e2e                     # Playwright (test/e2e/, incl. axe accessibility checks in a11y.spec.js), serves the build via test/support/serve.js
 node --test --test-name-pattern="site.json" test/build.test.js   # single test
 npx playwright test test/e2e/map.spec.js                          # single spec; SKIP_BUILD=1 reuses last build
 uv run --no-project --with-requirements _tools/requirements.txt python -m unittest discover test/tools

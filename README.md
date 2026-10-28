@@ -789,7 +789,8 @@ Each talk is represented by a file in the `_talks/` directory. It must begin wit
 - optionally, a list of `links` (see the [_Links_](#links) subsection below for the available properties):
   - Links with an `icon` are treated separately and are also included on the talk overview page.
   - Links with `live: true` are only shown below the live stream for the given talk in form of buttons.
-- optionally, `hide: true` if the talk's page should not be linked to.
+- optionally, `lang` with the talk's language (e.g. `en`) if it differs from the site's, so screen readers pronounce its title and description correctly,
+- optionally, `hide: true` if the talk's page should not be linked to (its page then only redirects to the home page).
 
 Example:
 

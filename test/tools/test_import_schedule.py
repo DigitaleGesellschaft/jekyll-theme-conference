@@ -25,6 +25,7 @@ def frab(title: str, person: str, room: str, abstract: str) -> dict:
                                     "abstract": abstract,
                                     "description": "",
                                     "track": "Main <b>",
+                                    "language": "en",
                                     "persons": [{"public_name": person, "biography": ""}],
                                 }
                             ]
@@ -52,6 +53,7 @@ class TestImportSchedule(unittest.TestCase):
         self.assertEqual(talk["name"], "Talk alert(1) & more")
         self.assertEqual(talk["speakers"], ["Eve Evil"])
         self.assertEqual(talk["track"], "Main")
+        self.assertEqual(talk["lang"], "en")
         self.assertEqual(self.content["speakers"][0]["name"], "Eve Evil")
         self.assertEqual(self.content["rooms"][0]["name"], "Room")
         self.assertEqual(self.content["program"][0]["name"], talk["name"])

@@ -55,6 +55,9 @@ export function createProgramModule() {
         ([entry]) => {
           stickyWrapper.style.display = entry.isIntersecting ? 'none' : 'block';
 
+          // A hidden element ignores scrolling: catch up with the table
+          stickyWrapper.scrollLeft = container.scrollLeft;
+
           // Overlay the table instead of pushing it down: the shift would
           // reveal the original header again and the two would flicker
           // (exact height, offsetHeight is rounded to whole pixels)

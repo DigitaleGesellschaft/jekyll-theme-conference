@@ -24,7 +24,7 @@
 
         {% assign cur_letter = last_letter %}
         <div class="col-count">
-          <h3>{{ cur_letter | escape }}</h3>
+          <h2 class="h3">{{ cur_letter | escape }}</h2>
           <ul class="list-unstyled">
       {% endif %}
 
@@ -32,7 +32,7 @@
         {% if speaker.hide %}
           {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
         {% else %}
-          <a class="link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
+          <a class="d-inline-block py-1 link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
             {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
           </a>
         {% endif %}

@@ -10,8 +10,9 @@
 
 // Program Overview
 .program-table {
+  // Gap between columns: spacer columns would be announced by screen readers
   border-collapse: separate !important;
-  border-spacing: 0 !important;
+  border-spacing: 1rem 0 !important;
 
   .program-time {
     position: sticky;
@@ -33,12 +34,6 @@
   td.program-talk[rowspan] {
     border-width: 0 0 2px 0.25rem !important;
     border-bottom-color: var(--bs-body-bg) !important;
-  }
-
-  .program-space {
-    width: 1rem;
-    min-width: 1rem;
-    max-width: 1rem;
   }
 }
 
@@ -148,6 +143,17 @@
   &:hover {
     color: shade-color(color-contrast($dark), $link-shade-percentage);
   }
+}
+
+// Outline button text: Bootstrap's colours have too little contrast on
+// tinted (home box) and dark backgrounds
+.btn-outline-primary {
+  --bs-btn-color: var(--bs-primary-text-emphasis);
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary {
+  --bs-btn-color: var(--bs-secondary-color);
+  --bs-btn-border-color: var(--bs-border-color);
 }
 
 [data-bs-theme="dark"] .live-button {

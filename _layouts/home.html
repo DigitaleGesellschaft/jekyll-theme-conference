@@ -67,7 +67,7 @@
             </span>
 
             {%- if link.name_inactive -%}
-              <span class="live-hide d-print-inline {{ btn_default }} disabled" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+              <span class="live-hide d-print-inline {{ btn_default }} disabled" aria-disabled="true" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
                 {{ link.name_inactive }}
               </span>
             {%- endif -%}

@@ -37,7 +37,6 @@
         <thead>
           <tr>
             <th scope="col" class="program-time text-center" aria-label="{{ site.data.lang[site.conference.lang].program.time | default: 'Time' }}">#</th>
-            <th scope="col" class="program-space"></th>
             {%- assign nbr_rooms = d.rooms | size -%}
             {%- for r in d.rooms -%}
               {%- assign room = site.rooms | where: 'name', r.name | first %}
@@ -50,9 +49,6 @@
                   </a>
                 {%- endif -%}
               </th>
-              {%- unless forloop.last %}
-                <th scope="col" class="program-space" aria-hidden="true"></th>
-              {%- endunless -%}
             {%- endfor %}
           </tr>
         </thead>
@@ -107,6 +103,8 @@
                       {{- current_hour | append: ':' | append: current_min -}}
                     {%- endif -%}
                   {%- else -%}
+                    {%- comment -%} Hour for screen readers, e.g. "10:15" instead of ":15" {%- endcomment -%}
+                    <span class="visually-hidden">{{ current_hour }}</span>
                     {%- if current_min < 10 -%}
                       {{- ':0' | append: current_min -}}
                     {%- else -%}
@@ -115,9 +113,17 @@
                   {%- endif -%}
                 </th>
               {%- else -%}
-                <th scope="row"></th>
+                <th scope="row">
+                  {%- comment -%} Time for screen readers only {%- endcomment -%}
+                  <span class="visually-hidden">
+                    {%- if current_min < 10 -%}
+                      {{- current_hour | append: ':0' | append: current_min -}}
+                    {%- else -%}
+                      {{- current_hour | append: ':' | append: current_min -}}
+                    {%- endif -%}
+                  </span>
+                </th>
               {%- endif %}
-              <td></td>
 
               {%- for r in d.rooms -%}
                 {%- assign room = site.rooms | where: 'name', r.name | first -%}
@@ -179,6 +185,13 @@
                     {%- comment -%} Colour on the cell itself: a child cannot stretch over all spanned rows {%- endcomment %}
                     <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-start border-{{ track_color }}-subtle shadow-sm">
                       <div class="overflow-hidden">
+                        {%- comment -%} Time and track for screen readers: visually given by row and colour {%- endcomment %}
+                        <span class="visually-hidden">
+                          {%- if talk_start_hour < 10 -%}0{%- endif -%}{{- talk_start_hour -}}:{%- if talk_start_min_exact < 10 -%}0{%- endif -%}{{- talk_start_min_exact -}}
+                          –
+                          {%- if talk_end_hour < 10 -%}0{%- endif -%}{{- talk_end_hour -}}:{%- if talk_end_min_exact < 10 -%}0{%- endif -%}{{- talk_end_min_exact -}}
+                          {%- if talk.track -%}, {{ talk.track | escape }}{%- endif -%}
+                        </span>
 
                         {%- include show_live_icon.html class="mb-2" %}
 
@@ -203,10 +216,6 @@
                   <td class="program-talk"></td>
                 {%- endunless -%}
 
-                {%- if forloop.last != true %}
-                  <td class="program-space"></td>
-                {%- endif -%}
-
               {%- endfor %}
 
             </tr>
@@ -225,7 +234,7 @@
 
   {%- if site.conference.talks.tracks %}
     {%- unless page.hide_legend -%}
-      <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
+      <h2 class="h5 mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h2>
       {%- for track_prop in site.conference.talks.tracks %}
         <div class="d-block d-sm-inline-block m-1 p-1 ps-2 pe-2 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-start border-4 border-{{ track_prop.color | default: 'light' }}-subtle fw-normal">
           {{- track_prop.name | escape -}}

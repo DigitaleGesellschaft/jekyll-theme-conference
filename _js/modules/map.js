@@ -61,9 +61,10 @@ export function createMapModule() {
       return;
     }
 
+    // Keep the keyboard focus, which the removed button held, on the map
     loadButton.addEventListener('click', () => {
       mapEl.querySelector('.map-consent')?.remove();
-      load();
+      load().then(() => mapEl.focus());
     }, { once: true });
   };
 

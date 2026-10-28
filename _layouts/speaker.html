@@ -27,7 +27,7 @@
   {% endif %}
 
   {% if has_regular_links > 0 %}
-    <h5 class="mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information | default: "More Information" }}:</h5>
+    <h2 class="h5 mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information | default: "More Information" }}:</h2>
 
     <ul class="list-unstyled">
       {% for link in speaker.links %}
@@ -50,7 +50,7 @@
   {% endfor %}
 
   {% if active_speaker %}
-    <h5 class="mt-4 mb-2">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h5>
+    <h2 class="h5 mt-4 mb-2">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h2>
 
     <table class="mw-100">
     {%- for d in site.data.program.days -%}
@@ -78,4 +78,6 @@
   </p>
 
   {%- include footer.html -%}
+{%- else -%}
+  {%- include hidden_page.html -%}
 {%- endunless -%}

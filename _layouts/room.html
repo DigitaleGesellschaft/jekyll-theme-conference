@@ -24,15 +24,15 @@
     {% for r in d.rooms %}
       {% if this_room.name == r.name and r.talks.size > 0 %}
         {% unless room_talks %}
-          <h5 class="mt-4 mb-2">
+          <h2 class="h5 mt-4 mb-2">
             {{ site.data.lang[site.conference.lang].location.talks | default: "Talks in this room" }}:
-          </h5>
+          </h2>
           {% assign room_talks = true %}
         {% endunless %}
 
-        <h6 class="mt-1 mb-2">
+        <h3 class="h6 mt-1 mb-2">
           {{- day_name | escape -}}
-        </h6>
+        </h3>
 
         <table class="mw-100">
         {%- for t in r.talks -%}
@@ -47,4 +47,6 @@
   {% endfor %}
 
   {%- include footer.html -%}
+{%- else -%}
+  {%- include hidden_page.html -%}
 {%- endunless -%}
