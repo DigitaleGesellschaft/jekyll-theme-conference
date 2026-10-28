@@ -1,3 +1,9 @@
+{%- comment -%}
+  Link tag of `link`, e.g. {% include get_link.html context="talk" %}. The
+  context ("talk" with `talk`, "speaker" with `speaker`, or none) selects the
+  folder of files and the title of videos. Passed explicitly: variables of
+  that name may be left over from elsewhere on the page.
+{%- endcomment -%}
 {%- assign link_valid = false -%}
 {%- if link.live -%}
   {%- if include.type == "live" -%}
@@ -31,10 +37,10 @@
 {%- elsif link.file -%}
   {%- assign link_icon = link.icon | default: "file-earmark-text" -%}
 
-  {%- if talk -%}
+  {%- if include.context == "talk" -%}
     {%- assign link_href = link.file | prepend: '/documents/slides/' | prepend: site.baseurl -%}
 
-  {%- elsif speaker -%}
+  {%- elsif include.context == "speaker" -%}
     {%- assign link_href = link.file | prepend: '/documents/bio/' | prepend: site.baseurl -%}
 
   {%- else -%}
@@ -47,7 +53,7 @@
   {%- assign link_icon = link.icon | default: "camera-video-fill" -%}
   {%- assign link_iframe = link.iframe | default: true -%}
 
-  {%- if talk -%}
+  {%- if include.context == "talk" -%}
 
     {%- capture modal_title -%}
       {%- if talk.hide -%}
@@ -63,7 +69,7 @@
       {%- include list_speakers.html -%}
     {%- endcapture -%}
 
-  {%- elsif speaker -%}
+  {%- elsif include.context == "speaker" -%}
 
     {%- capture modal_title -%}
       {%- if speaker.hide -%}

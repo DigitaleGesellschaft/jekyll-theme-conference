@@ -268,6 +268,21 @@ describe("Markup", () => {
     assert.deepEqual([...new Set(activeLinks)], ["/conf/program/"]);
   });
 
+  test("file links resolve by their context, not by variables left over on the page", () => {
+    const flyerLinks = {};
+    for (const file of ["index.html", "program/index.html", "talks/index.html", "talks/opening_welcome/index.html", "speakers/index.html", "speakers/ada_lovelace/index.html", "rooms/room_a/index.html", "location/index.html"]) {
+      flyerLinks[file] = [...new Set([...read(file).matchAll(/href="([^"]*flyer\.pdf)"/g)].map(([, href]) => href))];
+    }
+
+    // Navigation (top bar and PWA bottom bar)
+    for (const [file, hrefs] of Object.entries(flyerLinks)) {
+      assert.deepEqual(hrefs, ["/conf/documents/flyer.pdf"], file);
+    }
+    // Talk slides and speaker documents
+    assert.match(read("talks/opening_welcome/index.html"), /href="\/conf\/documents\/slides\/opening\.pdf"/);
+    assert.match(read("speakers/ada_lovelace/index.html"), /href="\/conf\/documents\/bio\/ada\.pdf"/);
+  });
+
   test("program table has no interactive grid role", () => {
     assert.doesNotMatch(read("program/index.html"), /role="grid"/);
   });

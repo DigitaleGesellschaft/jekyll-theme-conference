@@ -75,6 +75,9 @@ conference:
       - name: Location
         icon: geo-alt
         relative_url: /location/
+      - name: Flyer
+        icon: file-earmark-text
+        file: flyer.pdf
       - live: true
         name_inactive: Offline
 

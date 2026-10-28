@@ -1,6 +1,8 @@
-{%- if talk -%}
+{%- comment -%} Links of the talk or speaker given by the context, e.g. context="talk" {%- endcomment -%}
+{%- assign links = nil -%}
+{%- if include.context == "talk" -%}
   {%- assign links = talk.links -%}
-{%- elsif speaker -%}
+{%- elsif include.context == "speaker" -%}
   {%- assign links = speaker.links -%}
 {%- endif -%}
 
