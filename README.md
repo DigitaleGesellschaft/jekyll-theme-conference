@@ -265,13 +265,12 @@ To add more languages, copy the internationalization file from this repository t
 
 ### Timezone
 
-Multiple dynamic features such as showing the current day in the program or live indications require correct timing. Define the timezone in which the conference takes place with the `tz` property set to a valid [UTC timezone offset](https://en.wikipedia.org/wiki/List_of_UTC_offsets) in the format `"+/-HH:MM"`:
+Multiple dynamic features such as showing the current day in the program, live indications or the dates in the structured data require correct timing. Define the timezone in which the conference takes place with Jekyll's `timezone` setting, set to an [IANA timezone name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Daylight saving time is taken into account and the result does not depend on the timezone of the machine building the site.
 
 Example:
 
 ```yaml
-conference:
-  tz: "+02:00"
+timezone: Europe/Zurich
 ```
 
 ### Navigation Bar
@@ -533,7 +532,7 @@ conference:
 
 ### Progressive Web App (PWA)
 
-The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
+The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. Once a visitor opened the site, all pages (program, talks, speakers, rooms, …) and all files below `assets/` (stylesheets, scripts, images, fonts) are available offline. Documents (`documents/`) and map tiles are not. Pages and data are always loaded fresh when online, so schedule changes reach visitors right away. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
 
 1. Enable and optionally customize the functionality in your `_config.yml`:
    ```yaml
@@ -637,6 +636,8 @@ conference:
 To help users find your venue, an [OpenStreetMap](https://www.openstreetmap.org/) container displaying a map can be shown on the location page as well as the address of the venue. You can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
 The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitor's current location (has to be manually activated and granted by the visitor).
 
+To protect the visitors' privacy, the map is only loaded once the visitor clicks a button, as the tile provider receives the visitor's IP address. If you host the tiles yourself, you can load the map right away by setting `click_to_load: false`.
+
 Location settings are configured directly in the Front Matter of the location page (the page with `layout: location`). The location page's Front Matter supports the following properties:
 
 - `title`: The title shown in the navigation bar for the location section (defaults to "Location")
@@ -645,6 +646,7 @@ Location settings are configured directly in the Front Matter of the location pa
   - `home_coord`: Center coordinates of the map (e.g., `47.37808, 8.53935`)
   - `default_zoom`: Initial zoom level (e.g., `17`)
   - `map_provider`: Tile provider (default: `"OpenStreetMap.Mapnik"`)
+  - `click_to_load`: Load the map only after the visitor's consent (default: `true`)
 - `postal_address`: Postal address displayed on the location page and used in schema.org structured data. Can contain:
   - `name`: Venue name (e.g., "Zentralwäscherei")
   - `street`: Street address (e.g., "Neue Hard 12")
@@ -680,7 +682,7 @@ The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. Th
 
 1. The conference JavaScript bundle (`conference.bundle.js`) is automatically loaded and provides all necessary libraries
 2. Await the initialization of the theme's object using `window.conference.awaitReady()`
-3. Fetch the map object and verify it is set (while the JavaScript code is executed on each page, the map object will only exist on the location page)
+3. Fetch the map object and verify it is set (while the JavaScript code is executed on each page, the map object will only exist on the location page). The returned promise resolves once the visitor loaded the map.
 4. Modify the map.
 
 The following example for `assets/js/main.js` adds a simple marker to the map:
@@ -1050,10 +1052,13 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
   - `conference.program`: Program navigation and tab management
   - `conference.map`: Map functionality (if enabled)
   - `conference.modal`: Modal popup handling
-  - `conference.live`: Live streaming and real-time updates
+  - `conference.live`: Live streaming and real-time updates (incl. `setTime("09:30", "2026-02-20")`, `getTime()`, `resetTime()` for testing)
+  - `conference.infobox`: Dismissal of information boxes and modals
+  - `conference.darkmode`: Dark mode according to the system preference
+  - `conference.pwa`: Service worker registration (if PWA is enabled)
   - `conference.awaitReady()`: Promise-based initialization helper
-- `window.$` / `window.jQuery`: jQuery library
-- `window.L`: Leaflet map library (if map is enabled)
+- `window.bootstrap`: Bootstrap components (Alert, Collapse, Dropdown, Modal, Tab)
+- `window.L`: Leaflet map library (once the map is loaded)
 
 **Example Usage:**
 
@@ -1143,6 +1148,21 @@ To modify the theme's source code and rebuild:
    ```bash
    bundle exec jekyll serve
    ```
+
+### Tests
+
+The tests build the example site in `test/fixture/` (containing edge cases such as quotes and markup in names, overnight talks, hidden entries, live streams, PWA and a map) and run on every pull request:
+
+```bash
+npm run build                         # theme bundles
+(cd test/fixture && bundle install)   # once
+npm test                              # generated JSON, structured data, timestamps, escaping, program options, style setups
+npx playwright install chromium       # once
+npm run test:e2e                      # in a browser: modules, live stream, map, offline PWA, dark mode, info boxes
+uv run --no-project --with-requirements _tools/requirements.txt python -m unittest discover test/tools
+```
+
+Run a single test with e.g. `node --test --test-name-pattern="site.json" test/build.test.js` or `npx playwright test test/e2e/map.spec.js`. Set `SKIP_BUILD=1` to reuse the last build in browser tests.
 
 
 ## License

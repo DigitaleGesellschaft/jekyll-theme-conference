@@ -128,6 +128,18 @@ conference:
 **Action:**
 - Move `link_preview` under `meta.link_preview`.
 
+### Timezone
+
+The theme now uses Jekyll's `timezone` setting (an IANA name, daylight saving time aware) instead of `conference.tz` (a fixed offset). Without it, times depend on the machine building the site.
+
+```yaml
+# _config.yml
+timezone: Europe/Zurich  # was: conference.tz: "+01:00"
+```
+
+**Action:**
+- Replace `conference.tz` (or a top-level `tz`) with `timezone`.
+
 ### Removed Settings
 
 Remove from `_config.yml` if present:
@@ -175,3 +187,6 @@ conference:
 
 ### Dark Mode
 Automatic support based on system preferences. Optionally add `img_dark` for logos.
+
+### Map Privacy
+The map is only loaded once the visitor clicks a button, as the tile provider receives the visitor's IP address. Set `map.click_to_load: false` in the location page's Front Matter to load it right away (e.g. for self-hosted tiles).
