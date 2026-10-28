@@ -1,4 +1,4 @@
-version: 11
+version: 12
 
 en:
   pronoun:
@@ -46,6 +46,9 @@ en:
     focus_me: Show my current location
     map_load: Load map
     map_privacy: "The map is loaded from an external provider, which receives your IP address:"
+  embed:
+    load: Load content
+    privacy: "This content is loaded from an external provider, which receives your IP address:"
   program:
     title: Program
     legend: Caption
@@ -106,6 +109,9 @@ de:
     focus_me: Meinen aktuellen Standort anzeigen
     map_load: Karte laden
     map_privacy: "Die Karte wird von einem externen Anbieter geladen, der dabei Ihre IP-Adresse erhält:"
+  embed:
+    load: Inhalt laden
+    privacy: "Dieser Inhalt wird von einem externen Anbieter geladen, der dabei Ihre IP-Adresse erhält:"
   program:
     title: Programm
     legend: Legende
@@ -166,6 +172,9 @@ fr:
     focus_me: Afficher ma localisation actuelle
     map_load: Charger la carte
     map_privacy: "La carte est chargée depuis un fournisseur externe qui reçoit alors votre adresse IP :"
+  embed:
+    load: Charger le contenu
+    privacy: "Ce contenu est chargé depuis un fournisseur externe qui reçoit alors votre adresse IP :"
   program:
     title: Programme
     legend: Légende
@@ -226,6 +235,9 @@ pt:
     focus_me: Mostrar minha localização atual
     map_load: Carregar mapa
     map_privacy: "O mapa é carregado a partir de um fornecedor externo, que recebe o seu endereço IP:"
+  embed:
+    load: Carregar conteúdo
+    privacy: "Este conteúdo é carregado a partir de um fornecedor externo, que recebe o seu endereço IP:"
   program:
     title: Programa
     legend: Legenda

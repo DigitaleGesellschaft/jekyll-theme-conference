@@ -516,7 +516,8 @@ To activate these functionalities, each day in the `program.yml` file must conta
   - if streaming should be enabled (`enable`), and if enabled
   - how many minutes the stream goes active before a talk (`prepend`),
   - how many minutes the stream stays active after a talk (`extend`),
-  - how long a pause between two consecutive talks has to be for the stream to pause (`pause`), and
+  - how long a pause between two consecutive talks has to be for the stream to pause (`pause`),
+  - if the stream is only loaded once the visitor clicks a button, as the streaming provider receives the visitor's IP address (`click_to_load`, default: `true`; set to `false` for self-hosted streams), and
   - an external (absolute) link to which the user will be redirected instead of opening the modal (`external`),
 
 ```yaml
@@ -528,6 +529,7 @@ conference:
       pause: 60 # in minutes
       prepend: 5 # in minutes
       extend: 5 # in minutes
+      click_to_load: true # optional: false loads streams without consent
       external: "https://example.com/stream" # optional: external link instead of modal
 ```
 
@@ -637,7 +639,7 @@ conference:
 To help users find your venue, an [OpenStreetMap](https://www.openstreetmap.org/) container displaying a map can be shown on the location page as well as the address of the venue. You can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
 The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitor's current location (has to be manually activated and granted by the visitor).
 
-To protect the visitors' privacy, the map is only loaded once the visitor clicks a button, as the tile provider receives the visitor's IP address. If you host the tiles yourself, you can load the map right away by setting `click_to_load: false`.
+To protect the visitors' privacy, the map is only loaded once the visitor clicks a button, as the tile provider receives the visitor's IP address. The consent is stored in the browser for 30 days. If you host the tiles yourself, you can load the map right away by setting `click_to_load: false`.
 
 Location settings are configured directly in the Front Matter of the location page (the page with `layout: location`). The location page's Front Matter supports the following properties:
 
@@ -864,7 +866,8 @@ Links are used at different locations throughout the theme: They can either be u
   - pointing to a _file_ uploaded to the `/documents` folder: `file:`, or
   - pointing to an external _video_: `video:`.
 - optionally, if it is disabled (`disabled: true`),
-- optionally, if it should open in an iframe embedded in a popup-like modal (`iframe: true`), and
+- optionally, if it should open in an iframe embedded in a popup-like modal (`iframe: true`),
+- optionally, for links opening in the modal, if the content is loaded right away (`click_to_load: false`, e.g. for self-hosted videos) instead of once the visitor clicks a button, as the provider receives the visitor's IP address, and
 - optionally, an icon to show in front of the title (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show, see [_Icons_](#icons)).
 
 Using the `file:` indicator, the
@@ -1067,6 +1070,7 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
   - `conference.program`: Program days as tabs
   - `conference.map`: Map functionality (`getMap()` resolves once the map is loaded, or with `null` without map)
   - `conference.modal`: Links (e.g. videos) in a modal
+  - `conference.embed`: Embedded streams on the stream overview page
   - `conference.live`: Live indications following the program (incl. `setTime("09:30", "2026-02-20")`, `getTime()`, `pauseTime()`, `continueTime()`, `resetTime()` for testing)
   - `conference.stream`: Live stream modal
   - `conference.infobox`: Dismissal of information boxes and modals
@@ -1119,9 +1123,11 @@ _js/
 ├── core/
 │   ├── clock.js       # Current (or test) time
 │   ├── conference.js  # Core conference object
+│   ├── consent.js     # Consent before loading embedded content
 │   └── time.js        # Timezone helpers
 └── modules/
     ├── darkmode.js    # Colour mode following the system
+    ├── embed.js       # Embedded streams (stream overview)
     ├── infobox.js     # Dismissal of information boxes
     ├── live.js        # Live indications
     ├── map.js         # Map functionality

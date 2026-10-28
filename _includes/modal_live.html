@@ -12,6 +12,7 @@
 
       <div class="modal-body ratio ratio-16x9">
         <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ live_lang.stream | default: 'Live Stream' }}"></iframe>
+        {%- include embed_consent.html hidden=true click_to_load=site.conference.live.streaming.click_to_load %}
         <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
           <div id="stream-modal-desc"></div>
           <div id="stream-offline" class="d-none">

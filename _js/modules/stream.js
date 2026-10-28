@@ -2,9 +2,10 @@
  * Stream Module - Live stream modal with room switching
  *
  * Loads the talks (data.json) only once the modal is opened, shows the
- * room's stream or why there is none (not started, paused, ended, offline)
- * and the room's next talk.
+ * room's stream (after consent, see core/consent.js) or why there is none
+ * (not started, paused, ended, offline) and the room's next talk.
  */
+import { clearEmbed, loadEmbed } from "../core/consent.js";
 
 const SECONDS_PER_MINUTE = 60;
 
@@ -106,7 +107,7 @@ export function createStreamModule(clock, live, conferenceConfig) {
   };
 
   // ==========================================================================
-  // Player: stream or message (e.g. "Live stream has ended.")
+  // Player: stream, consent box or message (e.g. "Live stream has ended.")
   // ==========================================================================
 
   const createPlayer = (modalEl) => {
@@ -114,30 +115,14 @@ export function createStreamModule(clock, live, conferenceConfig) {
     const placeholder = modalEl.querySelector("#stream-placeholder");
     const message = placeholder.querySelector("#stream-modal-desc");
     const offline = placeholder.querySelector("#stream-offline");
+    const consent = modalEl.querySelector("[data-embed-consent]");
     let url = null;
-
-    const showFrame = () => {
-      iframe.classList.remove("d-none");
-      // Compare with the last URL, not iframe.src: the browser normalizes the
-      // latter (e.g. "https://host" -> "https://host/"), causing reloads
-      if (iframe.dataset.streamUrl !== url) {
-        iframe.dataset.streamUrl = url;
-        iframe.src = url;
-      }
-    };
-
-    // Unload the stream, e.g. when the modal closes
-    const clearFrame = () => {
-      if (iframe.dataset.streamUrl) {
-        delete iframe.dataset.streamUrl;
-        iframe.src = "about:blank";
-      }
-    };
 
     const showPlaceholder = (content) => {
       for (const el of [message, offline]) {
         el.classList.toggle("d-none", el !== content);
       }
+      consent?.classList.add("d-none");
       iframe.classList.add("d-none");
       placeholder.classList.replace("d-none", "d-flex");
     };
@@ -147,12 +132,12 @@ export function createStreamModule(clock, live, conferenceConfig) {
         return;
       }
       if (!navigator.onLine) {
-        clearFrame();
+        clearEmbed(iframe);
         showPlaceholder(offline);
         return;
       }
       placeholder.classList.replace("d-flex", "d-none");
-      showFrame();
+      loadEmbed(iframe, consent, url);
     };
 
     window.addEventListener("online", render);
@@ -165,13 +150,13 @@ export function createStreamModule(clock, live, conferenceConfig) {
       },
       showMessage: (text) => {
         url = null;
-        clearFrame();
+        clearEmbed(iframe);
         message.textContent = text;
         showPlaceholder(message);
       },
       clear: () => {
         url = null;
-        clearFrame();
+        clearEmbed(iframe);
       },
     };
   };

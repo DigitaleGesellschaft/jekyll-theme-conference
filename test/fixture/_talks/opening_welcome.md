@@ -13,5 +13,8 @@ links:
     file: opening.pdf
   - name: Recording
     video: https://media.example.org/embed/opening
+  - name: Interview
+    video: https://media.example.org/embed/interview
+    click_to_load: false
 ---
 Welcome to the conference.

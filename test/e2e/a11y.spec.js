@@ -52,6 +52,7 @@ test("video modal names its frame after the talk and releases focus on close", a
   const modal = page.locator("#link-modal");
   await expect(modal).toBeVisible();
   await expect(modal.locator("iframe")).toHaveAttribute("title", "Opening & Welcome");
+  await expect(modal.getByRole("button", { name: "Load content" })).toBeVisible();
 
   // Escape works once the modal holds the focus (after its transition)
   await expect.poll(() => modal.evaluate((el) => el.contains(document.activeElement))).toBe(true);

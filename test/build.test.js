@@ -346,4 +346,13 @@ describe("Assets and privacy", () => {
     assert.doesNotMatch(html(), /map\.bundle\.css/);
     assert.match(read("location/index.html"), /data-map-css="\/conf\/assets\/css\/map\.bundle\.css\?v=[0-9a-f]{10}"/);
   });
+
+  test("videos and streams are not embedded before consent", () => {
+    for (const file of ["talks/opening_welcome/index.html", "live/index.html"]) {
+      assert.doesNotMatch(read(file), /<iframe[^>]* src="http/, file);
+    }
+    assert.match(read("live/index.html"), /data-embed-src="https:\/\/stream\.example\.org\/a"/);
+    assert.match(read("live/index.html"), /<a href="https:\/\/stream\.example\.org\/a" rel="noopener" data-embed-host>stream\.example\.org<\/a>/);
+    assert.match(read("talks/opening_welcome/index.html"), /data-href="https:\/\/media\.example\.org\/embed\/interview"\s+data-click-to-load="false"/);
+  });
 });

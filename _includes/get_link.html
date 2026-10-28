@@ -110,6 +110,9 @@
       data-bs-toggle="modal"
       data-bs-target="#link-modal"
       data-href="{{ link_href | escape }}"
+      {% if link.click_to_load == false %}
+        data-click-to-load="false"
+      {% endif %}
       {% if modal_title %}
         data-title-format="html"
         data-title="{{ modal_title | strip_newlines | escape }}"

@@ -2,14 +2,15 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title" id="link-modal-label">
-          <h3 class="mb-2 fw-light"></h3>
-          <h5 class="mb-0 fw-light" id="link-modal-description"></h5>
+        <div class="modal-title">
+          <h2 class="h3 mb-2 fw-light" id="link-modal-label"></h2>
+          <p class="h5 mb-0 fw-light d-none" id="link-modal-description"></p>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
       </div>
       <div class="modal-body ratio ratio-16x9">
-        <iframe src="" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].more_information | default: 'More Information' }}"></iframe>
+        <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].more_information | default: 'More Information' }}"></iframe>
+        {%- include embed_consent.html hidden=true %}
       </div>
       <div class="modal-footer justify-content-start">
         <p></p>
