@@ -51,10 +51,10 @@
 
     {%- capture modal_title -%}
       {%- if talk.hide -%}
-        {{ talk.name }}
+        {{ talk.name | escape }}
       {%- else -%}
         <a class="text-reset link-underline-{{ include.color | default: "primary" }} link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ talk.url | prepend: site.baseurl }}">
-          {{ talk.name }}
+          {{ talk.name | escape }}
         </a>
       {%- endif -%}
     {%- endcapture -%}
@@ -67,15 +67,15 @@
 
     {%- capture modal_title -%}
       {%- if speaker.hide -%}
-        {{ speaker.first_name }} {{ speaker.last_name }}
+        {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
       {%- else -%}
         <a class="text-reset link-underline-{{ include.color | default: "primary" }} link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
-          {{ speaker.first_name }} {{ speaker.last_name }}
+          {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
         </a>
       {%- endif -%}
     {%- endcapture -%}
 
-    {%- assign modal_footer = link.name -%}
+    {%- assign modal_footer = link.name | escape -%}
 
   {%- endif -%}
 
@@ -106,26 +106,26 @@
     <a
       class="{{ link_class }}"
       href="#"
-      title="{{ link.name }}"
+      title="{{ link.name | escape }}"
       data-bs-toggle="modal"
       data-bs-target="#link-modal"
-      data-href="{{ link_href }}"
+      data-href="{{ link_href | escape }}"
       {% if modal_title %}
-        data-format='html'
+        data-title-format="html"
         data-title="{{ modal_title | strip_newlines | escape }}"
         {% if modal_subtitle %}
           data-subtitle="{{ modal_subtitle | strip_newlines | escape }}"
         {% endif %}
       {% elsif link.name %}
-        data-format='text'
-        data-title="{{ link.name }}"
+        data-title-format="text"
+        data-title="{{ link.name | escape }}"
       {% endif %}
       {% if modal_footer %}
-        data-format='html'
+        data-footer-format="html"
         data-footer="{{ modal_footer | strip_newlines | escape }}"
       {% elsif link.description %}
-        data-format='text'
-        data-footer="{{ link.description }}"
+        data-footer-format="text"
+        data-footer="{{ link.description | escape }}"
       {% endif %}
     >
 
@@ -135,16 +135,16 @@
     {%- else-%}
       <a
         class="{{ link_class }}"
-        href="{{ link_href }}"
-        title="{{ link.name }}"
+        href="{{ link_href | escape }}"
+        title="{{ link.name | escape }}"
       >
     {%- endif -%}
 
   {%- else -%}
     <a
       class="{{ link_class }}{% if include.is_active %} active{% endif %}"
-      href="{{ link_href }}"
-      title="{{ link.name }}"
+      href="{{ link_href | escape }}"
+      title="{{ link.name | escape }}"
       {%- if include.is_active %}
       aria-current="page"
       {%- endif %}
@@ -157,7 +157,7 @@
   <li class="mb-1">
     {{ link_tag | replace: ' class="', ' class="icon-link '}}
       <i class="bi bi-{{ link_icon | default: 'link-45deg' }}" aria-hidden="true"></i>
-      {{- link.name }}
+      {{- link.name | escape }}
     </a>
   </li>
 {%- endcapture -%}

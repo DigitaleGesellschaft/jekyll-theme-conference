@@ -1,11 +1,13 @@
 {% for speaker_name in talk.speakers -%}
   {%- assign speaker = site.speakers | where: 'name', speaker_name | first -%}
 
-  {%- if speaker.hide or include.text_only -%}
+  {%- if include.text_only -%}
     {{- speaker_name -}}
+  {%- elsif speaker.hide -%}
+    {{- speaker_name | escape -}}
   {%- else -%}
     <a class="text-reset link-underline-{{ track_color }} link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ speaker.url | prepend: site.baseurl }}">
-      {{- speaker_name -}}
+      {{- speaker_name | escape -}}
     </a>
   {%- endif -%}
 

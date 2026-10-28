@@ -8,7 +8,7 @@
   </p>
 
   <h1 class="fw-light mb-3 text-break">
-    {{ speaker.first_name }} {{ speaker.last_name }}
+    {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
   </h1>
 
   {{ content }}

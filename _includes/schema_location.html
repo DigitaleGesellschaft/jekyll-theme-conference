@@ -25,16 +25,16 @@
 {
   "@context": "https://schema.org",
   "@type": "Place"{% if location_postal_address.name %},
-  "name": {{ location_postal_address.name | jsonify }}{% endif %}{% if location_postal_address %},
+  "name": {{ location_postal_address.name | jsonify | replace: "<", "\u003c" }}{% endif %}{% if location_postal_address %},
   "url": "{{ location_url }}"{% if location_map %},
   "hasMap": "{{ location_url }}"{% endif %},
   "address": {
     "@type": "PostalAddress"{% if location_postal_address.street %},
-    "streetAddress": {{ location_postal_address.street | jsonify }}{% endif %}{% if location_postal_address.locality %},
-    "addressLocality": {{ location_postal_address.locality | jsonify }}{% endif %}{% if location_postal_address.postal_code %},
-    "postalCode": {{ location_postal_address.postal_code | jsonify }}{% endif %}{% if location_postal_address.region %},
-    "addressRegion": {{ location_postal_address.region | jsonify }}{% endif %}{% if location_postal_address.country %},
-    "addressCountry": {{ location_postal_address.country | jsonify }}{% endif %}
+    "streetAddress": {{ location_postal_address.street | jsonify | replace: "<", "\u003c" }}{% endif %}{% if location_postal_address.locality %},
+    "addressLocality": {{ location_postal_address.locality | jsonify | replace: "<", "\u003c" }}{% endif %}{% if location_postal_address.postal_code %},
+    "postalCode": {{ location_postal_address.postal_code | jsonify | replace: "<", "\u003c" }}{% endif %}{% if location_postal_address.region %},
+    "addressRegion": {{ location_postal_address.region | jsonify | replace: "<", "\u003c" }}{% endif %}{% if location_postal_address.country %},
+    "addressCountry": {{ location_postal_address.country | jsonify | replace: "<", "\u003c" }}{% endif %}
   }{% endif %}{% if contains_places != "" %},
   "containsPlace": [
     {{ contains_places }}

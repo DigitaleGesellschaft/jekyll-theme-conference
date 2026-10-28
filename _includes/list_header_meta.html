@@ -1,7 +1,7 @@
 {%- include get_page_title.html default=site.title replace_quotes=true -%}
 {%- include get_page_description.html default=site.title replace_quotes=true -%}
 
-<meta name="description" content="{{ page_description }}" />
+<meta name="description" content="{{ page_description | escape }}" />
 
 {%- comment -%} Canonical URL {%- endcomment -%}
 <link rel="canonical" href="{{ page.url | prepend: site.baseurl | prepend: site.url }}" />
@@ -14,19 +14,19 @@
   {%- else %}
   <meta name="twitter:card" content="summary" />
   {%- endif %}
-  <meta name="twitter:title" content="{{ page_title }}" />
-  <meta name="twitter:description" content="{{ page_description }}" />
+  <meta name="twitter:title" content="{{ page_title | escape }}" />
+  <meta name="twitter:description" content="{{ page_description | escape }}" />
 
   {%- comment -%} Open Graph tags {%- endcomment -%}
   <meta property="og:site_name" content="{{ site.title }}" />
   {%- if site.conference.meta.link_preview.img and site.conference.meta.link_preview.img.open_graph %}
   {%- assign og_image_url = site.conference.meta.link_preview.img.open_graph | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url -%}
   <meta property="og:image" content="{{ og_image_url }}" />
-  <meta property="og:image:alt" content="{{ page_title }}" />
+  <meta property="og:image:alt" content="{{ page_title | escape }}" />
   {%- endif %}
   <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}" />
-  <meta property="og:title" content="{{ page_title }}" />
-  <meta property="og:description" content="{{ page_description }}" />
+  <meta property="og:title" content="{{ page_title | escape }}" />
+  <meta property="og:description" content="{{ page_description | escape }}" />
   <meta property="og:type" content="website" />
 {%- endunless %}
 

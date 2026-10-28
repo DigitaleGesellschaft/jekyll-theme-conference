@@ -2,10 +2,14 @@
  * Modal Module - Handles Bootstrap modal popups for links
  */
 export function createModalModule() {
+  // Set content as HTML only when the attribute is marked as such (escaped by Liquid)
+  const setContent = (el, content, format) => {
+    el[format === 'html' ? 'innerHTML' : 'textContent'] = content;
+  };
+
   const show = (modal, event) => {
     const btn = event.relatedTarget;
-    const { href, format, title, subtitle, footer } = btn.dataset;
-    const isHtml = format === 'html';
+    const { href, title, titleFormat, subtitle, footer, footerFormat } = btn.dataset;
 
     modal.querySelector('iframe').src = href;
 
@@ -15,9 +19,9 @@ export function createModalModule() {
     const footerP = modal.querySelector('.modal-footer p');
 
     if (title) {
-      titleH3[isHtml ? 'innerHTML' : 'textContent'] = title;
+      setContent(titleH3, title, titleFormat);
       if (subtitle) {
-        titleH5[isHtml ? 'innerHTML' : 'textContent'] = subtitle;
+        setContent(titleH5, subtitle, titleFormat);
         titleH5.classList.remove('d-none');
       } else {
         titleH5.textContent = '';
@@ -31,7 +35,7 @@ export function createModalModule() {
 
     if (footer) {
       footerEl.classList.remove('d-none');
-      footerP[isHtml ? 'innerHTML' : 'textContent'] = footer;
+      setContent(footerP, footer, footerFormat);
     } else {
       footerEl.classList.add('d-none');
     }
@@ -43,7 +47,7 @@ export function createModalModule() {
     titleH5.textContent = '';
     titleH5.classList.add('d-none');
     modal.querySelector('iframe').src = '';
-    modal.querySelector('.modal-footer p').innerHTML = '';
+    modal.querySelector('.modal-footer p').textContent = '';
   };
 
   const init = () => {

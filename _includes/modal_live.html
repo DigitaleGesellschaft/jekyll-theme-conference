@@ -10,7 +10,7 @@
       </div>
 
       <div class="modal-body ratio ratio-16x9">
-        <iframe src="" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}"></iframe>
+        <iframe src="" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}"></iframe>
         <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
           <div id="stream-modal-desc"></div>
         </div>
@@ -29,14 +29,14 @@
 
       <div class="modal-footer justify-content-around">
         {%- for room in site.rooms -%}
-          <a id="stream-button{{ forloop.index }}" href="#" class="btn btn-outline-primary d-none d-sm-inline{% unless room.live %} disabled{% endunless %}" role="button" data-room="{{ room.name }}">
-            {{ room.name }}
+          <a id="stream-button{{ forloop.index }}" href="#" class="btn btn-outline-primary d-none d-sm-inline{% unless room.live %} disabled{% endunless %}" role="button" data-room="{{ room.name | escape }}">
+            {{ room.name | escape }}
           </a>
         {%- endfor %}
         <div class="w-100 d-block d-sm-none">
           <select class="form-select" id="stream-select" aria-label="{{ site.data.lang[site.conference.lang].location.rooms | default: 'Rooms' }}">
             {%- for room in site.rooms -%}
-              <option value="{{ forloop.index }}"{% unless room.live %} disabled{% endunless %}>{{ room.name }}</option>
+              <option value="{{ forloop.index }}"{% unless room.live %} disabled{% endunless %}>{{ room.name | escape }}</option>
             {%- endfor %}
           </select>
         </div>

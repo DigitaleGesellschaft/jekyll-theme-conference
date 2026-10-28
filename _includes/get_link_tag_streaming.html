@@ -18,7 +18,7 @@
     title="{{ stream_label }}"
     data-bs-toggle="modal"
     data-bs-target="#stream-modal"
-    data-room="{{ data_room.name }}"
+    data-room="{{ data_room.name | escape }}"
     aria-haspopup="dialog"
   >
 {%- endif -%}
