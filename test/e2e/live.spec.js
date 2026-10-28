@@ -18,6 +18,26 @@ test("stream modal shows the current talk with its live links", async ({ page })
   await expect(page.locator("#stream-info-links a")).toHaveText('Q&A "live"');
 });
 
+test.describe(() => {
+  // Without the service worker answering from its cache
+  test.use({ serviceWorkers: "block" });
+
+  test("stream modal loads the talks again after a failed attempt", async ({ page }) => {
+    await track(page);
+    let offline = true;
+    await page.route("**/assets/js/data.json", (route) => (offline ? route.abort() : route.continue()));
+
+    await openStream(page, "09:10");
+    await expect(page.locator("#stream-modal iframe")).not.toHaveAttribute("src", /stream/);
+    await page.locator("#stream-modal .btn-close").click();
+    offline = false;
+    await expect(page.locator("#stream-modal")).toBeHidden();
+
+    await page.locator("nav .live-show a[data-bs-target='#stream-modal']").click();
+    await expect(page.locator("#stream-modal iframe")).toHaveAttribute("src", "https://stream.example.org/a");
+  });
+});
+
 test("names are rendered as text, not markup", async ({ page }) => {
   await track(page);
   await openStream(page, "09:40");

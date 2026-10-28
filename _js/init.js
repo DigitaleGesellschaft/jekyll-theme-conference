@@ -1,41 +1,34 @@
 /**
  * Initialization Module
- * Loads configuration and initializes all conference modules
+ * Reads the configuration (inlined into the page) and initializes all modules
  */
-const NON_MODULES = ["config", "ready", "awaitReady"];
+
+// Settings and translations, e.g. { "live": {...}, "lang": { "live": {...} } }
+const readConfig = () => {
+  try {
+    return JSON.parse(document.getElementById("conference-config")?.textContent || "{}");
+  } catch (error) {
+    console.error("Failed to read config:", error);
+    return {};
+  }
+};
 
 // Initialize each module with its config and lang; a failing module must not
 // keep the others from starting. Modules loading data return a promise.
-const initModules = (conference, config) => {
-  const pending = [];
+export async function init(conference, modules) {
+  const config = readConfig();
+  Object.assign(conference.config, config);
 
-  for (const [name, module] of Object.entries(conference)) {
-    if (NON_MODULES.includes(name) || !module?.init) {
-      continue;
-    }
-
+  const pending = Object.entries(modules).map(([name, module]) => {
     try {
-      pending.push(module.init(config[name], config.lang?.[name]));
+      return module.init(config[name], config.lang?.[name]);
     } catch (error) {
       console.warn(`Failed to initialize module "${name}":`, error);
+      return null;
     }
-  }
+  });
+  await Promise.allSettled(pending);
 
-  return Promise.allSettled(pending);
-};
-
-export function init(conference) {
-  return fetch(conference.config.baseurl + "/assets/js/config.json")
-    .then((response) => response.json())
-    .catch((error) => {
-      console.error("Failed to load config:", error);
-      return {};
-    })
-    .then(async (config) => {
-      Object.assign(conference.config, config);
-      await initModules(conference, config);
-
-      conference.ready = true;
-      return conference;
-    });
+  conference.ready = true;
+  return conference;
 }

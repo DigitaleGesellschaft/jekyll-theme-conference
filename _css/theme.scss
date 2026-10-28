@@ -99,29 +99,40 @@
   display: initial;
 }
 
-// PWA
+// PWA: in the installed app, the bottom navigation replaces the top one. It
+// sticks to the bottom (part of the page, so it never covers the content).
+@mixin pwa-mode {
+  .d-pwa-none {
+    display: none;
+  }
+
+  .d-pwa-block {
+    display: block;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-pwa {
+    position: sticky;
+    bottom: 0;
+    z-index: $zindex-fixed;
+    margin-top: auto;
+  }
+}
+
 .d-pwa-block {
   display: none;
 }
 
 @media (display-mode: standalone), (display-mode: fullscreen) {
-  .d-pwa-none {
-    display: none;
-  }
-
-  .d-pwa-block {
-    display: block;
-  }
+  @include pwa-mode;
 }
 
 [data-pwa="true"] {
-  .d-pwa-none {
-    display: none;
-  }
-
-  .d-pwa-block {
-    display: block;
-  }
+  @include pwa-mode;
 }
 
 // Map

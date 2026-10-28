@@ -5,22 +5,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script>
-    // Apply dark mode immediately based on system preference to prevent flash
-    (function() {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.setAttribute('data-bs-theme', prefersDark ? 'dark' : 'light');
-    })();
-
-    {%- if site.conference.pwa and site.conference.pwa.enable %}
-    // Apply PWA styles for iOS immediately to prevent flash
-    (function() {
-      const isStandalone = (navigator.standalone || window.matchMedia("(display-mode: standalone)").matches);
-      document.documentElement.setAttribute('data-pwa', isStandalone ? 'true' : 'false');
-    })();
-    {%- endif -%}
-  </script>
-
   {% include get_page_title.html -%}
   <title>
     {{- page_title | escape -}}
@@ -29,20 +13,25 @@
   </title>
   {% include list_header_meta.html %}
 
+  {%- assign site_version = site.time | date: '%s' -%}
   {% if site.conference.custom_style == "bootstrap" %}
   {% comment %} Conference bundle with separate Bootstrap {% endcomment %}
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css?t={{ site.time | date: '%s' }}" />
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference-only.bundle.css?t={{ site.time | date: '%s' }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css?t={{ site_version }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference-only.bundle.css?t={{ site_version }}" />
   {% elsif site.conference.custom_style != "full" %}
   {% comment %} Full conference bundle {% endcomment %}
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?t={{ site.time | date: '%s' }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?t={{ site_version }}" />
   {% endif %}
   {% comment %} User stylesheet (can include full custom conference bundle) {% endcomment %}
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site.time | date: '%s' }}" />
-
-  {% include list_header_live.html %}
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site_version }}" />
 
   {% include list_header_pwa.html %}
+
+  {%- comment -%}
+    Before the first paint (no flash): colour mode and installed app (PWA).
+    Static content, i.e. one hash for a Content Security Policy (see README).
+  {%- endcomment %}
+  <script>{ const root = document.documentElement; root.dataset.bsTheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; root.dataset.pwa = !!document.querySelector('link[rel="manifest"]') && (navigator.standalone === true || matchMedia("(display-mode: standalone)").matches); }</script>
 </head>
 
 <body class="min-vh-100">

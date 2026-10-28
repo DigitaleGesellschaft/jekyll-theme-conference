@@ -47,13 +47,13 @@ Edit sources in `_js/` and `_css/`; never edit `_sass/` or `*.bundle.*`. `_sass/
 
 ### Liquid → JSON → JavaScript
 
-The JS has no build-time knowledge of site data. Three Liquid-rendered JSON endpoints bridge it:
+The JS has no build-time knowledge of site data. Liquid bridges it:
 
-- `assets/js/config.json` (layout `json-config`): per-module settings and translated strings
-- `assets/js/data.json` (layout `json-data`): days/rooms/talks for live streaming
+- `_includes/conference_config.json`: per-module settings and translated strings, inlined into every page (`<script type="application/json" id="conference-config">`, in `footer.html`)
+- `assets/js/data.json` (layout `json-data`): rooms/speakers/talks, fetched by the stream module when its modal opens
 - `assets/js/site.json` (layout `json-site`): used by the PWA service worker (`_layouts/sw.js`)
 
-`_js/init.js` fetches `config.json` and calls `module.init(config[name], config.lang[name])` on every module attached to `window.conference`. A new JS module must be attached in `_js/main.js` and, if configurable, get a matching key (and `lang` entry) in `_layouts/json-config.html`. Modules are factories (`createXModule()`) in `_js/modules/`. `assets/js/main.js` is a stub for consumers' own code.
+`_js/init.js` reads the inline config and calls `module.init(config[name], config.lang[name])` on each module listed in `_js/main.js`. A new JS module must be added to that list and, if configurable, get a matching key (and `lang` entry) in `_includes/conference_config.json`. Modules are factories (`createXModule()`) in `_js/modules/`; shared helpers (clock, time) in `_js/core/`. `assets/js/main.js` is a stub for consumers' own code.
 
 ### Liquid includes as functions
 
