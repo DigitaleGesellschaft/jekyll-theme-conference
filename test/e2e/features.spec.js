@@ -95,7 +95,7 @@ test("installed app shows the bottom navigation instead of the top one", async (
   const bottomNav = page.locator("nav.navbar-pwa");
   await expect(page.locator("header nav.navbar")).toBeHidden();
   await expect(bottomNav).toBeVisible();
-  await expect(bottomNav.getByRole("link")).toHaveText(["Program", "Talks", "Speakers", "Location"]);
+  await expect(bottomNav.getByRole("link")).toHaveText(["Program", "Talks", "Speakers", "Location", "Flyer"]);
 
   // Content is not hidden behind the navigation at the bottom
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));

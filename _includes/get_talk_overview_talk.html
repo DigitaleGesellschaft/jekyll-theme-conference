@@ -49,10 +49,10 @@
     {%- endif -%}
     {%- include list_tags.html -%}
 
-    {%- include get_link_types.html -%}
+    {%- include get_link_types.html context="talk" -%}
     {%- if has_icon_links > 0 -%}
       {% for link in talk.links -%}
-        {%- include get_link.html type="icon" class="badge bg-body-secondary text-body-secondary fw-normal me-1" color=track_color -%}
+        {%- include get_link.html type="icon" class="badge bg-body-secondary text-body-secondary fw-normal me-1" color=track_color context="talk" -%}
         {%- if link_valid -%}
           {{- link_tag -}}
             {% include icon.html name=link_icon %}

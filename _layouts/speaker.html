@@ -13,12 +13,12 @@
 
   {{ content }}
 
-  {% include get_link_types.html %}
+  {% include get_link_types.html context="speaker" %}
 
   {% if has_icon_links > 0 %}
     <ul class="list-unstyled">
       {% for link in speaker.links %}
-        {% include get_link.html type="icon" %}
+        {% include get_link.html type="icon" context="speaker" %}
         {% if link_valid %}
           {{ link_list_item }}
         {% endif %}
@@ -31,7 +31,7 @@
 
     <ul class="list-unstyled">
       {% for link in speaker.links %}
-        {% include get_link.html %}
+        {% include get_link.html context="speaker" %}
         {% if link_valid %}
           {{ link_list_item }}
         {% endif %}
