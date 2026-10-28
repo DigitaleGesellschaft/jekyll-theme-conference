@@ -13,7 +13,7 @@
 
   {%- capture conference_config -%}{%- include conference_config.json -%}{%- endcapture %}
   <script type="application/json" id="conference-config">{{ conference_config | replace: "<", "\u003c" }}</script>
-  <script type="module" src="{{ site.baseurl }}/assets/js/conference.bundle.js?t={{ site_version }}"></script>
+  <script type="module" src="{{ site.baseurl }}/assets/js/conference.bundle.js?v={{ asset_versions['js/conference.bundle.js'] | default: site_version }}"></script>
   <script type="module" src="{{ site.baseurl }}/assets/js/main.js?t={{ site_version }}"></script>
 
 </body>

@@ -2,10 +2,12 @@
   Resources precached by the service worker (sw.js) for offline use:
   all visible pages and everything below /assets/ the site actually uses.
   Documents (/documents/), source maps, .woff fonts with a .woff2 twin and
-  the icon font (icons are inline SVGs) are skipped.
+  the icon font (icons are inline SVGs) are skipped. Theme bundles carry
+  their content hash (?v=), so an unchanged bundle is not downloaded again.
 {%- endcomment -%}
 {%- assign pages = "" | split: "" -%}
 {%- assign assets = "" | split: "" -%}
+{%- assign asset_versions = site.data.conference_assets -%}
 
 {%- comment -%} Skip unused stylesheet bundles and the map, which needs the network anyway {%- endcomment -%}
 {%- assign skip_assets = "/assets/css/map.bundle.css" | split: "," -%}
@@ -51,10 +53,14 @@
   {%- if ext == ".woff" and static_paths contains woff2_path -%}
     {%- continue -%}
   {%- endif -%}
-  {%- if ext == ".map" or skip_assets contains file.path or file.path contains "/assets/js/leaflet" or file.path contains "/assets/webfonts/bootstrap-icons." -%}
+  {%- if ext == ".map" or skip_assets contains file.path or file.path contains "/assets/js/leaflet-" or file.path contains "/assets/webfonts/bootstrap-icons." -%}
     {%- continue -%}
   {%- endif -%}
   {%- assign url = file.path | prepend: site.baseurl -%}
+  {%- assign asset_key = file.path | remove_first: "/assets/" -%}
+  {%- if asset_versions[asset_key] -%}
+    {%- assign url = url | append: "?v=" | append: asset_versions[asset_key] -%}
+  {%- endif -%}
   {%- assign assets = assets | push: url -%}
 {%- endfor -%}
 {

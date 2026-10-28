@@ -24,6 +24,7 @@ assets/css/*.bundle.css
 assets/webfonts/bootstrap-icons.*
 _sass/**/*
 _includes/icons/
+_data/conference_assets.yml
 
 ### Tests ###
 test/fixture/.jekyll-cache/

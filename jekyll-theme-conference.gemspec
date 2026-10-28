@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
       files << sass_file if File.exist?(sass_file) && !files.include?(sass_file)
     end
 
-    #   Inline SVG icons
-    Dir.glob("_includes/icons/*").each do |file|
+    #   Inline SVG icons and bundle content hashes
+    (Dir.glob("_includes/icons/*") + ["_data/conference_assets.yml"]).each do |file|
       files << file if File.exist?(file) && !files.include?(file)
     end
 
