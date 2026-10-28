@@ -127,13 +127,14 @@ describe("PWA", () => {
     }
   });
 
-  test("site.json lists assets but no documents, redundant fonts, source maps or map scripts", () => {
+  test("site.json lists assets but no documents, redundant or icon fonts, source maps or map files", () => {
     const { assets } = readJson("assets/js/site.json");
+    const paths = assets.map(pathOf);
 
-    for (const path of ["/assets/images/icon.png", "/assets/css/main.css", "/assets/css/conference.bundle.css", "/assets/webfonts/bootstrap-icons.woff2", "/assets/webfonts/legacy.woff"]) {
-      assert.ok(assets.includes(BASEURL + path), `missing ${path}`);
+    for (const path of ["/assets/images/icon.png", "/assets/css/main.css", "/assets/css/conference.bundle.css", "/assets/webfonts/legacy.woff"]) {
+      assert.ok(paths.includes(BASEURL + path), `missing ${path}`);
     }
-    assert.deepEqual(assets.filter((url) => /\/documents\/|bootstrap-icons\.woff$|\.map$|conference-only|leaflet/.test(url)), []);
+    assert.deepEqual(assets.filter((url) => /\/documents\/|bootstrap-icons|\.map$|conference-only|leaflet|map\.bundle/.test(url)), []);
   });
 
   test("every precached URL exists", () => {
@@ -309,4 +310,17 @@ describe("Accessibility", () => {
 
 describe("Assets and privacy", () => {
   const html = () => read("talks/opening_welcome/index.html");
+
+  test("icons are inline SVGs, not an icon font", () => {
+    assert.match(html(), /<svg [^>]*class="bi bi-clock" aria-hidden="true" focusable="false"/);
+    assert.match(read("talks/talk_with_quotes/index.html"), /class="bi bi-camera-video-off-fill"/);
+    for (const file of htmlFiles()) {
+      assert.doesNotMatch(read(file), /<i class="bi /, file);
+    }
+  });
+
+  test("Leaflet styles are loaded with the map only", () => {
+    assert.doesNotMatch(html(), /map\.bundle\.css/);
+    assert.match(read("location/index.html"), /data-map-css="\/conf\/assets\/css\/map\.bundle\.css\?t=\d+"/);
+  });
 });

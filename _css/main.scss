@@ -5,15 +5,5 @@
 // 1. Bootstrap Framework
 @use "./bootstrap";
 
-// 2. Bootstrap Icons
-@use "bootstrap-icons/font/bootstrap-icons" with (
-  $bootstrap-icons-font-dir: "../webfonts"
-);
-
-// 3. Leaflet Map Styles
-@use "leaflet/dist/leaflet.css";
-@use "leaflet-easybutton/src/easy-button.css";
-@use "leaflet.locatecontrol/dist/L.Control.Locate.css";
-
-// 4. Conference Theme Styles
+// 2. Conference Theme Styles (icons are inline SVGs, Leaflet styles load with the map)
 @use "./theme";

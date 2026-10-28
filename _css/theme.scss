@@ -8,6 +8,13 @@
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
 
+// Inline SVG icons (_includes/icon.html), sized like the icon font's glyphs
+.bi {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
 // Program Overview
 .program-table {
   // Gap between columns: spacer columns would be announced by screen readers
@@ -80,6 +87,15 @@
 // Remove bottom margin on last paragraph in alert
 .alert>p:last-of-type {
   margin-bottom: 0;
+}
+
+// Home header image: full width on small screens
+.home-header-img {
+  width: 100%;
+
+  @include media-breakpoint-up(md) {
+    width: 75%;
+  }
 }
 
 // Dark mode

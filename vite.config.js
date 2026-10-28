@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'fs';
 import { basename, dirname, join, resolve } from 'path';
 import { defineConfig } from 'vite';
 
@@ -38,7 +38,7 @@ const copyAssetsPlugin = () => {
       const cssDir = resolve(import.meta.dirname, '_css');
       const webfontsDir = resolve(import.meta.dirname, 'assets/webfonts');
 
-      // Font files (woff/woff2)
+      // Font files (woff/woff2), for sites using the icon font themselves
       copy(
         join(nodeModules, 'bootstrap-icons/font/fonts'),
         webfontsDir,
@@ -84,6 +84,33 @@ const copyAssetsPlugin = () => {
   };
 };
 
+// Inline SVG icons: each Bootstrap Icon becomes an include rendered at build
+// time (see _includes/icon.html), e.g. icons/clock.svg; _names.txt lists all
+// names (",alarm,alarm-fill,...,") so unknown names can be skipped
+const iconsPlugin = () => {
+  return {
+    name: 'icons',
+    writeBundle() {
+      const source = resolve(import.meta.dirname, 'node_modules/bootstrap-icons/icons');
+      const target = resolve(import.meta.dirname, '_includes/icons');
+      rmSync(target, { recursive: true, force: true });
+      mkdirSync(target, { recursive: true });
+
+      const names = [];
+      for (const file of readdirSync(source).filter((file) => file.endsWith('.svg'))) {
+        const name = basename(file, '.svg');
+        const svg = readFileSync(join(source, file), 'utf8')
+          .replace(/\s*\n\s*/g, '')
+          .replace(/ width="16" height="16"/, '')
+          .replace(/ class="[^"]*"/, ` class="bi bi-${name}{{ icon_class }}" aria-hidden="true" focusable="false"`);
+        writeFileSync(join(target, file), svg);
+        names.push(name);
+      }
+      writeFileSync(join(target, '_names.txt'), `,${names.join(',')},`);
+    },
+  };
+};
+
 export default defineConfig({
   build: {
     outDir: 'assets',
@@ -93,6 +120,7 @@ export default defineConfig({
         'js/conference': resolve(import.meta.dirname, '_js/main.js'),
         'css/conference': resolve(import.meta.dirname, '_css/main.scss'),
         'css/conference-only': resolve(import.meta.dirname, '_css/main-only.scss'),
+        'css/map': resolve(import.meta.dirname, '_css/map.scss'),
       },
       output: {
         // Main JavaScript
@@ -150,5 +178,6 @@ export default defineConfig({
   },
   plugins: [
     copyAssetsPlugin(),
+    iconsPlugin(),
   ],
 });

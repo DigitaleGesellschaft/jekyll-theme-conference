@@ -34,7 +34,7 @@
             {% endif %}
             {%- include get_link.html class="nav-link icon-link flex-column flex-md-row text-center" is_active=is_active -%}
             {{ link_tag }}
-              <i class="bi bi-{{ link_icon | default: 'link-45deg' }}" aria-hidden="true"></i>
+              {% assign link_icon_name = link_icon | default: 'link-45deg' %}{% include icon.html name=link_icon_name %}
               <span>{{ link.name }}</span>
             </a>
           </div>

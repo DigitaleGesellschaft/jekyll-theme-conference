@@ -55,7 +55,7 @@
         {%- include get_link.html type="icon" class="badge bg-body-secondary text-body-secondary fw-normal me-1" color=track_color -%}
         {%- if link_valid -%}
           {{- link_tag -}}
-            <i class="bi bi-{{ link_icon }}" aria-hidden="true"></i>
+            {% include icon.html name=link_icon %}
           </a>
         {%- endif -%}
       {%- endfor %}

@@ -56,6 +56,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
 - [Design](#design)
   - [Pre-compiled Bundle (Default)](#pre-compiled-bundle-default)
   - [Split Bundle (Custom Bootstrap CSS)](#split-bundle-custom-bootstrap-css)
+  - [Icons](#icons)
 - [JavaScript](#javascript)
 - [Development](#development)
   - [Jekyll Theme Development](#jekyll-theme-development)
@@ -864,7 +865,7 @@ Links are used at different locations throughout the theme: They can either be u
   - pointing to an external _video_: `video:`.
 - optionally, if it is disabled (`disabled: true`),
 - optionally, if it should open in an iframe embedded in a popup-like modal (`iframe: true`), and
-- optionally, an icon to show in front of the title (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show).
+- optionally, an icon to show in front of the title (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show, see [_Icons_](#icons)).
 
 Using the `file:` indicator, the
 
@@ -940,7 +941,7 @@ Additional static pages can easily be added as files and linked to via navigatio
 
 ## Design
 
-The design is based on [Bootstrap 5](http://getbootstrap.com) and is highly customizable. It integrates [Bootstrap Icons](https://icons.getbootstrap.com/) and [Leaflet](https://leafletjs.com/) for mapping. The theme also features automatic dark mode, adapting to user system preferences.
+The design is based on [Bootstrap 5](http://getbootstrap.com) and is highly customizable. It integrates [Bootstrap Icons](https://icons.getbootstrap.com/) (see [_Icons_](#icons)) and [Leaflet](https://leafletjs.com/) for mapping. The theme also features automatic dark mode, adapting to user system preferences.
 
 The theme offers three distinct approaches to Bootstrap integration, allowing you to choose the level of customization that suits your needs:
 
@@ -957,9 +958,8 @@ The `assets/css/` directory contains:
 
 - `conference.bundle.css`: Complete bundle containing:
   - Pre-compiled Bootstrap 5 framework
-  - Bootstrap Icons
-  - Leaflet map styles
   - Conference theme customizations
+- `map.bundle.css`: Leaflet map styles, loaded together with the map
 - `main.scss`: For user-modifiable custom styles.
 
 Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [FrontMatter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
@@ -985,10 +985,8 @@ conference:
 The `assets/css/` directory contains:
 
 - `bootstrap.min.css`: Your custom Bootstrap framework (user-provided).
-- `conference-only.bundle.css`: Complete bundle containing:
-  - Bootstrap Icons
-  - Leaflet map styles
-  - Conference theme customizations
+- `conference-only.bundle.css`: Conference theme customizations
+- `map.bundle.css`: Leaflet map styles, loaded together with the map
 - `main.scss`: For additional custom styles.
 
 Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [FrontMatter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
@@ -1040,6 +1038,22 @@ While offering the most flexibility, this setup requires several steps:
     // ...
     ```
 
+### Icons
+
+The theme shows [Bootstrap Icons](https://icons.getbootstrap.com/) as inline SVG images, rendered when the site is built: only the icons in use are part of a page, without loading an icon font. Any icon name can be used for links and tags (e.g. `icon: camera-video-off-fill`); unknown names show no icon. In your own pages and layouts, include an icon with
+
+```liquid
+{% include icon.html name="geo-alt" class="me-1" %}
+```
+
+To use the icon font in your own content or JavaScript instead (e.g. `<i class="bi bi-train-front"></i>`), add it to your `assets/css/main.scss`:
+
+```scss
+@use "bootstrap-icons/font/bootstrap-icons" with (
+  $bootstrap-icons-font-dir: "../webfonts"
+);
+```
+
 
 ## JavaScript
 
@@ -1050,7 +1064,7 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
 **Available Global Objects:**
 
 - `window.conference`: Main conference object with the following modules:
-  - `conference.program`: Program navigation and tab management
+  - `conference.program`: Program days as tabs
   - `conference.map`: Map functionality (`getMap()` resolves once the map is loaded, or with `null` without map)
   - `conference.modal`: Links (e.g. videos) in a modal
   - `conference.live`: Live indications following the program (incl. `setTime("09:30", "2026-02-20")`, `getTime()`, `pauseTime()`, `continueTime()`, `resetTime()` for testing)
@@ -1122,6 +1136,7 @@ _js/
 _css/
 ├── main.scss                 # Main entry point (with Bootstrap)
 ├── main-only.scss            # Alternative entry point (without Bootstrap)
+├── map.scss                  # Leaflet styles (loaded with the map)
 ├── bootstrap.scss            # Adapted Bootstrap Framework
 ├── bootstrap-variables.scss  # Placeholder for custom build of Bootstrap Framework
 └── theme.scss                # Conference-specific styles
@@ -1145,10 +1160,12 @@ To modify the theme's source code and rebuild:
    ```
    This compiles:
    - `_js/` → `assets/js/conference.bundle.js`
-   - `_css/` → `assets/css/conference.bundle.css` and `assets/css/conference-only.bundle.css`
+   - `_css/` → `assets/css/conference.bundle.css`, `assets/css/conference-only.bundle.css` and `assets/css/map.bundle.css`
+   This generates:
+   - `_includes/icons/`: one include per Bootstrap Icon (inline SVG)
    This copies:
    - `_css/` + any SASS file from the different framework libraries → `_sass`
-   - Webfonts → `assets/webfonts/`
+   - Webfonts → `assets/webfonts/` (for sites using the icon font themselves)
 
 3. Test your changes locally:
    ```bash

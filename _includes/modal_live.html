@@ -15,7 +15,7 @@
         <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
           <div id="stream-modal-desc"></div>
           <div id="stream-offline" class="d-none">
-            <i class="bi bi-wifi-off" aria-hidden="true"></i> {{ live_lang.offline | default: "offline" }}
+            {% include icon.html name="wifi-off" %} {{ live_lang.offline | default: "offline" }}
           </div>
         </div>
       </div>
@@ -46,6 +46,21 @@
         </div>
       </div>
 
+      {%- comment -%} Icons of the talks' live links, e.g. for a "Q&A" button {%- endcomment -%}
+      {%- assign live_icons = "" | split: "" -%}
+      {%- for talk in site.talks -%}
+        {%- for link in talk.links -%}
+          {%- if link.live and link.icon -%}
+            {%- assign live_icons = live_icons | push: link.icon -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+      {%- assign live_icons = live_icons | uniq %}
+      <template id="stream-icons">
+        {%- for icon in live_icons -%}
+          <span data-icon="{{ icon | escape }}">{% include icon.html name=icon %}</span>
+        {%- endfor -%}
+      </template>
 
     </div>
   </div>

@@ -38,7 +38,8 @@
 
   {% if page.map %}
     {%- assign map_lang = site.data.lang[site.conference.lang].location -%}
-    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ map_lang.map_label | default: 'Interactive conference location map' }}">
+    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ map_lang.map_label | default: 'Interactive conference location map' }}" data-map-css="{{ site.baseurl }}/assets/css/map.bundle.css?t={{ site_version }}">
+      <template data-map-icon>{% include icon.html name="star" %}</template>
       {%- unless page.map.click_to_load == false %}
         {%- comment -%} Privacy: tiles are only requested from the provider after consent {%- endcomment %}
         <div class="map-consent d-flex flex-column justify-content-center align-items-center text-center h-100 p-4 bg-body-tertiary rounded">
@@ -47,7 +48,7 @@
             {{ page.map.map_provider | default: "OpenStreetMap.Mapnik" | split: "." | first | escape }}
           </p>
           <button type="button" class="btn btn-primary" data-map-load>
-            <i class="bi bi-map" aria-hidden="true"></i>
+            {% include icon.html name="map" %}
             {{ map_lang.map_load | default: "Load map" }}
           </button>
         </div>

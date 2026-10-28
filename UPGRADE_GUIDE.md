@@ -141,6 +141,11 @@ timezone: Europe/Zurich  # was: conference.tz: "+01:00"
 **Action:**
 - Replace `conference.tz` (or a top-level `tz`) with `timezone`.
 
+### Icons
+The icon font is no longer loaded: the theme renders the icons it uses as inline SVGs. Icon names in links and tags work as before.
+
+If your own content, layouts, or JavaScript use the icon font (e.g. `<i class="bi bi-train-front"></i>`), add it to `assets/css/main.scss` (see README, section _Icons_), or use `{% include icon.html name="train-front" %}`.
+
 ### Removed Settings
 
 Remove from `_config.yml` if present:
