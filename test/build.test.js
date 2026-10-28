@@ -11,6 +11,7 @@ import { BASEURL, buildSite } from "./support/build.js";
 let site;
 
 const read = (path) => readFileSync(join(site, path), "utf8");
+const pathOf = (url) => url.split("?")[0];
 const readJson = (path) => JSON.parse(read(path));
 
 const htmlFiles = (dir = site) =>
@@ -30,17 +31,20 @@ before(() => {
 });
 
 describe("JSON endpoints", () => {
-  for (const file of ["assets/js/config.json", "assets/js/data.json", "assets/js/site.json", "manifest.json"]) {
+  for (const file of ["assets/js/data.json", "assets/js/site.json", "manifest.json"]) {
     test(`${file} is valid JSON`, () => {
       assert.doesNotThrow(() => readJson(file));
     });
   }
 
-  test("config.json carries map and live settings", () => {
-    const config = readJson("assets/js/config.json");
+  test("inline config carries map, live and stream settings", () => {
+    const config = JSON.parse(read("index.html").match(/<script type="application\/json" id="conference-config">([\s\S]*?)<\/script>/)[1]);
 
+    assert.equal(config.baseurl, BASEURL);
     assert.deepEqual(config.map.home_coord, [47.3744489, 8.5410422]);
     assert.equal(config.live.timezone, "Europe/Zurich");
+    assert.deepEqual(config.live.days.map(({ date }) => date), ["2026-02-20", "2026-02-21"]);
+    assert.equal(config.stream.prepend, 5);
   });
 
   test("data.json keeps names with quotes and markup intact", () => {
@@ -135,7 +139,7 @@ describe("PWA", () => {
   test("every precached URL exists", () => {
     const { pages, assets } = readJson("assets/js/site.json");
     const missing = [...pages, ...assets].filter((url) => {
-      const path = url.slice(BASEURL.length);
+      const path = pathOf(url).slice(BASEURL.length);
       return !existsSync(join(site, path)) && !existsSync(join(site, path, "index.html"));
     });
 
@@ -301,4 +305,8 @@ describe("Accessibility", () => {
     assert.match(read("talks/late_night/index.html"), /<h1 lang="de"[^>]*>Late Night<\/h1>/);
     assert.match(programCell("Late Night"), /<a lang="de"[^>]*>Late Night<\/a>/);
   });
+});
+
+describe("Assets and privacy", () => {
+  const html = () => read("talks/opening_welcome/index.html");
 });

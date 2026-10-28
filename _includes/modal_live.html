@@ -1,22 +1,26 @@
+{%- assign live_lang = site.data.lang[site.conference.lang].live -%}
 <div class="modal fade" id="stream-modal" tabindex="-1" aria-labelledby="stream-modal-title" aria-describedby="stream-modal-desc" aria-hidden="true" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title" id="stream-modal-title">
-          {{ site.data.lang[site.conference.lang].live.stream | default: "Live Stream" }}
-        </h5>
+        <h2 class="modal-title h5" id="stream-modal-title">
+          {{ live_lang.stream | default: "Live Stream" }}
+        </h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
       </div>
 
       <div class="modal-body ratio ratio-16x9">
-        <iframe src="" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}"></iframe>
+        <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ live_lang.stream | default: 'Live Stream' }}"></iframe>
         <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
           <div id="stream-modal-desc"></div>
+          <div id="stream-offline" class="d-none">
+            <i class="bi bi-wifi-off" aria-hidden="true"></i> {{ live_lang.offline | default: "offline" }}
+          </div>
         </div>
       </div>
 
-      <div class="modal-footer flex-column justify-content-start d-none" id="stream-info" data-time="">
+      <div class="modal-footer flex-column justify-content-start d-none" id="stream-info">
         <div class="align-self-start live-time my-0 small" id="stream-info-time" data-time=""></div>
         <div class="align-self-start ps-2 border-start border-4" id="stream-info-color">
           <p class="mb-0">
@@ -29,9 +33,9 @@
 
       <div class="modal-footer justify-content-around">
         {%- for room in site.rooms -%}
-          <a id="stream-button{{ forloop.index }}" href="#" class="btn btn-outline-primary d-none d-sm-inline{% unless room.live %} disabled{% endunless %}" role="button" data-room="{{ room.name | escape }}">
+          <button type="button" id="stream-button{{ forloop.index }}" class="btn btn-outline-primary d-none d-sm-inline" data-room="{{ room.name | escape }}" aria-pressed="false"{% unless room.live %} disabled{% endunless %}>
             {{ room.name | escape }}
-          </a>
+          </button>
         {%- endfor %}
         <div class="w-100 d-block d-sm-none">
           <select class="form-select" id="stream-select" aria-label="{{ site.data.lang[site.conference.lang].location.rooms | default: 'Rooms' }}">
@@ -41,6 +45,7 @@
           </select>
         </div>
       </div>
+
 
     </div>
   </div>

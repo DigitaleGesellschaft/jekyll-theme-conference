@@ -2,10 +2,6 @@
  * Core conference object factory
  */
 export function createConference() {
-  // Get baseurl from the script tag data
-  const scriptTag = document.querySelector('script[data-baseurl]');
-  const baseurl = scriptTag ? scriptTag.dataset.baseurl : '';
-
   let readyResolve;
   const readyPromise = new Promise((resolve) => {
     readyResolve = resolve;
@@ -14,27 +10,19 @@ export function createConference() {
   let _ready = false;
 
   return {
-    config: {
-      baseurl: baseurl
-    },
+    // Filled from the page's inline configuration, e.g. { baseurl: "/conf" }
+    config: {},
+
     get ready() {
       return _ready;
     },
     set ready(value) {
       _ready = value;
-      if (value === true && readyResolve) {
+      if (value === true) {
         readyResolve();
       }
     },
 
-    awaitReady: () => {
-      // If already ready, resolve immediately
-      if (_ready === true) {
-        return Promise.resolve();
-      }
-      // Otherwise return the deferred promise
-      return readyPromise;
-    }
+    awaitReady: () => readyPromise,
   };
 }
-

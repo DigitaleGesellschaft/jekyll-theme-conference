@@ -1051,12 +1051,14 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
 
 - `window.conference`: Main conference object with the following modules:
   - `conference.program`: Program navigation and tab management
-  - `conference.map`: Map functionality (if enabled)
-  - `conference.modal`: Modal popup handling
-  - `conference.live`: Live streaming and real-time updates (incl. `setTime("09:30", "2026-02-20")`, `getTime()`, `resetTime()` for testing)
+  - `conference.map`: Map functionality (`getMap()` resolves once the map is loaded, or with `null` without map)
+  - `conference.modal`: Links (e.g. videos) in a modal
+  - `conference.live`: Live indications following the program (incl. `setTime("09:30", "2026-02-20")`, `getTime()`, `pauseTime()`, `continueTime()`, `resetTime()` for testing)
+  - `conference.stream`: Live stream modal
   - `conference.infobox`: Dismissal of information boxes and modals
   - `conference.darkmode`: Dark mode according to the system preference
   - `conference.pwa`: Service worker registration (if PWA is enabled)
+  - `conference.config`: Settings of the modules, e.g. `conference.config.baseurl`
   - `conference.awaitReady()`: Promise-based initialization helper
 - `window.bootstrap`: Bootstrap components (Alert, Collapse, Dropdown, Modal, Tab)
 - `window.L`: Leaflet map library (once the map is loaded)
@@ -1072,9 +1074,6 @@ window.conference.awaitReady().then(async () => {
         // Add custom map markers
         L.marker([47.37785, 8.54035]).addTo(map);
     }
-
-    // Access live data
-    const liveData = window.conference.live.getData();
 
     // Custom program interactions
     // ...
@@ -1101,15 +1100,21 @@ The theme's JavaScript and CSS are built using [Vite](https://vitejs.dev/). Sour
 **JavaScript** (`_js/` directory):
 ```
 _js/
-├── main.js            # Main entry point
-├── init.js            # Initialization module
+├── main.js            # Main entry point, list of modules
+├── init.js            # Reads the inline configuration, initializes the modules
 ├── core/
-│   └── conference.js  # Core conference object
+│   ├── clock.js       # Current (or test) time
+│   ├── conference.js  # Core conference object
+│   └── time.js        # Timezone helpers
 └── modules/
-    ├── program.js     # Program navigation
+    ├── darkmode.js    # Colour mode following the system
+    ├── infobox.js     # Dismissal of information boxes
+    ├── live.js        # Live indications
     ├── map.js         # Map functionality
-    ├── modal.js       # Modal popups
-    └── live.js        # Live streaming
+    ├── modal.js       # Links in a modal
+    ├── program.js     # Program days as tabs
+    ├── pwa.js         # Service worker registration
+    └── stream.js      # Live stream modal
 ```
 
 **CSS/SCSS** (`_css/` directory):

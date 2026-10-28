@@ -66,9 +66,12 @@ test("installed app shows the bottom navigation instead of the top one", async (
   await expect(bottomNav).toBeVisible();
   await expect(bottomNav.getByRole("link")).toHaveText(["Program", "Talks", "Speakers", "Location"]);
 
-  // Content is not hidden behind the fixed navigation
-  const [padding, height] = await bottomNav.evaluate((nav) => [parseFloat(document.body.style.paddingBottom), nav.offsetHeight]);
-  expect(padding).toBe(height);
+  // Content is not hidden behind the navigation at the bottom
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const mainBottom = await page.locator("main").evaluate((main) => main.getBoundingClientRect().bottom);
+  const navTop = (await bottomNav.boundingBox()).y;
+  expect(mainBottom).toBeLessThanOrEqual(navTop);
+  expect(navTop + (await bottomNav.boundingBox()).height).toBeLessThanOrEqual(page.viewportSize().height + 1);
 });
 
 test("dark mode follows the system preference", async ({ page }) => {

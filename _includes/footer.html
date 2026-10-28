@@ -1,7 +1,7 @@
 
   </main>
 
-  <footer class="fixed-bottom">
+  <footer class="footer-pwa">
     {%- include navbar_pwa.html -%}
   </footer>
 
@@ -11,8 +11,10 @@
     {%- include modal_live.html -%}
   {%- endif -%}
 
-  <script type="module" src="{{ site.baseurl }}/assets/js/conference.bundle.js?t={{ site.time | date: '%s' }}" data-baseurl="{{ site.baseurl }}"></script>
-  <script type="module" src="{{ site.baseurl }}/assets/js/main.js?t={{ site.time | date: '%s' }}"></script>
+  {%- capture conference_config -%}{%- include conference_config.json -%}{%- endcapture %}
+  <script type="application/json" id="conference-config">{{ conference_config | replace: "<", "\u003c" }}</script>
+  <script type="module" src="{{ site.baseurl }}/assets/js/conference.bundle.js?t={{ site_version }}"></script>
+  <script type="module" src="{{ site.baseurl }}/assets/js/main.js?t={{ site_version }}"></script>
 
 </body>
 </html>

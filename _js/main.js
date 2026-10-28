@@ -13,11 +13,12 @@ import Tab from "bootstrap/js/dist/tab";
 
 window.bootstrap = { Alert, Collapse, Dropdown, Modal, Tab };
 
-// Import core module
+// Import core
+import { createClock } from "./core/clock.js";
 import { createConference } from "./core/conference.js";
 import { init } from "./init.js";
 
-// Import additional modules
+// Import modules
 import { createDarkModeModule } from "./modules/darkmode.js";
 import { createInfoboxModule } from "./modules/infobox.js";
 import { createLiveModule } from "./modules/live.js";
@@ -25,27 +26,25 @@ import { createMapModule } from "./modules/map.js";
 import { createModalModule } from "./modules/modal.js";
 import { createProgramModule } from "./modules/program.js";
 import { createPWAModule } from "./modules/pwa.js";
+import { createStreamModule } from "./modules/stream.js";
 
 // Initialize the conference object and expose it immediately
 const conference = createConference();
 window.conference = conference;
 
-conference.darkmode = createDarkModeModule();
-conference.infobox = createInfoboxModule();
-conference.modal = createModalModule();
-conference.program = createProgramModule();
-conference.live = createLiveModule(conference.config);
+// Modules by config key (see _includes/conference_config.json), initialized in this order
+const clock = createClock();
+const live = createLiveModule(clock);
+const modules = {
+  darkmode: createDarkModeModule(),
+  infobox: createInfoboxModule(),
+  modal: createModalModule(),
+  program: createProgramModule(),
+  live,
+  stream: createStreamModule(clock, live, conference.config),
+  map: createMapModule(),
+  pwa: createPWAModule(conference.config),
+};
+Object.assign(conference, modules);
 
-// Lazy-load map module only when map element exists
-if (document.getElementById("map")) {
-  conference.map = createMapModule();
-}
-
-// Start initialization
-init(conference).then(() => {
-  // Initialize PWA module if enabled
-  if (conference.config.pwa && conference.config.pwa.enable) {
-    conference.pwa = createPWAModule(conference.config);
-    conference.pwa.init();
-  }
-});
+init(conference, modules);

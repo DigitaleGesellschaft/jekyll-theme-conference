@@ -1,5 +1,11 @@
+{%- comment -%}
+  Settings and translated strings of the JavaScript modules, inlined into
+  every page (no extra request before the modules start)
+{%- endcomment -%}
 {%- assign lang = site.data.lang[site.conference.lang] -%}
 {
+    "baseurl": {{ site.baseurl | jsonify }},
+
     {%- include get_location_config.html -%}
     {%- if location_map %}
     "map": {
@@ -12,56 +18,38 @@
     {% if site.conference.live -%}
     "live": {
         "timezone": {{ site.timezone | jsonify }},
-        "time": {
-            {% assign d = site.data.program.days | first -%}
-            {%- include get_day_time.html -%}
-            {%- assign t = day_start_talk -%}
+        "days": [
+            {%- for d in site.data.program.days %}
+            {
+                {%- include get_day_hash.html %}
+                "name": {{ day_name | jsonify }},
+                "date": {{ d.date | jsonify }}
+            }{%- unless forloop.last -%},{%- endunless %}
+            {%- endfor %}
+        ]
+    },
+    {%- endif %}
 
-            {%- include get_talk_timestamp.html -%}
-            {%- assign conf_start = timestamp_start -%}
-
-            {%- assign d = site.data.program.days | last -%}
-            {%- include get_day_time.html -%}
-            {%- assign t = day_end_talk -%}
-
-            {%- include get_talk_timestamp.html -%}
-            {%- assign conf_end = timestamp_end -%}
-
-            "start": {{ conf_start }},
-            "end": {{ conf_end }}
-        },
-
-        "streaming": {
-            "enable": {{ site.conference.live.streaming.enable | default: "false" }},
-            "pause": {{ site.conference.live.streaming.pause | default: 60 }},
-            "prepend": {{ site.conference.live.streaming.prepend | default: 5 }},
-            "extend": {{ site.conference.live.streaming.extend | default: 5 }}
-        }
+    {% if site.conference.live.streaming.enable -%}
+    "stream": {
+        "pause": {{ site.conference.live.streaming.pause | default: 60 }},
+        "prepend": {{ site.conference.live.streaming.prepend | default: 5 }},
+        "extend": {{ site.conference.live.streaming.extend | default: 5 }}
     },
     {%- endif %}
 
     {% if site.conference.pwa -%}
     "pwa": {
-        "enable": {{ site.conference.pwa.enable | default: false }},
-        "theme_color": {{ site.conference.pwa.theme_color | default: '#0d6efd' | jsonify }}
+        "enable": {{ site.conference.pwa.enable | default: false }}
     },
     {%- endif %}
 
     "lang": {
-        {%- if location_map %}
         "map": {
             "focus_conf": {{ lang.location.focus_conf | default: "Center map on conference location" | jsonify }},
             "focus_me": {{ lang.location.focus_me | default: "Show me where I am" | jsonify }}
-        }
-        {%- endif -%}
-
-        {%- if site.conference.live and site.conference.live.streaming.enable -%}
-            {%- if location_map %},{% endif %}
+        },
         "live": {
-            "pre_stream": {{ lang.live.pre_stream | default: "Live stream has not started yet." | jsonify }},
-            "post_stream": {{ lang.live.post_stream | default: "Live stream has ended." | jsonify }},
-            "pause_stream": {{ lang.live.pause_stream | default: "Live stream is currently paused." | jsonify }},
-            "offline": {{ lang.live.offline | default: "offline" | jsonify }},
             "time": {
                 "soon": {{ lang.live.time.soon | default: "soon" | jsonify }},
                 "now": {{ lang.live.time.now | default: "now" | jsonify }},
@@ -76,7 +64,11 @@
                 "minutes": {{ lang.live.time.minutes | default: "minutes" | jsonify }},
                 "minute": {{ lang.live.time.minute | default: "minute" | jsonify }}
             }
+        },
+        "stream": {
+            "pre_stream": {{ lang.live.pre_stream | default: "Live stream has not started yet." | jsonify }},
+            "post_stream": {{ lang.live.post_stream | default: "Live stream has ended." | jsonify }},
+            "pause_stream": {{ lang.live.pause_stream | default: "Live stream is currently paused." | jsonify }}
         }
-        {%- endif %}
     }
 }
