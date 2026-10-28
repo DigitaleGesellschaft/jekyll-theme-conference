@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jekyll-theme-conference (4.0.2)
+    jekyll-theme-conference (4.1.0)
       jekyll (~> 4.3)
 
 GEM
