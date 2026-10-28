@@ -18,7 +18,7 @@
         {%- for d in site.data.program.days -%}
           {%- include get_day_hash.html %}
           <li class="nav-item" role="presentation">
-            <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name }}</a>
+            <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name | escape }}</a>
           </li>
         {%- endfor %}
       </ul>
@@ -33,7 +33,7 @@
     {%- endif %}
 
     <div class="program-table-container w-100 overflow-x-scroll">
-      <table class="table program-table w-auto mx-auto align-top mb-0" role="grid" aria-label="{{ site.data.lang[site.conference.lang].program.schedule | default: 'Conference schedule' }}{% if nbr_days > 1 %} - {{ day_name }}{% endif %}">
+      <table class="table program-table w-auto mx-auto align-top mb-0" aria-label="{{ site.data.lang[site.conference.lang].program.schedule | default: 'Conference schedule' }}{% if nbr_days > 1 %} - {{ day_name | escape }}{% endif %}">
         <thead>
           <tr>
             <th scope="col" class="program-time text-center" aria-label="{{ site.data.lang[site.conference.lang].program.time | default: 'Time' }}">#</th>
@@ -43,10 +43,10 @@
               {%- assign room = site.rooms | where: 'name', r.name | first %}
               <th scope="col" class="program-talk text-center" id="room-{{ day_hash }}-{{ forloop.index }}">
                 {%- if room.hide or location_hide -%}
-                  {{- room.name -}}
+                  {{- room.name | escape -}}
                 {%- else -%}
                   <a class="text-reset link-underline-primary link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ room.url | prepend: site.baseurl }}">
-                    {{- room.name -}}
+                    {{- room.name | escape -}}
                   </a>
                 {%- endif -%}
               </th>
@@ -176,8 +176,9 @@
                     {%- endunless -%}
 
                     {%- include get_track_properties.html -%}
-                    <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-0 h-100">
-                      <div class="h-100 p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-4 border-start border-{{ track_color }}-subtle shadow-sm overflow-hidden">
+                    {%- comment -%} Colour on the cell itself: a child cannot stretch over all spanned rows {%- endcomment %}
+                    <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-start border-{{ track_color }}-subtle shadow-sm">
+                      <div class="overflow-hidden">
 
                         {%- include show_live_icon.html class="mb-2" %}
 
@@ -227,7 +228,7 @@
       <h5 class="mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h5>
       {%- for track_prop in site.conference.talks.tracks %}
         <div class="d-block d-sm-inline-block m-1 p-1 ps-2 pe-2 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-start border-4 border-{{ track_prop.color | default: 'light' }}-subtle fw-normal">
-          {{- track_prop.name -}}
+          {{- track_prop.name | escape -}}
         </div>
       {%- endfor -%}
     {%- endunless -%}

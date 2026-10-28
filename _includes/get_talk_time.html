@@ -18,8 +18,13 @@
 {%- assign talk_start_hour = talk_start | split: ':' | first | plus: 0 -%}
 {%- assign talk_start_min = talk_start | split: ':' | last | divided_by: program_time_steps | floor | times: program_time_steps -%}
 {%- assign talk_end_hour = talk_end | split: ':' | first | plus: 0 -%}
-{%- assign talk_end_min = talk_end | split: ':' | last | divided_by: program_time_steps | ceil | times: program_time_steps -%}
+{%- assign talk_end_min = talk_end | split: ':' | last | times: 1.0 | divided_by: program_time_steps | ceil | times: program_time_steps -%}
 
 {%- assign talk_start_hour_24h = talk_start_day | times: 24 | plus: talk_start_hour -%}
 {%- assign talk_end_hour_24h = talk_end_day | times: 24 | plus: talk_end_hour -%}
 {%- assign talk_duration_min = talk_end_hour_24h | minus: talk_start_hour_24h | times: 60 | minus: talk_start_min | plus: talk_end_min -%}
+
+{%- comment -%} Exact length, talk_duration_min is rounded to the program's time steps {%- endcomment -%}
+{%- assign talk_start_min_exact = talk_start | split: ':' | last | plus: 0 -%}
+{%- assign talk_end_min_exact = talk_end | split: ':' | last | plus: 0 -%}
+{%- assign talk_length_min = talk_end_hour_24h | minus: talk_start_hour_24h | times: 60 | minus: talk_start_min_exact | plus: talk_end_min_exact -%}

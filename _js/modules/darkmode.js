@@ -1,15 +1,17 @@
 /**
- * Dark Mode Module - Switches dark mode based on system preference
+ * Dark Mode Module - Follows changes of the system preference
+ *
+ * The initial theme is set by an inline script in the header (no flash).
  */
 export function createDarkModeModule() {
+  const query = window.matchMedia('(prefers-color-scheme: dark)');
+
   const apply = () => {
-    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-bs-theme', query.matches ? 'dark' : 'light');
   };
 
   const init = () => {
-    apply();
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', apply);
+    query.addEventListener('change', apply);
   };
 
   return { init };

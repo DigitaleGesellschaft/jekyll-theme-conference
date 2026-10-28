@@ -4,14 +4,14 @@
     <h1 class="display-3 text-break">
       {% if page.header.img %}
         {% if page.header.img_dark %}
-          <div class="mode-light">
+          <span class="mode-light">
             <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
             <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
-          </div>
-          <div class="mode-dark">
+          </span>
+          <span class="mode-dark">
             <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
             <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
-          </div>
+          </span>
         {% else %}
           <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
           <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
@@ -23,9 +23,7 @@
       {% endif %}
     </h1>
     {% if site.description != none %}
-      <p class="lead">
-        {{ site.description | markdownify | replace: '<p>', '<p class="lead">' }}
-      </p>
+      {{ site.description | markdownify | replace: '<p>', '<p class="lead">' }}
     {% endif %}
 
     <hr class="my-4">

@@ -11,6 +11,12 @@
 
 {%- if program_page -%}
   {%- assign program_url = program_page.url -%}
+
+  {%- comment -%} A program page rounds talks to its own time steps {%- endcomment -%}
+  {%- if page.layout == 'program' -%}
+    {%- assign program_page = page -%}
+  {%- endif -%}
+
   {%- if program_page.time_steps -%}
     {%- if program_page.time_steps == "start" -%}
       {%- assign program_time_steps = 1 -%}
