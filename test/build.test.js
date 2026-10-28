@@ -137,6 +137,23 @@ describe("PWA", () => {
     assert.deepEqual(assets.filter((url) => /\/documents\/|bootstrap-icons|\.map$|conference-only|leaflet|map\.bundle/.test(url)), []);
   });
 
+  test("site.json lists theme bundles with their content hash", () => {
+    const { assets } = readJson("assets/js/site.json");
+
+    assert.ok(assets.some((url) => /\/assets\/css\/conference\.bundle\.css\?v=[0-9a-f]{10}$/.test(url)));
+    assert.ok(assets.some((url) => /\/assets\/js\/conference\.bundle\.js\?v=[0-9a-f]{10}$/.test(url)));
+  });
+
+  test("site.json lists chunks under the URLs the bundle imports", () => {
+    const { assets } = readJson("assets/js/site.json");
+    const chunks = [...read("assets/js/conference.bundle.js").matchAll(/"\.\/([\w-]+\.bundle\.js)"/g)]
+      .map(([, file]) => `${BASEURL}/assets/js/${file}`)
+      .filter((url) => !url.includes("/leaflet-"));
+
+    assert.ok(chunks.length);
+    assert.deepEqual(chunks.filter((url) => !assets.includes(url)), []);
+  });
+
   test("every precached URL exists", () => {
     const { pages, assets } = readJson("assets/js/site.json");
     const missing = [...pages, ...assets].filter((url) => {
@@ -311,6 +328,12 @@ describe("Accessibility", () => {
 describe("Assets and privacy", () => {
   const html = () => read("talks/opening_welcome/index.html");
 
+  test("theme bundles are versioned by their content hash, the site's files by build time", () => {
+    assert.match(html(), /conference\.bundle\.css\?v=[0-9a-f]{10}"/);
+    assert.match(html(), /conference\.bundle\.js\?v=[0-9a-f]{10}"/);
+    assert.match(html(), /main\.css\?t=\d+"/);
+  });
+
   test("icons are inline SVGs, not an icon font", () => {
     assert.match(html(), /<svg [^>]*class="bi bi-clock" aria-hidden="true" focusable="false"/);
     assert.match(read("talks/talk_with_quotes/index.html"), /class="bi bi-camera-video-off-fill"/);
@@ -321,6 +344,6 @@ describe("Assets and privacy", () => {
 
   test("Leaflet styles are loaded with the map only", () => {
     assert.doesNotMatch(html(), /map\.bundle\.css/);
-    assert.match(read("location/index.html"), /data-map-css="\/conf\/assets\/css\/map\.bundle\.css\?t=\d+"/);
+    assert.match(read("location/index.html"), /data-map-css="\/conf\/assets\/css\/map\.bundle\.css\?v=[0-9a-f]{10}"/);
   });
 });

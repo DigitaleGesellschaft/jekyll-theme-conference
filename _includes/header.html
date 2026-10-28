@@ -13,14 +13,18 @@
   </title>
   {% include list_header_meta.html %}
 
+  {%- comment -%}
+    Theme bundles are versioned by their content hash, the site's own files by the build time
+  {%- endcomment -%}
   {%- assign site_version = site.time | date: '%s' -%}
+  {%- assign asset_versions = site.data.conference_assets -%}
   {% if site.conference.custom_style == "bootstrap" %}
   {% comment %} Conference bundle with separate Bootstrap {% endcomment %}
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/bootstrap.min.css?t={{ site_version }}" />
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference-only.bundle.css?t={{ site_version }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference-only.bundle.css?v={{ asset_versions['css/conference-only.bundle.css'] | default: site_version }}" />
   {% elsif site.conference.custom_style != "full" %}
   {% comment %} Full conference bundle {% endcomment %}
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?t={{ site_version }}" />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/conference.bundle.css?v={{ asset_versions['css/conference.bundle.css'] | default: site_version }}" />
   {% endif %}
   {% comment %} User stylesheet (can include full custom conference bundle) {% endcomment %}
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/main.css?t={{ site_version }}" />

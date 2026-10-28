@@ -38,7 +38,8 @@
 
   {% if page.map %}
     {%- assign map_lang = site.data.lang[site.conference.lang].location -%}
-    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ map_lang.map_label | default: 'Interactive conference location map' }}" data-map-css="{{ site.baseurl }}/assets/css/map.bundle.css?t={{ site_version }}">
+    {%- assign map_css_version = site.data.conference_assets['css/map.bundle.css'] | default: site_version %}
+    <div id="map" class="w-100 rounded shadow-sm" aria-label="{{ map_lang.map_label | default: 'Interactive conference location map' }}" data-map-css="{{ site.baseurl }}/assets/css/map.bundle.css?v={{ map_css_version }}">
       <template data-map-icon>{% include icon.html name="star" %}</template>
       {%- unless page.map.click_to_load == false %}
         {%- comment -%} Privacy: tiles are only requested from the provider after consent {%- endcomment %}

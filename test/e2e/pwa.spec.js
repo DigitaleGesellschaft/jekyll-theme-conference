@@ -21,6 +21,17 @@ test("pages and stylesheets are available offline", async ({ page, context }) =>
   }
 });
 
+test("theme bundles are precached with their content hash", async ({ page }) => {
+  await page.goto("");
+
+  const keys = await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+    const [name] = (await caches.keys()).filter((key) => key.startsWith("jekyll-conference-theme-"));
+    return (await (await caches.open(name)).keys()).map((request) => request.url);
+  });
+  expect(keys.some((url) => /conference\.bundle\.css\?v=[0-9a-f]{10}$/.test(url))).toBe(true);
+});
+
 test("a new build's versioned assets are not served from an old cache", async ({ page }) => {
   await page.goto("");
 

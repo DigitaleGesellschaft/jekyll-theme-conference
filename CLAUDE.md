@@ -38,11 +38,12 @@ Releases: push a `v*` tag → `.github/workflows/publish.yml` builds and pushes 
 
 `npm run build` (see `vite.config.js`) produces files listed in `.gitignore` that the gemspec explicitly globs back in:
 
-- `_js/main.js` → `assets/js/conference.bundle.js` (Leaflet split into a lazy chunk, bundler helpers into `rolldown-runtime.bundle.js`)
+- `_js/main.js` → `assets/js/conference.bundle.js` (Leaflet split into a lazy chunk `leaflet-<hash>.bundle.js`, bundler helpers into `rolldown-runtime-<hash>.bundle.js`)
 - `_css/main.scss` → `assets/css/conference.bundle.css` (with Bootstrap)
 - `_css/main-only.scss` → `assets/css/conference-only.bundle.css` (without Bootstrap)
 - `_css/map.scss` → `assets/css/map.bundle.css` (Leaflet, loaded by the map module)
 - `iconsPlugin` writes one include per Bootstrap Icon to `_includes/icons/` (used via `_includes/icon.html`; no icon font in the bundles)
+- `assetVersionsPlugin` writes the bundles' content hashes to `_data/conference_assets.yml`: the header links bundles with `?v=<hash>`, `site.json` precaches them likewise, so the service worker keeps unchanged bundles across site builds
 - `copyAssetsPlugin` copies `_css/*.scss` and Bootstrap/Icons/Leaflet sources from `node_modules` into `_sass/` (`main.scss` becomes `_sass/conference.scss`), and icon fonts into `assets/webfonts/` (opt-in for consumers).
 
 Edit sources in `_js/` and `_css/`; never edit `_sass/` or `*.bundle.*`. `_sass/` exists so consumers with `conference.custom_style: "full"` can recompile Bootstrap with their own variables. `custom_style` (`none` / `bootstrap` / `full`) selects which stylesheet `_includes/header.html` links.

@@ -35,7 +35,7 @@ for (const [style, { linked }] of Object.entries(STYLES)) {
 
     test("precaches only the linked bundle", () => {
       const { assets } = JSON.parse(readFileSync(join(sites[style], "assets/js/site.json"), "utf8"));
-      const bundles = BUNDLES.filter((file) => assets.includes(`${BASEURL}/assets/css/${file}`));
+      const bundles = BUNDLES.filter((file) => assets.some((url) => url.split("?")[0] === `${BASEURL}/assets/css/${file}`));
 
       assert.deepEqual(bundles, BUNDLES.filter((file) => linked.includes(file)));
     });

@@ -533,7 +533,7 @@ conference:
 
 ### Progressive Web App (PWA)
 
-The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. Once a visitor opened the site, all pages (program, talks, speakers, rooms, …) and all files below `assets/` (stylesheets, scripts, images, fonts) are available offline. Documents (`documents/`) and map tiles are not. Pages and data are always loaded fresh when online, so schedule changes reach visitors right away. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
+The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. Once a visitor opened the site, all pages (program, talks, speakers, rooms, …) and all files below `assets/` (stylesheets, scripts, images, fonts) are available offline. Documents (`documents/`) and map tiles are not. Pages and data are always loaded fresh when online, so schedule changes reach visitors right away (falling back to the stored copy if the network does not answer within 3 seconds, e.g. on a crowded conference Wi-Fi). When the site is rebuilt, installed apps only download what changed: the theme's bundles are versioned by their content, all other files are revalidated. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
 
 1. Enable and optionally customize the functionality in your `_config.yml`:
    ```yaml
@@ -1163,6 +1163,7 @@ To modify the theme's source code and rebuild:
    - `_css/` → `assets/css/conference.bundle.css`, `assets/css/conference-only.bundle.css` and `assets/css/map.bundle.css`
    This generates:
    - `_includes/icons/`: one include per Bootstrap Icon (inline SVG)
+   - `_data/conference_assets.yml`: content hashes of the bundles (cache busting)
    This copies:
    - `_css/` + any SASS file from the different framework libraries → `_sass`
    - Webfonts → `assets/webfonts/` (for sites using the icon font themselves)
