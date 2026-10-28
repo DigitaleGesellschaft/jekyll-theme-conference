@@ -33,6 +33,11 @@ export function createModalModule() {
       titleH5.classList.add('d-none');
     }
 
+    // Name the frame after its content, e.g. the talk
+    const iframe = modal.querySelector('iframe');
+    iframe.dataset.defaultTitle ??= iframe.title;
+    iframe.title = titleH3.textContent.trim() || iframe.dataset.defaultTitle;
+
     if (footer) {
       footerEl.classList.remove('d-none');
       setContent(footerP, footer, footerFormat);
@@ -51,6 +56,15 @@ export function createModalModule() {
   };
 
   const init = () => {
+    // Bootstrap hides a closing modal from assistive technology while it
+    // still holds the focus; release it first (Bootstrap returns it to the
+    // trigger once hidden)
+    document.addEventListener('hide.bs.modal', (e) => {
+      if (e.target.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+    });
+
     const modalEl = document.getElementById('link-modal');
     if (!modalEl) return;
 

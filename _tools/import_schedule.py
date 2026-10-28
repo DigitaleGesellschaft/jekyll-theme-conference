@@ -172,6 +172,10 @@ def parse_frab(data: str) -> Dict[str, List[Dict[str, str]]]:
                     ),
                 }
 
+                # Language of the talk, e.g. "en", if it differs from the site's
+                if talk.get("language"):
+                    new_talk["lang"] = clean_text(talk["language"])
+
                 if talk.get("type"):
                     new_talk["tags"].append(clean_text(talk.get("type")))
 

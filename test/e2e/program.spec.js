@@ -58,3 +58,18 @@ test("sticky header does not shift the table while scrolling", async ({ page }) 
   // e.g. ["none 0", "block 0"], never a shifted table or flickering
   expect(states).toEqual(["none 0", "block 0"]);
 });
+
+test("sticky header follows a horizontal scroll made while it was hidden", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("program/");
+  await ready(page);
+
+  const container = page.locator(".tab-pane.active .program-table-container");
+  const sticky = page.locator(".tab-pane.active [data-program-sticky]");
+  await container.evaluate((el) => el.scrollTo(el.scrollWidth, 0));
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect(sticky).toBeVisible();
+
+  const scrollLeft = await container.evaluate((el) => el.scrollLeft);
+  await expect.poll(() => sticky.evaluate((el) => el.scrollLeft)).toBe(scrollLeft);
+});

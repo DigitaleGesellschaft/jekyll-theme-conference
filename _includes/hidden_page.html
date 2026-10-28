@@ -1,0 +1,18 @@
+{%- comment -%}
+  Stand-in for a hidden talk, speaker or room: Jekyll writes a page for every
+  document, so make it a complete one that points to the home page
+{%- endcomment -%}
+<!DOCTYPE html>
+<html lang="{{ site.conference.lang | default: 'en' }}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex">
+  <meta http-equiv="refresh" content="0; url={{ site.baseurl }}/">
+  <title>{{ site.title | escape }}</title>
+</head>
+<body>
+  <main>
+    <h1><a href="{{ site.baseurl }}/">{{ site.title | escape }}</a></h1>
+  </main>
+</body>
+</html>

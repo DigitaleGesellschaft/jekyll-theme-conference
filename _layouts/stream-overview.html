@@ -19,7 +19,7 @@
       {%- endif %}
 
     <div class="col-md mb-4">
-      <h3 id="stream-heading-{{ forloop.index }}">{{ room.name | escape }}</h3>
+      <h2 class="h3" id="stream-heading-{{ forloop.index }}">{{ room.name | escape }}</h2>
       <div class="ratio ratio-16x9">
         {%- include get_room_live_href.html %}
         <iframe src="{{ room_live_href }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}: {{ room.name | escape }}" aria-labelledby="stream-heading-{{ forloop.index }}"></iframe>

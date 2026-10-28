@@ -164,7 +164,8 @@ describe("Program options", () => {
   // Time labels of the first day, e.g. ["09:00", ":30", "10:00", ...]
   const timeLabels = (path) => {
     const table = read(path).split("</table>")[0];
-    return [...table.matchAll(/<th scope="row"[^>]*>([^<]*)<\/th>/g)].map(([, label]) => label.trim());
+    const visible = table.replace(/<span class="visually-hidden">[^<]*<\/span>/g, "");
+    return [...visible.matchAll(/<th scope="row"[^>]*>([^<]*)<\/th>/g)].map(([, label]) => label.trim());
   };
 
   test("default: rows every 15 minutes, labels on full hours, legend", () => {
@@ -173,14 +174,14 @@ describe("Program options", () => {
     // 09:00 - 01:00 (+1 day) in steps of 15 minutes
     assert.equal(labels.length, 64);
     assert.deepEqual(labels.filter(Boolean).slice(0, 3), ["9:00", "10:00", "11:00"]);
-    assert.match(read("program/index.html"), /<h5[^>]*>Caption<\/h5>/);
+    assert.match(read("program/index.html"), /<h2[^>]*>Caption<\/h2>/);
   });
 
   test("time_steps start: one row per talk start, hide_legend", () => {
     const html = read("variants/start/index.html");
 
     assert.deepEqual(timeLabels("variants/start/index.html"), ["9:00", "9:30", "22:00"]);
-    assert.doesNotMatch(html, /<h5[^>]*>Caption<\/h5>/);
+    assert.doesNotMatch(html, /<h2[^>]*>Caption<\/h2>/);
   });
 
   test("show_alltimes: labels for all rows", () => {
@@ -247,5 +248,57 @@ describe("Markup", () => {
 
   test("program table has no interactive grid role", () => {
     assert.doesNotMatch(read("program/index.html"), /role="grid"/);
+  });
+});
+
+describe("Accessibility", () => {
+  // Cell of a talk in the program, e.g. programCell("Opening & Welcome")
+  const programCell = (name) => {
+    const html = read("program/index.html");
+    const end = html.indexOf(name);
+    return html.slice(html.lastIndexOf("<td rowspan", end), html.indexOf("</td>", end));
+  };
+
+  test("program cells name the time and track, not only by position and colour", () => {
+    const cell = programCell("Opening &amp; Welcome");
+
+    assert.match(cell, /<span class="visually-hidden">09:00–09:30, Main<\/span>/);
+  });
+
+  test("program rows name their full time for screen readers", () => {
+    for (const path of ["program/index.html", "variants/alltimes/index.html"]) {
+      const table = read(path).split("</table>")[0];
+      const headers = [...table.matchAll(/<th scope="row"[^>]*>([\s\S]*?)<\/th>/g)].map(([, html]) => html.replace(/<[^>]+>/g, "").trim());
+
+      assert.ok(headers.every((text) => /^\d{1,2}:\d{2}$/.test(text)), `${path}: ${headers.slice(0, 4)}`);
+    }
+  });
+
+  test("program table has no spacer columns", () => {
+    assert.doesNotMatch(read("program/index.html"), /program-space/);
+  });
+
+  test("headings do not skip levels", () => {
+    for (const file of htmlFiles()) {
+      const main = read(file).match(/<main[\s\S]*<\/main>/)?.[0] ?? "";
+      const levels = [...main.matchAll(/<h([1-6])[\s>]/g)].map(([, level]) => Number(level));
+
+      levels.forEach((level, i) => assert.ok(i === 0 || level <= levels[i - 1] + 1, `${file}: h${levels[i - 1]} followed by h${level}`));
+    }
+  });
+
+  test("hidden talks and speakers produce complete pages that are not indexed", () => {
+    for (const file of ["talks/hidden_talk/index.html", "speakers/hidden_person/index.html"]) {
+      const html = read(file);
+
+      assert.match(html, /<html lang="en">/);
+      assert.match(html, /<title>[^<]+<\/title>/);
+      assert.match(html, /<meta name="robots" content="noindex">/);
+    }
+  });
+
+  test("talks in another language are marked as such", () => {
+    assert.match(read("talks/late_night/index.html"), /<h1 lang="de"[^>]*>Late Night<\/h1>/);
+    assert.match(programCell("Late Night"), /<a lang="de"[^>]*>Late Night<\/a>/);
   });
 });
