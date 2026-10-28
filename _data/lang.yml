@@ -1,4 +1,4 @@
-version: 10
+version: 11
 
 en:
   pronoun:
@@ -44,6 +44,8 @@ en:
     talks: Talks in this room
     focus_conf: Center map on conference location
     focus_me: Show my current location
+    map_load: Load map
+    map_privacy: "The map is loaded from an external provider, which receives your IP address:"
   program:
     title: Program
     legend: Caption
@@ -102,6 +104,8 @@ de:
     talks: Vorträge in diesem Raum
     focus_conf: Karte auf den Konferenz-Ort zentrieren
     focus_me: Meinen aktuellen Standort anzeigen
+    map_load: Karte laden
+    map_privacy: "Die Karte wird von einem externen Anbieter geladen, der dabei Ihre IP-Adresse erhält:"
   program:
     title: Programm
     legend: Legende
@@ -160,6 +164,8 @@ fr:
     talks: Présentations dans cette salle
     focus_conf: Centrer la carte sur le lieu de la conférence
     focus_me: Afficher ma localisation actuelle
+    map_load: Charger la carte
+    map_privacy: "La carte est chargée depuis un fournisseur externe qui reçoit alors votre adresse IP :"
   program:
     title: Programme
     legend: Légende
@@ -218,6 +224,8 @@ pt:
     talks: Apresentações nesta sala
     focus_conf: Centralizar o mapa para o local da conferência
     focus_me: Mostrar minha localização atual
+    map_load: Carregar mapa
+    map_privacy: "O mapa é carregado a partir de um fornecedor externo, que recebe o seu endereço IP:"
   program:
     title: Programa
     legend: Legenda
