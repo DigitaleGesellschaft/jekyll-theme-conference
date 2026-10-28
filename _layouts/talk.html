@@ -9,7 +9,7 @@
         <div class="h6 mt-2 mb-0 me-1 pe-1 pb-1">
           {% include get_track_properties.html %}
           <span class="d-block d-sm-inline p-1 px-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-start border-4 border-{{ track_color }}-subtle fw-normal">
-            {{ talk.track }}
+            {{ talk.track | escape }}
           </span>
         </div>
       {% endif %}
@@ -25,7 +25,7 @@
     </div>
   {% endif %}
 
-  <h1 class="fw-light text-break">{{ talk.name }}</h1>
+  <h1 class="fw-light text-break">{{ talk.name | escape }}</h1>
 
   <p class="mb-3 fw-light">
     {% include list_speakers.html %}

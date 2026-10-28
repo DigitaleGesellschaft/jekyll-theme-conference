@@ -13,11 +13,11 @@
 {
   "@context": "https://schema.org",
   "@type": "Place",
-  "name": {{ room.name | jsonify }},
+  "name": {{ room.name | jsonify | replace: "<", "\u003c" }},
   "url": "{{ room_url }}",
   "containedInPlace": {
     "@type": "Place"{% if location_postal_address.name %},
-    "name": {{ location_postal_address.name | jsonify }}{% endif %},
+    "name": {{ location_postal_address.name | jsonify | replace: "<", "\u003c" }}{% endif %},
     "url": "{{ schema_location_url }}"
   }
 }

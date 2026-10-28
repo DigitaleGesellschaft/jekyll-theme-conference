@@ -6,7 +6,7 @@
 
   <!-- title for print: -->
   <h1 class="display-5 mb-3 d-none d-print-inline">
-    {{ this_room.name }}
+    {{ this_room.name | escape }}
   </h1>
 
   <!-- title shown in browser: -->
@@ -31,7 +31,7 @@
         {% endunless %}
 
         <h6 class="mt-1 mb-2">
-          {{- day_name -}}
+          {{- day_name | escape -}}
         </h6>
 
         <table class="mw-100">

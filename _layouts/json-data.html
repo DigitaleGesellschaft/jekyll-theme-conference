@@ -4,9 +4,9 @@
         {%- for d in site.data.program.days %}
         {
             {%- include get_day_hash.html %}
-            "name": "{{ day_name }}",
-            "hash": "{{ day_hash }}",
-            "date": "{{ d.date }}"
+            "name": {{ day_name | jsonify }},
+            "hash": {{ day_hash | jsonify }},
+            "date": {{ d.date | jsonify }}
         }{%- unless forloop.last -%},{%- endunless %}
         {%- endfor %}
     ],
@@ -25,10 +25,10 @@
             {%- else -%}
                 {%- assign first_room = false -%}
             {%- endunless %}
-        "{{ room.name }}": {
+        {{ room.name | jsonify }}: {
             "id": {{ forloop.index }},
-            "name": "{{ room.name }}",
-            "href": "{{ room_live_href }}"
+            "name": {{ room.name | jsonify }},
+            "href": {{ room_live_href | jsonify }}
         }
         {%- endif -%}
     {%- endfor %}
@@ -36,12 +36,12 @@
 
     "speakers": {
     {%- for speaker in site.speakers %}
-        "{{ speaker.name }}" : {
-            "name": "{{ speaker.first_name | append: ' ' | append: speaker.last_name }}",
+        {{ speaker.name | jsonify }} : {
+            "name": {{ speaker.first_name | append: ' ' | append: speaker.last_name | jsonify }},
         {%- if speaker.hide %}
             "href": ""
         {%- else %}
-            "href": "{{ speaker.url | prepend: site.baseurl }}"
+            "href": {{ speaker.url | prepend: site.baseurl | jsonify }}
         {%- endif %}
         }{%- unless forloop.last -%},{%- endunless %}
     {%- endfor %}
@@ -61,7 +61,7 @@
                         {%- else -%}
                             {%- assign first_room = false -%}
                         {%- endunless %}
-        "{{ room.name | replace: '"', '\"' }}": [
+        {{ room.name | jsonify }}: [
                         {%- assign first_talk = false %}
                     {%- else -%}
                         ,
@@ -70,45 +70,44 @@
                     {%- for t in r.talks %}
                         {%- assign talk = site.talks | where: 'name', t.name | first %}
             {
-                "name": "{{ talk.name | replace: '"', '\"' }}",
+                "name": {{ talk.name | jsonify }},
 
                         {%- unless talk.hide %}
-                "href": "{{ talk.url | prepend: site.baseurl }}",
+                "href": {{ talk.url | prepend: site.baseurl | jsonify }},
                         {%- else %}
                 "href": "",
                         {%- endunless -%}
 
                         {%- include get_track_properties.html %}
-                "color": "{{ track_color }}",
-                "speakers": [
-                        {%- for speaker_name in talk.speakers %}
-                    "{{ speaker_name}}"{%- unless forloop.last -%},{%- endunless -%}
-                        {%- endfor %}
-                ],
+                "color": {{ track_color | jsonify }},
+                "speakers": {% if talk.speakers %}{{ talk.speakers | jsonify }}{% else %}[]{% endif %},
 
                         {%- include get_talk_timestamp.html %}
                 "start": {{ timestamp_start }},
                 "end": {{ timestamp_end }}
 
-                        {% include get_link_types.html %}
+                        {%- include get_link_types.html %}
                         {%- if has_live_links > 0 -%},
                 "live_links": [
+                            {%- assign first_link = true -%}
                             {%- for link in talk.links -%}
                                 {%- include get_link.html type="live" color=track_color -%}
-                                {%- if link_valid %},
+                                {%- unless link_valid -%}
+                                    {%- continue -%}
+                                {%- endunless -%}
+
+                                {%- unless first_link -%},{%- endunless -%}
+                                {%- assign first_link = false %}
                     {
-                        "name": "{{ link.name | replace: '"', '\"' }}",
-                        "href": "{{ link_href | replace: '"', '%22' }}"
-                                    {%- if link_icon -%},
-                        "icon": "{{ link_icon | replace: '"', '\"' }}"
-                                    {%- endif %}
-                                    {%- if link_disabled -%},
+                        "name": {{ link.name | jsonify }},
+                        "href": {{ link_href | jsonify }}
+                                {%- if link_icon -%},
+                        "icon": {{ link_icon | jsonify }}
+                                {%- endif %}
+                                {%- if link_disabled -%},
                         "disabled": true
-                                    {%- endif -%}
                                 {%- endif %}
                     }
-                                {%- assign has_live_links = has_live_links | minus: 1 -%}
-                                {%- if has_live_links > 0 -%},{%- endif -%}
                             {%- endfor %}
                 ]
                         {%- endif %}

@@ -23,7 +23,7 @@
 
   {% include get_page_title.html -%}
   <title>
-    {{- page_title -}}
+    {{- page_title | escape -}}
     {%- unless page_title == empty %} - {% endunless -%}
     {{- site.title -}}
   </title>

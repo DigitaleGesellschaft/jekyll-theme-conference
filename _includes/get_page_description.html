@@ -14,7 +14,7 @@
   {%- endif -%}
 {%- endcapture -%}
 
-{%- if page_description.empty and include.default -%}
+{%- if page_description == empty and include.default -%}
   {%- assign page_description = include.default -%}
 {%- endif -%}
 

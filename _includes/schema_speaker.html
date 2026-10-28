@@ -27,12 +27,12 @@
 {
   "@context": "https://schema.org",
   "@type": "Person",
-  "name": "{{ speaker.first_name | append: " " | append: speaker.last_name | jsonify }}",
-  "givenName": {{ speaker.first_name | jsonify }},
-  "familyName": {{ speaker.last_name | jsonify }},
+  "name": {{ speaker.first_name | append: " " | append: speaker.last_name | jsonify | replace: "<", "\u003c" }},
+  "givenName": {{ speaker.first_name | jsonify | replace: "<", "\u003c" }},
+  "familyName": {{ speaker.last_name | jsonify | replace: "<", "\u003c" }},
   "url": "{{ speaker_url }}",
   "performerIn": [
-    {% if performer_in -%}
+    {% if performer_in != "" -%}
       {{ performer_in }}
     {%- else -%}
       {%- comment -%} Link to conference event {%- endcomment -%}

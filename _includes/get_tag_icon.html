@@ -7,7 +7,9 @@
   {% endif %}
 {% endfor %}
 
-{% assign tag_html = tag %}
+{% assign tag_escaped = tag | escape %}
+{% assign tag_html = tag_escaped %}
 {% if tag_icon.size > 0 %}
-  {% assign tag_html = '<i class="bi bi-' | append: tag_icon | append: '" title="' | append: tag | append: '" aria-hidden="true"></i>' %}
+  {% comment %} Icon only: name kept for screen readers {% endcomment %}
+  {% assign tag_html = '<i class="bi bi-' | append: tag_icon | append: '" title="' | append: tag_escaped | append: '" aria-hidden="true"></i><span class="visually-hidden">' | append: tag_escaped | append: '</span>' %}
 {% endif %}
