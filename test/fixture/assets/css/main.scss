@@ -1,0 +1,7 @@
+---
+---
+
+// Recompile the theme with the site's Bootstrap variables (_sass/)
+{% if site.conference.custom_style == "full" %}
+@use "conference";
+{% endif %}

@@ -123,13 +123,13 @@ describe("PWA", () => {
     }
   });
 
-  test("site.json lists assets but no documents, redundant fonts or source maps", () => {
+  test("site.json lists assets but no documents, redundant fonts, source maps or map scripts", () => {
     const { assets } = readJson("assets/js/site.json");
 
     for (const path of ["/assets/images/icon.png", "/assets/css/main.css", "/assets/css/conference.bundle.css", "/assets/webfonts/bootstrap-icons.woff2", "/assets/webfonts/legacy.woff"]) {
       assert.ok(assets.includes(BASEURL + path), `missing ${path}`);
     }
-    assert.deepEqual(assets.filter((url) => /\/documents\/|bootstrap-icons\.woff$|\.map$|conference-only/.test(url)), []);
+    assert.deepEqual(assets.filter((url) => /\/documents\/|bootstrap-icons\.woff$|\.map$|conference-only|leaflet/.test(url)), []);
   });
 
   test("every precached URL exists", () => {

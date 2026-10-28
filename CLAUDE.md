@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Jekyll theme distributed as a Ruby gem (`jekyll-theme-conference`). Content (talks, speakers, rooms) lives in the *consuming* site as Jekyll collections; the schedule lives in the consuming site's `_data/program.yml`. This repo has no `_config.yml` and no content, so it cannot be served on its own.
+A Jekyll theme distributed as a Ruby gem (`jekyll-theme-conference`). Content (talks, speakers, rooms) lives in the *consuming* site as Jekyll collections; the schedule lives in the consuming site's `_data/program.yml`. This repo has no content, so it cannot be served on its own; its `_config.yml` only holds defaults Jekyll merges under the site's config (e.g. `sass.quiet_deps` against Bootstrap's deprecation warnings).
 
 User-facing documentation for every config option is in `README.md`; breaking changes v3→v4 in `UPGRADE_GUIDE.md`. Update both when adding or changing options.
 
@@ -38,7 +38,7 @@ Releases: push a `v*` tag → `.github/workflows/publish.yml` builds and pushes 
 
 `npm run build` (see `vite.config.js`) produces files listed in `.gitignore` that the gemspec explicitly globs back in:
 
-- `_js/main.js` → `assets/js/conference.bundle.js` (Leaflet split into a lazy chunk)
+- `_js/main.js` → `assets/js/conference.bundle.js` (Leaflet split into a lazy chunk, bundler helpers into `rolldown-runtime.bundle.js`)
 - `_css/main.scss` → `assets/css/conference.bundle.css` (with Bootstrap)
 - `_css/main-only.scss` → `assets/css/conference-only.bundle.css` (without Bootstrap)
 - `copyAssetsPlugin` copies `_css/*.scss` and Bootstrap/Icons/Leaflet sources from `node_modules` into `_sass/` (`main.scss` becomes `_sass/conference.scss`), and icon fonts into `assets/webfonts/`.

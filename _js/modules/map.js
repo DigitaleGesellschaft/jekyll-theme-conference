@@ -9,17 +9,20 @@ export function createMapModule() {
 
   const loadLeaflet = () => {
     if (!leafletPromise) {
-      leafletPromise = Promise.all([
-        import('leaflet'),
-        import('leaflet-easybutton'),
-        import('leaflet.locatecontrol'),
-        import('leaflet-providers')
-      ]).then(([L, , locateControl]) => {
-        const leaflet = L.default;
-        leaflet.control.locate = locateControl.locate;
-        window.L = leaflet;
-        return leaflet;
-      });
+      // Plugins extend the global L when evaluated, so load Leaflet first
+      leafletPromise = import('leaflet')
+        .then((L) => {
+          window.L = L.default;
+          return Promise.all([
+            import('leaflet-easybutton'),
+            import('leaflet.locatecontrol'),
+            import('leaflet-providers')
+          ]);
+        })
+        .then(([, locateControl]) => {
+          window.L.control.locate = locateControl.locate;
+          return window.L;
+        });
     }
     return leafletPromise;
   };

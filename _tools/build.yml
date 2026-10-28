@@ -18,14 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           lfs: true
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3"
+          ruby-version: "3.4"
           bundler-cache: true
 
       - name: Build with Jekyll
@@ -43,9 +43,9 @@ jobs:
           minify --all --html-keep-document-tags --html-keep-end-tags -r -o _site/ _site/
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Install PurgeCSS
         run: npm install -g purgecss
       - name: Compress CSS with PurgeCSS
@@ -60,7 +60,7 @@ jobs:
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: ./website.zip
           name: Release ${{ github.ref_name }}

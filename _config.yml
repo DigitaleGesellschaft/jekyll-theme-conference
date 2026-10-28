@@ -1,0 +1,5 @@
+# Defaults for sites using the theme; the site's _config.yml overrides them
+
+# Silence deprecation warnings from Bootstrap's Sass sources
+sass:
+  quiet_deps: true
