@@ -5,6 +5,8 @@
  * <div id="map" data-map-css="…/map.bundle.css?v=…"> with a <template
  * data-map-icon> holding the icon of the "center map" button.
  */
+import { grantConsent, hasConsent } from "../core/consent.js";
+
 export function createMapModule() {
   let map;
   let leafletPromise = null;
@@ -77,15 +79,19 @@ export function createMapModule() {
       Promise.all([loadLeaflet(), loadStylesheet(mapEl.dataset.mapCss)]).then(([L]) => createMap(L, mapEl, config, lang));
 
     // Privacy: contact the tile provider only once the visitor asks for the
-    // map (consent button is omitted with `click_to_load: false`)
+    // map (consent button is omitted with `click_to_load: false`), e.g.
+    // "OpenStreetMap" for "OpenStreetMap.Mapnik" as named in the consent box
+    const provider = config.map_provider.split(".")[0];
     const loadButton = mapEl.querySelector("[data-map-load]");
-    if (!loadButton) {
+    if (!loadButton || hasConsent(provider)) {
+      mapEl.querySelector(".map-consent")?.remove();
       load();
       return;
     }
 
     // Keep the keyboard focus, which the removed button held, on the map
     loadButton.addEventListener("click", () => {
+      grantConsent(provider);
       mapEl.querySelector(".map-consent")?.remove();
       load().then(() => mapEl.focus());
     }, { once: true });

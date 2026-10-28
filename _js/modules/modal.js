@@ -1,75 +1,57 @@
 /**
- * Modal Module - Handles Bootstrap modal popups for links
+ * Modal Module - Shows links (e.g. videos) in a modal, after consent
  */
+import { clearEmbed, loadEmbed } from "../core/consent.js";
+
 export function createModalModule() {
   // Set content as HTML only when the attribute is marked as such (escaped by Liquid)
   const setContent = (el, content, format) => {
-    el[format === 'html' ? 'innerHTML' : 'textContent'] = content;
+    el[format === "html" ? "innerHTML" : "textContent"] = content || "";
+    el.classList.toggle("d-none", !content);
   };
 
   const show = (modal, event) => {
-    const btn = event.relatedTarget;
-    const { href, title, titleFormat, subtitle, footer, footerFormat } = btn.dataset;
+    const { href, title, titleFormat, subtitle, footer, footerFormat, clickToLoad } = event.relatedTarget.dataset;
+    const titleEl = modal.querySelector("#link-modal-label");
+    const iframe = modal.querySelector("iframe");
 
-    modal.querySelector('iframe').src = href;
-
-    const titleH3 = modal.querySelector('.modal-title h3');
-    const titleH5 = modal.querySelector('.modal-title h5');
-    const footerEl = modal.querySelector('.modal-footer');
-    const footerP = modal.querySelector('.modal-footer p');
-
-    if (title) {
-      setContent(titleH3, title, titleFormat);
-      if (subtitle) {
-        setContent(titleH5, subtitle, titleFormat);
-        titleH5.classList.remove('d-none');
-      } else {
-        titleH5.textContent = '';
-        titleH5.classList.add('d-none');
-      }
-    } else {
-      titleH3.textContent = '';
-      titleH5.textContent = '';
-      titleH5.classList.add('d-none');
-    }
+    setContent(titleEl, title, titleFormat);
+    setContent(modal.querySelector("#link-modal-description"), title && subtitle, titleFormat);
+    setContent(modal.querySelector(".modal-footer p"), footer, footerFormat);
+    modal.querySelector(".modal-footer").classList.toggle("d-none", !footer);
 
     // Name the frame after its content, e.g. the talk
-    const iframe = modal.querySelector('iframe');
     iframe.dataset.defaultTitle ??= iframe.title;
-    iframe.title = titleH3.textContent.trim() || iframe.dataset.defaultTitle;
+    iframe.title = titleEl.textContent.trim() || iframe.dataset.defaultTitle;
 
-    if (footer) {
-      footerEl.classList.remove('d-none');
-      setContent(footerP, footer, footerFormat);
-    } else {
-      footerEl.classList.add('d-none');
-    }
+    // Links with `click_to_load: false` skip the consent box, which may still
+    // show from the previous link
+    const consentEl = modal.querySelector("[data-embed-consent]");
+    consentEl.classList.add("d-none");
+    loadEmbed(iframe, clickToLoad === "false" ? null : consentEl, href);
   };
 
   const hide = (modal) => {
-    modal.querySelector('.modal-title h3').textContent = '';
-    const titleH5 = modal.querySelector('.modal-title h5');
-    titleH5.textContent = '';
-    titleH5.classList.add('d-none');
-    modal.querySelector('iframe').src = '';
-    modal.querySelector('.modal-footer p').textContent = '';
+    clearEmbed(modal.querySelector("iframe"));
   };
 
   const init = () => {
     // Bootstrap hides a closing modal from assistive technology while it
     // still holds the focus; release it first (Bootstrap returns it to the
     // trigger once hidden)
-    document.addEventListener('hide.bs.modal', (e) => {
+    document.addEventListener("hide.bs.modal", (e) => {
       if (e.target.contains(document.activeElement)) {
         document.activeElement.blur();
       }
     });
 
-    const modalEl = document.getElementById('link-modal');
-    if (!modalEl) return;
+    const modalEl = document.getElementById("link-modal");
+    if (!modalEl) {
+      return;
+    }
 
-    modalEl.addEventListener('show.bs.modal', e => show(modalEl, e));
-    modalEl.addEventListener('hide.bs.modal', () => hide(modalEl));
+    modalEl.addEventListener("show.bs.modal", (e) => show(modalEl, e));
+    modalEl.addEventListener("hide.bs.modal", () => hide(modalEl));
   };
 
   return { init };

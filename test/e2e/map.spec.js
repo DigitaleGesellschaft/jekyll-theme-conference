@@ -23,4 +23,11 @@ test("map loads third-party tiles only after consent click", async ({ page }) =>
   // without the page's ?t= query)
   const entryLoads = await page.evaluate(() => performance.getEntriesByType("resource").filter((entry) => entry.name.includes("conference.bundle.js")).length);
   expect(entryLoads).toBe(1);
+
+  // Consent remembered across visits, e.g. in a new tab
+  const newPage = await page.context().newPage();
+  await track(newPage);
+  await newPage.goto("location/");
+  await expect(newPage.locator("#map.leaflet-container")).toHaveCount(1);
+  await expect(newPage.locator("#map .map-consent")).toHaveCount(0);
 });

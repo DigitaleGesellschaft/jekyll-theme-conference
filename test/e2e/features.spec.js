@@ -23,8 +23,30 @@ test("video link opens in a modal with the talk as title", async ({ page }) => {
 
   const modal = page.locator("#link-modal");
   await expect(modal).toBeVisible();
-  await expect(modal.locator(".modal-title h3")).toHaveText("Opening & Welcome");
+  await expect(modal.locator("#link-modal-label")).toHaveText("Opening & Welcome");
+
+  // Privacy: the video host is contacted only after the click
+  await expect(modal.locator("[data-embed-host]")).toHaveText("media.example.org");
+  await expect(modal.locator("iframe")).not.toHaveAttribute("src", /media/);
+  await modal.getByRole("button", { name: "Load content" }).click();
   await expect(modal.locator("iframe")).toHaveAttribute("src", "https://media.example.org/embed/opening");
+});
+
+test("video link with click_to_load: false loads right away", async ({ page }) => {
+  await track(page);
+  await page.goto("talks/opening_welcome/");
+  await ready(page);
+  const modal = page.locator("#link-modal");
+
+  // The previous link's consent box does not stay
+  await page.getByRole("link", { name: "Recording" }).click();
+  await expect(modal.locator("[data-embed-consent]")).toBeVisible();
+  await modal.locator(".btn-close").click();
+  await expect(modal).toBeHidden();
+
+  await page.getByRole("link", { name: "Interview" }).click();
+  await expect(modal.locator("iframe")).toHaveAttribute("src", "https://media.example.org/embed/interview");
+  await expect(modal.locator("[data-embed-consent]")).toBeHidden();
 });
 
 test("live indication follows the schedule", async ({ page }) => {
@@ -47,12 +69,21 @@ test("program shows the current day and switches days via the URL", async ({ pag
   await expect(page.locator(".tab-pane.active")).toContainText("Second Day");
 });
 
-test("stream overview embeds every live room", async ({ page }) => {
-  await track(page);
+test("stream overview embeds every live room after consent", async ({ page }) => {
+  const log = await track(page);
   await page.goto("live/");
   await ready(page);
 
-  await expect(page.locator("iframe[src^='https://stream.example.org']")).toHaveCount(2);
+  const streams = page.locator("iframe[src^='https://stream.example.org']");
+  await expect(streams).toHaveCount(0);
+  expect(log.external).toEqual([]);
+
+  // Consent counts for the host, i.e. both rooms here
+  await page.getByRole("button", { name: "Load content" }).first().click();
+  await expect(streams).toHaveCount(1);
+  await page.reload();
+  await ready(page);
+  await expect(streams).toHaveCount(2);
 });
 
 test("installed app shows the bottom navigation instead of the top one", async ({ page }) => {

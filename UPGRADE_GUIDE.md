@@ -194,5 +194,24 @@ conference:
 ### Dark Mode
 Automatic support based on system preferences. Optionally add `img_dark` for logos.
 
-### Map Privacy
-The map is only loaded once the visitor clicks a button, as the tile provider receives the visitor's IP address. Set `map.click_to_load: false` in the location page's Front Matter to load it right away (e.g. for self-hosted tiles).
+### Privacy: Map, Videos & Streams
+The map, embedded videos (links with `video:` or `iframe: true`) and live streams are only loaded once the visitor clicks a button, as their provider receives the visitor's IP address. To load self-hosted content right away, set `click_to_load: false` in the respective place:
+```yaml
+# location/index.md (Front Matter)
+map:
+  click_to_load: false
+```
+```yaml
+# _config.yml
+conference:
+  live:
+    streaming:
+      click_to_load: false
+```
+```yaml
+# _talks/example.md
+links:
+  - name: Recording
+    video: https://media.example.org/embed/example
+    click_to_load: false
+```

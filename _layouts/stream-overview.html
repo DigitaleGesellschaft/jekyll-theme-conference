@@ -22,7 +22,9 @@
       <h2 class="h3" id="stream-heading-{{ forloop.index }}">{{ room.name | escape }}</h2>
       <div class="ratio ratio-16x9">
         {%- include get_room_live_href.html %}
-        <iframe src="{{ room_live_href }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}: {{ room.name | escape }}" aria-labelledby="stream-heading-{{ forloop.index }}"></iframe>
+        {%- comment -%} Loaded by the embed module, after consent {%- endcomment %}
+        <iframe data-embed-src="{{ room_live_href | escape }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}: {{ room.name | escape }}" aria-labelledby="stream-heading-{{ forloop.index }}"></iframe>
+        {%- include embed_consent.html href=room_live_href click_to_load=site.conference.live.streaming.click_to_load %}
       </div>
     </div>
 

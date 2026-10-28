@@ -1,0 +1,21 @@
+{%- comment -%}
+  Consent box shown instead of embedded third-party content (video, stream)
+  until the visitor loads it (see _js/core/consent.js), e.g.
+  {% include embed_consent.html href=room_live_href %}. The link to the
+  provider also works without JavaScript. Omitted with click_to_load=false
+  (e.g. `conference.live.streaming.click_to_load`).
+{%- endcomment -%}
+{%- unless include.click_to_load == false -%}
+  {%- assign embed_lang = site.data.lang[site.conference.lang].embed -%}
+  {%- assign embed_host = include.href | split: "/" -%}
+  <div class="embed-consent d-flex flex-column justify-content-center align-items-center text-center p-4 bg-body-tertiary{% if include.hidden %} d-none{% endif %}" data-embed-consent>
+    <p class="mb-3">
+      {{ embed_lang.privacy | default: "This content is loaded from an external provider, which receives your IP address:" }}
+      <a href="{{ include.href | escape }}" rel="noopener" data-embed-host>{{ embed_host[2] | escape }}</a>
+    </p>
+    <button type="button" class="btn btn-primary" data-embed-load>
+      {% include icon.html name="play-fill" %}
+      {{ embed_lang.load | default: "Load content" }}
+    </button>
+  </div>
+{%- endunless -%}
