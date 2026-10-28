@@ -92,6 +92,7 @@ postal_address:
 **Action:**
 - Move `conference.map` and `conference.location` from `_config.yml` to page's Front Matter.
 - If you specify an address, add it via dedicated `postal_address` attributes to page's Front Matter.
+- `CartoDB.*` map providers now require an API key, which the theme cannot pass; `OpenFireMap` was removed. Switch to another `map_provider`.
 
 > [!WARNING]
 > From version 4 onward, only pages with `layout: location` support embedded maps.

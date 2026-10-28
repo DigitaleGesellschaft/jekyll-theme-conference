@@ -7,7 +7,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { before, describe, test } from "node:test";
 import { compileString } from "sass";
-import { BASEURL, FIXTURE_DIR, buildSite } from "./support/build.js";
+import { BASEURL, FIXTURE_DIR, buildSite, buildWarnings } from "./support/build.js";
 
 const STYLES = {
   none: { config: undefined, linked: ["conference.bundle.css", "main.css"] },
@@ -51,4 +51,11 @@ test("full: theme Sass compiles with the site's Bootstrap variables", () => {
 
   assert.match(css, /--bs-primary: #4ea93f/);
   assert.match(css, /\.program-table/);
+});
+
+test("full: Jekyll compiles Bootstrap without deprecation warnings", () => {
+  const css = readFileSync(join(sites.full, "assets/css/main.css"), "utf8");
+
+  assert.match(css, /--bs-primary: ?#4ea93f/);
+  assert.doesNotMatch(buildWarnings(sites.full), /deprecation/i);
 });

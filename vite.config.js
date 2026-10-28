@@ -33,10 +33,10 @@ const copyAssetsPlugin = () => {
   return {
     name: 'copy-assets',
     writeBundle() {
-      const nodeModules = resolve(__dirname, 'node_modules');
-      const sassDir = resolve(__dirname, '_sass');
-      const cssDir = resolve(__dirname, '_css');
-      const webfontsDir = resolve(__dirname, 'assets/webfonts');
+      const nodeModules = resolve(import.meta.dirname, 'node_modules');
+      const sassDir = resolve(import.meta.dirname, '_sass');
+      const cssDir = resolve(import.meta.dirname, '_css');
+      const webfontsDir = resolve(import.meta.dirname, 'assets/webfonts');
 
       // Font files (woff/woff2)
       copy(
@@ -88,11 +88,11 @@ export default defineConfig({
   build: {
     outDir: 'assets',
     emptyOutDir: false,
-    rollupOptions: {
+    rolldownOptions: {
       input: {
-        'js/conference': resolve(__dirname, '_js/main.js'),
-        'css/conference': resolve(__dirname, '_css/main.scss'),
-        'css/conference-only': resolve(__dirname, '_css/main-only.scss'),
+        'js/conference': resolve(import.meta.dirname, '_js/main.js'),
+        'css/conference': resolve(import.meta.dirname, '_css/main.scss'),
+        'css/conference-only': resolve(import.meta.dirname, '_css/main-only.scss'),
       },
       output: {
         // Main JavaScript
@@ -115,17 +115,24 @@ export default defineConfig({
             return 'leaflet';
           }
         },
+
+        // Run modules only when imported, e.g. Leaflet plugins after Leaflet
+        // set the global L. Also moves the bundler's helpers into a separate
+        // chunk: the lazy chunks import them without the page's ?t= query,
+        // which would load the entry a second time.
+        strictExecutionOrder: true,
       },
     },
-    minify: 'esbuild',
     sourcemap: false,
+    // Preload URLs ignore the site's baseurl; chunks load on demand anyway
+    modulePreload: false,
     cssCodeSplit: true,
     target: 'es2020',
   },
   css: {
     preprocessorOptions: {
       scss: {
-        includePaths: ['node_modules'],
+        loadPaths: ['node_modules'],
         // Suppress Bootstrap's Sass deprecation warnings
         // See https://getbootstrap.com/docs/5.3/getting-started/vite/#configure-vite
         silenceDeprecations: [

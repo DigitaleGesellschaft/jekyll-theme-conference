@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: "22"
+          node-version: "24"
           cache: "npm"
 
       - name: Install Node.js dependencies
@@ -32,7 +32,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3"
+          ruby-version: "3.4"
           bundler-cache: true
           working-directory: test/fixture
 
@@ -49,14 +49,14 @@ jobs:
 
       - name: Upload Playwright traces
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-results
           path: test-results/
           retention-days: 7
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v10
 
       - name: Test import scripts
         run: uv run --no-project --with-requirements _tools/requirements.txt python -m unittest discover test/tools
