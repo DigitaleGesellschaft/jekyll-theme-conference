@@ -1,13 +1,14 @@
 {%- comment -%}
   Resources precached by the service worker (sw.js) for offline use:
   all visible pages and everything below /assets/ the site actually uses.
-  Documents (/documents/), source maps and .woff fonts with a .woff2 twin are skipped.
+  Documents (/documents/), source maps, .woff fonts with a .woff2 twin and
+  the icon font (icons are inline SVGs) are skipped.
 {%- endcomment -%}
 {%- assign pages = "" | split: "" -%}
 {%- assign assets = "" | split: "" -%}
 
 {%- comment -%} Skip unused stylesheet bundles and the map, which needs the network anyway {%- endcomment -%}
-{%- assign skip_assets = "/assets/js/leaflet.bundle.js" | split: "," -%}
+{%- assign skip_assets = "/assets/css/map.bundle.css" | split: "," -%}
 {%- unless site.conference.custom_style == "bootstrap" -%}
   {%- assign skip_assets = skip_assets | push: "/assets/css/conference-only.bundle.css" -%}
 {%- endunless -%}
@@ -50,7 +51,7 @@
   {%- if ext == ".woff" and static_paths contains woff2_path -%}
     {%- continue -%}
   {%- endif -%}
-  {%- if ext == ".map" or skip_assets contains file.path -%}
+  {%- if ext == ".map" or skip_assets contains file.path or file.path contains "/assets/js/leaflet" or file.path contains "/assets/webfonts/bootstrap-icons." -%}
     {%- continue -%}
   {%- endif -%}
   {%- assign url = file.path | prepend: site.baseurl -%}

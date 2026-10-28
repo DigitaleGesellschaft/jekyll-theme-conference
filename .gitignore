@@ -23,6 +23,7 @@ assets/js/*.bundle.js
 assets/css/*.bundle.css
 assets/webfonts/bootstrap-icons.*
 _sass/**/*
+_includes/icons/
 
 ### Tests ###
 test/fixture/.jekyll-cache/

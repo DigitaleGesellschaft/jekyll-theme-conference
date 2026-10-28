@@ -1,0 +1,17 @@
+{%- comment -%}
+  Inline Bootstrap Icon as SVG, rendered at build time (no icon font), e.g.
+  {% include icon.html name="clock" class="me-1" %}. Unknown names render nothing.
+{%- endcomment -%}
+{%- unless icon_names -%}
+  {%- capture icon_names -%}{%- include icons/_names.txt -%}{%- endcapture -%}
+{%- endunless -%}
+
+{%- assign icon_key = include.name | prepend: "," | append: "," -%}
+{%- if include.name and icon_names contains icon_key -%}
+  {%- if include.class -%}
+    {%- assign icon_class = include.class | prepend: " " -%}
+  {%- else -%}
+    {%- assign icon_class = "" -%}
+  {%- endif -%}
+  {%- include icons/{{ include.name }}.svg -%}
+{%- endif -%}

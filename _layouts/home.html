@@ -3,19 +3,13 @@
   <div class="bg-body-tertiary text-body-primary rounded p-4 p-md-5 mb-4">
     <h1 class="display-3 text-break">
       {% if page.header.img %}
-        {% if page.header.img_dark %}
-          <span class="mode-light">
-            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
-            <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
-          </span>
-          <span class="mode-dark">
-            <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
-            <img src="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
-          </span>
-        {% else %}
-          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-75 d-none d-md-inline" alt="{{ site.title }}" />
-          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="w-100 d-md-none" alt="{{ site.title }}" />
-        {% endif %}
+        {%- comment -%} One image, the dark variant only downloaded in dark mode {%- endcomment %}
+        <picture>
+          {%- if page.header.img_dark %}
+          <source srcset="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" media="(prefers-color-scheme: dark)" />
+          {%- endif %}
+          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="home-header-img" alt="{{ site.title }}" />
+        </picture>
       {% elsif page.title %}
         {{ page.title }}
       {% else %}

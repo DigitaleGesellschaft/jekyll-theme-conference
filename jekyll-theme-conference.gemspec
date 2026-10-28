@@ -29,6 +29,11 @@ Gem::Specification.new do |spec|
       files << sass_file if File.exist?(sass_file) && !files.include?(sass_file)
     end
 
+    #   Inline SVG icons
+    Dir.glob("_includes/icons/*").each do |file|
+      files << file if File.exist?(file) && !files.include?(file)
+    end
+
     #   Bootstrap Icons webfonts (built from NPM packages)
     Dir.glob("assets/webfonts/bootstrap-icons.*").each do |font_file|
       files << font_file if File.exist?(font_file) && !files.include?(font_file)

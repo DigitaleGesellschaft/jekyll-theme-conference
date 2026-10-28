@@ -187,6 +187,7 @@ export function createStreamModule(clock, live, conferenceConfig) {
     const talkEl = modalEl.querySelector("#stream-info-talk");
     const speakersEl = modalEl.querySelector("#stream-info-speakers");
     const linksEl = modalEl.querySelector("#stream-info-links");
+    const icons = modalEl.querySelector("#stream-icons");
 
     // Track colour classes, e.g. "border-info-subtle" or "link-underline-info"
     const setColor = (el, pattern, colorClass) => {
@@ -218,11 +219,9 @@ export function createStreamModule(clock, live, conferenceConfig) {
         .map((link) => {
           const button = createLink(link.href, link.name || "", "btn btn-secondary m-1 live-past");
           button.dataset.time = talk.start;
-          if (link.icon) {
-            const icon = document.createElement("i");
-            icon.className = `bi bi-${link.icon}`;
-            icon.setAttribute("aria-hidden", "true");
-            button.prepend(icon, " ");
+          const icon = link.icon && icons?.content.querySelector(`[data-icon="${CSS.escape(link.icon)}"]`);
+          if (icon) {
+            button.prepend(icon.cloneNode(true), " ");
           }
           return button;
         });

@@ -74,12 +74,12 @@
       <div class="navbar-brand navbar-logo order-2 ms-1 me-0 text-end overflow-hidden">
         <a href="{{ site.conference.navigation.logo.url }}">
           {%- if site.conference.navigation.logo.img %}
-            {%- if site.conference.navigation.logo.img_dark %}
-              <img src="{{ site.conference.navigation.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="align-middle mode-light" alt="{{ site.conference.navigation.logo.name }}" />
-              <img src="{{ site.conference.navigation.logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" class="align-middle mode-dark" alt="{{ site.conference.navigation.logo.name }}" />
-            {%- else %}
+            <picture>
+              {%- if site.conference.navigation.logo.img_dark %}
+              <source srcset="{{ site.conference.navigation.logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" media="(prefers-color-scheme: dark)" />
+              {%- endif %}
               <img src="{{ site.conference.navigation.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="align-middle" alt="{{ site.conference.navigation.logo.name }}" />
-            {%- endif %}
+            </picture>
           {%- else %}
             {{ site.conference.navigation.logo.name }}
           {%- endif %}

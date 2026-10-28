@@ -4,14 +4,5 @@
  * Without Bootstrap
  */
 
-// 1. Bootstrap Icons
-@use "bootstrap-icons/font/bootstrap-icons" with ($bootstrap-icons-font-dir: "../webfonts"
-);
-
-// 2. Leaflet Map Styles
-@use "leaflet/dist/leaflet.css";
-@use "leaflet-easybutton/src/easy-button.css";
-@use "leaflet.locatecontrol/dist/L.Control.Locate.css";
-
-// 3. Conference Theme Styles
+// Conference Theme Styles (icons are inline SVGs, Leaflet styles load with the map)
 @use "./theme";
