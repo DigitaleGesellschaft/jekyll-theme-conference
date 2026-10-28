@@ -1,50 +1,64 @@
+{%- comment -%}
+  Resources precached by the service worker (sw.js) for offline use:
+  all visible pages and everything below /assets/ the site actually uses.
+  Documents (/documents/), source maps and .woff fonts with a .woff2 twin are skipped.
+{%- endcomment -%}
+{%- assign pages = "" | split: "" -%}
+{%- assign assets = "" | split: "" -%}
+
+{%- comment -%} Skip unused stylesheet bundles and the map, which needs the network anyway {%- endcomment -%}
+{%- assign skip_assets = "/assets/js/leaflet.bundle.js" | split: "," -%}
+{%- unless site.conference.custom_style == "bootstrap" -%}
+  {%- assign skip_assets = skip_assets | push: "/assets/css/conference-only.bundle.css" -%}
+{%- endunless -%}
+{%- if site.conference.custom_style == "bootstrap" or site.conference.custom_style == "full" -%}
+  {%- assign skip_assets = skip_assets | push: "/assets/css/conference.bundle.css" -%}
+{%- endif -%}
+
+{%- for page in site.pages -%}
+  {%- assign page_ext = page.url | split: "." | last -%}
+  {%- if page.output == false or page.url == nil or page.url == "" or page.url == "/sw.js" or page_ext == "map" -%}
+    {%- continue -%}
+  {%- endif -%}
+  {%- assign url = page.url | prepend: site.baseurl -%}
+  {%- if page.url contains "/assets/" -%}
+    {%- assign assets = assets | push: url -%}
+  {%- else -%}
+    {%- assign pages = pages | push: url -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- for collection in site.collections -%}
+  {%- unless collection.output -%}
+    {%- continue -%}
+  {%- endunless -%}
+  {%- for item in collection.docs -%}
+    {%- unless item.hide or item.output == false -%}
+      {%- assign url = item.url | prepend: site.baseurl -%}
+      {%- assign pages = pages | push: url -%}
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endfor -%}
+
+{%- assign static_paths = site.static_files | map: "path" -%}
+{%- for file in site.static_files -%}
+  {%- assign ext = file.extname | downcase -%}
+  {%- assign woff2_path = file.path | append: "2" -%}
+  {%- unless file.path contains "/assets/" -%}
+    {%- continue -%}
+  {%- endunless -%}
+  {%- if ext == ".woff" and static_paths contains woff2_path -%}
+    {%- continue -%}
+  {%- endif -%}
+  {%- if ext == ".map" or skip_assets contains file.path -%}
+    {%- continue -%}
+  {%- endif -%}
+  {%- assign url = file.path | prepend: site.baseurl -%}
+  {%- assign assets = assets | push: url -%}
+{%- endfor -%}
 {
-  "name": "{{ site.title }}",
-  "baseurl": "{{ site.baseurl }}",
-  "pages": [
-    {%- assign first_page = true -%}
-    {%- for page in site.pages -%}
-      {%- unless page.output == false or page.url == nil or page.url == '' -%}
-        {%- unless first_page -%},{%- endunless -%}
-        "{{ page.url | prepend: site.baseurl }}"
-        {%- assign first_page = false -%}
-      {%- endunless -%}
-    {%- endfor -%}
-    {%- for collection in site.collections -%}
-      {%- if collection.first.output -%}
-        {%- for item in collection.first.docs -%}
-          {%- unless item.output == false or item.url == nil or item.url == '' -%}
-            {%- unless first_page -%},{%- endunless -%}
-            "{{ item.url | prepend: site.baseurl }}"
-            {%- assign first_page = false -%}
-          {%- endunless -%}
-        {%- endfor -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {%- for post in site.posts -%}
-      {%- unless post.url == nil or post.url == '' -%}
-        {%- unless first_page -%},{%- endunless -%}
-        "{{ post.url | prepend: site.baseurl }}"
-        {%- assign first_page = false -%}
-      {%- endunless -%}
-    {%- endfor -%}
-  ],
-  "assets": [
-    {% if site.conference.custom_style == "bootstrap" -%}
-    {%- comment %} Conference bundle with separate Bootstrap {% endcomment -%}
-    "{{ site.baseurl }}/assets/css/bootstrap.min.css",
-    "{{ site.baseurl }}/assets/css/conference-only.bundle.css",
-    {% elsif site.conference.custom_style != "full" -%}
-    {%- comment %} Full conference bundle {% endcomment -%}
-    "{{ site.baseurl }}/assets/css/conference.bundle.css",
-    {% endif -%}
-    "{{ site.baseurl }}/assets/css/main.css",
-    "{{ site.baseurl }}/assets/js/conference.bundle.js",
-    "{{ site.baseurl }}/assets/js/leaflet.bundle.js",
-    "{{ site.baseurl }}/assets/js/main.js",
-    "{{ site.baseurl }}/assets/js/config.json",
-    "{{ site.baseurl }}/assets/js/data.json",
-    "{{ site.baseurl }}/assets/webfonts/bootstrap-icons.woff",
-    "{{ site.baseurl }}/assets/webfonts/bootstrap-icons.woff2"
-  ]
+  "name": {{ site.title | jsonify }},
+  "baseurl": {{ site.baseurl | jsonify }},
+  "pages": {{ pages | uniq | jsonify }},
+  "assets": {{ assets | uniq | jsonify }}
 }
