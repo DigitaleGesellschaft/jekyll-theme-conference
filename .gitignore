@@ -23,3 +23,12 @@ assets/js/*.bundle.js
 assets/css/*.bundle.css
 assets/webfonts/bootstrap-icons.*
 _sass/**/*
+
+### Tests ###
+test/fixture/.jekyll-cache/
+test/fixture/_site/
+test-results/
+playwright-report/
+.playwright-mcp/
+test/fixture/vendor/
+test/fixture/.bundle/

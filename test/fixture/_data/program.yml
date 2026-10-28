@@ -1,0 +1,30 @@
+days:
+  - name: Friday
+    abbr: Fr
+    date: "2026-02-20"
+    rooms:
+      - name: Room A
+        talks:
+          - name: Opening & Welcome
+            time_start: "09:00"
+            time_end: "09:30"
+          - name: Late Night
+            time_start: "22:00"
+            time_end: "01:00 +1"
+      - name: Room <B>
+        talks:
+          - name: Talk with "quotes" <script>alert(1)</script>
+            time_start: "09:30"
+            time_end: "11:00"
+  - name: Saturday
+    abbr: Sa
+    date: "2026-02-21"
+    rooms:
+      - name: Room A
+        talks:
+          - name: Second Day
+            time_start: "09:00"
+            time_end: "09:40"
+          - name: Hidden Talk
+            time_start: "10:00"
+            time_end: "10:45"
