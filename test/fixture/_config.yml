@@ -64,6 +64,9 @@ conference:
         type: image/png
 
   navigation:
+    logo:
+      name: Fixture Org
+      url: https://example.org
     links:
       - name: Home
         relative_url: /
