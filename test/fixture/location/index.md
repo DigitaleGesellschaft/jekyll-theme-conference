@@ -8,7 +8,6 @@ postal_address:
   locality: Zurich
   country: CH
 map:
-  enable: true
   home_coord: "47.3744489, 8.5410422"
   default_zoom: 17
 ---

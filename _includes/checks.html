@@ -64,8 +64,45 @@ For more details, refer to the [Tracks & Tags](https://github.com/DigitaleGesell
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any location configuration from `conference.location` to your location file (with `layout: location`). For more details, refer to the [Location Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#location-page) section in the theme's README." -%}
 {%- endif -%}
 {%- if page.map and page.layout != "location" -%}
-  {%- assign errors = errors | push: "Your page's FrontMatter contains an outdated property name. Maps are no longer supported on individual pages and can only included on pages with " -%}
+  {%- assign errors = errors | push: "Your page's FrontMatter contains an outdated property name. Maps are no longer supported on individual pages and can only be included on pages with `layout: location`. For more details, refer to the [Location Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#location-page) section in the theme's README." -%}
 {%- endif -%}
+{%- if page.map.enable != nil -%}
+  {%- assign errors = errors | push: "Your page's FrontMatter contains an outdated property name. `map.enable` is no longer supported: a location page with `map` shows the map. Remove `enable`." -%}
+{%- endif -%}
+
+{%- comment -%}
+  Icons of the config and of this page's links that are no Bootstrap Icons,
+  e.g. Font Awesome's file-alt (icon.html renders nothing for them)
+{%- endcomment -%}
+{%- capture icon_names -%}{%- include icons/_names.txt -%}{%- endcapture -%}
+{%- assign checked_icons = "" | split: "" -%}
+{%- if site.conference.talks.tags -%}
+  {%- assign checked_icons = checked_icons | concat: site.conference.talks.tags -%}
+{%- endif -%}
+{%- if site.conference.navigation.links -%}
+  {%- assign checked_icons = checked_icons | concat: site.conference.navigation.links -%}
+{%- endif -%}
+{%- if page.links -%}
+  {%- assign checked_icons = checked_icons | concat: page.links -%}
+{%- endif -%}
+{%- assign checked_icons = checked_icons | map: "icon" | compact | uniq -%}
+{%- for icon in checked_icons -%}
+  {%- assign icon_key = icon | prepend: "," | append: "," -%}
+  {%- unless icon_names contains icon_key -%}
+    {%- assign error_msg = "Unknown icon `" | append: icon | append: "`. Use the name of a [Bootstrap Icon](https://icons.getbootstrap.com/), e.g. `file-earmark-text`." -%}
+    {%- assign errors = errors | push: error_msg -%}
+  {%- endunless -%}
+{%- endfor -%}
+
+{%- comment -%} Font Awesome markup in this page's content, e.g. <i class="fas fa-video"></i> {%- endcomment -%}
+{%- assign fa_classes = "fa fa-,fas fa-,far fa-,fab fa-" | split: "," -%}
+{%- for fa_class in fa_classes -%}
+  {%- if content contains fa_class -%}
+    {%- assign error_msg = "This page contains Font Awesome icons (e.g. `" | append: fa_class | append: "`), which are no longer supported. Use [Bootstrap Icons](https://icons.getbootstrap.com/) instead." -%}
+    {%- assign errors = errors | push: error_msg -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
 
 {%- if site.conference.main -%}
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any main configuration from `conference.main` to your home file (with `layout: home`). For more details, refer to the [Landing Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#landing-page) section in the theme's README." -%}
