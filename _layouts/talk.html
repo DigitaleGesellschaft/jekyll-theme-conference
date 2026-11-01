@@ -77,9 +77,12 @@
   {% endif %}
 
   <p class="d-print-none d-pwa-none mt-5">
-    <a href="{{ page.collection | prepend: '/' | prepend: site.baseurl }}" class="btn btn-outline-secondary me-2">
+    {%- include get_overview_url.html layout="talk-overview" -%}
+    {%- if overview_url %}
+    <a href="{{ overview_url | prepend: site.baseurl }}" class="btn btn-outline-secondary me-2">
       {% include icon.html name="megaphone" %}&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
+    {%- endif %}
 
     {%- include get_program_config.html -%}
     <a href="{{ program_url | prepend: site.baseurl }}" class="btn btn-outline-secondary">

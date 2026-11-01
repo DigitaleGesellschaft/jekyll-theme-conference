@@ -269,6 +269,11 @@ describe("Markup", () => {
     assert.doesNotMatch(read("talks/opening_welcome/index.html"), /There was an error when generating the site/);
   });
 
+  test("overview buttons link to the overview pages", () => {
+    assert.match(read("talks/opening_welcome/index.html"), /<a href="\/conf\/talks\/" class="btn/);
+    assert.match(read("speakers/ada_lovelace/index.html"), /<a href="\/conf\/speakers\/" class="btn/);
+  });
+
   test("home page has no block elements in heading and no nested paragraphs", () => {
     const html = read("index.html");
 
