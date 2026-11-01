@@ -635,7 +635,7 @@ To protect the visitors' privacy, the map is only loaded once the visitor clicks
 Location settings are configured directly in the Front Matter of the location page (the page with `layout: location`). The location page's Front Matter supports the following properties:
 
 - `title`: The title shown in the navigation bar for the location section (defaults to "Location")
-- `hide`: Set to `true` to hide the location page and all room links (default: `false`). Hidden rooms still need to exist in the `_rooms/` directory as references.
+- `hide`: Set to `true` to hide the location page and all room links (default: `false`). The page then only redirects to the home page. Hidden rooms still need to exist in the `_rooms/` directory as references.
 - `map`: Map configuration object with the following properties:
   - `home_coord`: Center coordinates of the map (e.g., `47.37808, 8.53935`)
   - `default_zoom`: Initial zoom level (e.g., `17`)

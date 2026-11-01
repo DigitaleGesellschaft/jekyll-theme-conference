@@ -21,6 +21,13 @@ Rooms without `order` are listed as they first appear in the program instead of 
 **Action:**
 - None, unless you relied on the alphabetical order: then set `order`.
 
+### Hidden Location Page
+
+A location page with `hide: true` only redirects to the home page, like hidden talks, speakers and rooms, instead of showing its content.
+
+**Action:**
+- None, unless the page should stay visible: then remove `hide` and its room links show again.
+
 
 ## Upgrade from v3 to v4
 

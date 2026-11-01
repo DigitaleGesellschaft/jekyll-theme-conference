@@ -1,0 +1,21 @@
+# Hides the location page and with it the links to the rooms
+defaults:
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talk
+  - scope:
+      path: ""
+      type: speakers
+    values:
+      layout: speaker
+  - scope:
+      path: ""
+      type: rooms
+    values:
+      layout: room
+  - scope:
+      path: "location"
+    values:
+      hide: true
