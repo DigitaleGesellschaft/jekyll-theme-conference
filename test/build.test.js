@@ -259,6 +259,16 @@ describe("Markup", () => {
     assert.doesNotMatch(read("index.html"), /There was an error when generating the site/);
   });
 
+  test("theme checks report outdated icons, map and markup of the page", () => {
+    const html = read("outdated/index.html");
+
+    assert.match(html, /Unknown icon <code[^>]*>file-alt<\/code>/);
+    assert.match(html, /<code[^>]*>map\.enable<\/code> is no longer supported/);
+    assert.match(html, /Font Awesome[^<]*<code[^>]*>fas fa-<\/code>/);
+    assert.match(html, /can only be included on pages with <code[^>]*>layout: location<\/code>/);
+    assert.doesNotMatch(read("talks/opening_welcome/index.html"), /There was an error when generating the site/);
+  });
+
   test("home page has no block elements in heading and no nested paragraphs", () => {
     const html = read("index.html");
 

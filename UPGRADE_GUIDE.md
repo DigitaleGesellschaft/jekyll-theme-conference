@@ -1,8 +1,18 @@
 # Upgrade Guide
 
-This guide covers the essential changes needed to upgrade between major versions: [v3 to v4](#upgrade-from-v3-to-v4).
+This guide covers the essential changes needed to upgrade between major versions: [v4 to v5](#upgrade-from-v4-to-v5) and [v3 to v4](#upgrade-from-v3-to-v4).
 
 For detailed documentation, see the [README](README.md).
+
+
+## Upgrade from v4 to v5
+
+### New Checks
+
+With `show_errors`, the theme now also reports leftovers of v3: icons that are no [Bootstrap Icons](https://icons.getbootstrap.com/) (e.g. Font Awesome's `file-alt`, which render nothing), `map.enable` and Font Awesome markup in content (e.g. `<i class="fas fa-video"></i>`).
+
+**Action:**
+- Fix the reported leftovers, see [Icons](#icons) and [Map & Location Configuration](#map--location-configuration).
 
 
 ## Upgrade from v3 to v4
@@ -151,7 +161,7 @@ timezone: Europe/Zurich  # was: conference.tz: "+01:00"
 - Replace `conference.tz` (or a top-level `tz`) with `timezone`.
 
 #### Icons
-[Font Awesome](https://fontawesome.com/) was replaced by [Bootstrap Icons](https://icons.getbootstrap.com/). Unknown icon names show no icon.
+[Font Awesome](https://fontawesome.com/) was replaced by [Bootstrap Icons](https://icons.getbootstrap.com/). Unknown icon names show no icon; from v5 on, `show_errors` reports them.
 
 | Font Awesome (v3) | Bootstrap Icons (v4) |
 |-------------------|----------------------|
