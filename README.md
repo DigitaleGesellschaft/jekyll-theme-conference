@@ -20,7 +20,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
 - [Demo: Winterkongress](https://winterkongress.ch/)
 
 > [!WARNING]
-> If you were using the theme up to version 3, please note the changes to migrate to the new version 4 in the [upgrade guide](UPGRADE_GUIDE.md).
+> If you upgrade from an earlier major version, please note the necessary changes in the [upgrade guide](UPGRADE_GUIDE.md).
 
 
 ## Table of Contents
@@ -29,38 +29,39 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Gem-based Method](#gem-based-method)
   - [Remote Theme Method](#remote-theme-method)
 - [Setup](#setup)
-  - [Automatic Import](#automatic-import)
+  - [Import from pretalx](#import-from-pretalx)
   - [Automatic Build](#automatic-build)
 - [Configuration](#configuration)
-  - [Theme Verification](#theme-verification)
+  - [Error Checks](#error-checks)
   - [Collection URLs](#collection-urls)
   - [Language](#language)
   - [Timezone](#timezone)
   - [Navigation Bar](#navigation-bar)
-  - [Meta Data for Search Engines and Link Previews](#meta-data-for-search-engines-and-link-previews)
-  - [Main Landing Page](#main-landing-page)
-  - [Information Boxes & Modals](#information-boxes--modals)
+  - [Meta Data](#meta-data)
+  - [Information Bars & Modals](#information-bars--modals)
   - [Live Indications & Streaming](#live-indications--streaming)
   - [Progressive Web App (PWA)](#progressive-web-app-pwa)
-  - [Talk Settings](#talk-settings)
-  - [Location Settings](#location-settings)
-  - [Program Settings](#program-settings)
+  - [Tracks & Tags](#tracks--tags)
+  - [Landing Page](#landing-page)
+  - [Location Page](#location-page)
+  - [Program Page](#program-page)
 - [Content](#content)
   - [Schedule / Program](#schedule--program)
   - [Talks](#talks)
   - [Speakers](#speakers)
   - [Rooms](#rooms)
   - [Links](#links)
-  - [Overview Pages](#overview-pages)
-  - [Additional Pages](#additional-pages)
+  - [Pages](#pages)
 - [Design](#design)
   - [Pre-compiled Bundle (Default)](#pre-compiled-bundle-default)
   - [Split Bundle (Custom Bootstrap CSS)](#split-bundle-custom-bootstrap-css)
+  - [Full Custom Build (Custom SCSS)](#full-custom-build-custom-scss)
   - [Icons](#icons)
-- [JavaScript](#javascript)
+- [Custom JavaScript](#custom-javascript)
 - [Development](#development)
   - [Jekyll Theme Development](#jekyll-theme-development)
   - [JavaScript & CSS Development](#javascript--css-development)
+  - [Tests](#tests)
 - [License](#license)
 
 
@@ -141,37 +142,24 @@ To update the theme, change the version tag in the `remote_theme` value (e.g., `
 
 ## Setup
 
-The different talks, speakers and rooms are stored as a collection of files. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) used to store additional information beside a description. Their exact use and meaning is described further below in the section [_Content_](#content). Additional configuration options can be found in the section [_Configuration_](#configuration).
-
-The schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/) under `_data/program.yml`. For further details about it see below in the section [_Content_](#content).
+Add the talks, speakers, rooms and the schedule of your conference as described in the section [_Content_](#content), and adapt the theme as described in the section [_Configuration_](#configuration). The tools below import them or build the site for you.
 
 > [!TIP]
 > Please note that the generated website can be large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g., with [minify](https://github.com/tdewolff/minify)).
 
-### Automatic Import
+### Import from pretalx
 
 In this repository, you'll find the Python file `_tools/import_schedule.py`. This script allows you to import content from a [frab](https://github.com/frab/frab/wiki/Manual#introduction)-compatible JSON file, such as those exported from [pretalx.com](https://pretalx.com/p/about/).
 
 1. Copy the files `_tools/import_schedule.py` and `_tools/requirements.txt` from this repository
 
-2. Create a virtual environment and activate it
+2. Execute the script with [uv](https://docs.astral.sh/uv/), which installs the requirements, e.g., to show the help type
 
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate
+   uv run --no-project --with-requirements _tools/requirements.txt python _tools/import_schedule.py --help
    ```
 
-3. Install the requirements
-
-   ```bash
-   pip install -r _tools/requirements.txt
-   ```
-
-4. Execute the script, e.g., to show the help type
-
-   ```bash
-   python _tools/import_schedule.py --help
-   ```
+Likewise, `_tools/import_resources.py` imports resources such as slides and other documents from [pretalx.com](https://pretalx.com/p/about/) via its API. It downloads all files, stores them and updates the links of the talks concerned (see [_Links_](#links)). Run it the same way, e.g., `uv run --no-project --with-requirements _tools/requirements.txt python _tools/import_resources.py --help`.
 
 ### Automatic Build
 
@@ -179,11 +167,13 @@ If you prefer not to install the full Ruby/Jekyll toolchain locally, you can lev
 
 - `build.yml`: This workflow automatically builds and optimizes the website whenever a new tag starting with `v` (e.g., `v2020.01.01`) is added. It then attaches the generated website as an archive to a release for easy download.
 - `test.yml`: This workflow automatically attempts to build the website upon a new pull request, making it suitable for use as a status check before merging.
-- `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (refer to the 'Automatic Import' section for details). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports.
+- `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (see [_Import from pretalx_](#import-from-pretalx)). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports.
 
 To get started, simply copy the desired workflow file to your repository and adapt it to your needs:
 
 - `_tools/build.yml` -> `.github/workflows/build.yml`
+- `_tools/test.yml` -> `.github/workflows/test.yml`
+- `_tools/schedule.yml` -> `.github/workflows/schedule.yml`
 
 > [!IMPORTANT]
 > Please note that the `Gemfile.lock` of your project must be adapted to include specific versions required by GitHub's workflow server, i.e., run `bundle lock --add-platform x86_64-linux` to add support for them.
@@ -191,9 +181,9 @@ To get started, simply copy the desired workflow file to your repository and ada
 
 ## Configuration
 
-All configurations and customization for this theme are stored under the `conference` property in the `_config.yml` file. You can find an example configuration containing most of the here discussed parameters under `_config.example.yml` in this repository.
+Most settings of this theme are stored under the `conference` property in the `_config.yml` file. Some are Jekyll's own settings at the top level (e.g. `timezone`), and the settings of the main landing page, the location page and the program page are stored in their Front Matter (sections at the end).
 
-### Theme Verification
+### Error Checks
 
 Upon building, the theme runs some basic verification to check if all necessary files and configurations are in place. If it encounters an error it shows this by adding an information bar on all your sites. You can disable this, e.g., in a production environment, by setting `show_errors` to `false` (default: `true`).
 
@@ -276,7 +266,7 @@ timezone: Europe/Zurich
 
 ### Navigation Bar
 
-The navigation bar is located at the top and visible on every site. On the left, it shows the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the [_Content_](#content) > [_Links_](#links) section below for the available properties per link. Please note that icons are ignored for the navigation bar.
+The navigation bar is located at the top and visible on every site. On the left, it shows the title of the website (`site.title`) followed by the links listed under the `links` property of the `navigation` property. See the [_Content_](#content) > [_Links_](#links) section below for the available properties per link. Icons are only shown when installed as an app (see below).
 
 Example:
 
@@ -315,7 +305,7 @@ conference:
       url: 'https://github.com'
 ```
 
-The navigation bar automatically collapses when the available space is too small (e.g., on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/5.3/layout/breakpoints/). The default breakpoint is `md` (collapsing if the screen width is smaller than 992px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
+The navigation bar automatically collapses when the available space is too small (e.g., on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/5.3/layout/breakpoints/). The default breakpoint is `md` (collapsing if the screen width is smaller than 768px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
 
 When installed as a progressive web application (see the [_Progressive Web App (PWA)_](#progressive-web-app-pwa) section below), the navigation bar moves to the bottom. In PWA mode, it displays link icons and ignores links with `live: true`. Please note that the navigation bar has a limited width and no vertical scrolling. To hide an entry in this mode, set `pwa_hide: true` on its link.
 
@@ -331,7 +321,7 @@ conference:
         relative_url: /supporters/
 ```
 
-### Meta Data for Search Engines and Link Previews
+### Meta Data
 
 The theme automatically includes the necessary `<meta>` tags to ease link previewing when sharing links based on the [Open Graph protocol](https://ogp.me/) (used by all major social networks and messenger apps) and [Twitter Cards](https://developer.x.com/en/docs/x-for-websites/cards/overview/abouts-cards) (used by X). These tags control how a link is shown when shared via different platforms and apps. The theme also includes [Schema.org](https://schema.org/) JSON-LD structured data to help search engines better understand and display the conference and its talks, potentially showing event cards, speaker information, and enhanced search listings.
 
@@ -360,7 +350,7 @@ conference:
         open_graph: "facebook_preview.png"  # inside /assets/images/
 ```
 
-#### Meta Data for Search Engines
+#### Structured Data (Schema.org)
 
 Support for [Schema.org](https://schema.org/) JSON-LD structured data is organized under the `schema_org` property part of the `meta` property. It can be disabled by setting `disable` to `true`. Different schemas are generated depending on the page type, and these schemas are interconnected. The following schemas are generated:
 - `ConferenceEvent` (main and program page)
@@ -420,31 +410,7 @@ conference:
       img: "conference.png"  # inside /assets/images/
 ```
 
-### Main Landing Page
-
-The main landing page is shown at the root of the website to greet new visitors. To show it you need to create a `index.md` file in the root of your website's folder and specify its layout as `layout: home`.
-
-The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `header` property of the main page's FrontMatter containing
-
-- a `img` property specifying the path to the image file relative to the `/assets/images/` folder.
-- optionally a `img_dark` property for a dark mode version of the logo, which will be automatically displayed when the user's system is in dark mode. If not specified, the regular `img` will be used in both light and dark modes.
-
-The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of link buttons. See the [_Content_](#content) > [_Links_](#links) section below for the available properties per link.
-
-```yaml
-layout: home
-header:
-  img: "main_logo.png"
-  img_dark: "main_logo_dark.png"  # optional: dark mode version
-links:
-  - name: Program
-    relative_url: /program/
-  - name: Tickets
-    disabled: true
-    absolute_url: ''
-```
-
-### Information Boxes & Modals
+### Information Bars & Modals
 
 The theme supports two types of information displays: banners at the top of the page (`bars`) and dialog popups (`modals`). Both can be used to inform your visitors about important news and announcements.
 
@@ -512,14 +478,14 @@ This can be further extended if some talks have an associated live stream: When 
 
 To activate these functionalities, each day in the `program.yml` file must contain a `date` property (see section [_Content_](#content) > [Schedule / Program](#schedule--program) below) and the `live` property has to be set in the configuration file containing
 
-- how long a pause between two consecutive talks has to be for the live indication to pause (`stop`),
+- optionally, how long a pause between two consecutive talks has to be for the live indication to pause (`stop`, default: `240`), and
 - optionally, under the `streaming` property:
   - if streaming should be enabled (`enable`), and if enabled
-  - how many minutes the stream goes active before a talk (`prepend`),
-  - how many minutes the stream stays active after a talk (`extend`),
-  - how long a pause between two consecutive talks has to be for the stream to pause (`pause`),
+  - how many minutes the stream goes active before a talk (`prepend`, default: `5`),
+  - how many minutes the stream stays active after a talk (`extend`, default: `5`),
+  - how long a pause between two consecutive talks has to be for the stream to pause (`pause`, default: `60`),
   - if the stream is only loaded once the visitor clicks a button, as the streaming provider receives the visitor's IP address (`click_to_load`, default: `true`; set to `false` for self-hosted streams), and
-  - an external (absolute) link to which the user will be redirected instead of opening the modal (`external`),
+  - an external (absolute) link to which the user will be redirected instead of opening the modal (`external`).
 
 ```yaml
 conference:
@@ -547,7 +513,7 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
        # Theme color for the PWA (default: Bootstrap primary color, #0d6efd)
        theme_color: "#0d6efd"
 
-       # Background color for the PWA (default: Bootstrap primary color, #ffffff)
+       # Background color for the PWA (default: white, #ffffff)
        background_color: "#ffffff"
 
        # PWA icons configuration
@@ -593,9 +559,9 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
 > [!NOTE]
 > Please note that when installed as a PWA, the navigation bar moves to the bottom and includes icons. See the [_Navigation Bar_](#navigation-bar) section above for more information.
 
-### Talk Settings
+### Tracks & Tags
 
-Talks can optionally be organized into tracks, where each track groups talks under a common subject. Tracks are visually distinct across the website, especially in the program, by a unique color. Additionally, each talk can have one or more associated tags. Both tracks and tags are linked via the talk's Front Matter (refer to the [_Content_](#content) > [_Talks_](#talks) >  section below for more details).
+Talks can optionally be organized into tracks, where each track groups talks under a common subject. Tracks are visually distinct across the website, especially in the program, by a unique color. Additionally, each talk can have one or more associated tags. Both tracks and tags are linked via the talk's Front Matter (refer to the [_Content_](#content) > [_Talks_](#talks) section below for more details).
 
 To define available tracks, add the `tracks` property under the `talks` property in the configuration file. This property is a list of tracks, with each track requiring:
 
@@ -632,10 +598,34 @@ conference:
     # Talk tags
     tags:
       - name: No recording
-        icon: video-slash
+        icon: camera-video-off-fill
 ```
 
-### Location Settings
+### Landing Page
+
+The main landing page is shown at the root of the website to greet new visitors. To show it you need to create a `index.md` file in the root of your website's folder and specify its layout as `layout: home`.
+
+The main page states your site's title (`site.title`) or a logo instead. The logo can be configured through the `header` property of the main page's Front Matter containing
+
+- a `img` property specifying the path to the image file relative to the `/assets/images/` folder.
+- optionally a `img_dark` property for a dark mode version of the logo, which will be automatically displayed when the user's system is in dark mode. If not specified, the regular `img` will be used in both light and dark modes.
+
+The title/logo on the main page is followed by a description of your site (`site.description`) and the content of your `index.md` file. It ends with an optional list of link buttons. See the [_Content_](#content) > [_Links_](#links) section below for the available properties per link.
+
+```yaml
+layout: home
+header:
+  img: "main_logo.png"
+  img_dark: "main_logo_dark.png"  # optional: dark mode version
+links:
+  - name: Program
+    relative_url: /program/
+  - name: Tickets
+    disabled: true
+    absolute_url: ''
+```
+
+### Location Page
 
 To help users find your venue, an [OpenStreetMap](https://www.openstreetmap.org/) container displaying a map can be shown on the location page as well as the address of the venue. You can define the initial position of the map by setting the default zoom level `default_zoom`, the center coordinates `home_coord`, and the map provider for the tiles `map_provider`. Alternative map providers can be found [here](https://leaflet-extras.github.io/leaflet-providers/preview/).
 The map contains small control buttons to zoom in and out, center the map back to the initial position, and show the visitor's current location (has to be manually activated and granted by the visitor).
@@ -707,7 +697,7 @@ window.conference.awaitReady().then(async () => {
 });
 ```
 
-### Program Settings
+### Program Page
 
 Program settings are configured directly in the Front Matter of the program page (the page with `layout: program`). The program page's Front Matter supports the following properties:
 
@@ -729,7 +719,7 @@ show_alltimes: true
 
 ## Content
 
-The different talks, speakers and rooms are stored as a collection of files. Each file contains a small header in form of a YAML block (called [FrontMatter](https://jekyllrb.com/docs/front-matter/)) used to store additional information beside a description.
+The different talks, speakers and rooms are stored as a collection of files. Each file contains a small header in form of a YAML block (called [Front Matter](https://jekyllrb.com/docs/front-matter/)) used to store additional information beside a description.
 The schedule defining when and in which room a talk takes place is stored as a [YAML data file](https://jekyllrb.com/docs/datafiles/).
 
 ### Schedule / Program
@@ -877,13 +867,13 @@ Using the `file:` indicator, the
   - the site's base address followed by `/documents/slides` and the value for _talks_,
   - the site's base address followed by `/documents/bio` and the value for _speakers_, or
   - the site's base address followed by `/documents` and the value for all remaining types.
-- the link's `icon:` is set to `file-alt`.
+- the link's `icon:` is set to `file-earmark-text`.
 
 Using the `video:` indicator, the
 
 - link address is set to an absolute address as given by the value.
 - the link's `iframe:` attribute is set to `true` to embed the video in a popup-like modal having a default iframe ratio of 24:11.
-- the link's `icon:` is set to `video`.
+- the link's `icon:` is set to `camera-video-fill`.
 
 Additionally, a _talk_ link can also have the following property:
 
@@ -897,34 +887,9 @@ Additionally, a _navigation bar_ or _main landing page_ link can also have the f
   - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above).
 - `menu` containing another list of links. This creates a dropdown menu of multiple sublinks, while the URL of the parent link is ignored. The sublinks have the same properties as regular links.
 
-#### Import link files
+### Pages
 
-There exists a Python file in this repository, `_tools/import_resources.py`, which can be used to import resources such as slides and other documents from [pretalx.com](https://pretalx.com/p/about/)) via its API. It automatically downloads all files, stores them and updates the links of the talks concerned.
-
-1. Copy the files `_tools/import_resources.py` and `_tools/requirements.txt` from this repository
-
-2. Create a virtual environment and activate it
-
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   ```
-
-3. Install the requirements
-
-   ```bash
-   pip install -r _tools/requirements.txt
-   ```
-
-4. Execute the script, e.g., to show the help type
-
-   ```bash
-   python _tools/import_resources.py --help
-   ```
-
-### Overview Pages
-
-For each of the three collections, there exists a dedicated layout giving an overview of all items in the collection. Furthermore, there exists a layout to show the program as a time schedule. Simply create an empty page and associate the corresponding layout with it:
+The overviews of talks and speakers, the location with its rooms, and the program as a time schedule each have a dedicated layout. Simply create a page and associate the corresponding layout with it:
 
 - `talks/index.md` with `layout: talk-overview`
 - `speakers/index.md` with `layout: speaker-overview`
@@ -936,9 +901,7 @@ They can be empty but should contain the `layout` property in the Front Matter h
 If you choose a different location for the overview pages you must:
 
 - for the `talks` and `speakers` overview files, adapt the URL of the two collections as described further above in the section [_Configuration_](#configuration) > [_Collection URLs_](#collection-urls), and
-- for the `location` and `program` files, adapt the corresponding `url` parameter as described further above in the sections [_Configuration_](#configuration) > [_Location Settings_](#location-settings) and [_Configuration_](#configuration) > [_Program Settings_](#program-settings).
-
-### Additional Pages
+- for the `location` and `program` files, adapt the corresponding `url` parameter as described further above in the sections [_Configuration_](#configuration) > [_Location Page_](#location-page) and [_Configuration_](#configuration) > [_Program Page_](#program-page).
 
 Additional static pages can easily be added as files and linked to via navigation bar or main landing page.
 
@@ -966,7 +929,7 @@ The `assets/css/` directory contains:
 - `map.bundle.css`: Leaflet map styles, loaded together with the map
 - `main.scss`: For user-modifiable custom styles.
 
-Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [FrontMatter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
+Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [Front Matter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
 
 
 ```scss
@@ -993,7 +956,7 @@ The `assets/css/` directory contains:
 - `map.bundle.css`: Leaflet map styles, loaded together with the map
 - `main.scss`: For additional custom styles.
 
-Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [FrontMatter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
+Including `assets/css/main.scss` in your project is optional. If included, it must begin with a [Front Matter](https://jekyllrb.com/docs/front-matter/) header for Jekyll recognition:
 
 ```scss
 ---
@@ -1003,7 +966,7 @@ Including `assets/css/main.scss` in your project is optional. If included, it mu
 // ...
 ```
 
-#### Custom SCSS
+### Full Custom Build (Custom SCSS)
 
 Compile your Bootstrap framework by modifying [Bootstrap variables](https://getbootstrap.com/docs/5.3/customize/sass/#variable-defaults). This provides complete control over Bootstrap's SCSS variables, enabling source-level customization.
 
@@ -1059,7 +1022,7 @@ To use the icon font in your own content or JavaScript instead (e.g. `<i class="
 ```
 
 
-## JavaScript
+## Custom JavaScript
 
 The theme includes a pre-built JavaScript bundle (`assets/js/conference.bundle.js`). This bundle is automatically included in the theme gem, pre-compiled, and minified, requiring no build tools for end users. Please do not modify this file directly.
 
@@ -1168,9 +1131,11 @@ To modify the theme's source code and rebuild:
    This compiles:
    - `_js/` → `assets/js/conference.bundle.js`
    - `_css/` → `assets/css/conference.bundle.css`, `assets/css/conference-only.bundle.css` and `assets/css/map.bundle.css`
+
    This generates:
    - `_includes/icons/`: one include per Bootstrap Icon (inline SVG)
    - `_data/conference_assets.yml`: content hashes of the bundles (cache busting)
+
    This copies:
    - `_css/` + any SASS file from the different framework libraries → `_sass`
    - Webfonts → `assets/webfonts/` (for sites using the icon font themselves)

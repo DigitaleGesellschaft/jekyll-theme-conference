@@ -32,10 +32,10 @@
 {%- endfor -%}
 {%- assign main_categories_size = site.conference.talks.main_categories | size -%}
 {%- if main_categories_size > 0 -%}
-  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.talks.main_categories` to `conference.talks.tracks` in your configuration. For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README." -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.talks.main_categories` to `conference.talks.tracks` in your configuration. For more details, refer to the [Tracks & Tags](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#tracks--tags) section in the theme's README." -%}
 {%- endif -%}
 {%- if talks_with_categories > 0 -%}
-  {%- assign errors = errors | push: "The `categories` property in the FrontMatter of some of your talks is deprecated. Please update it by reorganizing the content into `track` and `tags` properties instead. For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README." -%}
+  {%- assign errors = errors | push: "The `categories` property in the FrontMatter of some of your talks is deprecated. Please update it by reorganizing the content into `track` and `tags` properties instead. For more details, refer to the [Tracks & Tags](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#tracks--tags) section in the theme's README." -%}
 {%- endif -%}
 {%- if missing_tracks.size > 0 -%}
   {%- capture error_msg -%}
@@ -43,32 +43,32 @@
     {%- for missing_track in missing_tracks %}
 - {{ missing_track }}
 {% endfor %}
-For more details, refer to the [Talk Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#talk-settings) section in the theme's README
+For more details, refer to the [Tracks & Tags](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#tracks--tags) section in the theme's README
   {%- endcapture -%}
   {%- assign errors = errors | push: error_msg -%}
 {%- endif -%}
 
 {%- if site.conference.info_bars -%}
-  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.info_bars` to `conference.info.bars` in your configuration. For more details, refer to the [Information Boxes](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#information-boxes--modals) section in the theme's README." -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.info_bars` to `conference.info.bars` in your configuration. For more details, refer to the [Information Bars & Modals](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#information-bars--modals) section in the theme's README." -%}
 {%- endif -%}
 
 {%- if site.conference.link_preview -%}
-  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.link_preview` to `conference.meta.link_preview` in your configuration. For more details, refer to the [Meta Data for Search Engines and Link Previews](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#meta-data-for-search-engines-and-link-previews) section in the theme's README." -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.link_preview` to `conference.meta.link_preview` in your configuration. For more details, refer to the [Link Previews](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#link-previews) section in the theme's README." -%}
 {%- endif -%}
 
 {%- if site.conference.program -%}
-  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any program configuration from `conference.program` to the your program file (with `layout: program`). For more details, refer to the [Program Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#program-settings) section in the theme's README." -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any program configuration from `conference.program` to your program file (with `layout: program`). For more details, refer to the [Program Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#program-page) section in the theme's README." -%}
 {%- endif -%}
 
 {%- if site.conference.location -%}
-  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any location configuration from `conference.location` to the your location file (with `layout: location`). For more details, refer to the [Location Settings](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#location-settings) section in the theme's README." -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any location configuration from `conference.location` to your location file (with `layout: location`). For more details, refer to the [Location Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#location-page) section in the theme's README." -%}
 {%- endif -%}
 {%- if page.map and page.layout != "location" -%}
   {%- assign errors = errors | push: "Your page's FrontMatter contains an outdated property name. Maps are no longer supported on individual pages and can only included on pages with " -%}
 {%- endif -%}
 
 {%- if site.conference.main -%}
-  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any main configuration from `conference.main` to the your home file (with `layout: home`). For more details, refer to the [Main Landing Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#main-landing-page) section in the theme's README." -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any main configuration from `conference.main` to your home file (with `layout: home`). For more details, refer to the [Landing Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#landing-page) section in the theme's README." -%}
 {%- endif -%}
 
 {%- if site.conference.talks.hide_icons == true or site.conference.talks.hide_link_icons -%}
