@@ -1,5 +1,5 @@
 module.exports = {
-  content: ["_site/**/*.html", "_site/assets/js/*.js"],
+  content: ["_site/**/*.html", "_site/assets/js/**/*.js"],
   css: [
     "_site/assets/css/conference.bundle.css",
     "_site/assets/css/main.css",

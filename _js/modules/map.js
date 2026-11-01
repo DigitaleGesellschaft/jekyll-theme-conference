@@ -3,7 +3,9 @@
  *
  * Leaflet (script and styles) loads only with the map, e.g.
  * <div id="map" data-map-css="…/map.bundle.css?v=…"> with a <template
- * data-map-icon> holding the icon of the "center map" button.
+ * data-map-icon> holding the icon of the "center map" button. The location
+ * page's map script (`map.script`, e.g. maps/2026.js below /assets/js/)
+ * adapts the map before getMap() resolves.
  */
 import { grantConsent, hasConsent } from "../core/consent.js";
 
@@ -43,7 +45,20 @@ export function createMapModule() {
       document.head.append(link);
     });
 
-  const createMap = (L, mapEl, config, lang) => {
+  // Default export of the map script, called with the map, e.g. to add markers
+  const runScript = async (src) => {
+    if (!src) {
+      return;
+    }
+    try {
+      const { default: adaptMap } = await import(/* @vite-ignore */ src);
+      adaptMap(map);
+    } catch (error) {
+      console.error(`Map script ${src} failed:`, error);
+    }
+  };
+
+  const createMap = async (L, mapEl, config, lang) => {
     map = L.map(mapEl).setView(config.home_coord, config.default_zoom);
     L.tileLayer.provider(config.map_provider).addTo(map);
 
@@ -57,6 +72,7 @@ export function createMapModule() {
       strings: { title: lang?.focus_me },
     }).addTo(map);
 
+    await runScript(config.script);
     mapReadyResolve(map);
   };
 
