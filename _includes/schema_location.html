@@ -8,7 +8,7 @@
 
 {%- assign contains_places = "" -%}
 {%- assign first_room = true -%}
-{%- for r in site.rooms -%}
+{%- for r in sorted_rooms -%}
   {%- unless r.hide -%}
     {%- unless first_room -%}
       {%- assign contains_places = contains_places | append: "," -%}

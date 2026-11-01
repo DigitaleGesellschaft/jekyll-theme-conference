@@ -254,6 +254,21 @@ describe("Program options", () => {
   });
 });
 
+describe("Room order", () => {
+  let siteByName;
+
+  before(() => {
+    siteByName = buildSite("_config.rooms-by-name.yml");
+  });
+
+  test("rooms follow their order, not the collection's", () => {
+    const location = readFileSync(join(siteByName, "location/index.html"), "utf8");
+    const rooms = [...location.matchAll(/href="[^"]*\/rooms\/(\w+)\/"/g)].map(([, room]) => room);
+
+    assert.deepEqual([...new Set(rooms)], ["room_a", "room_b"]);
+  });
+});
+
 describe("Markup", () => {
   test("theme checks report no errors", () => {
     assert.doesNotMatch(read("index.html"), /There was an error when generating the site/);

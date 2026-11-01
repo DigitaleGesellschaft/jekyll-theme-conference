@@ -11,7 +11,7 @@
   {{ content }}
 
   {%- assign nbr_streams = 0 -%}
-  {%- for room in site.rooms -%}
+  {%- for room in sorted_rooms -%}
     {%- if room.live -%}
       {%- assign mod_nbr_streams = nbr_streams | modulo: 2 -%}
       {%- if mod_nbr_streams == 0 %}
