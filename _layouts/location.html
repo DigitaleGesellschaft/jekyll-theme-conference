@@ -1,3 +1,4 @@
+{%- unless page.hide -%}
 {% include header.html %}
 
   {% assign this_room = page %}
@@ -10,9 +11,7 @@
     {% endif %}
   </h1>
 
-  {% unless page.hide %}
-    {% include navbar_rooms.html %}
-  {% endunless %}
+  {% include navbar_rooms.html %}
 
   {% if page.postal_address %}
     <address>
@@ -58,3 +57,6 @@
   {% endif %}
 
 {% include footer.html %}
+{%- else -%}
+  {%- include hidden_page.html -%}
+{%- endunless -%}

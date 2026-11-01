@@ -269,6 +269,22 @@ describe("Room order", () => {
   });
 });
 
+describe("Hidden location page", () => {
+  let siteHidden;
+
+  before(() => {
+    siteHidden = buildSite("_config.hidden-location.yml");
+  });
+
+  test("is a stand-in that is not indexed, without room links", () => {
+    const html = readFileSync(join(siteHidden, "location/index.html"), "utf8");
+
+    assert.match(html, /<meta name="robots" content="noindex">/);
+    assert.match(html, new RegExp(`http-equiv="refresh" content="0; url=${BASEURL}/"`));
+    assert.doesNotMatch(readFileSync(join(siteHidden, "program/index.html"), "utf8"), /href="[^"]*\/rooms\//);
+  });
+});
+
 describe("Markup", () => {
   test("theme checks report no errors", () => {
     assert.doesNotMatch(read("index.html"), /There was an error when generating the site/);
