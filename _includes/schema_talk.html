@@ -23,19 +23,7 @@
         {%- include get_page_description.html default=site.title replace_quotes=true -%}
         {%- assign talk_description = page_description | default: talk.name -%}
 
-        {%- comment -%} Get EventStatus from config, default to EventScheduled {%- endcomment -%}
-        {%- if site.conference.meta.schema_org.event_status -%}
-          {%- assign event_status = site.conference.event_status -%}
-        {%- else -%}
-          {%- assign event_status = "EventScheduled" -%}
-        {%- endif -%}
-
-        {%- comment -%} Get EventAttendanceMode from config, default to MixedEventAttendanceMode {%- endcomment -%}
-        {%- if site.conference.meta.schema_org.event_attendance_mode -%}
-          {%- assign event_attendance_mode = site.conference.event_attendance_mode -%}
-        {%- else -%}
-          {%- assign event_attendance_mode = "MixedEventAttendanceMode" -%}
-        {%- endif -%}
+        {%- include get_schema_event.html -%}
 
         {%- comment -%} Calculate duration in ISO 8601 format (PT45M for 45 minutes) {%- endcomment -%}
         {%- assign start_time_parts = talk_start | split: ':' -%}

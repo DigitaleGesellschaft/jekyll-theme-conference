@@ -46,6 +46,11 @@ conference:
   lang: en
   show_errors: true
 
+  meta:
+    schema_org:
+      event_status: postponed
+      event_attendance_mode: online
+
   live:
     streaming:
       enable: true

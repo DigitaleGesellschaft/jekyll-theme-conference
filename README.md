@@ -402,6 +402,7 @@ Optionally, the following properties can be added under the `schema_org` propert
 
 ```yaml
 conference:
+  meta:
     schema_org:
       disable: false  # Set to true to disable Schema.org JSON-LD structured data
       event_status: "scheduled"  # Options: scheduled, cancelled, postponed, moved_online

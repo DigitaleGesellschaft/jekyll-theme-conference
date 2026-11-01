@@ -99,6 +99,15 @@ describe("Structured data", () => {
     }
     assert.deepEqual(failures, []);
   });
+
+  test("conference and talks carry the configured status and attendance mode", () => {
+    for (const file of ["index.html", "talks/opening_welcome/index.html"]) {
+      const html = read(file);
+
+      assert.match(html, /"eventStatus": "https:\/\/schema.org\/EventPostponed"/, file);
+      assert.match(html, /"eventAttendanceMode": "https:\/\/schema.org\/OnlineEventAttendanceMode"/, file);
+    }
+  });
 });
 
 describe("PWA", () => {
