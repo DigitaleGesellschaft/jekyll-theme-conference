@@ -38,7 +38,7 @@ jobs:
       - name: Build JavaScript and CSS bundles with Vite
         run: npm run build
 
-      - name: Set up Ruby 3.3
+      - name: Set up Ruby 3.4
         id: setup_ruby
         uses: ruby/setup-ruby@v1
         with:
