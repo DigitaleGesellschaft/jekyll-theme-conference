@@ -1,0 +1,11 @@
+days:
+  - name: Friday
+    date: "2025-02-21"
+    rooms:
+      - name: Main Hall
+        talks:
+          - name: Keynote 2025
+            time_start: "10:00"
+            time_end: "11:00"
+      - name: Annex
+        talks: []

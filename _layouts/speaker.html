@@ -40,7 +40,7 @@
   {% endif %}
 
   {% assign active_speaker = false %}
-  {% for talk in site.talks %}
+  {% for talk in edition_talks %}
     {% for speaker_name in talk.speakers %}
       {% if speaker_name == speaker.name %}
         {% assign active_speaker = true %}
@@ -53,11 +53,11 @@
     <h2 class="h5 mt-4 mb-2">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h2>
 
     <table class="mw-100">
-    {%- for d in site.data.program.days -%}
+    {%- for d in edition_program.days -%}
       {%- include get_day_hash.html -%}
       {%- for r in d.rooms -%}
         {%- for t in r.talks -%}
-          {%- assign talk = site.talks | where: 'name', t.name | first -%}
+          {%- assign talk = edition_talks | where: 'name', t.name | first -%}
 
           {%- for speaker_name in talk.speakers -%}
             {%- if speaker_name == speaker.name -%}

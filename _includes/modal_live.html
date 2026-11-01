@@ -12,7 +12,7 @@
 
       <div class="modal-body ratio ratio-16x9">
         <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ live_lang.stream | default: 'Live Stream' }}"></iframe>
-        {%- include embed_consent.html hidden=true click_to_load=site.conference.live.streaming.click_to_load %}
+        {%- include embed_consent.html hidden=true click_to_load=edition_live.streaming.click_to_load %}
         <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
           <div id="stream-modal-desc"></div>
           <div id="stream-offline" class="d-none">
@@ -33,14 +33,14 @@
       </div>
 
       <div class="modal-footer justify-content-around">
-        {%- for room in sorted_rooms -%}
+        {%- for room in edition_rooms -%}
           <button type="button" id="stream-button{{ forloop.index }}" class="btn btn-outline-primary d-none d-sm-inline" data-room="{{ room.name | escape }}" aria-pressed="false"{% unless room.live %} disabled{% endunless %}>
             {{ room.name | escape }}
           </button>
         {%- endfor %}
         <div class="w-100 d-block d-sm-none">
           <select class="form-select" id="stream-select" aria-label="{{ site.data.lang[site.conference.lang].location.rooms | default: 'Rooms' }}">
-            {%- for room in sorted_rooms -%}
+            {%- for room in edition_rooms -%}
               <option value="{{ forloop.index }}"{% unless room.live %} disabled{% endunless %}>{{ room.name | escape }}</option>
             {%- endfor %}
           </select>
@@ -49,7 +49,7 @@
 
       {%- comment -%} Icons of the talks' live links, e.g. for a "Q&A" button {%- endcomment -%}
       {%- assign live_icons = "" | split: "" -%}
-      {%- for talk in site.talks -%}
+      {%- for talk in edition_talks -%}
         {%- for link in talk.links -%}
           {%- if link.live and link.icon -%}
             {%- assign live_icons = live_icons | push: link.icon -%}

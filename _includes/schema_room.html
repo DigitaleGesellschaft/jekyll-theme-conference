@@ -8,7 +8,7 @@
 {%- include get_location_config.html -%}
 {%- assign schema_location_url = location_url | prepend: site.baseurl | prepend: site.url -%}
 
-{%- unless site.conference.meta.schema_org.disable or location_hide or room.hide -%}
+{%- unless edition_schema_org.disable or location_hide or room.hide -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

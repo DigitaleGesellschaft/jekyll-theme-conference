@@ -1,7 +1,8 @@
 name: Test
 
-# Builds the fixture site (test/fixture) with the theme and checks the
-# generated output, the JavaScript in a browser and the import scripts
+# Builds the fixture sites (test/fixture, test/fixture-editions) with the
+# theme and checks the generated output, the JavaScript in a browser and
+# the import scripts
 on:
   pull_request:
     types: [opened, synchronize, reopened]

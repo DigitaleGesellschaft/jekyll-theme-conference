@@ -1,8 +1,8 @@
-{% assign breakpoint = site.conference.navigation.breakpoint | default: 'md' %}
+{% assign breakpoint = edition_nav_breakpoint | default: 'md' %}
 <nav class="navbar navbar-expand-{{ breakpoint }} d-pwa-none bg-body-tertiary mb-3" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
   <div class="container">
 
-    <a class="navbar-brand order-0" href="{{ site.baseurl }}/">{{ site.title }}</a>
+    <a class="navbar-brand order-0" href="{{ site.baseurl }}{{ edition_base }}/">{{ edition_title }}</a>
 
     <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ site.data.lang[site.conference.lang].navigation.toggle | default: 'Toggle navigation menu' }}">
       <span class="navbar-toggler-icon" aria-hidden="true"></span>
@@ -10,26 +10,23 @@
 
     <div class="collapse navbar-collapse order-3 order-md-1" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto">
-        {%- for link in site.conference.navigation.links -%}
+        {%- for link in edition_nav_links -%}
 
-          {%- if link.menu %}
+          {%- if link.menu -%}
+            {%- include get_menu.html -%}
+            {%- unless menu_empty %}
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown{{ forloop.index0 }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ link.name }}
+              <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown{{ forloop.index0 }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
+                {{ menu_name }}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbar-dropdown{{ forloop.index0 }}">
-                {%- assign parent_link = link -%}
-                {%- for link in parent_link.menu -%}
-                  {%- include get_link.html class="dropdown-item" %}
-                  {{ link_tag }}
-                    {{ link.name }}
-                  </a>
-                {%- endfor %}
+                {%- include show_menu_items.html %}
               </div>
             </li>
+            {%- endunless -%}
 
           {%- elsif link.live -%}
-            {% if site.conference.live %}
+            {% if edition_live %}
               {%- include get_live_timestamps.html -%}
 
               <li class="nav-item live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
@@ -55,7 +52,11 @@
 
           {%- else %}
             <li class="nav-item">
-              {% if page.url == link.relative_url or link.relative_url != "/" and page.url contains link.relative_url %}
+              {% assign link_url = nil -%}
+              {%- if link.relative_url -%}
+                {%- assign link_url = link.relative_url | prepend: edition_base -%}
+              {%- endif -%}
+              {% if page.url == link_url or link.relative_url != "/" and page.url contains link_url %}
                 {% assign is_active = true %}
               {% else %}
                 {% assign is_active = false %}
@@ -68,20 +69,38 @@
           {%- endif -%}
         {%- endfor %}
       </ul>
+
+      {%- comment -%} Menu of editions, unless a link places it {%- endcomment -%}
+      {%- assign editions_link = edition_nav_links | where: "menu", "editions" | first -%}
+      {%- unless editions_link or edition_nav_editions.hide -%}
+        {%- include get_menu.html menu="editions" -%}
+        {%- unless menu_empty %}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbar-editions" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
+            {{ menu_name }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar-editions">
+            {%- include show_menu_items.html %}
+          </div>
+        </li>
+      </ul>
+        {%- endunless -%}
+      {%- endunless %}
     </div>
 
-    {%- if site.conference.navigation.logo %}
+    {%- if edition_nav_logo %}
       <div class="navbar-brand navbar-logo order-2 ms-1 me-0 text-end overflow-hidden">
-        <a class="text-reset text-decoration-none" href="{{ site.conference.navigation.logo.url }}">
-          {%- if site.conference.navigation.logo.img %}
+        <a class="text-reset text-decoration-none" href="{{ edition_nav_logo.url }}">
+          {%- if edition_nav_logo.img %}
             <picture>
-              {%- if site.conference.navigation.logo.img_dark %}
-              <source srcset="{{ site.conference.navigation.logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" media="(prefers-color-scheme: dark)" />
+              {%- if edition_nav_logo.img_dark %}
+              <source srcset="{{ edition_nav_logo.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" media="(prefers-color-scheme: dark)" />
               {%- endif %}
-              <img src="{{ site.conference.navigation.logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="align-middle" alt="{{ site.conference.navigation.logo.name }}" />
+              <img src="{{ edition_nav_logo.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="align-middle" alt="{{ edition_nav_logo.name }}" />
             </picture>
           {%- else %}
-            {{ site.conference.navigation.logo.name }}
+            {{ edition_nav_logo.name }}
           {%- endif %}
         </a>
       </div>

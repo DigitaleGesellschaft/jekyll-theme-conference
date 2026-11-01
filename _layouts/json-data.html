@@ -1,9 +1,9 @@
-{%- include get_rooms.html -%}
+{%- include get_edition.html -%}
 {
-    {% if site.conference.live and site.conference.live.streaming.enable -%}
+    {% if edition_live and edition_live.streaming.enable -%}
     "rooms": {
     {%- assign first_room = true -%}
-    {%- for room in sorted_rooms %}
+    {%- for room in edition_rooms %}
         {%- if room.live -%}
             {%- include get_room_live_href.html -%}
             {%- unless room_live_href -%}
@@ -25,7 +25,7 @@
     },
 
     "speakers": {
-    {%- for speaker in site.speakers %}
+    {%- for speaker in edition_speakers %}
         {{ speaker.name | jsonify }} : {
             "name": {{ speaker.first_name | append: ' ' | append: speaker.last_name | jsonify }},
         {%- if speaker.hide %}
@@ -39,9 +39,9 @@
 
     "talks": {
     {%- assign first_room = true -%}
-    {%- for room in sorted_rooms -%}
+    {%- for room in edition_rooms -%}
         {%- assign first_talk = true -%}
-        {%- for d in site.data.program.days -%}
+        {%- for d in edition_program.days -%}
             {%- for r in d.rooms -%}
                 {%- if room.name == r.name and room.live %}
 
@@ -58,7 +58,7 @@
                     {%- endif -%}
 
                     {%- for t in r.talks %}
-                        {%- assign talk = site.talks | where: 'name', t.name | first %}
+                        {%- assign talk = edition_talks | where: 'name', t.name | first %}
             {
                 "name": {{ talk.name | jsonify }},
 

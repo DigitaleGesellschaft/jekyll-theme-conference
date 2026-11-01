@@ -1,6 +1,11 @@
+import io
+import json
 import sys
+import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "_tools"))
 
@@ -66,6 +71,50 @@ class TestImportSchedule(unittest.TestCase):
         self.assertIn("&lt;img", description)
         self.assertIn("<https://example.org>", description)
         self.assertIn("1 < 2", description)
+
+
+class TestImportScheduleEdition(unittest.TestCase):
+    # Import a schedule into a new site folder, e.g. with "--edition", "2025"
+    def import_frab(self, *args: str) -> Path:
+        output_dir = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        (output_dir / "schedule.json").write_text(json.dumps(frab("Talk", "Ada", "Room", "")))
+
+        self.import_frab_into(output_dir, *args)
+        return output_dir
+
+    def import_frab_into(self, output_dir: Path, *args: str) -> None:
+        frab_file = output_dir / "schedule.json"
+        argv = ["import_schedule.py", str(frab_file), "--output-dir", str(output_dir), *args]
+        with mock.patch.object(sys, "argv", argv), redirect_stdout(io.StringIO()):
+            import_schedule.main()
+
+    def test_writes_single_edition_to_site(self) -> None:
+        output_dir = self.import_frab()
+
+        self.assertTrue((output_dir / "_talks" / "talk.md").is_file())
+        self.assertTrue((output_dir / "_data" / "program.yml").is_file())
+
+    def test_writes_edition_to_its_folders(self) -> None:
+        output_dir = self.import_frab("--edition", "2025")
+
+        self.assertTrue((output_dir / "_talks" / "2025" / "talk.md").is_file())
+        self.assertTrue((output_dir / "_speakers" / "2025" / "ada.md").is_file())
+        self.assertTrue((output_dir / "_rooms" / "2025" / "room.md").is_file())
+        self.assertTrue((output_dir / "_data" / "programs" / "2025.yml").is_file())
+        self.assertFalse((output_dir / "_data" / "program.yml").exists())
+
+    def test_creates_missing_edition_pages(self) -> None:
+        output_dir = self.import_frab("--edition", "2025")
+        program_page = output_dir / "2025" / "program" / "index.md"
+
+        self.assertIn("layout: program", program_page.read_text())
+        self.assertIn("layout: talk-overview", (output_dir / "2025" / "talks" / "index.md").read_text())
+        self.assertIn("layout: speaker-overview", (output_dir / "2025" / "speakers" / "index.md").read_text())
+
+        # Existing pages are kept
+        program_page.write_text("---\nlayout: program\ntitle: Own\n---\n")
+        self.import_frab_into(output_dir, "--edition", "2025")
+        self.assertIn("title: Own", program_page.read_text())
 
 
 class TestImportResources(unittest.TestCase):

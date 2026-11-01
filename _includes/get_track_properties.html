@@ -1,5 +1,5 @@
 {%- assign track_color = 'light' -%}
-{%- for track_prop in site.conference.talks.tracks -%}
+{%- for track_prop in edition_tracks -%}
   {%- if talk.track == track_prop.name -%}
     {%- assign track_color = track_prop.color | default: track_color -%}
     {%- break -%}

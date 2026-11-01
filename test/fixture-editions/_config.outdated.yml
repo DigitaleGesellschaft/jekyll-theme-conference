@@ -1,0 +1,11 @@
+# Icons of Font Awesome instead of Bootstrap Icons in the config
+conference:
+  navigation:
+    links:
+      - name: Program
+        relative_url: /program/
+        icon: video-slash
+  talks:
+    tags:
+      - name: Old
+        icon: file-alt

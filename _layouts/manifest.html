@@ -1,10 +1,11 @@
+{%- include get_edition.html -%}
 {%- if site.conference.pwa and site.conference.pwa.enable -%}
 {
-  "name": {{ site.title | jsonify }},
-  "short_name": {{ site.title | jsonify }},
-  "description": {{ site.description | jsonify }},
+  "name": {{ edition_title | jsonify }},
+  "short_name": {{ edition_title | jsonify }},
+  "description": {{ edition_description | jsonify }},
   "lang": {{ site.conference.lang | default: 'en' | jsonify }},
-  "start_url": {{ site.baseurl | append: '/' | jsonify }},
+  "start_url": {{ site.baseurl | append: edition_base | append: '/' | jsonify }},
   "scope": {{ site.baseurl | append: '/' | jsonify }},
   "display": "standalone",
   "background_color": {{ site.conference.pwa.background_color | default: '#ffffff' | jsonify }},
@@ -33,7 +34,7 @@
   {%- endif %}
   "shortcuts": [
   {%- assign first_shortcut = true -%}
-  {%- for link in site.conference.navigation.links -%}
+  {%- for link in edition_nav_links -%}
     {%- unless link.pwa_hide or link.live or link.menu -%}
       {%- include get_link.html %}
       {%- unless first_shortcut -%},{%- endunless -%}

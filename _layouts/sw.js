@@ -117,8 +117,20 @@ const networkFirst = async (event) => {
 // Cache first: versioned assets do not change once cached
 const cacheFirst = async (event) => (await caches.match(event.request)) || networkFirst(event);
 
+// Folders of documents (e.g. slides, not offline): /documents/, with
+// editions /<id>/documents/
+{%- assign document_paths = "/documents/" | split: "," -%}
+{%- if site.conference.editions.size > 0 -%}
+  {%- assign document_paths = "" | split: "" -%}
+  {%- for e in site.conference.editions -%}
+    {%- assign document_path = "/" | append: e.id | append: "/documents/" -%}
+    {%- assign document_paths = document_paths | push: document_path -%}
+  {%- endfor -%}
+{%- endif %}
+const DOCUMENT_PATHS = {{ document_paths | jsonify }};
+
 // Fetch event - only handle same-origin GET requests within the site,
-// except the service worker itself and documents (e.g. slides, not offline)
+// except the service worker itself and documents
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -126,7 +138,7 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET" || url.origin !== self.location.origin || !url.pathname.startsWith(`${BASE_URL}/`)) {
     return;
   }
-  if (url.pathname === `${BASE_URL}/sw.js` || url.pathname.startsWith(`${BASE_URL}/documents/`)) {
+  if (url.pathname === `${BASE_URL}/sw.js` || DOCUMENT_PATHS.some((path) => url.pathname.startsWith(`${BASE_URL}${path}`))) {
     return;
   }
 

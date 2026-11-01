@@ -4,7 +4,9 @@
   Documents (/documents/), source maps, .woff fonts with a .woff2 twin and
   the icon font (icons are inline SVGs) are skipped. Theme bundles carry
   their content hash (?v=), so an unchanged bundle is not downloaded again.
+  Of several editions, only the current one is precached.
 {%- endcomment -%}
+{%- include get_edition.html -%}
 {%- assign pages = "" | split: "" -%}
 {%- assign assets = "" | split: "" -%}
 {%- assign asset_versions = site.data.conference_assets -%}
@@ -23,6 +25,10 @@
   {%- if page.output == false or page.url == nil or page.url == "" or page.url == "/sw.js" or page_ext == "map" -%}
     {%- continue -%}
   {%- endif -%}
+  {%- assign page_edition = page.edition | append: "" -%}
+  {%- if page.edition and page_edition != edition_current_id -%}
+    {%- continue -%}
+  {%- endif -%}
   {%- assign url = page.url | prepend: site.baseurl -%}
   {%- if page.url contains "/assets/" -%}
     {%- assign assets = assets | push: url -%}
@@ -36,6 +42,10 @@
     {%- continue -%}
   {%- endunless -%}
   {%- for item in collection.docs -%}
+    {%- assign item_edition = item.edition | append: "" -%}
+    {%- if item.edition and item_edition != edition_current_id -%}
+      {%- continue -%}
+    {%- endif -%}
     {%- unless item.hide or item.output == false -%}
       {%- assign url = item.url | prepend: site.baseurl -%}
       {%- assign pages = pages | push: url -%}
@@ -64,7 +74,7 @@
   {%- assign assets = assets | push: url -%}
 {%- endfor -%}
 {
-  "name": {{ site.title | jsonify }},
+  "name": {{ edition_title | jsonify }},
   "baseurl": {{ site.baseurl | jsonify }},
   "pages": {{ pages | uniq | jsonify }},
   "assets": {{ assets | uniq | jsonify }}

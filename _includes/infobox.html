@@ -11,14 +11,17 @@
   {%- endif -%}
 {%- endif -%}
 
-{%- if  site.conference.info.bars.size > 0 -%}
-  {%- for infobar in site.conference.info.bars -%}
+{%- comment -%} Main page of the edition, e.g. /2025/ {%- endcomment -%}
+{%- assign home_url = edition_base | append: "/" -%}
+
+{%- if  edition_info_bars.size > 0 -%}
+  {%- for infobar in edition_info_bars -%}
 
     {%- assign show_infobar = false -%}
-    {%- if page.url == "/" and infobar.pages_only != true -%}
+    {%- if page.url == home_url and infobar.pages_only != true -%}
       {%- assign show_infobar = true -%}
     {%- endif -%}
-    {%- if page.url != "/" and infobar.main_only != true -%}
+    {%- if page.url != home_url and infobar.main_only != true -%}
       {%- assign show_infobar = true -%}
     {%- endif -%}
 
@@ -46,14 +49,14 @@
   {%- endfor -%}
 {%- endif -%}
 
-{%- if site.conference.info.modals.size > 0 -%}
-  {%- for infomodal in site.conference.info.modals -%}
+{%- if edition_info_modals.size > 0 -%}
+  {%- for infomodal in edition_info_modals -%}
 
     {%- assign show_infomodal = false -%}
-    {%- if page.url == "/" and infomodal.pages_only != true -%}
+    {%- if page.url == home_url and infomodal.pages_only != true -%}
       {%- assign show_infomodal = true -%}
     {%- endif -%}
-    {%- if page.url != "/" and infomodal.main_only != true -%}
+    {%- if page.url != home_url and infomodal.main_only != true -%}
       {%- assign show_infomodal = true -%}
     {%- endif -%}
 

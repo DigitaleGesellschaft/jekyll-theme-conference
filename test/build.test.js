@@ -41,6 +41,8 @@ describe("JSON endpoints", () => {
     const config = JSON.parse(read("index.html").match(/<script type="application\/json" id="conference-config">([\s\S]*?)<\/script>/)[1]);
 
     assert.equal(config.baseurl, BASEURL);
+    assert.equal(config.edition, null);
+    assert.equal(config.edition_current, true);
     assert.deepEqual(config.map.home_coord, [47.3744489, 8.5410422]);
     assert.equal(config.live.timezone, "Europe/Zurich");
     assert.deepEqual(config.live.days.map(({ date }) => date), ["2026-02-20", "2026-02-21"]);
@@ -111,6 +113,13 @@ describe("Structured data", () => {
 });
 
 describe("PWA", () => {
+  test(".htaccess keeps its content and forwards nothing without editions", () => {
+    const htaccess = read(".htaccess");
+
+    assert.match(htaccess, /ErrorDocument 404/);
+    assert.doesNotMatch(htaccess, /Rewrite/);
+  });
+
   test("manifest has icons and shortcuts and does not lock orientation", () => {
     const manifest = readJson("manifest.json");
 

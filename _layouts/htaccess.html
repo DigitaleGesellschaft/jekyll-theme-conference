@@ -1,0 +1,19 @@
+{%- comment -%}
+  Apache configuration (.htaccess) of a site with several editions: forwards
+  addresses outside the editions to the current one, if it has them (e.g.
+  /program/ -> /2026/program/), followed by the page's own content. Without
+  editions, only the content.
+{%- endcomment -%}
+{%- include get_edition.html -%}
+{%- if edition_current_id -%}
+{%- assign edition_url = site.baseurl | append: "/" | append: edition_current_id -%}
+# Forward to the current edition, e.g. /program/ -> {{ edition_url }}/program/
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}{{ edition_url }}/$1 -f [OR]
+RewriteCond %{DOCUMENT_ROOT}{{ edition_url }}/$1 -d
+RewriteRule ^(.*)$ {{ edition_url }}/$1 [R=302,L]
+
+{% endif -%}
+{{ content }}

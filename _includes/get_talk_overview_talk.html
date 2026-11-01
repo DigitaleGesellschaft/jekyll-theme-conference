@@ -9,10 +9,10 @@
 
   {% if talk.hide -%}
     {%- assign talk_scheduled = false -%}
-    {%- for d in site.data.program.days -%}
+    {%- for d in edition_program.days -%}
       {%- include get_day_hash.html -%}
       {%- for r in d.rooms -%}
-        {%- assign room = site.rooms | where: 'name', r.name | first -%}
+        {%- assign room = edition_rooms | where: 'name', r.name | first -%}
         {%- for t in r.talks -%}
           {%- if talk.name == t.name -%}
             <p class="mb-1 fw-light">
@@ -36,8 +36,8 @@
   {%- endif %}
 
   <p class="mb-0">
-    {%- if site.conference.live and talk.hide != true -%}
-      {% for d in site.data.program.days -%}
+    {%- if edition_live and talk.hide != true -%}
+      {% for d in edition_program.days -%}
         {%- for r in d.rooms -%}
           {%- for t in r.talks -%}
             {%- if talk.name == t.name -%}

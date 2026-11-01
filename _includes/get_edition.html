@@ -1,0 +1,85 @@
+{%- comment -%}
+  Edition of the current page, e.g. "2025" for /2025/talks/x/ (Front Matter
+  `edition`, set per folder via `defaults`; none: the current edition). The
+  current edition is the first of `conference.editions` with `current: true`,
+  else the first one. Without `conference.editions` there is a single edition:
+  `edition` is nil and everything below is the site's own. Sets:
+  - edition, edition_config (its `editions` entry), edition_current_id,
+    edition_current (true on the current edition)
+  - edition_base: URL prefix of the edition's pages, e.g. "/2025" (or "")
+  - edition_documents: folder of linked files, e.g. "/2025/documents"
+  - edition_talks, edition_speakers, edition_program
+  - edition_rooms: by `order`, else as they first appear in the program
+  - edition_title, edition_description and per sub-setting (e.g.
+    `navigation.logo`): edition_link_preview, edition_schema_org,
+    edition_nav_logo, edition_nav_links, edition_nav_breakpoint,
+    edition_nav_editions,
+    edition_info_bars, edition_info_modals, edition_tracks, edition_tags:
+    the edition's setting, else the site's
+  - edition_live: `conference.live` on the current edition, else nil
+{%- endcomment -%}
+{%- assign edition = nil -%}
+{%- assign edition_config = nil -%}
+{%- assign edition_current_id = nil -%}
+{%- assign edition_current = true -%}
+{%- assign edition_base = "" -%}
+{%- assign edition_talks = site.talks -%}
+{%- assign edition_speakers = site.speakers -%}
+{%- assign edition_rooms = site.rooms -%}
+{%- assign edition_program = site.data.program -%}
+
+{%- assign editions = site.conference.editions -%}
+{%- if editions.size > 0 -%}
+  {%- assign edition_current_config = editions | where: "current", true | first | default: editions[0] -%}
+  {%- assign edition_current_id = edition_current_config.id | append: "" -%}
+  {%- assign edition = page.edition | default: edition_current_id | append: "" -%}
+  {%- assign edition_config = editions | where: "id", edition | first -%}
+  {%- if edition != edition_current_id -%}
+    {%- assign edition_current = false -%}
+  {%- endif -%}
+
+  {%- assign edition_base = "/" | append: edition -%}
+  {%- assign edition_talks = site.talks | where: "edition", edition -%}
+  {%- assign edition_speakers = site.speakers | where: "edition", edition -%}
+  {%- assign edition_rooms = site.rooms | where: "edition", edition -%}
+  {%- assign edition_program = site.data.programs[edition] -%}
+{%- endif -%}
+{%- assign edition_documents = edition_base | append: "/documents" -%}
+
+{%- comment -%}
+  Rooms by `order`, else as they first appear in the program (e.g. the
+  program's room columns), followed by rooms not in it
+{%- endcomment -%}
+{%- assign rooms_with_order = edition_rooms | where_exp: "r", "r.order != nil" -%}
+{%- if rooms_with_order.size > 0 -%}
+  {%- assign edition_rooms = edition_rooms | sort: "order", "last" -%}
+{%- else -%}
+  {%- assign rooms_by_program = "" | split: "" -%}
+  {%- for d in edition_program.days -%}
+    {%- for r in d.rooms -%}
+      {%- assign room = edition_rooms | where: "name", r.name | first -%}
+      {%- if room -%}
+        {%- assign rooms_by_program = rooms_by_program | push: room -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- assign edition_rooms = rooms_by_program | concat: edition_rooms | uniq -%}
+{%- endif -%}
+
+{%- assign edition_title = edition_config.title | default: site.title -%}
+{%- assign edition_description = edition_config.description | default: site.description -%}
+{%- assign edition_link_preview = edition_config.meta.link_preview | default: site.conference.meta.link_preview -%}
+{%- assign edition_schema_org = edition_config.meta.schema_org | default: site.conference.meta.schema_org -%}
+{%- assign edition_nav_logo = edition_config.navigation.logo | default: site.conference.navigation.logo -%}
+{%- assign edition_nav_links = edition_config.navigation.links | default: site.conference.navigation.links -%}
+{%- assign edition_nav_breakpoint = edition_config.navigation.breakpoint | default: site.conference.navigation.breakpoint -%}
+{%- assign edition_nav_editions = edition_config.navigation.editions | default: site.conference.navigation.editions -%}
+{%- assign edition_info_bars = edition_config.info.bars | default: site.conference.info.bars -%}
+{%- assign edition_info_modals = edition_config.info.modals | default: site.conference.info.modals -%}
+{%- assign edition_tracks = edition_config.talks.tracks | default: site.conference.talks.tracks -%}
+{%- assign edition_tags = edition_config.talks.tags | default: site.conference.talks.tags -%}
+
+{%- assign edition_live = nil -%}
+{%- if edition_current -%}
+  {%- assign edition_live = site.conference.live -%}
+{%- endif -%}

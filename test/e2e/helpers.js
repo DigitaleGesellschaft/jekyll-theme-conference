@@ -3,6 +3,10 @@
  */
 const LOCAL_ORIGIN = "http://127.0.0.1";
 
+// Site with several editions (test/fixture-editions/), served next to the fixture
+export const EDITIONS_PORT = 4011;
+export const EDITIONS_URL = `${LOCAL_ORIGIN}:${EDITIONS_PORT}/conf/`;
+
 // Abort third-party requests (keeps tests offline and privacy-checkable)
 // and collect them together with console errors and failed local requests
 export async function track(page) {

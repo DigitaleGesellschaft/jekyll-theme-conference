@@ -4,20 +4,20 @@
 {%- endcomment -%}
 {%- include get_location_config.html -%}
 
-{%- assign conference_url = site.url | append: site.baseurl -%}
+{%- assign conference_url = site.url | append: site.baseurl | append: edition_base -%}
 
-{%- if site.data.program and site.data.program.days.size > 0 -%}
-  {%- assign first_day = site.data.program.days | first -%}
+{%- if edition_program and edition_program.days.size > 0 -%}
+  {%- assign first_day = edition_program.days | first -%}
   {%- assign start_date = first_day.date -%}
-  {%- assign last_day = site.data.program.days | last -%}
+  {%- assign last_day = edition_program.days | last -%}
   {%- assign end_date = last_day.date -%}
 
   {%- assign sub_events = "" -%}
   {%- assign first_sub_event = true -%}
-  {%- for d in site.data.program.days -%}
+  {%- for d in edition_program.days -%}
     {%- for r in d.rooms -%}
       {%- for t in r.talks -%}
-        {%- assign talk = site.talks | where: 'name', t.name | first -%}
+        {%- assign talk = edition_talks | where: 'name', t.name | first -%}
         {%- if talk -%}
           {%- assign talk_url = talk.url | prepend: site.baseurl | prepend: site.url -%}
           {%- assign talk_description = talk.name -%}
@@ -37,8 +37,8 @@
 
 {%- include get_schema_event.html -%}
 
-{%- if site.conference.meta.schema_org.tickets and site.conference.meta.schema_org.tickets.availability -%}
-  {%- assign availability_raw = site.conference.meta.schema_org.tickets.availability -%}
+{%- if edition_schema_org.tickets and edition_schema_org.tickets.availability -%}
+  {%- assign availability_raw = edition_schema_org.tickets.availability -%}
   {%- if availability_raw == "in_stock" -%}
     {%- assign ticket_availability = "InStock" -%}
   {%- elsif availability_raw == "pre_order" -%}
@@ -56,13 +56,13 @@
   {%- endif -%}
 {%- endif -%}
 
-{%- unless site.conference.meta.schema_org.disable -%}
+{%- unless edition_schema_org.disable -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "ConferenceEvent",
-  "name": {{ site.title | jsonify | replace: "<", "\u003c" }},
-  "description": {{ site.description | jsonify | replace: "<", "\u003c" }}{% if start_date %},
+  "name": {{ edition_title | jsonify | replace: "<", "\u003c" }},
+  "description": {{ edition_description | jsonify | replace: "<", "\u003c" }}{% if start_date %},
   "startDate": "{{ start_date }}"{% endif %}{% if end_date %},
   "endDate": "{{ end_date }}"{% endif %},
   "eventStatus": "https://schema.org/{{ event_status }}",
@@ -72,28 +72,28 @@
     "@type": "Place"{% if location_postal_address.name %},
     "name": {{ location_postal_address.name | jsonify | replace: "<", "\u003c" }}{% endif %},
     "url": "{{ location_url | prepend: site.baseurl | prepend: site.url }}"
-  }{% endunless %}{% if site.conference.meta.schema_org.has_participation_offer and site.conference.meta.schema_org.has_participation_offer.url %},
+  }{% endunless %}{% if edition_schema_org.has_participation_offer and edition_schema_org.has_participation_offer.url %},
   "hasParticipationOffer": {
     "@type": "Offer",
-    "url": "{{ site.conference.meta.schema_org.has_participation_offer.url }}"
-  }{% endif %}{% if site.conference.meta.schema_org.tickets %},
+    "url": "{{ edition_schema_org.has_participation_offer.url }}"
+  }{% endif %}{% if edition_schema_org.tickets %},
   "offers": {
-    "@type": "Offer"{% if site.conference.meta.schema_org.tickets.url %},
-    "url": "{{ site.conference.meta.schema_org.tickets.url }}"{% endif %}{% if ticket_availability %},
-    "availability": "https://schema.org/{{ ticket_availability }}"{% endif %}{% if site.conference.meta.schema_org.tickets.price %},
-    "price": "{{ site.conference.meta.schema_org.tickets.price }}"{% endif %}{% if site.conference.meta.schema_org.tickets.priceCurrency %},
-    "priceCurrency": "{{ site.conference.meta.schema_org.tickets.priceCurrency }}"{% endif %}
-  }{% endif %}{% if site.conference.meta.schema_org.organizer %},
+    "@type": "Offer"{% if edition_schema_org.tickets.url %},
+    "url": "{{ edition_schema_org.tickets.url }}"{% endif %}{% if ticket_availability %},
+    "availability": "https://schema.org/{{ ticket_availability }}"{% endif %}{% if edition_schema_org.tickets.price %},
+    "price": "{{ edition_schema_org.tickets.price }}"{% endif %}{% if edition_schema_org.tickets.priceCurrency %},
+    "priceCurrency": "{{ edition_schema_org.tickets.priceCurrency }}"{% endif %}
+  }{% endif %}{% if edition_schema_org.organizer %},
   "organizer": {
-    "@type": "Organization"{% if site.conference.meta.schema_org.organizer.name %},
-    "name": {{ site.conference.meta.schema_org.organizer.name | jsonify | replace: "<", "\u003c" }}{% endif %}{% if site.conference.meta.schema_org.organizer.url %},
-    "url": "{{ site.conference.meta.schema_org.organizer.url }}"{% endif %}
+    "@type": "Organization"{% if edition_schema_org.organizer.name %},
+    "name": {{ edition_schema_org.organizer.name | jsonify | replace: "<", "\u003c" }}{% endif %}{% if edition_schema_org.organizer.url %},
+    "url": "{{ edition_schema_org.organizer.url }}"{% endif %}
   }{% endif %}{% if sub_events != "" %},
   "subEvent": [
     {{ sub_events }}
   ]{% endif %},
-  "url": "{{ conference_url }}"{% if site.conference.meta.schema_org.img %},
-  "image": "{{ site.conference.meta.schema_org.img | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}"{% endif %}
+  "url": "{{ conference_url }}"{% if edition_schema_org.img %},
+  "image": "{{ edition_schema_org.img | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}"{% endif %}
 }
 </script>
 {%- endunless -%}

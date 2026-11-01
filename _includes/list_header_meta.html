@@ -1,16 +1,16 @@
-{%- include get_page_title.html default=site.title replace_quotes=true -%}
-{%- include get_page_description.html default=site.title replace_quotes=true -%}
+{%- include get_page_title.html default=edition_title replace_quotes=true -%}
+{%- include get_page_description.html default=edition_title replace_quotes=true -%}
 
 <meta name="description" content="{{ page_description | escape }}" />
 
 {%- comment -%} Canonical URL {%- endcomment -%}
 <link rel="canonical" href="{{ page.url | prepend: site.baseurl | prepend: site.url }}" />
 
-{% unless site.conference.meta.link_preview.disable -%}
+{% unless edition_link_preview.disable -%}
   {%- comment -%} Twitter Card tags {%- endcomment -%}
-  {%- if site.conference.meta.link_preview.img and site.conference.meta.link_preview.img.twitter %}
+  {%- if edition_link_preview.img and edition_link_preview.img.twitter %}
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="{{ site.conference.meta.link_preview.img.twitter | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}" />
+  <meta name="twitter:image" content="{{ edition_link_preview.img.twitter | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}" />
   {%- else %}
   <meta name="twitter:card" content="summary" />
   {%- endif %}
@@ -18,9 +18,9 @@
   <meta name="twitter:description" content="{{ page_description | escape }}" />
 
   {%- comment -%} Open Graph tags {%- endcomment -%}
-  <meta property="og:site_name" content="{{ site.title }}" />
-  {%- if site.conference.meta.link_preview.img and site.conference.meta.link_preview.img.open_graph %}
-  {%- assign og_image_url = site.conference.meta.link_preview.img.open_graph | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url -%}
+  <meta property="og:site_name" content="{{ edition_title }}" />
+  {%- if edition_link_preview.img and edition_link_preview.img.open_graph %}
+  {%- assign og_image_url = edition_link_preview.img.open_graph | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url -%}
   <meta property="og:image" content="{{ og_image_url }}" />
   <meta property="og:image:alt" content="{{ page_title | escape }}" />
   {%- endif %}
@@ -31,7 +31,7 @@
 {%- endunless %}
 
 {%- comment -%} Schema.org JSON-LD structured data {%- endcomment -%}
-{%- unless site.conference.meta.schema_org.disable -%}
+{%- unless edition_schema_org.disable -%}
   {%- if page.layout == 'talk' -%}
     {%- include schema_talk.html -%}
   {%- elsif page.layout == 'speaker' -%}
