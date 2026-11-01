@@ -231,7 +231,7 @@ defaults:
       layout: room
 ```
 
-To change the URL of the collection, simply edit the `permalink` property and replace the `:collection` tag (which translates to `talks`, `speakers` and `rooms`) with your desired value. Please note that the talk and speaker overview pages should reside in a folder of the same name.
+To change the URL of the collection, simply edit the `permalink` property and replace the `:collection` tag (which translates to `talks`, `speakers` and `rooms`) with your desired value.
 
 > [!NOTE]
 > Please note that while you might want to change the URLs, the name of the three collections (`talks`, `speakers` and `rooms`) is fixed and cannot be changed.
@@ -890,11 +890,6 @@ The overviews of talks and speakers, the location with its rooms, and the progra
 - `program/index.md` with `layout: program`
 
 They can be empty but should contain the `layout` property in the Front Matter header.
-
-If you choose a different location for the overview pages you must:
-
-- for the `talks` and `speakers` overview files, adapt the URL of the two collections as described further above in the section [_Configuration_](#configuration) > [_Collection URLs_](#collection-urls), and
-- for the `location` and `program` files, adapt the corresponding `url` parameter as described further above in the sections [_Configuration_](#configuration) > [_Location Page_](#location-page) and [_Configuration_](#configuration) > [_Program Page_](#program-page).
 
 Additional static pages can easily be added as files and linked to via navigation bar or main landing page.
 

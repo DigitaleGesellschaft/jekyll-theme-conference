@@ -1,0 +1,13 @@
+{%- comment -%}
+  URL of the overview page with the given layout, wherever it lives, e.g.
+  include.layout="speaker-overview" for /people/. Sets overview_url (nil
+  without such a page).
+{%- endcomment -%}
+{%- assign overview_url = nil -%}
+
+{%- for p in site.pages -%}
+  {%- if p.layout == include.layout -%}
+    {%- assign overview_url = p.url -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
