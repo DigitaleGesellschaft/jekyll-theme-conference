@@ -1,0 +1,20 @@
+{%- comment -%}
+  Root page of a site with several editions: forwards to the current one,
+  e.g. / -> /2026/
+{%- endcomment -%}
+{%- include get_edition.html -%}
+{%- assign edition_url = site.baseurl | append: edition_base | append: "/" -%}
+<!DOCTYPE html>
+<html lang="{{ site.conference.lang | default: 'en' }}">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="refresh" content="0; url={{ edition_url }}">
+  <link rel="canonical" href="{{ site.url }}{{ edition_url }}" />
+  <title>{{ edition_title | escape }}</title>
+</head>
+<body>
+  <main>
+    <h1><a href="{{ edition_url }}">{{ edition_title | escape }}</a></h1>
+  </main>
+</body>
+</html>

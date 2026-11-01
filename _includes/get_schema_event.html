@@ -1,9 +1,9 @@
 {%- comment -%}
-  Schema.org EventStatus and EventAttendanceMode of the conference, e.g.
+  Schema.org EventStatus and EventAttendanceMode of the edition, e.g.
   `event_status: postponed` sets event_status to "EventPostponed". Sets
   event_status, event_attendance_mode.
 {%- endcomment -%}
-{%- assign event_status_raw = site.conference.meta.schema_org.event_status | default: "scheduled" -%}
+{%- assign event_status_raw = edition_schema_org.event_status | default: "scheduled" -%}
 {%- if event_status_raw == "scheduled" -%}
   {%- assign event_status = "EventScheduled" -%}
 {%- elsif event_status_raw == "cancelled" -%}
@@ -16,7 +16,7 @@
   {%- assign event_status = "EventScheduled" -%}
 {%- endif -%}
 
-{%- assign event_attendance_mode_raw = site.conference.meta.schema_org.event_attendance_mode | default: "offline" -%}
+{%- assign event_attendance_mode_raw = edition_schema_org.event_attendance_mode | default: "offline" -%}
 {%- if event_attendance_mode_raw == "offline" -%}
   {%- assign event_attendance_mode = "OfflineEventAttendanceMode" -%}
 {%- elsif event_attendance_mode_raw == "online" -%}

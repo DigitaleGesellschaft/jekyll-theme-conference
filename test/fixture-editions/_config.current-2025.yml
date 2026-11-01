@@ -1,0 +1,12 @@
+# The first edition marked as current wins over the first in the list, and
+# the menu of editions is hidden
+conference:
+  navigation:
+    editions:
+      hide: true
+  editions:
+    - id: "2026"
+    - id: "2025"
+      current: true
+    - id: "2024"
+      current: true

@@ -7,6 +7,11 @@
 
 {%- for p in site.pages -%}
   {%- if p.layout == 'location' -%}
+    {%- comment -%} The page of this edition {%- endcomment -%}
+    {%- assign p_edition = p.edition | default: edition_current_id | append: "" -%}
+    {%- if edition and p_edition != edition -%}
+      {%- continue -%}
+    {%- endif -%}
     {%- assign location_page = p -%}
     {%- break -%}
   {%- endif -%}

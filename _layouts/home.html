@@ -8,16 +8,16 @@
           {%- if page.header.img_dark %}
           <source srcset="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" media="(prefers-color-scheme: dark)" />
           {%- endif %}
-          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="home-header-img" alt="{{ site.title }}" />
+          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="home-header-img" alt="{{ edition_title }}" />
         </picture>
       {% elsif page.title %}
         {{ page.title }}
       {% else %}
-        {{ site.title }}
+        {{ edition_title }}
       {% endif %}
     </h1>
-    {% if site.description != none %}
-      {{ site.description | markdownify | replace: '<p>', '<p class="lead">' }}
+    {% if edition_description != none %}
+      {{ edition_description | markdownify | replace: '<p>', '<p class="lead">' }}
     {% endif %}
 
     <hr class="my-4">
@@ -30,23 +30,20 @@
       {% for link in page.links %}
 
         {% if link.menu %}
+          {% include get_menu.html %}
+          {% unless menu_empty %}
           <div class="dropdown d-inline">
-            <a class="{{ btn_default }} dropdown-toggle" href="#" role="button" id="main-dropdown{{ forloop.index0 }}" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ link.name }}
+            <a class="{{ btn_default }} dropdown-toggle" href="#" role="button" id="main-dropdown{{ forloop.index0 }}" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
+              {{ menu_name }}
             </a>
             <div class="dropdown-menu" aria-labelledby="main-dropdown{{ forloop.index0 }}">
-              {% assign parent_link = link %}
-              {% for link in parent_link.menu %}
-                {% include get_link.html class="dropdown-item" %}
-                {{ link_tag }}
-                  {{ link.name }}
-                </a>
-              {% endfor %}
+              {% include show_menu_items.html %}
             </div>
           </div>
+          {% endunless %}
 
         {% elsif link.live %}
-          {% if site.conference.live %}
+          {% if edition_live %}
             {%- include get_live_timestamps.html -%}
 
             <span class="live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">

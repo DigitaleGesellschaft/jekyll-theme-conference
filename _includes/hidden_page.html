@@ -3,17 +3,18 @@
   page for every document, so make it a complete one that points to the home
   page
 {%- endcomment -%}
+{%- include get_edition.html -%}
 <!DOCTYPE html>
 <html lang="{{ site.conference.lang | default: 'en' }}">
 <head>
   <meta charset="utf-8" />
   <meta name="robots" content="noindex">
-  <meta http-equiv="refresh" content="0; url={{ site.baseurl }}/">
-  <title>{{ site.title | escape }}</title>
+  <meta http-equiv="refresh" content="0; url={{ site.baseurl }}{{ edition_base }}/">
+  <title>{{ edition_title | escape }}</title>
 </head>
 <body>
   <main>
-    <h1><a href="{{ site.baseurl }}/">{{ site.title | escape }}</a></h1>
+    <h1><a href="{{ site.baseurl }}{{ edition_base }}/">{{ edition_title | escape }}</a></h1>
   </main>
 </body>
 </html>

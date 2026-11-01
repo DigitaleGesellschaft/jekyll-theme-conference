@@ -45,6 +45,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Landing Page](#landing-page)
   - [Location Page](#location-page)
   - [Program Page](#program-page)
+  - [Editions](#editions)
 - [Content](#content)
   - [Schedule / Program](#schedule--program)
   - [Talks](#talks)
@@ -159,7 +160,9 @@ In this repository, you'll find the Python file `_tools/import_schedule.py`. Thi
    uv run --no-project --with-requirements _tools/requirements.txt python _tools/import_schedule.py --help
    ```
 
-Likewise, `_tools/import_resources.py` imports resources such as slides and other documents from [pretalx.com](https://pretalx.com/p/about/) via its API. It downloads all files, stores them and updates the links of the talks concerned (see [_Links_](#links)). Run it the same way, e.g., `uv run --no-project --with-requirements _tools/requirements.txt python _tools/import_resources.py --help`.
+   With several [editions](#editions), pass the edition's id, e.g. `--edition 2026`: the script then writes to `_talks/2026/`, …, `_data/programs/2026.yml` and creates the edition's overview pages.
+
+Likewise, `_tools/import_resources.py` imports resources such as slides and other documents from [pretalx.com](https://pretalx.com/p/about/) via its API. It downloads all files, stores them and updates the links of the talks concerned (see [_Links_](#links)). Run it the same way, e.g., `uv run --no-project --with-requirements _tools/requirements.txt python _tools/import_resources.py --help`. With several [editions](#editions), pass the edition's folders, e.g. `--file-folder 2026/documents/slides/ --talk-folder _talks/2026/`.
 
 ### Automatic Build
 
@@ -167,7 +170,7 @@ If you prefer not to install the full Ruby/Jekyll toolchain locally, you can lev
 
 - `build.yml`: This workflow automatically builds and optimizes the website whenever a new tag starting with `v` (e.g., `v2020.01.01`) is added. It then attaches the generated website as an archive to a release for easy download.
 - `test.yml`: This workflow automatically attempts to build the website upon a new pull request, making it suitable for use as a status check before merging.
-- `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (see [_Import from pretalx_](#import-from-pretalx)). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports.
+- `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (see [_Import from pretalx_](#import-from-pretalx)). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports. With several [editions](#editions), set its `EDITION` variable to the id of the edition to import.
 
 To get started, simply copy the desired workflow file to your repository and adapt it to your needs:
 
@@ -277,12 +280,30 @@ conference:
       - name: Program
         relative_url: /program/
       - live: true
-      - name: Previous Editions
+      - name: About  # dropdown menu
         menu:
-          - name: 2020 (current)
-            disabled: true
-          - name: 2019
-            relative_url: /2019/
+          - name: Location
+            relative_url: /location/
+          - name: Code of Conduct
+            relative_url: /code-of-conduct/
+          - name: Contact
+            absolute_url: mailto:info@example.org
+```
+
+With several [_Editions_](#editions), a menu to switch between them appears at the end of the navigation bar, labelled with the page's edition. A link with `menu: editions` places it among the links instead (see [_Links_](#links)). The `editions` property under the `navigation` property adapts it:
+
+- `name` labels the menu instead of the edition; a link's own `name` wins.
+- `hide: true` removes the menu at the end, but not a link with `menu: editions`.
+
+```yaml
+conference:
+  navigation:
+    editions:
+      name: Editions
+    links:
+      - name: Program
+        relative_url: /program/
+      - menu: editions
 ```
 
 Optionally, a logo or link of your organization hosting the conference can be shown on the right side of the navigation bar. It is activated through the `logo` property under the `navigation` property containing
@@ -502,7 +523,7 @@ conference:
 
 ### Progressive Web App (PWA)
 
-The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. Once a visitor opened the site, all pages (program, talks, speakers, rooms, …) and all files below `assets/` (stylesheets, scripts, images, fonts) are available offline. Documents (`documents/`) and map tiles are not. Pages and data are always loaded fresh when online, so schedule changes reach visitors right away (falling back to the stored copy if the network does not answer within 3 seconds, e.g. on a crowded conference Wi-Fi). When the site is rebuilt, installed apps only download what changed: the theme's bundles are versioned by their content, all other files are revalidated. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
+The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. Once a visitor opened the site, all pages (program, talks, speakers, rooms, …) and all files below `assets/` (stylesheets, scripts, images, fonts) are available offline. Documents (`documents/`, with [editions](#editions) `<id>/documents/`) and map tiles are not. Pages and data are always loaded fresh when online, so schedule changes reach visitors right away (falling back to the stored copy if the network does not answer within 3 seconds, e.g. on a crowded conference Wi-Fi). When the site is rebuilt, installed apps only download what changed: the theme's bundles are versioned by their content, all other files are revalidated. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
 
 1. Enable and optionally customize the functionality in your `_config.yml`:
    ```yaml
@@ -688,7 +709,7 @@ export default function (map) {
 }
 ```
 
-Alternatively, `assets/js/main.js` gets the map with `await window.conference.map.getMap()` after `await window.conference.awaitReady()` (resolves once the visitor loaded the map, with `null` on pages without map).
+With several [editions](#editions), each edition's location page names its own script. Alternatively, `assets/js/main.js` gets the map with `await window.conference.map.getMap()` after `await window.conference.awaitReady()` (resolves once the visitor loaded the map, with `null` on pages without map).
 
 ### Program Page
 
@@ -709,6 +730,82 @@ show_alltimes: true
 ---
 ```
 
+### Editions
+
+One site can hold several editions of a conference, e.g. the current one and past ones as archive. Every edition lives below its own folder (`/2026/`, `/2025/`, …), the site's root forwards to the current edition. Without `editions`, the site holds a single edition as described in the rest of this document.
+
+List the editions in `_config.yml` under `conference.editions`. The current edition is the first one with `current: true`, else the first one of the list. Its `id` names the edition's folders, its `name` labels it in the menu to switch between editions (default: its id).
+
+An edition inherits the site's settings and can override some of them. An override replaces the site's setting as a whole, all others are kept; e.g. an edition with its own `navigation.links` keeps the site's `navigation.logo`.
+
+| Setting | In `_config.yml` | Per edition |
+|---|---|---|
+| `title`, `description` | Jekyll, top level | yes |
+| `url`, `baseurl`, `timezone` | Jekyll, top level | no |
+| `meta.link_preview`, `meta.schema_org` | `conference` | yes |
+| `navigation.logo`, `navigation.links`, `navigation.breakpoint`, `navigation.editions` | `conference` | yes |
+| `info.bars`, `info.modals` | `conference` | yes |
+| `talks.tracks`, `talks.tags` | `conference` | yes |
+| `lang`, `custom_style`, `show_errors`, `pwa` | `conference` | no |
+| `live` | `conference` | no, current edition only |
+
+Settings in a page's Front Matter (e.g. of the [_Landing Page_](#landing-page) or the [_Program Page_](#program-page)) belong to its edition anyway, as every edition has its own pages.
+
+```yaml
+conference:
+  editions:
+    - id: "2026"
+      current: true
+      title: My Conference 2026
+    - id: "2025"
+      name: 2025 (Archive)
+      title: My Conference 2025
+      talks:
+        tracks:
+          - name: Workshops
+            color: warning
+```
+
+Mark each page and entry with its edition by folder, with one pair of `defaults` per edition (in addition to the layouts of the collections, see [_Collection URLs_](#collection-urls)):
+
+```yaml
+defaults:
+  - scope:
+      path: "2026"     # pages, e.g. 2026/program/index.md
+    values:
+      edition: "2026"
+  - scope:
+      path: "_*/2026"  # talks, speakers and rooms, e.g. _talks/2026/keynote.md
+    values:
+      edition: "2026"
+      permalink: /2026/:collection/:title/
+```
+
+With `show_errors`, pages report a page or entry whose `edition` doesn't match its folder, e.g. due to a forgotten `defaults` entry.
+
+The content of each edition is then placed as follows:
+
+```
+index.md                  layout: editions (forwards to the current edition)
+2026/index.md             layout: home
+2026/program/index.md     layout: program (likewise talks/, speakers/, location/, …)
+2026/documents/           files of links (slides/, bio/, …)
+_talks/2026/              talks (likewise _speakers/2026/, _rooms/2026/)
+_data/programs/2026.yml   schedule
+```
+
+Talks, speakers and rooms are looked up within their edition only, so names may repeat across editions (e.g. a speaker attending every year). Links with `relative_url` point into the page's edition, e.g. `/program/` to `/2026/program/`. Live indications, live streams and the offline app (PWA) cover the current edition only. To point visitors of a past edition to the current one, give it an info bar (see [_Information Bars & Modals_](#information-bars--modals)), e.g. `info: {bars: [{title: Archive, color: secondary, text: "Go to the [current edition](/2026/)."}]}` in its `editions` entry. Files below `assets/` (styles, scripts, images) and `_sass/` are shared by all editions.
+
+Other addresses, e.g. a former `/program/`, show the site's 404 page. To forward them to the current edition on an Apache web server, create a `.htaccess` file in the root of your project:
+
+```yaml
+---
+layout: htaccess
+---
+```
+
+It forwards addresses that don't exist but do exist in the current edition, e.g. `/program/` to `/2026/program/`, and follows the current edition on its own. Below the Front Matter, you can add your own rules. It assumes the site lies at `baseurl` below the web server's document root. Other hosts (e.g. GitHub Pages, Netlify, nginx) ignore the file and need their own redirects.
+
 
 ## Content
 
@@ -717,7 +814,7 @@ The schedule defining when and in which room a talk takes place is stored as a [
 
 ### Schedule / Program
 
-The schedule of the conference linking the talks with the rooms and indicating when each talk takes place and how long it lasts, is set in the `_data/program.yml` file. It contains a list of days, whereby each day contains a list of rooms, whereby each room contains a list of talks.
+The schedule of the conference linking the talks with the rooms and indicating when each talk takes place and how long it lasts, is set in the `_data/program.yml` file (with several [editions](#editions): `_data/programs/<id>.yml` per edition). It contains a list of days, whereby each day contains a list of rooms, whereby each room contains a list of talks.
 
 Each day consists of
 
@@ -861,6 +958,7 @@ Using the `file:` indicator, the
   - the site's base address followed by `/documents/slides` and the value for _talks_,
   - the site's base address followed by `/documents/bio` and the value for _speakers_, or
   - the site's base address followed by `/documents` and the value for all remaining types.
+  - With several [editions](#editions), the edition's id precedes `/documents`, e.g. `/2026/documents/slides`.
 - the link's `icon:` is set to `file-earmark-text`.
 
 Using the `video:` indicator, the
@@ -880,6 +978,7 @@ Additionally, a _navigation bar_ or _main landing page_ link can also have the f
   - If `name_inactive` is set, its value is used as a placeholder text while the conference is **not** live. If `name_inactive` is an empty string, "Live Stream" is shown instead.
   - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above).
 - `menu` containing another list of links. This creates a dropdown menu of multiple sublinks, while the URL of the parent link is ignored. The sublinks have the same properties as regular links.
+  - With `menu: editions`, the dropdown menu lists the [editions](#editions) instead. Without `name`, it is labelled with `navigation.editions.name`, else the page's edition. It is not shown with a single edition.
 
 ### Pages
 
@@ -1029,7 +1128,7 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
   - `conference.infobox`: Dismissal of information boxes and modals
   - `conference.darkmode`: Dark mode according to the system preference
   - `conference.pwa`: Service worker registration (if PWA is enabled)
-  - `conference.config`: Settings of the modules, e.g. `conference.config.baseurl`
+  - `conference.config`: Settings of the modules, e.g. `conference.config.baseurl`, `conference.config.edition` (the page's edition id, `null` without editions) and `conference.config.edition_current`
   - `conference.awaitReady()`: Promise-based initialization helper
 - `window.bootstrap`: Bootstrap components (Alert, Collapse, Dropdown, Modal, Tab)
 - `window.L`: Leaflet map library (once the map is loaded)
@@ -1136,7 +1235,7 @@ To modify the theme's source code and rebuild:
 
 ### Tests
 
-The tests build the example site in `test/fixture/` (containing edge cases such as quotes and markup in names, overnight talks, hidden entries, live streams, PWA and a map) and run on every pull request:
+The tests build the example site in `test/fixture/` (containing edge cases such as quotes and markup in names, overnight talks, hidden entries, live streams, PWA and a map) and the site with two editions in `test/fixture-editions/`, and run on every pull request:
 
 ```bash
 npm run build                         # theme bundles

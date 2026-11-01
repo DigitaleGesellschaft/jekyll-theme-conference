@@ -1,16 +1,16 @@
 {%- assign stream_label = site.data.lang[site.conference.lang].live.stream | default: "Live Stream" -%}
 
-{%- if site.conference.live.streaming.external -%}
+{%- if edition_live.streaming.external -%}
   <a
     class="{{ include.class }}"
-    href="{{ site.conference.live.streaming.external }}"
+    href="{{ edition_live.streaming.external }}"
     title="{{ stream_label }}"
   >
 {%- else -%}
   {%- if r -%}
     {%- assign data_room = r -%}
   {%- else -%}
-    {% assign data_room = sorted_rooms | first %}
+    {% assign data_room = edition_rooms | first %}
   {%- endif -%}
   <a
     class="{{ include.class }}"

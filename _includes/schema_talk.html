@@ -6,7 +6,7 @@
 {%- assign talk_found = false -%}
 {%- assign schema_data = "" -%}
 
-{%- for d in site.data.program.days -%}
+{%- for d in edition_program.days -%}
   {%- if talk_found -%}{%- break -%}{%- endif -%}
   {%- for r in d.rooms -%}
     {%- if talk_found -%}{%- break -%}{%- endif -%}
@@ -18,9 +18,9 @@
         {%- assign datetime_start = timestamp_start | date: "%Y-%m-%dT%H:%M:%S%:z" -%}
         {%- assign datetime_end = timestamp_end | date: "%Y-%m-%dT%H:%M:%S%:z" -%}
 
-        {%- assign room = site.rooms | where: 'name', r.name | first -%}
+        {%- assign room = edition_rooms | where: 'name', r.name | first -%}
         {%- assign talk_url = page.url | prepend: site.baseurl | prepend: site.url -%}
-        {%- include get_page_description.html default=site.title replace_quotes=true -%}
+        {%- include get_page_description.html default=edition_title replace_quotes=true -%}
         {%- assign talk_description = page_description | default: talk.name -%}
 
         {%- include get_schema_event.html -%}
@@ -50,7 +50,7 @@
         {%- endif -%}
 
         {%- comment -%} Get conference URL for superEvent {%- endcomment -%}
-        {%- assign conference_url = site.url | append: site.baseurl -%}
+        {%- assign conference_url = site.url | append: site.baseurl | append: edition_base -%}
 
         {%- comment -%} Find video link if present {%- endcomment -%}
         {%- assign video_url = "" -%}
@@ -63,7 +63,7 @@
           {%- endfor -%}
         {%- endif -%}
 
-        {%- unless site.conference.meta.schema_org.disable or talk.hide -%}
+        {%- unless edition_schema_org.disable or talk.hide -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -84,7 +84,7 @@
   "keywords": [{% if talk.track %}{{ talk.track | jsonify | replace: "<", "\u003c" }}{% if talk.tags and talk.tags.size > 0 %}, {% endif %}{% endif %}{% if talk.tags and talk.tags.size > 0 %}{% for tag in talk.tags %}{{ tag | jsonify | replace: "<", "\u003c" }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}]{% endif %}{% if talk.speakers.size > 0 %},
   "performer": [
     {%- for speaker_name in talk.speakers -%}
-      {%- assign speaker = site.speakers | where: 'name', speaker_name | first -%}
+      {%- assign speaker = edition_speakers | where: 'name', speaker_name | first -%}
       {%- if speaker -%}
     {
       "@type": "Person",
@@ -96,8 +96,8 @@
   "superEvent": {
     "@type": "ConferenceEvent",
     "url": "{{ conference_url }}"
-  }{% if site.conference.meta.link_preview.img and site.conference.meta.link_preview.img.open_graph %},
-  "image": "{{ site.conference.meta.schema_org.img | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}"{% endif %}{% if video_url != "" %},
+  }{% if edition_link_preview.img and edition_link_preview.img.open_graph %},
+  "image": "{{ edition_schema_org.img | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url }}"{% endif %}{% if video_url != "" %},
   "video": {
     "@type": "VideoObject",
     "name": {{ talk.name | jsonify | replace: "<", "\u003c" }},

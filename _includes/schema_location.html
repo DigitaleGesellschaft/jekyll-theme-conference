@@ -3,12 +3,12 @@
   Usage: {% include schema_location.html %}
 {%- endcomment -%}
 {%- include get_location_config.html -%}
-{%- assign conference_url = site.url | append: site.baseurl -%}
+{%- assign conference_url = site.url | append: site.baseurl | append: edition_base -%}
 {%- assign location_url = location_url | prepend: site.baseurl | prepend: site.url -%}
 
 {%- assign contains_places = "" -%}
 {%- assign first_room = true -%}
-{%- for r in sorted_rooms -%}
+{%- for r in edition_rooms -%}
   {%- unless r.hide -%}
     {%- unless first_room -%}
       {%- assign contains_places = contains_places | append: "," -%}
@@ -20,7 +20,7 @@
   {%- endunless -%}
 {%- endfor -%}
 
-{%- unless site.conference.meta.schema_org.disable or location_hide -%}
+{%- unless edition_schema_org.disable or location_hide -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

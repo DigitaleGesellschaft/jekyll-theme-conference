@@ -7,7 +7,7 @@
 
 {%- assign performer_in = "" -%}
 {%- assign first_talk = true -%}
-{%- for talk in site.talks -%}
+{%- for talk in edition_talks -%}
   {%- for speaker_name in talk.speakers -%}
     {%- if speaker_name == speaker.name -%}
       {%- unless first_talk -%}
@@ -22,7 +22,7 @@
   {%- endfor -%}
 {%- endfor -%}
 
-{%- unless site.conference.meta.schema_org.disable or speaker.hide -%}
+{%- unless edition_schema_org.disable or speaker.hide -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -36,7 +36,7 @@
       {{ performer_in }}
     {%- else -%}
       {%- comment -%} Link to conference event {%- endcomment -%}
-      {"@type":"Event","url":"{{ site.url | append: site.baseurl }}"}
+      {"@type":"Event","url":"{{ site.url | append: site.baseurl | append: edition_base }}"}
     {%- endif %}
   ]
 }

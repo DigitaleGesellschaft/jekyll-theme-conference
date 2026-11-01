@@ -1,12 +1,17 @@
 {%- comment -%}
-  URL of the overview page with the given layout, wherever it lives, e.g.
-  include.layout="speaker-overview" for /people/. Sets overview_url (nil
-  without such a page).
+  URL of the edition's overview page with the given layout, wherever it
+  lives, e.g. include.layout="speaker-overview" for /2025/people/. Sets
+  overview_url (nil without such a page).
 {%- endcomment -%}
 {%- assign overview_url = nil -%}
 
 {%- for p in site.pages -%}
   {%- if p.layout == include.layout -%}
+    {%- comment -%} The page of this edition {%- endcomment -%}
+    {%- assign p_edition = p.edition | default: edition_current_id | append: "" -%}
+    {%- if edition and p_edition != edition -%}
+      {%- continue -%}
+    {%- endif -%}
     {%- assign overview_url = p.url -%}
     {%- break -%}
   {%- endif -%}

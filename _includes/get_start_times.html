@@ -1,4 +1,4 @@
-{%- assign selected_day = site.data.program.days | where: "date", d.date | first -%}
+{%- assign selected_day = edition_program.days | where: "date", d.date | first -%}
 {%- assign start_keys = "" | split: "," -%}
 
 {%- comment -%}

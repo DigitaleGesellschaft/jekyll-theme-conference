@@ -325,6 +325,24 @@ def create_program_file(
         )
 
 
+# Overview pages of an edition, e.g. 2025/program/index.md
+EDITION_PAGES = {
+    "program": "program",
+    "talks": "talk-overview",
+    "speakers": "speaker-overview",
+}
+
+
+def create_edition_pages(output_dir: Path, edition: str) -> None:
+    for folder, layout in EDITION_PAGES.items():
+        page_path = output_dir / edition / folder / "index.md"
+        if page_path.exists():
+            continue
+
+        page_path.parent.mkdir(parents=True, exist_ok=True)
+        page_path.write_text(f"---\nlayout: {layout}\n---\n", encoding="utf-8")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Parse Frab schedule JSON and generate content files."
@@ -352,6 +370,13 @@ def main():
         help="Locale string for formatting day names (e.g., 'en_US.utf8', 'fr_FR.utf8'). "
         "Requires locale to be installed on the system.",
     )
+    parser.add_argument(
+        "--edition",
+        type=str,
+        default=None,
+        help="Edition of a site with several editions (e.g., '2025'): writes to "
+        "_talks/2025/, ..., _data/programs/2025.yml and creates its overview pages.",
+    )
 
     args = parser.parse_args()
 
@@ -371,11 +396,14 @@ def main():
 
     content = parse_frab(data)
 
-    # Define output directories
-    rooms_dir = args.output_dir / "_rooms"
-    speakers_dir = args.output_dir / "_speakers"
-    talks_dir = args.output_dir / "_talks"
+    # Define output directories, e.g. _talks/ or _talks/2025/
+    edition_dir = Path(args.edition) if args.edition else Path()
+    rooms_dir = args.output_dir / "_rooms" / edition_dir
+    speakers_dir = args.output_dir / "_speakers" / edition_dir
+    talks_dir = args.output_dir / "_talks" / edition_dir
     program_file = args.output_dir / "_data" / "program.yml"
+    if args.edition:
+        program_file = args.output_dir / "_data" / "programs" / f"{args.edition}.yml"
 
     # Create content files
     print(f"Creating room files in {rooms_dir}...")
@@ -392,6 +420,10 @@ def main():
     create_program_file(
         content["program"], program_file, args.date_format, args.lc_time
     )
+
+    if args.edition:
+        print(f"Creating missing pages of edition {args.edition}...")
+        create_edition_pages(args.output_dir, args.edition)
 
     print("Frab parsing and file creation complete.")
 

@@ -2,7 +2,8 @@
   Link tag of `link`, e.g. {% include get_link.html context="talk" %}. The
   context ("talk" with `talk`, "speaker" with `speaker`, or none) selects the
   folder of files and the title of videos. Passed explicitly: variables of
-  that name may be left over from elsewhere on the page.
+  that name may be left over from elsewhere on the page. Relative URLs and
+  files belong to the page's edition, e.g. /program/ -> /2025/program/.
 {%- endcomment -%}
 {%- assign link_valid = false -%}
 {%- if link.live -%}
@@ -32,19 +33,19 @@
   {%- assign link_href = link.absolute_url -%}
 
 {%- elsif link.relative_url -%}
-  {%- assign link_href = link.relative_url | prepend: site.baseurl -%}
+  {%- assign link_href = link.relative_url | prepend: edition_base | prepend: site.baseurl -%}
 
 {%- elsif link.file -%}
   {%- assign link_icon = link.icon | default: "file-earmark-text" -%}
 
   {%- if include.context == "talk" -%}
-    {%- assign link_href = link.file | prepend: '/documents/slides/' | prepend: site.baseurl -%}
+    {%- assign link_href = link.file | prepend: '/slides/' | prepend: edition_documents | prepend: site.baseurl -%}
 
   {%- elsif include.context == "speaker" -%}
-    {%- assign link_href = link.file | prepend: '/documents/bio/' | prepend: site.baseurl -%}
+    {%- assign link_href = link.file | prepend: '/bio/' | prepend: edition_documents | prepend: site.baseurl -%}
 
   {%- else -%}
-    {%- assign link_href = link.file | prepend: '/documents/' | prepend: site.baseurl -%}
+    {%- assign link_href = link.file | prepend: '/' | prepend: edition_documents | prepend: site.baseurl -%}
 
   {%- endif -%}
 
@@ -139,7 +140,7 @@
     >
 
   {%- elsif link.live -%}
-    {%- if site.conference.live and site.conference.live.streaming.enable -%}
+    {%- if edition_live and edition_live.streaming.enable -%}
       {% include get_link_tag_streaming.html class=link_class %}
     {%- else-%}
       <a

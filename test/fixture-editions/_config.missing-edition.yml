@@ -1,0 +1,24 @@
+# Pages, speakers and rooms of 2025 lose their `edition` (only 2026 is set
+# via defaults), talks of 2025 get the wrong one
+defaults:
+  - scope:
+      type: talks
+    values:
+      layout: talk
+  - scope:
+      type: speakers
+    values:
+      layout: speaker
+  - scope:
+      type: rooms
+    values:
+      layout: room
+  - scope:
+      path: "_*/2026"
+    values:
+      edition: "2026"
+      permalink: /2026/:collection/:title/
+  - scope:
+      path: "_talks/2025"
+    values:
+      edition: "2026"

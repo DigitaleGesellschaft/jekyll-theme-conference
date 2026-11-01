@@ -11,7 +11,7 @@
   {{ content }}
 
   {%- assign nbr_streams = 0 -%}
-  {%- for room in sorted_rooms -%}
+  {%- for room in edition_rooms -%}
     {%- if room.live -%}
       {%- assign mod_nbr_streams = nbr_streams | modulo: 2 -%}
       {%- if mod_nbr_streams == 0 %}
@@ -24,7 +24,7 @@
         {%- include get_room_live_href.html %}
         {%- comment -%} Loaded by the embed module, after consent {%- endcomment %}
         <iframe data-embed-src="{{ room_live_href | escape }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ site.data.lang[site.conference.lang].live.stream | default: 'Live Stream' }}: {{ room.name | escape }}" aria-labelledby="stream-heading-{{ forloop.index }}"></iframe>
-        {%- include embed_consent.html href=room_live_href click_to_load=site.conference.live.streaming.click_to_load %}
+        {%- include embed_consent.html href=room_live_href click_to_load=edition_live.streaming.click_to_load %}
       </div>
     </div>
 

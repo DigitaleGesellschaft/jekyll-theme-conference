@@ -1,0 +1,4 @@
+---
+layout: htaccess
+---
+ErrorDocument 404 /conf/404.html

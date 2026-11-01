@@ -1,4 +1,4 @@
-{%- assign nbr_days = site.data.program.days | size -%}
+{%- assign nbr_days = edition_program.days | size -%}
 {%- if nbr_days > 1 and day_abbr -%}
   {%- assign time_pronoun = site.data.lang[site.conference.lang].pronoun.on_ | default: "on" -%}
 {%- else -%}

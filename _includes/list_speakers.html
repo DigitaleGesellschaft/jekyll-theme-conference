@@ -1,5 +1,5 @@
 {% for speaker_name in talk.speakers -%}
-  {%- assign speaker = site.speakers | where: 'name', speaker_name | first -%}
+  {%- assign speaker = edition_speakers | where: 'name', speaker_name | first -%}
 
   {%- if include.text_only -%}
     {{- speaker_name -}}

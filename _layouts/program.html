@@ -1,6 +1,7 @@
+{%- include get_edition.html -%}
 {%- include get_location_config.html -%}
 {% include header.html %}
-  {% assign nbr_days = site.data.program.days | size -%}
+  {% assign nbr_days = edition_program.days | size -%}
 
   <h1 class="display-5 {% if nbr_days > 1 -%} mb-2 {%- else -%} mb-4 {%- endif %} text-break">
     {%- if page.title -%}
@@ -15,7 +16,7 @@
   {%- if nbr_days > 1 %}
     <nav aria-label="{{ site.data.lang[site.conference.lang].program.days | default: 'Conference days' }}">
       <ul class="nav nav-pills justify-content-center mb-3" id="program-tabs" role="tablist">
-        {%- for d in site.data.program.days -%}
+        {%- for d in edition_program.days -%}
           {%- include get_day_hash.html %}
           <li class="nav-item" role="presentation">
             <a class="nav-link {%- if forloop.index == 1 %} active{% endif %}" id="tab-{{ day_hash }}" data-bs-toggle="tab" {%- if d.date -%}{%- include get_talk_timestamp.html %} data-ts="{{ timestamp_start }}" {%- endif %} href="#{{ day_hash }}" role="tab" aria-controls="{{ day_hash }}" aria-selected="{% if forloop.index == 1 %}true{% else %}false{% endif %}">{{ day_name | escape }}</a>
@@ -26,7 +27,7 @@
     <div class="tab-content" id="day-content">
   {%- endif %}
 
-  {%- for d in site.data.program.days -%}
+  {%- for d in edition_program.days -%}
     {%- if nbr_days > 1 -%}
       {%- include get_day_hash.html %}
       <div class="tab-pane {%- if forloop.index == 1 %} active{% endif %}" id="{{ day_hash }}" role="tabpanel" aria-labelledby="tab-{{ day_hash }}">
@@ -39,7 +40,7 @@
             <th scope="col" class="program-time text-center" aria-label="{{ site.data.lang[site.conference.lang].program.time | default: 'Time' }}">#</th>
             {%- assign nbr_rooms = d.rooms | size -%}
             {%- for r in d.rooms -%}
-              {%- assign room = site.rooms | where: 'name', r.name | first %}
+              {%- assign room = edition_rooms | where: 'name', r.name | first %}
               <th scope="col" class="program-talk text-center" id="room-{{ day_hash }}-{{ forloop.index }}">
                 {%- if room.hide or location_hide -%}
                   {{- room.name | escape -}}
@@ -126,11 +127,11 @@
               {%- endif %}
 
               {%- for r in d.rooms -%}
-                {%- assign room = site.rooms | where: 'name', r.name | first -%}
+                {%- assign room = edition_rooms | where: 'name', r.name | first -%}
 
                 {%- assign active_talk = false -%}
                 {%- for t in r.talks -%}
-                  {%- assign talk = site.talks | where: 'name', t.name | first -%}
+                  {%- assign talk = edition_talks | where: 'name', t.name | first -%}
 
                   {%- include get_talk_time.html -%}
 
@@ -232,10 +233,10 @@
     </div>
   {%- endif -%}
 
-  {%- if site.conference.talks.tracks %}
+  {%- if edition_tracks %}
     {%- unless page.hide_legend -%}
       <h2 class="h5 mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h2>
-      {%- for track_prop in site.conference.talks.tracks %}
+      {%- for track_prop in edition_tracks %}
         <div class="d-block d-sm-inline-block m-1 p-1 ps-2 pe-2 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-start border-4 border-{{ track_prop.color | default: 'light' }}-subtle fw-normal">
           {{- track_prop.name | escape -}}
         </div>

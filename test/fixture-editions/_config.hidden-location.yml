@@ -1,0 +1,36 @@
+# 2025 hides its location page and with it the links to its rooms
+defaults:
+  - scope:
+      type: talks
+    values:
+      layout: talk
+  - scope:
+      type: speakers
+    values:
+      layout: speaker
+  - scope:
+      type: rooms
+    values:
+      layout: room
+  - scope:
+      path: "2026"
+    values:
+      edition: "2026"
+  - scope:
+      path: "_*/2026"
+    values:
+      edition: "2026"
+      permalink: /2026/:collection/:title/
+  - scope:
+      path: "2025"
+    values:
+      edition: "2025"
+  - scope:
+      path: "_*/2025"
+    values:
+      edition: "2025"
+      permalink: /2025/:collection/:title/
+  - scope:
+      path: "2025/location"
+    values:
+      hide: true

@@ -1,4 +1,4 @@
-{%- include get_rooms.html -%}
+{%- include get_edition.html -%}
 <!DOCTYPE html>
 <html lang="{{ site.conference.lang | default: 'en' }}">
 
@@ -10,7 +10,7 @@
   <title>
     {{- page_title | escape -}}
     {%- unless page_title == empty %} - {% endunless -%}
-    {{- site.title -}}
+    {{- edition_title -}}
   </title>
   {% include list_header_meta.html %}
 
@@ -47,11 +47,12 @@
     <!-- navigation bar (web only): -->
     {%- include navbar.html -%}
 
-    {%- unless page.url == "/" -%}
+    {%- assign home_url = edition_base | append: "/" -%}
+    {%- unless page.url == home_url -%}
       <!-- site title (print only): -->
       <div class="container d-none d-print-block mt-4 mb-4">
         <h1 class="display-4">
-          {{ site.title }}
+          {{ edition_title }}
         </h1>
       </div>
     {%- endunless -%}

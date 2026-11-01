@@ -7,6 +7,15 @@ For detailed documentation, see the [README](README.md).
 
 ## Upgrade from v4 to v5
 
+v5 adds support for several editions of a conference in one site. Sites with a single edition keep working unchanged.
+
+### Language File
+
+The internationalization file gained the `editions.title` string (`version: 13`).
+
+**Action:**
+- If you keep your own copy of `_data/lang.yml`, replace it with the [current version](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/blob/main/_data/lang.yml).
+
 ### New Checks
 
 With `show_errors`, the theme now also reports leftovers of v3: icons that are no [Bootstrap Icons](https://icons.getbootstrap.com/) (e.g. Font Awesome's `file-alt`, which render nothing), `map.enable` and Font Awesome markup in content (e.g. `<i class="fas fa-video"></i>`).
@@ -27,6 +36,23 @@ A location page with `hide: true` only redirects to the home page, like hidden t
 
 **Action:**
 - None, unless the page should stay visible: then remove `hide` and its room links show again.
+
+### Editions (optional)
+
+Merge the sites of several editions (e.g. one repository per year) into one site, see [Editions](README.md#editions). Per edition:
+1. Add it to `conference.editions` with its `defaults`.
+2. Move its talks, speakers and rooms to `_talks/<id>/`, `_speakers/<id>/` and `_rooms/<id>/`.
+3. Move `_data/program.yml` to `_data/programs/<id>.yml`.
+4. Move its pages (`index.md`, `program/`, `talks/`, …) and `documents/` to `<id>/`.
+
+Finally add an `index.md` with `layout: editions` and forward the former sites' addresses to `/<id>/`. On Apache, a `.htaccess` with `layout: htaccess` forwards former addresses of the current edition, e.g. `/program/` (see [Editions](README.md#editions)). Sites with a single edition need no change.
+
+When merging, mind that:
+- The site's `baseurl` drops the edition (e.g. `/2026` → `""`). Relative paths in content, such as `../assets/images/logo.svg`, then point into the edition's folder: use `{{ site.baseurl }}/assets/…` instead.
+- `assets/`, `_sass/`, `manifest.json` and `sw.js` are shared by all editions. Markers on an edition's map go into a script named by its location page (`map.script`, see [Location Page](README.md#location-page)).
+- The edition menu replaces self-made menus of previous editions: remove them.
+- Import tools need the edition: set `EDITION` in the `schedule.yml` workflow, pass `--edition <id>` to `import_schedule.py` and the edition's folders to `import_resources.py` (e.g. `--file-folder <id>/documents/slides/ --talk-folder _talks/<id>/`).
+- Keep settings shared by all editions (e.g. `navigation.logo`) in `conference` and add only the differing ones to an edition, see [Editions](README.md#editions).
 
 
 ## Upgrade from v3 to v4

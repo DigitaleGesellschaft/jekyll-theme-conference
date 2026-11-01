@@ -1,8 +1,8 @@
 {%- comment -%}
-  Resolved once per page: get_talk_time.html includes this for every talk
-  and time step of the program
+  Resolved once per page and edition: get_talk_time.html includes this for
+  every talk and time step of the program
 {%- endcomment -%}
-{%- assign program_config_key = page.url -%}
+{%- assign program_config_key = page.url | append: "|" | append: edition -%}
 {%- unless program_config_resolved == program_config_key -%}
   {%- assign program_page = nil -%}
   {%- assign program_url = nil -%}
@@ -10,6 +10,11 @@
 
   {%- for p in site.pages -%}
     {%- if p.layout == 'program' -%}
+      {%- comment -%} The page of this edition {%- endcomment -%}
+      {%- assign p_edition = p.edition | default: edition_current_id | append: "" -%}
+      {%- if edition and p_edition != edition -%}
+        {%- continue -%}
+      {%- endif -%}
       {%- assign program_page = p -%}
       {%- break -%}
     {%- endif -%}

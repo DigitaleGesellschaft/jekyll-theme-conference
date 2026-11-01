@@ -1,0 +1,30 @@
+{%- comment -%}
+  Dropdown menu of a link: `menu` lists its links, or is "editions" for the
+  menu to switch between editions. Input: link, or include.menu instead
+  (e.g. menu="editions"). Sets:
+  - menu_links: the list of links, or "editions"
+  - menu_name: the link's `name`; for editions, else `navigation.editions.name`,
+    else the page's edition id (e.g. "2026")
+  - menu_label: accessible name of the toggle if its text alone is unclear,
+    e.g. "Edition: 2026" (else nil)
+  - menu_empty: true for editions with fewer than two editions
+{%- endcomment -%}
+{%- assign menu_links = link.menu -%}
+{%- assign menu_name = link.name -%}
+{%- if include.menu -%}
+  {%- assign menu_links = include.menu -%}
+  {%- assign menu_name = nil -%}
+{%- endif -%}
+{%- assign menu_label = nil -%}
+{%- assign menu_empty = false -%}
+
+{%- if menu_links == "editions" -%}
+  {%- if site.conference.editions.size < 2 -%}
+    {%- assign menu_empty = true -%}
+  {%- endif -%}
+  {%- assign menu_name = menu_name | default: edition_nav_editions.name -%}
+  {%- unless menu_name -%}
+    {%- assign menu_name = edition -%}
+    {%- assign menu_label = site.data.lang[site.conference.lang].editions.title | default: "Edition" | append: ": " | append: edition -%}
+  {%- endunless -%}
+{%- endif -%}

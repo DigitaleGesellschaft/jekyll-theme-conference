@@ -12,7 +12,7 @@
 
   <div class="col-count-1 col-count-md-2 col-count-lg-3">
     {% assign cur_letter = false %}
-    {% assign speakers = site.speakers | sort_natural: 'last_name' %}
+    {% assign speakers = edition_speakers | sort_natural: 'last_name' %}
     {% for speaker in speakers %}
 
       {% assign last_letter = speaker.last_name | slice: 0 | capitalize %}

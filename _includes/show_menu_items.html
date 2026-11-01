@@ -1,0 +1,19 @@
+{%- comment -%}
+  Items of a dropdown menu (see get_menu.html, sets menu_links): its links,
+  or each edition's home page, marking the page's edition
+{%- endcomment -%}
+{%- if menu_links == "editions" -%}
+  {%- for e in site.conference.editions -%}
+    {%- assign e_id = e.id | append: "" %}
+    <a class="dropdown-item{% if e_id == edition %} active{% endif %}" href="{{ site.baseurl }}/{{ e_id }}/"{% if e_id == edition %} aria-current="true"{% endif %}>
+      {{ e.name | default: e_id }}
+    </a>
+  {%- endfor -%}
+{%- else -%}
+  {%- for link in menu_links -%}
+    {%- include get_link.html class="dropdown-item" %}
+    {{ link_tag }}
+      {{ link.name }}
+    </a>
+  {%- endfor -%}
+{%- endif -%}

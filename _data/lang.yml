@@ -1,4 +1,4 @@
-version: 12
+version: 13
 
 en:
   pronoun:
@@ -62,6 +62,8 @@ en:
   talk:
     overview: Talks
     title: Talk
+  editions:
+    title: Edition
 
 de:
   pronoun:
@@ -125,6 +127,8 @@ de:
   talk:
     overview: Vorträge
     title: Vortrag
+  editions:
+    title: Ausgabe
 
 fr:
   pronoun:
@@ -188,6 +192,8 @@ fr:
   talk:
     overview: Présentations
     title: Présentation
+  editions:
+    title: Édition
 
 pt:
   pronoun:
@@ -251,3 +257,5 @@ pt:
   talk:
     overview: Apresentações
     title: Apresentação
+  editions:
+    title: Edição

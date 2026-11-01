@@ -7,6 +7,10 @@ on:
     branches:
       - main
 
+env:
+  # Several editions: id of the edition to import, e.g. "2026"
+  EDITION: ""
+
 jobs:
   build:
     name: Update Schedule and Content
@@ -29,12 +33,18 @@ jobs:
         run: |
           sudo locale-gen de_CH.UTF-8
           source .venv/bin/activate
-          python _tools/import_schedule.py --lc-time de_CH.UTF-8 schedule.json
+          python _tools/import_schedule.py --lc-time de_CH.UTF-8 ${EDITION:+--edition "$EDITION"} schedule.json
 
+      # With an edition, the program and the edition's pages, e.g.
+      # _data/programs/2026.yml and 2026/program/index.md
       - name: Delete source and add generated files
         run: |
           git rm schedule.json
-          git add --ignore-errors _data/program.yml _rooms _speakers _talks
+          if [ -n "$EDITION" ]; then
+            git add --ignore-errors "_data/programs/$EDITION.yml" "$EDITION" _rooms _speakers _talks
+          else
+            git add --ignore-errors _data/program.yml _rooms _speakers _talks
+          fi
 
       - name: Add new commit and push
         run: |

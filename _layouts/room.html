@@ -1,3 +1,4 @@
+{%- include get_edition.html -%}
 {%- include get_location_config.html -%}
 {%- assign this_room = page -%}
 
@@ -19,7 +20,7 @@
   {{ content }}
 
   {% assign room_talks = false %}
-  {% for d in site.data.program.days %}
+  {% for d in edition_program.days %}
     {% include get_day_hash.html %}
     {% for r in d.rooms %}
       {% if this_room.name == r.name and r.talks.size > 0 %}
@@ -36,7 +37,7 @@
 
         <table class="mw-100">
         {%- for t in r.talks -%}
-          {%- assign talk = site.talks | where: 'name', t.name | first -%}
+          {%- assign talk = edition_talks | where: 'name', t.name | first -%}
           {%- include show_talk_listed.html hide_day=true -%}
         {%- endfor -%}
         </table>

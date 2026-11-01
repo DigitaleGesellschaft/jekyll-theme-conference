@@ -17,7 +17,7 @@ npm run dev          # Vite dev server
 gem build *.gemspec  # package the gem (run npm run build first)
 ```
 
-Tests build the fixture site `test/fixture/` (edge cases: quotes/markup in names, overnight talks, hidden entries, live, PWA, map) and run in CI (`.github/workflows/test.yml`):
+Tests build the fixture site `test/fixture/` (edge cases: quotes/markup in names, overnight talks, hidden entries, live, PWA, map) and `test/fixture-editions/` (two editions, `editions.test.js`) and run in CI (`.github/workflows/test.yml`):
 
 ```bash
 (cd test/fixture && bundle install)  # once

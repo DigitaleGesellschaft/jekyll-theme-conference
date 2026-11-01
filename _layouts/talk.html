@@ -32,7 +32,7 @@
   </p>
 
   <div class="mb-3 p-0">
-    {% for d in site.data.program.days -%}
+    {% for d in edition_program.days -%}
       {%- include get_day_hash.html -%}
       {%- for r in d.rooms -%}
         {%- for t in r.talks -%}

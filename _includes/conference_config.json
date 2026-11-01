@@ -5,6 +5,8 @@
 {%- assign lang = site.data.lang[site.conference.lang] -%}
 {
     "baseurl": {{ site.baseurl | jsonify }},
+    "edition": {{ edition | jsonify }},
+    "edition_current": {{ edition_current | jsonify }},
 
     {%- include get_location_config.html -%}
     {%- if location_map %}
@@ -18,11 +20,11 @@
     },
     {%- endif %}
 
-    {% if site.conference.live -%}
+    {% if edition_live -%}
     "live": {
         "timezone": {{ site.timezone | jsonify }},
         "days": [
-            {%- for d in site.data.program.days %}
+            {%- for d in edition_program.days %}
             {
                 {%- include get_day_hash.html %}
                 "name": {{ day_name | jsonify }},
@@ -33,11 +35,11 @@
     },
     {%- endif %}
 
-    {% if site.conference.live.streaming.enable -%}
+    {% if edition_live.streaming.enable -%}
     "stream": {
-        "pause": {{ site.conference.live.streaming.pause | default: 60 }},
-        "prepend": {{ site.conference.live.streaming.prepend | default: 5 }},
-        "extend": {{ site.conference.live.streaming.extend | default: 5 }}
+        "pause": {{ edition_live.streaming.pause | default: 60 }},
+        "prepend": {{ edition_live.streaming.prepend | default: 5 }},
+        "extend": {{ edition_live.streaming.extend | default: 5 }}
     },
     {%- endif %}
 
