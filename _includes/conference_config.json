@@ -12,6 +12,9 @@
         "map_provider": {{ location_map.map_provider | default: 'OpenStreetMap.Mapnik' | jsonify }},
         "home_coord": [{{ location_map.home_coord | default: '47.3744489, 8.5410422' }}],
         "default_zoom": {{ location_map.default_zoom | default: 17 }}
+        {%- if location_map.script %},
+        "script": {{ location_map.script | prepend: '/assets/js/' | prepend: site.baseurl | jsonify }}
+        {%- endif %}
     },
     {%- endif %}
 

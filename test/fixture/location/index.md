@@ -10,6 +10,7 @@ postal_address:
 map:
   home_coord: "47.3744489, 8.5410422"
   default_zoom: 17
+  script: maps/venue.js
 ---
 
 How to get here.

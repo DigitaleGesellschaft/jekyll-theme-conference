@@ -9,11 +9,18 @@ test("map loads third-party tiles only after consent click", async ({ page }) =>
   await expect(page.locator("#map .leaflet-container, #map.leaflet-container")).toHaveCount(0);
   expect(log.external).toEqual([]);
 
-  // Map API resolves once the visitor loads the map
-  const mapPromise = page.evaluate(() => window.conference.map.getMap().then((map) => !!map));
+  // Map API resolves once the visitor loads the map, after the location
+  // page's map script (`map.script`) added its marker
+  const mapPromise = page.evaluate(() =>
+    window.conference.map.getMap().then((map) => {
+      let markers = 0;
+      map.eachLayer((layer) => (markers += layer instanceof L.CircleMarker));
+      return markers;
+    }),
+  );
   await page.getByRole("button", { name: "Load map" }).click();
 
-  expect(await mapPromise).toBe(true);
+  expect(await mapPromise).toBe(1);
   await expect(page.locator("#map.leaflet-container")).toHaveCount(1);
   expect(log.external.length).toBeGreaterThan(0);
   expect(log.failed).toEqual([]);

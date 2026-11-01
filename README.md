@@ -641,6 +641,7 @@ Location settings are configured directly in the Front Matter of the location pa
   - `default_zoom`: Initial zoom level (e.g., `17`)
   - `map_provider`: Tile provider (default: `"OpenStreetMap.Mapnik"`)
   - `click_to_load`: Load the map only after the visitor's consent (default: `true`)
+  - `script`: Script adapting the map, e.g. adding markers (see below)
 - `postal_address`: Postal address displayed on the location page and used in schema.org structured data. Can contain:
   - `name`: Venue name (e.g., "Zentralwäscherei")
   - `street`: Street address (e.g., "Neue Hard 12")
@@ -672,30 +673,22 @@ map:
 Welcome to our conference venue!
 ```
 
-The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. The map object can be customized by adding additional layers with markers, text, or shapes. To do so, edit the `assets/js/main.js` file in your project:
-
-1. The conference JavaScript bundle (`conference.bundle.js`) is automatically loaded and provides all necessary libraries
-2. Await the initialization of the theme's object using `window.conference.awaitReady()`
-3. Fetch the map object and verify it is set (while the JavaScript code is executed on each page, the map object will only exist on the location page). The returned promise resolves once the visitor loaded the map.
-4. Modify the map.
-
-The following example for `assets/js/main.js` adds a simple marker to the map:
+The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. To add markers, text, or shapes, name a script in `map.script`, relative to `assets/js/` (e.g. `script: maps/venue.js` for `assets/js/maps/venue.js`). Once the visitor loaded the map, the theme calls the script's default export with the map object (Leaflet is available as `L`):
 
 ```javascript
-window.conference.awaitReady().then(async () => {
-    const map = await window.conference.map.getMap();
-
-    if (map) {
-        let main_station = L.marker([47.37785, 8.54035], {
-            icon: L.divIcon({
-                className: '',
-                html: '<span class="bi bi-train-front" aria-hidden="true"></span> Main Station',
-                iconSize: [120, 56]
-            })
-        }).addTo(map);
-    }
-});
+// assets/js/maps/venue.js
+export default function (map) {
+    L.marker([47.37785, 8.54035], {
+        icon: L.divIcon({
+            className: '',
+            html: '<span class="bi bi-train-front" aria-hidden="true"></span> Main Station',
+            iconSize: [120, 56]
+        })
+    }).addTo(map);
+}
 ```
+
+Alternatively, `assets/js/main.js` gets the map with `await window.conference.map.getMap()` after `await window.conference.awaitReady()` (resolves once the visitor loaded the map, with `null` on pages without map).
 
 ### Program Page
 
