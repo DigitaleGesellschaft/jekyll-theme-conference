@@ -1,0 +1,20 @@
+{%- comment -%}
+  Rooms by `order`, else as they first appear in the program (e.g. the
+  program's room columns), followed by rooms not in it. Sets sorted_rooms.
+{%- endcomment -%}
+{%- assign sorted_rooms = site.rooms -%}
+{%- assign rooms_with_order = sorted_rooms | where_exp: "r", "r.order != nil" -%}
+{%- if rooms_with_order.size > 0 -%}
+  {%- assign sorted_rooms = sorted_rooms | sort: "order", "last" -%}
+{%- else -%}
+  {%- assign rooms_by_program = "" | split: "" -%}
+  {%- for d in site.data.program.days -%}
+    {%- for r in d.rooms -%}
+      {%- assign room = sorted_rooms | where: "name", r.name | first -%}
+      {%- if room -%}
+        {%- assign rooms_by_program = rooms_by_program | push: room -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- assign sorted_rooms = rooms_by_program | concat: sorted_rooms | uniq -%}
+{%- endif -%}

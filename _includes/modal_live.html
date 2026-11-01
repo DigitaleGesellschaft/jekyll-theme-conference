@@ -33,14 +33,14 @@
       </div>
 
       <div class="modal-footer justify-content-around">
-        {%- for room in site.rooms -%}
+        {%- for room in sorted_rooms -%}
           <button type="button" id="stream-button{{ forloop.index }}" class="btn btn-outline-primary d-none d-sm-inline" data-room="{{ room.name | escape }}" aria-pressed="false"{% unless room.live %} disabled{% endunless %}>
             {{ room.name | escape }}
           </button>
         {%- endfor %}
         <div class="w-100 d-block d-sm-none">
           <select class="form-select" id="stream-select" aria-label="{{ site.data.lang[site.conference.lang].location.rooms | default: 'Rooms' }}">
-            {%- for room in site.rooms -%}
+            {%- for room in sorted_rooms -%}
               <option value="{{ forloop.index }}"{% unless room.live %} disabled{% endunless %}>{{ room.name | escape }}</option>
             {%- endfor %}
           </select>

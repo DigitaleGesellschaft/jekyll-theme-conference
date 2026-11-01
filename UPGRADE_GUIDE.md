@@ -14,6 +14,13 @@ With `show_errors`, the theme now also reports leftovers of v3: icons that are n
 **Action:**
 - Fix the reported leftovers, see [Icons](#icons) and [Map & Location Configuration](#map--location-configuration).
 
+### Room Order
+
+Rooms without `order` are listed as they first appear in the program instead of alphabetically. Rooms with `order` are sorted by it without `sort_by: order` in `_config.yml`.
+
+**Action:**
+- None, unless you relied on the alphabetical order: then set `order`.
+
 
 ## Upgrade from v3 to v4
 

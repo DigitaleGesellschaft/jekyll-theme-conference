@@ -1,7 +1,7 @@
 {%- include get_location_config.html -%}
 {% assign all_hidden = true -%}
 {% unless location_hide %}
-  {% for room in site.rooms %}
+  {% for room in sorted_rooms %}
     {% unless room.hide %}
       {% assign all_hidden = false %}
       {% break %}
@@ -21,7 +21,7 @@
           {%- endif %}
         </a>
       </li>
-      {% for room in site.rooms -%}
+      {% for room in sorted_rooms -%}
         <li class="nav-item">
           {% if room.hide or location_hide -%}
             <span class="nav-item nav-link disabled" aria-disabled="true">

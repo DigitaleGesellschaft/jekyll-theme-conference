@@ -1,0 +1,5 @@
+# Jekyll sorts the rooms by name ("Room <B>" first); the theme still lists
+# them by their `order`
+collections:
+  rooms:
+    sort_by: name

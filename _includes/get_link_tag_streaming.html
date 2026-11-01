@@ -10,7 +10,7 @@
   {%- if r -%}
     {%- assign data_room = r -%}
   {%- else -%}
-    {% assign data_room = site.rooms | sort: "order" | first %}
+    {% assign data_room = sorted_rooms | first %}
   {%- endif -%}
   <a
     class="{{ include.class }}"

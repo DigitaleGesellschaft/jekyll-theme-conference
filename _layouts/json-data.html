@@ -1,8 +1,9 @@
+{%- include get_rooms.html -%}
 {
     {% if site.conference.live and site.conference.live.streaming.enable -%}
     "rooms": {
     {%- assign first_room = true -%}
-    {%- for room in site.rooms %}
+    {%- for room in sorted_rooms %}
         {%- if room.live -%}
             {%- include get_room_live_href.html -%}
             {%- unless room_live_href -%}
@@ -38,7 +39,7 @@
 
     "talks": {
     {%- assign first_room = true -%}
-    {%- for room in site.rooms -%}
+    {%- for room in sorted_rooms -%}
         {%- assign first_talk = true -%}
         {%- for d in site.data.program.days -%}
             {%- for r in d.rooms -%}

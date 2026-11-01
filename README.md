@@ -731,7 +731,7 @@ Each room consists of
 - the room's `name` (must correspond to one of the room identifiers), and
 - a list of talks (`talks`) which also can be empty `[]`.
 
-The order of the rooms in the list defines the order of the rooms as shown in the schedule on the program page. For the live-streaming or the room overview the order of the rooms is alphabetical but can be adapted via the [main configuration file](https://jekyllrb.com/docs/collections/#sort-by-front-matter-key).
+The order of the rooms in the list defines the order of the rooms as shown in the schedule on the program page. Elsewhere (e.g. live streams or the room links on the location page), rooms follow their first appearance in the program, unless they set `order` (see [_Rooms_](#rooms)).
 
 Each talk consists of
 
@@ -823,7 +823,8 @@ links:
 Each room is represented by a file in the `_rooms/` directory. It must begin with valid [YAML Front Matter](https://jekyllrb.com/docs/frontmatter/) containing
 
 - the room's `name`
-- optionally, `hide: true` if the room's page should not be linked to, and
+- optionally, `hide: true` if the room's page should not be linked to,
+- optionally, its position (`order`, a number) where rooms are listed outside the program, otherwise rooms follow their first appearance in the program, and
 - optionally under the `live` property, a URL pointing to a live stream for the given room during the conference (see the section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above), either:
   - as an `absolute_url`, or
   - a `relative_url`.
