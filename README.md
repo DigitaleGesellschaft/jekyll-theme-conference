@@ -146,6 +146,9 @@ To update the theme, change the version tag in the `remote_theme` value (e.g., `
 Add the talks, speakers, rooms and the schedule of your conference as described in the section [_Content_](#content), and adapt the theme as described in the section [_Configuration_](#configuration). The tools below import them or build the site for you.
 
 > [!TIP]
+> To get started quickly, use the [template repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference-template): its `main` branch is an empty site ready to be filled, its `demo` branch showcases the theme with a fictional conference.
+
+> [!TIP]
 > Please note that the generated website can be large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g., with [minify](https://github.com/tdewolff/minify)).
 
 ### Import from pretalx
