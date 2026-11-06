@@ -258,8 +258,43 @@ describe("Program options", () => {
     assert.match(cell, /rowspan="2"/);
   });
 
+  test("rows carry their start for the line at the current time", () => {
+    const table = read("program/index.html").split("</table>")[0];
+    const times = [...table.matchAll(/<tr class="h-100" data-time="(\d+)">/g)].map(([, time]) => Number(time));
+
+    // Friday 09:00 - 01:00 (+1 day), 09:00 Zurich = 08:00 UTC
+    assert.equal(times.length, 64);
+    assert.equal(times[0], utc(2026, 2, 20, 8));
+    assert.equal(times[1], utc(2026, 2, 20, 8, 15));
+    assert.equal(times.at(-1), utc(2026, 2, 20, 23, 45));
+    assert.match(read("program/index.html"), /<div class="program-now bg-danger d-none" data-end="(\d+)" aria-hidden="true">/);
+    assert.equal(Number(read("program/index.html").match(/class="program-now[^"]*" data-end="(\d+)"/)[1]), utc(2026, 2, 21, 0));
+  });
+
+  test("time_steps start: rows carry their start, also after midnight", () => {
+    const table = read("variants/start/index.html").split("</table>")[0];
+    const times = [...table.matchAll(/data-time="(\d+)"/g)].map(([, time]) => Number(time));
+
+    assert.deepEqual(times, [utc(2026, 2, 20, 8), utc(2026, 2, 20, 8, 30), utc(2026, 2, 20, 21)]);
+  });
+
   test("talk pages link to the main program page", () => {
     assert.match(read("talks/opening_welcome/index.html"), /href="\/conf\/program\/"/);
+  });
+});
+
+describe("Line at the current time disabled", () => {
+  let siteOff;
+
+  before(() => {
+    siteOff = buildSite("_config.now-line-off.yml");
+  });
+
+  test("program has neither the line nor row times", () => {
+    const html = readFileSync(join(siteOff, "program/index.html"), "utf8");
+
+    assert.doesNotMatch(html, /program-now|<tr[^>]*data-time|"nowline"/);
+    assert.match(html, /live-show/);
   });
 });
 

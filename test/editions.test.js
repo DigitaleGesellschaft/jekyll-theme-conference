@@ -184,7 +184,8 @@ describe("editions", () => {
 
   test("live features are limited to the current edition", () => {
     assert.match(read(sites.main, "2026/program/index.html"), /id="stream-modal"/);
-    assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /id="stream-modal"|live-show/);
+    assert.match(read(sites.main, "2026/program/index.html"), /class="program-now bg-warning d-none"/);
+    assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /id="stream-modal"|live-show|program-now|"nowline"/);
   });
 
   test("data.json, site.json and manifest serve the current edition", () => {

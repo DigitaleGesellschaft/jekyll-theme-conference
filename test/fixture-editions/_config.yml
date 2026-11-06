@@ -57,6 +57,8 @@ conference:
   show_errors: true
 
   live:
+    now_line:
+      color: warning
     streaming:
       enable: true
 

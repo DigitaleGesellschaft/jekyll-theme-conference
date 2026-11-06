@@ -25,6 +25,7 @@ import { createInfoboxModule } from "./modules/infobox.js";
 import { createLiveModule } from "./modules/live.js";
 import { createMapModule } from "./modules/map.js";
 import { createModalModule } from "./modules/modal.js";
+import { createNowLineModule } from "./modules/nowline.js";
 import { createProgramModule } from "./modules/program.js";
 import { createPWAModule } from "./modules/pwa.js";
 import { createStreamModule } from "./modules/stream.js";
@@ -43,6 +44,7 @@ const modules = {
   embed: createEmbedModule(),
   program: createProgramModule(),
   live,
+  nowline: createNowLineModule(clock),
   stream: createStreamModule(clock, live, conference.config),
   map: createMapModule(),
   pwa: createPWAModule(conference.config),
