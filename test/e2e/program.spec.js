@@ -74,6 +74,27 @@ test("sticky header follows a horizontal scroll made while it was hidden", async
   await expect.poll(() => sticky.evaluate((el) => el.scrollLeft)).toBe(scrollLeft);
 });
 
+test("time column covers the talks scrolled below it, also in rows without label", async ({ page }) => {
+  await page.setViewportSize({ width: 400, height: 800 });
+  await page.goto("program/#fr");
+  await ready(page);
+
+  const container = page.locator("#fr .program-table-container");
+  await container.evaluate((el) => (el.scrollLeft = el.scrollWidth));
+
+  // Whether each row's time cell is at the left edge of the table,
+  // scrolling the page only (scrollIntoView would also scroll the table back)
+  const covered = await container.evaluate((el) =>
+    [...el.querySelectorAll("tbody tr")].map((row) => {
+      window.scrollTo({ top: row.getBoundingClientRect().top + window.scrollY - window.innerHeight / 2, behavior: "instant" });
+      const x = el.getBoundingClientRect().left + 10;
+      const y = row.getBoundingClientRect().top + row.getBoundingClientRect().height / 2;
+      return document.elementFromPoint(x, y)?.closest("th, td") === row.querySelector("th");
+    }),
+  );
+  expect(covered.every(Boolean)).toBe(true);
+});
+
 test("line at the current time follows the clock, behind talks", async ({ page }) => {
   await page.goto("program/#fr");
   await ready(page);
