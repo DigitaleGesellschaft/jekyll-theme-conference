@@ -41,15 +41,52 @@
   td.program-talk[rowspan] {
     border-width: 0 0 2px 0.25rem !important;
     border-bottom-color: var(--bs-body-bg) !important;
+
+    // Above the line at the current time
+    position: relative;
+    z-index: 1;
   }
 }
 
 .program-table-container {
+  position: relative;
   scroll-snap-type: x mandatory;
   scroll-padding-left: 4rem;
 
   tbody .program-talk {
     scroll-snap-align: start;
+  }
+}
+
+// Line at the current time (_js/modules/nowline.js): above empty cells,
+// below talks and the time column
+.program-now {
+  position: absolute;
+  height: 2px;
+  margin-top: -1px;
+  pointer-events: none;
+
+  @media print {
+    display: none;
+  }
+}
+
+// Its part in the time column: a box like the line (a gradient would be
+// rounded to pixels differently), behind the label (z-index -1 within the
+// sticky cell)
+.program-now-cell::after {
+  content: "";
+  position: absolute;
+  top: var(--program-now-top);
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: var(--program-now-height);
+  background-color: var(--program-now-color);
+  pointer-events: none;
+
+  @media print {
+    display: none;
   }
 }
 

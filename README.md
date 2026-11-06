@@ -502,7 +502,10 @@ This can be further extended if some talks have an associated live stream: When 
 
 To activate these functionalities, each day in the `program.yml` file must contain a `date` property (see section [_Content_](#content) > [Schedule / Program](#schedule--program) below) and the `live` property has to be set in the configuration file containing
 
-- optionally, how long a pause between two consecutive talks has to be for the live indication to pause (`stop`, default: `240`), and
+- optionally, how long a pause between two consecutive talks has to be for the live indication to pause (`stop`, default: `240`),
+- optionally, under the `now_line` property, a horizontal line in the program marking the current time (behind the talks):
+  - if it is shown (`enable`, default: `true`), and
+  - its colour, one of Bootstrap's theme colours (`color`, default: `danger`), and
 - optionally, under the `streaming` property:
   - if streaming should be enabled (`enable`), and if enabled
   - how many minutes the stream goes active before a talk (`prepend`, default: `5`),
@@ -515,6 +518,9 @@ To activate these functionalities, each day in the `program.yml` file must conta
 conference:
   live:
     stop: 240 # in minutes
+    now_line:
+      enable: true
+      color: danger # Bootstrap theme colour, e.g. primary
     streaming:
       enable: true
       pause: 60 # in minutes
@@ -1127,6 +1133,7 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
   - `conference.modal`: Links (e.g. videos) in a modal
   - `conference.embed`: Embedded streams on the stream overview page
   - `conference.live`: Live indications following the program (incl. `setTime("09:30", "2026-02-20")`, `getTime()`, `pauseTime()`, `continueTime()`, `resetTime()` for testing)
+  - `conference.nowline`: Line at the current time in the program
   - `conference.stream`: Live stream modal
   - `conference.infobox`: Dismissal of information boxes and modals
   - `conference.darkmode`: Dark mode according to the system preference
@@ -1187,6 +1194,7 @@ _js/
     ├── live.js        # Live indications
     ├── map.js         # Map functionality
     ├── modal.js       # Links in a modal
+    ├── nowline.js     # Line at the current time in the program
     ├── program.js     # Program days as tabs
     ├── pwa.js         # Service worker registration
     └── stream.js      # Live stream modal

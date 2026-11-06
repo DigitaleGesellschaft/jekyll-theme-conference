@@ -35,6 +35,10 @@
     },
     {%- endif %}
 
+    {% if edition_live and edition_live.now_line.enable != false -%}
+    "nowline": {},
+    {%- endif %}
+
     {% if edition_live.streaming.enable -%}
     "stream": {
         "pause": {{ edition_live.streaming.pause | default: 60 }},

@@ -1,0 +1,5 @@
+# Disables the line at the current time in the program
+conference:
+  live:
+    now_line:
+      enable: false

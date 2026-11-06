@@ -1,6 +1,11 @@
 {%- include get_edition.html -%}
 {%- include get_location_config.html -%}
 {% include header.html %}
+  {%- comment -%} Line at the current time (_js/modules/nowline.js) {%- endcomment -%}
+  {%- assign now_line = false -%}
+  {%- if edition_live and edition_live.now_line.enable != false -%}
+    {%- assign now_line = true -%}
+  {%- endif %}
   {% assign nbr_days = edition_program.days | size -%}
 
   <h1 class="display-5 {% if nbr_days > 1 -%} mb-2 {%- else -%} mb-4 {%- endif %} text-break">
@@ -57,6 +62,16 @@
         <tbody>
           {%- include get_day_time.html -%}
 
+          {%- if now_line and d.date -%}
+            {%- comment -%} End of the day's last row, e.g. 01:00 the next day (minutes may be 60 after rounding) {%- endcomment -%}
+            {%- assign now_hour = day_end_hour | prepend: "0" | slice: -2, 2 -%}
+            {%- assign now_offset = day_end_day | times: 1440 | plus: day_end_min | times: 60 -%}
+            {%- assign now_end = d.date | append: "T" | append: now_hour | append: ":00:00" | date: "%s" | plus: now_offset -%}
+
+            {%- comment -%} Rows before the day's start lie after midnight {%- endcomment -%}
+            {%- assign now_start_min = day_start_hour | times: 60 | plus: day_start_min -%}
+          {%- endif -%}
+
           {%- if day_end_day > day_start_day -%}
             {%- assign day_end_hour = day_end_day | minus: day_start_day | times: 24 | plus: day_end_hour -%}
           {%- endif -%}
@@ -85,7 +100,20 @@
               {% assign current_min = current_time | split: ":" | last | plus: 0 %}
             {%- endunless -%}
 
-            <tr class="h-100">
+            {%- if now_line and d.date -%}
+              {%- comment -%} Start of the row, e.g. 09:15 {%- endcomment -%}
+              {%- assign now_hour = current_hour | prepend: "0" | slice: -2, 2 -%}
+              {%- assign now_min = current_min | prepend: "0" | slice: -2, 2 -%}
+              {%- assign now_row_min = current_hour | times: 60 | plus: current_min -%}
+              {%- assign now_days = day_start_day -%}
+              {%- if now_row_min < now_start_min -%}
+                {%- assign now_days = now_days | plus: 1 -%}
+              {%- endif -%}
+              {%- assign now_offset = now_days | times: 86400 -%}
+              {%- assign now_row = d.date | append: "T" | append: now_hour | append: ":" | append: now_min | append: ":00" | date: "%s" | plus: now_offset -%}
+            {%- endif %}
+
+            <tr class="h-100" {%- if now_line and d.date %} data-time="{{ now_row }}" {%- endif %}>
 
               {%- if current_min == 0 or page.time_steps == "start" -%}
                 <th scope="row" class="program-time text-end">
@@ -223,6 +251,9 @@
           {%- endfor %}
         </tbody>
       </table>
+      {%- if now_line and d.date %}
+      <div class="program-now bg-{{ edition_live.now_line.color | default: 'danger' }} d-none" data-end="{{ now_end }}" aria-hidden="true"></div>
+      {%- endif %}
     </div>
 
     {%- if nbr_days > 1 %}
