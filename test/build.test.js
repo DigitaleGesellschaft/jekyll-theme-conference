@@ -201,9 +201,9 @@ describe("Escaping of user content", () => {
 });
 
 describe("Program options", () => {
-  // Time labels of the first day, e.g. ["09:00", ":30", "10:00", ...]
-  const timeLabels = (path) => {
-    const table = read(path).split("</table>")[0];
+  // Time labels of a day (default: the first), e.g. ["09:00", ":30", "10:00", ...]
+  const timeLabels = (path, day = 0) => {
+    const table = read(path).split("</table>")[day];
     const visible = table.replace(/<span class="visually-hidden">[^<]*<\/span>/g, "");
     return [...visible.matchAll(/<th scope="row"[^>]*>([^<]*)<\/th>/g)].map(([, label]) => label.trim());
   };
@@ -215,6 +215,14 @@ describe("Program options", () => {
     assert.equal(labels.length, 64);
     assert.deepEqual(labels.filter(Boolean).slice(0, 3), ["9:00", "10:00", "11:00"]);
     assert.match(read("program/index.html"), /<h2[^>]*>Caption<\/h2>/);
+  });
+
+  test("rooms without talks do not extend the day", () => {
+    // Saturday: Room C without talks first, Room A 09:00 - 10:45
+    const labels = timeLabels("program/index.html", 1);
+
+    assert.deepEqual(labels.filter(Boolean), ["9:00", "10:00"]);
+    assert.equal(labels.length, 7);
   });
 
   test("time_steps start: one row per talk start, hide_legend", () => {

@@ -25,6 +25,8 @@ days:
     abbr: Sa
     date: "2026-02-21"
     rooms:
+      - name: Room C
+        talks: []
       - name: Room A
         talks:
           - name: Second Day
