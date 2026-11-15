@@ -47,6 +47,10 @@
             {%- for r in d.rooms -%}
               {%- assign room = edition_rooms | where: 'name', r.name | first %}
               <th scope="col" class="program-talk text-center" id="room-{{ day_hash }}-{{ forloop.index }}">
+                {%- comment -%} Shown and operated by _js/modules/program.js, a visual aid only {%- endcomment -%}
+                <button type="button" class="program-arrow program-arrow-prev btn btn-link text-reset p-1" tabindex="-1" aria-hidden="true" hidden>
+                  {%- include icon.html name="chevron-left" -%}
+                </button>
                 {%- if room.hide or location_hide -%}
                   {{- room.name | escape -}}
                 {%- else -%}
@@ -54,6 +58,9 @@
                     {{- room.name | escape -}}
                   </a>
                 {%- endif -%}
+                <button type="button" class="program-arrow program-arrow-next btn btn-link text-reset p-1" tabindex="-1" aria-hidden="true" hidden>
+                  {%- include icon.html name="chevron-right" -%}
+                </button>
               </th>
             {%- endfor %}
           </tr>

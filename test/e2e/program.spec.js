@@ -74,6 +74,95 @@ test("sticky header follows a horizontal scroll made while it was hidden", async
   await expect.poll(() => sticky.evaluate((el) => el.scrollLeft)).toBe(scrollLeft);
 });
 
+test("arrows in the room headers scroll to the hidden rooms", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("program/");
+  await ready(page);
+
+  const rooms = page.locator(".tab-pane.active .program-table-container thead .program-talk");
+  const container = page.locator(".tab-pane.active .program-table-container");
+  const prev = (i) => rooms.nth(i).locator(".program-arrow-prev");
+  const next = (i) => rooms.nth(i).locator(".program-arrow-next");
+
+  // First room in view: only a way forward
+  await expect(prev(0)).toBeHidden();
+  await expect(next(0)).toBeVisible();
+
+  // Next: the second (last) room scrolls fully into view
+  await next(0).click();
+  await expect
+    .poll(() => container.evaluate((el) => Math.round(el.scrollWidth - el.clientWidth - el.scrollLeft)))
+    .toBe(0);
+  await expect(prev(1)).toBeVisible();
+  await expect(next(1)).toBeHidden();
+
+  // Previous: back to the start
+  await prev(1).click();
+  await expect(next(0)).toBeVisible();
+  await expect(prev(0)).toBeHidden();
+
+  // Only a visual aid: screen readers and keyboard skip the arrows
+  await expect(container.locator(".program-arrow").first()).toHaveAttribute("aria-hidden", "true");
+  await expect(container.locator(".program-arrow").first()).toHaveAttribute("tabindex", "-1");
+});
+
+test("arrows in the sticky header copy match the table's", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("program/#fr");
+  await ready(page);
+
+  const sticky = page.locator("#fr [data-program-sticky]");
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect(sticky).toBeVisible();
+
+  await sticky.locator(".program-arrow-next").first().click();
+  await expect(sticky.locator(".program-talk").nth(1).locator(".program-arrow-prev")).toBeVisible();
+  await expect(sticky.locator(".program-arrow-next").first()).toBeHidden();
+});
+
+test("arrows stay in view on the smallest screens", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("program/");
+  await ready(page);
+
+  const container = page.locator(".tab-pane.active .program-table-container");
+  const timeCell = container.locator("thead .program-time");
+  const next = container.locator(".program-arrow-next:visible");
+  const prev = container.locator(".program-arrow-prev:visible");
+
+  // Arrow between the time column and the container's right edge
+  const inView = async (arrow) => {
+    const box = await arrow.boundingBox();
+    const time = await timeCell.boundingBox();
+    const area = await container.boundingBox();
+    return box.x >= time.x + time.width && box.x + box.width <= area.x + area.width;
+  };
+
+  await expect.poll(() => inView(next)).toBe(true);
+
+  // Both arrows show on the first room while it scrolls out of view
+  await next.click();
+  await expect(next).toHaveCount(0);
+  await expect.poll(() => inView(prev)).toBe(true);
+});
+
+test("rooms keep their width on common phones", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto("program/");
+  await ready(page);
+
+  const room = page.locator(".tab-pane.active .program-table-container thead .program-talk").first();
+  expect(await room.evaluate((el) => el.offsetWidth)).toBe(240);
+});
+
+test("no arrows when all rooms fit", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.goto("program/#fr");
+  await ready(page);
+
+  await expect(page.locator("#fr .program-arrow:visible")).toHaveCount(0);
+});
+
 test("time column covers the talks scrolled below it, also in rows without label", async ({ page }) => {
   await page.setViewportSize({ width: 400, height: 800 });
   await page.goto("program/#fr");

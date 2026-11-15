@@ -97,9 +97,81 @@ export function createProgramModule() {
     });
   };
 
+  // Arrows in the room headers: on the outermost fully visible rooms if
+  // more rooms are scrolled out of view on that side, scroll by one room
+  const initRoomArrows = () => {
+    document.querySelectorAll('.program-table-container').forEach(container => {
+      const timeCell = container.querySelector('thead .program-time');
+      const rooms = [...container.querySelectorAll('thead .program-talk')];
+      if (!timeCell || !rooms.length) return;
+
+      // Same arrows in the sticky header copy (initStickyHeaders)
+      const sticky = container.previousElementSibling?.matches('[data-program-sticky]') ? container.previousElementSibling : null;
+      const headers = [container, sticky].filter(Boolean);
+
+      // Visible area: right of the sticky time column (tolerance for fractional pixels)
+      const EPSILON = 1;
+      const visibleArea = () => ({
+        start: timeCell.getBoundingClientRect().right - EPSILON,
+        end: container.getBoundingClientRect().right + EPSILON,
+      });
+
+      // Indices of the first and last fully visible room, e.g. [1, 1] on a
+      // phone after one step; the first partly visible one if none fits
+      const visibleRooms = () => {
+        const { start, end } = visibleArea();
+        const fits = rooms.flatMap((room, i) => {
+          const { left, right } = room.getBoundingClientRect();
+          return left >= start && right <= end ? [i] : [];
+        });
+        if (fits.length) return [fits[0], fits[fits.length - 1]];
+
+        const partly = Math.max(0, rooms.findIndex(room => room.getBoundingClientRect().right > start));
+        return [partly, partly];
+      };
+
+      const update = () => {
+        const { start, end } = visibleArea();
+        const [first, last] = visibleRooms();
+        const hiddenBefore = rooms[0].getBoundingClientRect().left < start;
+        const hiddenAfter = rooms[rooms.length - 1].getBoundingClientRect().right > end;
+
+        headers.forEach(header => {
+          header.querySelectorAll('thead .program-talk').forEach((room, i) => {
+            room.querySelector('.program-arrow-prev').hidden = !(hiddenBefore && i === first);
+            room.querySelector('.program-arrow-next').hidden = !(hiddenAfter && i === last);
+          });
+        });
+      };
+
+      // Align the neighbouring room with the time column
+      const scrollToRoom = (index) => {
+        const room = rooms[Math.min(Math.max(index, 0), rooms.length - 1)];
+        const left = room.getBoundingClientRect().left - timeCell.getBoundingClientRect().right;
+        container.scrollBy({ left, behavior: 'smooth' });
+      };
+
+      headers.forEach(header => {
+        header.addEventListener('click', (event) => {
+          const arrow = event.target.closest('.program-arrow');
+          if (!arrow) return;
+
+          const [first] = visibleRooms();
+          scrollToRoom(arrow.classList.contains('program-arrow-prev') ? first - 1 : first + 1);
+        });
+      });
+
+      container.addEventListener('scroll', update, { passive: true });
+
+      // Also on resize and when a hidden day's tab is shown
+      new ResizeObserver(update).observe(container);
+    });
+  };
+
   const init = () => {
     initTabs();
     initStickyHeaders();
+    initRoomArrows();
   };
 
   return { init };

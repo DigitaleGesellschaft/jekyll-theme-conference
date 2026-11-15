@@ -35,6 +35,14 @@
     width: 15rem;
     min-width: 15rem;
     max-width: 15rem;
+
+    // Smallest screens (e.g. 320px): narrower, to fit next to the time
+    // column (screen − time column, gaps and page padding); equals 15rem at 21rem
+    @media (max-width: 21rem) {
+      width: calc(100vw - 6rem);
+      min-width: calc(100vw - 6rem);
+      max-width: calc(100vw - 6rem);
+    }
   }
 
   // Talk: coloured bar on the left, gap to a directly following talk
@@ -45,6 +53,31 @@
     // Above the line at the current time
     position: relative;
     z-index: 1;
+  }
+
+  // Room: space for the arrows to rooms scrolled out of view
+  th.program-talk {
+    position: relative;
+    padding-inline: 1.75rem;
+  }
+
+  .program-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+
+    @media print {
+      display: none;
+    }
+  }
+
+  .program-arrow-prev {
+    left: 0;
+  }
+
+  .program-arrow-next {
+    right: 0;
   }
 }
 
