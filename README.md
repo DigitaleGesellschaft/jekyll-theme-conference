@@ -298,6 +298,8 @@ With several [_Editions_](#editions), a menu to switch between them appears at t
 - `name` labels the menu instead of the edition; a link's own `name` wins.
 - `hide: true` removes the menu at the end, but not a link with `menu: editions`.
 
+The installed app (see [_Progressive Web App (PWA)_](#progressive-web-app-pwa)) serves the current edition, so its navigation bar has no menu at the end. A link with `menu: editions` still shows there; add `pwa_hide: true` to it to keep the app on the current edition.
+
 ```yaml
 conference:
   navigation:

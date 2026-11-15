@@ -173,6 +173,13 @@ describe("editions", () => {
     assert.deepEqual(hrefs(menu), [`${BASEURL}/2026/`, `${BASEURL}/2025/`]);
   });
 
+  test("installed app shows the switcher only where a link places it", () => {
+    const pwaNavbar = (path) => read(sites.main, path).match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
+
+    assert.doesNotMatch(pwaNavbar("2026/index.html"), /dropup/);
+    assert.match(pwaNavbar("2025/index.html"), /id="navbar-dropup0"[^>]*>\s*Years\s*<\/a>/);
+  });
+
   test("switcher can be hidden", () => {
     assert.doesNotMatch(read(sites.current2025, "2025/index.html"), /navbar-editions/);
   });
