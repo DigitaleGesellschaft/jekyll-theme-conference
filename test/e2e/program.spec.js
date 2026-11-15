@@ -84,20 +84,47 @@ test("arrows in the room headers scroll to the hidden rooms", async ({ page }) =
   const prev = (i) => rooms.nth(i).locator(".program-arrow-prev");
   const next = (i) => rooms.nth(i).locator(".program-arrow-next");
 
-  // First room in view: only a way forward
+  const padding = () => rooms.first().evaluate((el) => getComputedStyle(el).paddingLeft);
+
+  // Click once the smooth scroll (and snapping) has stopped: a moving arrow
+  // misses the click
+  const SETTLE_MS = 100;
+  const click = async (arrow) => {
+    await container.evaluate(
+      (el, delay) =>
+        new Promise((resolve) => {
+          let last = -1;
+          const check = () => (el.scrollLeft === last ? resolve() : ((last = el.scrollLeft), setTimeout(check, delay)));
+          check();
+        }),
+      SETTLE_MS,
+    );
+    await arrow.click();
+  };
+
+  // First room in view: only a way forward, space for the arrows
   await expect(prev(0)).toBeHidden();
   await expect(next(0)).toBeVisible();
+  expect(await padding()).toBe("28px");
 
-  // Next: the second (last) room scrolls fully into view
-  await next(0).click();
+  // Next: the second room moves to the time column, rooms on both sides
+  await click(next(0));
+  await expect(prev(1)).toBeVisible();
+  await expect(next(1)).toBeVisible();
+
+  // Next: the third (last) room scrolls fully into view
+  await click(next(1));
   await expect
     .poll(() => container.evaluate((el) => Math.round(el.scrollWidth - el.clientWidth - el.scrollLeft)))
     .toBe(0);
-  await expect(prev(1)).toBeVisible();
-  await expect(next(1)).toBeHidden();
+  await expect(prev(2)).toBeVisible();
+  await expect(next(2)).toBeHidden();
 
-  // Previous: back to the start
-  await prev(1).click();
+  // Previous twice: back to the start
+  await click(prev(2));
+  await expect(prev(1)).toBeVisible();
+  await expect(next(1)).toBeVisible();
+  await click(prev(1));
   await expect(next(0)).toBeVisible();
   await expect(prev(0)).toBeHidden();
 
@@ -127,23 +154,24 @@ test("arrows stay in view on the smallest screens", async ({ page }) => {
 
   const container = page.locator(".tab-pane.active .program-table-container");
   const timeCell = container.locator("thead .program-time");
-  const next = container.locator(".program-arrow-next:visible");
-  const prev = container.locator(".program-arrow-prev:visible");
+  const room = (i) => container.locator("thead .program-talk").nth(i);
 
   // Arrow between the time column and the container's right edge
   const inView = async (arrow) => {
     const box = await arrow.boundingBox();
+    if (!box) return false;
+
     const time = await timeCell.boundingBox();
     const area = await container.boundingBox();
     return box.x >= time.x + time.width && box.x + box.width <= area.x + area.width;
   };
 
-  await expect.poll(() => inView(next)).toBe(true);
+  await expect.poll(() => inView(room(0).locator(".program-arrow-next"))).toBe(true);
 
-  // Both arrows show on the first room while it scrolls out of view
-  await next.click();
-  await expect(next).toHaveCount(0);
-  await expect.poll(() => inView(prev)).toBe(true);
+  // Second room: arrows on both sides
+  await room(0).locator(".program-arrow-next").click();
+  await expect.poll(() => inView(room(1).locator(".program-arrow-prev"))).toBe(true);
+  await expect.poll(() => inView(room(1).locator(".program-arrow-next"))).toBe(true);
 });
 
 test("rooms keep their width on common phones", async ({ page }) => {
@@ -161,6 +189,10 @@ test("no arrows when all rooms fit", async ({ page }) => {
   await ready(page);
 
   await expect(page.locator("#fr .program-arrow:visible")).toHaveCount(0);
+
+  // Room names use the full width
+  const padding = await page.locator("#fr thead .program-talk").first().evaluate((el) => getComputedStyle(el).paddingLeft);
+  expect(padding).toBe("8px");
 });
 
 test("time column covers the talks scrolled below it, also in rows without label", async ({ page }) => {

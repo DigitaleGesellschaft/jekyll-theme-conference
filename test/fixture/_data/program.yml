@@ -16,6 +16,11 @@ days:
           - name: Talk with "quotes" <script>alert(1)</script>
             time_start: "09:30"
             time_end: "11:00"
+      - name: Room C
+        talks:
+          - name: Workshop
+            time_start: "09:30"
+            time_end: "11:00"
   - name: Saturday
     abbr: Sa
     date: "2026-02-21"

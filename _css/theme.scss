@@ -55,9 +55,13 @@
     z-index: 1;
   }
 
-  // Room: space for the arrows to rooms scrolled out of view
+  // Room: holds the arrows to rooms scrolled out of view
   th.program-talk {
     position: relative;
+  }
+
+  // Space for them only while rooms overflow (_js/modules/program.js)
+  .program-arrows & th.program-talk {
     padding-inline: 1.75rem;
   }
 

@@ -3,6 +3,9 @@
  */
 const SECONDS_PER_DAY = 86400;
 
+// Tolerance for fractional pixels when comparing positions
+const EPSILON = 1;
+
 export function createProgramModule() {
   // Replace the hash without scrolling or adding a history entry
   const updateHash = (hash) => {
@@ -109,8 +112,7 @@ export function createProgramModule() {
       const sticky = container.previousElementSibling?.matches('[data-program-sticky]') ? container.previousElementSibling : null;
       const headers = [container, sticky].filter(Boolean);
 
-      // Visible area: right of the sticky time column (tolerance for fractional pixels)
-      const EPSILON = 1;
+      // Visible area: right of the sticky time column
       const visibleArea = () => ({
         start: timeCell.getBoundingClientRect().right - EPSILON,
         end: container.getBoundingClientRect().right + EPSILON,
@@ -137,6 +139,8 @@ export function createProgramModule() {
         const hiddenAfter = rooms[rooms.length - 1].getBoundingClientRect().right > end;
 
         headers.forEach(header => {
+          // Space for the arrows only while needed (theme.scss)
+          header.classList.toggle('program-arrows', hiddenBefore || hiddenAfter);
           header.querySelectorAll('thead .program-talk').forEach((room, i) => {
             room.querySelector('.program-arrow-prev').hidden = !(hiddenBefore && i === first);
             room.querySelector('.program-arrow-next').hidden = !(hiddenAfter && i === last);

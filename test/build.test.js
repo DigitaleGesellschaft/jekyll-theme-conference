@@ -309,7 +309,7 @@ describe("Room order", () => {
     const location = readFileSync(join(siteByName, "location/index.html"), "utf8");
     const rooms = [...location.matchAll(/href="[^"]*\/rooms\/(\w+)\/"/g)].map(([, room]) => room);
 
-    assert.deepEqual([...new Set(rooms)], ["room_a", "room_b"]);
+    assert.deepEqual([...new Set(rooms)], ["room_a", "room_b", "room_c"]);
   });
 });
 
