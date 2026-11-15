@@ -1,4 +1,4 @@
-version: 13
+version: 14
 
 en:
   pronoun:
@@ -64,6 +64,19 @@ en:
     title: Talk
   editions:
     title: Edition
+  pwa:
+    subtitle: Program offline on your home screen
+    install: Install
+    title: Install the app
+    ios:
+      share: "Tap the Share button in the browser's toolbar (if hidden, behind “⋯”)."
+      add: "Scroll down and tap “Add to Home Screen”."
+      confirm: "Tap “Add”."
+    android:
+      menu: "Tap the menu button “⋮” in the browser's toolbar."
+      add: "Tap “Install app” or “Add to Home screen”."
+      confirm: "Tap “Install”."
+    done: Then open the app from its icon, also offline.
 
 de:
   pronoun:
@@ -129,6 +142,19 @@ de:
     title: Vortrag
   editions:
     title: Ausgabe
+  pwa:
+    subtitle: Programm offline als App
+    install: Installieren
+    title: App installieren
+    ios:
+      share: "Tippen Sie in der Symbolleiste des Browsers auf „Teilen“ (falls nicht sichtbar, hinter „⋯“)."
+      add: "Scrollen Sie nach unten und tippen Sie auf „Zum Home-Bildschirm“."
+      confirm: "Tippen Sie auf „Hinzufügen“."
+    android:
+      menu: "Tippen Sie in der Symbolleiste des Browsers auf das Menü „⋮“."
+      add: "Tippen Sie auf „App installieren“ oder „Zum Startbildschirm hinzufügen“."
+      confirm: "Tippen Sie auf „Installieren“."
+    done: Öffnen Sie die App danach über ihr Symbol, auch offline.
 
 fr:
   pronoun:
@@ -194,6 +220,19 @@ fr:
     title: Présentation
   editions:
     title: Édition
+  pwa:
+    subtitle: Programme hors ligne sur l'écran d'accueil
+    install: Installer
+    title: Installer l'application
+    ios:
+      share: "Touchez le bouton « Partager » dans la barre d'outils du navigateur (s'il est masqué, sous « ⋯ »)."
+      add: "Faites défiler vers le bas et touchez « Sur l'écran d'accueil »."
+      confirm: "Touchez « Ajouter »."
+    android:
+      menu: "Touchez le menu « ⋮ » dans la barre d'outils du navigateur."
+      add: "Touchez « Installer l'application » ou « Ajouter à l'écran d'accueil »."
+      confirm: "Touchez « Installer »."
+    done: Ouvrez ensuite l'application depuis son icône, même hors ligne.
 
 pt:
   pronoun:
@@ -259,3 +298,16 @@ pt:
     title: Apresentação
   editions:
     title: Edição
+  pwa:
+    subtitle: Programação offline na tela inicial
+    install: Instalar
+    title: Instalar o app
+    ios:
+      share: "Toque no botão “Compartilhar” na barra de ferramentas do navegador (se não estiver visível, em “⋯”)."
+      add: "Role para baixo e toque em “Adicionar à Tela de Início”."
+      confirm: "Toque em “Adicionar”."
+    android:
+      menu: "Toque no menu “⋮” na barra de ferramentas do navegador."
+      add: "Toque em “Instalar app” ou “Adicionar à tela inicial”."
+      confirm: "Toque em “Instalar”."
+    done: Depois, abra o app pelo ícone, também offline.

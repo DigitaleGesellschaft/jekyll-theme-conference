@@ -188,6 +188,11 @@ describe("editions", () => {
     assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /id="stream-modal"|live-show|program-now|"nowline"/);
   });
 
+  test("install banner is limited to the current edition", () => {
+    assert.match(read(sites.main, "2026/program/index.html"), /id="pwa-banner"[\s\S]*id="pwa-install"/);
+    assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /pwa-banner|pwa-install/);
+  });
+
   test("data.json, site.json and manifest serve the current edition", () => {
     const data = readJson(sites.main, "assets/js/data.json");
     const { pages } = readJson(sites.main, "assets/js/site.json");

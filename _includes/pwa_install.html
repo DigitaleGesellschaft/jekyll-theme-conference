@@ -1,0 +1,26 @@
+{%- comment -%}
+  Steps to install the app (PWA), opened by _includes/pwa_banner.html.
+  _js/modules/pwa.js shows the steps of the visitor's platform.
+{%- endcomment -%}
+{%- if site.conference.pwa.enable and site.conference.pwa.install_banner != false and edition_current -%}
+  {%- assign lang = site.data.lang[site.conference.lang] %}
+  <div class="offcanvas offcanvas-bottom h-auto rounded-top-4 d-print-none" tabindex="-1" id="pwa-install" aria-labelledby="pwa-install-label">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title h5" id="pwa-install-label">{{ lang.pwa.title | default: "Install the app" }}</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{{ lang.close | default: 'Close' }}"></button>
+    </div>
+    <div class="offcanvas-body pt-0">
+      <ol class="pwa-install-steps list-unstyled" data-pwa-steps="ios">
+        <li><span>{{ lang.pwa.ios.share | default: "Tap the Share button in the browser's toolbar (if hidden, behind “⋯”)." }}</span>{% include icon.html name="box-arrow-up" %}</li>
+        <li><span>{{ lang.pwa.ios.add | default: "Scroll down and tap “Add to Home Screen”." }}</span>{% include icon.html name="plus-square" %}</li>
+        <li><span>{{ lang.pwa.ios.confirm | default: "Tap “Add”." }}</span>{% include icon.html name="check2" %}</li>
+      </ol>
+      <ol class="pwa-install-steps list-unstyled" data-pwa-steps="android">
+        <li><span>{{ lang.pwa.android.menu | default: "Tap the menu button “⋮” in the browser's toolbar." }}</span>{% include icon.html name="three-dots-vertical" %}</li>
+        <li><span>{{ lang.pwa.android.add | default: "Tap “Install app” or “Add to Home screen”." }}</span>{% include icon.html name="download" %}</li>
+        <li><span>{{ lang.pwa.android.confirm | default: "Tap “Install”." }}</span>{% include icon.html name="check2" %}</li>
+      </ol>
+      <p class="text-body-secondary mb-0">{{ lang.pwa.done | default: "Then open the app from its icon, also offline." }}</p>
+    </div>
+  </div>
+{%- endif -%}

@@ -546,6 +546,9 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
        # Background color for the PWA (default: white, #ffffff)
        background_color: "#ffffff"
 
+       # Banner asking visitors on phones and tablets to install the app (default: true)
+       install_banner: true
+
        # PWA icons configuration
        icons:
          - img: "icons/icon-192.png"
@@ -585,6 +588,8 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
 
    These icons will be used when users install the app on their devices. You can generate these from a single high-resolution logo using a tool like:
    - [PWA Asset Generator](https://github.com/onderceylan/pwa-asset-generator)
+
+On phones and tablets (iOS and Android), a banner above the page invites visitors to install the app. It looks like the platform's own install banners. Its button opens the browser's install prompt where available (Chrome on Android), otherwise a panel at the bottom explaining in three steps how to add the app to the home screen. Closing the banner hides it for 30 days. It is not shown on desktops, within the installed app or on past [editions](#editions). Set `install_banner: false` to turn it off.
 
 > [!NOTE]
 > Please note that when installed as a PWA, the navigation bar moves to the bottom and includes icons. See the [_Navigation Bar_](#navigation-bar) section above for more information.
@@ -1137,10 +1142,10 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
   - `conference.stream`: Live stream modal
   - `conference.infobox`: Dismissal of information boxes and modals
   - `conference.darkmode`: Dark mode according to the system preference
-  - `conference.pwa`: Service worker registration (if PWA is enabled)
+  - `conference.pwa`: Service worker registration and install banner (if PWA is enabled)
   - `conference.config`: Settings of the modules, e.g. `conference.config.baseurl`, `conference.config.edition` (the page's edition id, `null` without editions) and `conference.config.edition_current`
   - `conference.awaitReady()`: Promise-based initialization helper
-- `window.bootstrap`: Bootstrap components (Alert, Collapse, Dropdown, Modal, Tab)
+- `window.bootstrap`: Bootstrap components (Alert, Collapse, Dropdown, Modal, Offcanvas, Tab)
 - `window.L`: Leaflet map library (once the map is loaded)
 
 **Example Usage:**
@@ -1196,7 +1201,7 @@ _js/
     ├── modal.js       # Links in a modal
     ├── nowline.js     # Line at the current time in the program
     ├── program.js     # Program days as tabs
-    ├── pwa.js         # Service worker registration
+    ├── pwa.js         # Service worker registration, install banner
     └── stream.js      # Live stream modal
 ```
 
