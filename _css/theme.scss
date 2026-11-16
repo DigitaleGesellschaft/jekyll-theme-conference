@@ -117,6 +117,17 @@ h1.room-name,
     }
   }
 
+  // Track icon in the lower right corner, below the content
+  .program-talk-icon {
+    padding-bottom: 1.75rem !important;
+  }
+
+  .program-track-icon {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+  }
+
   // Room: holds the arrows to rooms scrolled out of view
   th.program-talk {
     position: relative;

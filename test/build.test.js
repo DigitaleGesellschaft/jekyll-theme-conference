@@ -547,6 +547,20 @@ describe("Accessibility", () => {
     assert.match(cell, /<span class="visually-hidden">09:00–09:30, Main<\/span>/);
   });
 
+  test("program cells and legend show the track icon", () => {
+    const legend = read("program/index.html").split("Caption</h2>")[1];
+
+    assert.match(programCell("Opening &amp; Welcome"), /program-talk-icon[\s\S]*class="bi bi-star-fill program-track-icon"/);
+    assert.match(legend, /class="bi bi-star-fill me-1"[^]*?Main/);
+  });
+
+  test("track without icon reserves its space, without icon", () => {
+    const cell = programCell("Talk with &quot;quotes&quot;");
+
+    assert.match(cell, /program-talk-icon/);
+    assert.doesNotMatch(cell, /program-track-icon/);
+  });
+
   test("program rows name their full time for screen readers", () => {
     for (const path of ["program/index.html", "variants/alltimes/index.html"]) {
       const table = read(path).split("</table>")[0];

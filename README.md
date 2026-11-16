@@ -634,6 +634,7 @@ To define available tracks, add the `tracks` property under the `talks` property
   - `info` (blue)
   - `light` (white)
   - `dark` (dark grey)
+- optionally, an icon (`icon: ` followed by the [Bootstrap Icons](https://icons.getbootstrap.com/) icon name to show) as a second distinction besides the color, e.g. for color blind visitors. It is shown in the lower right corner of each talk.
 
 Instead of displaying the tag name, you can replace it with an icon. To define tags with icons, add the `tags` property under the `talks` property in your configuration file. Each listed tag requires:
 
@@ -651,6 +652,7 @@ conference:
     tracks:
       - name: Track A
         color: info
+        icon: circle-fill
       - name: Track B
         color: success
 

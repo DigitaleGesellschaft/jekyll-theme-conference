@@ -8,6 +8,9 @@
   {%- endif %}
   {% assign nbr_days = edition_program.days | size -%}
 
+  {%- comment -%} Track icons, besides colour (e.g. for colour blind visitors), if any track has one {%- endcomment -%}
+  {%- assign track_icons = edition_tracks | where_exp: "track_prop", "track_prop.icon" | size -%}
+
   <h1 class="display-5 {% if nbr_days > 1 -%} mb-2 {%- else -%} mb-4 {%- endif %} text-break">
     {%- if page.title -%}
       {{- page.title -}}
@@ -219,7 +222,7 @@
 
                     {%- include get_track_properties.html -%}
                     {%- comment -%} Colour on the cell itself: a child cannot stretch over all spanned rows {%- endcomment %}
-                    <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-2 bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-start border-{{ track_color }}-subtle shadow-sm">
+                    <td rowspan="{{ talk_nbr_steps }}" class="program-talk p-2 {%- if track_icons > 0 %} program-talk-icon{% endif %} bg-{{ track_color }}-subtle text-{{ track_color }}-emphasis border-start border-{{ track_color }}-subtle shadow-sm">
                       <div class="overflow-hidden">
                         {%- comment -%} Time and track for screen readers: visually given by row and colour {%- endcomment %}
                         <span class="visually-hidden">
@@ -241,6 +244,9 @@
                           {%- include list_tags.html class="text-reset" %}
                         </p>
                       </div>
+                      {%- if track_icon %}
+                      {%- include icon.html name=track_icon class="program-track-icon" %}
+                      {%- endif %}
                     </td>
                     {%- assign active_talk = true %}
 
@@ -276,6 +282,9 @@
       <h2 class="h5 mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h2>
       {%- for track_prop in edition_tracks %}
         <div class="track-name d-sm-inline-block m-1 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-{{ track_prop.color | default: 'light' }}-subtle">
+          {%- if track_prop.icon -%}
+            {%- include icon.html name=track_prop.icon class="me-1" -%}
+          {%- endif -%}
           {{- track_prop.name | escape -}}
         </div>
       {%- endfor -%}

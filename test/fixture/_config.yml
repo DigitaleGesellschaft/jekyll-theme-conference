@@ -93,6 +93,7 @@ conference:
     tracks:
       - name: Main
         color: info
+        icon: star-fill
       - name: Side & "B"
         color: warning
     tags:
