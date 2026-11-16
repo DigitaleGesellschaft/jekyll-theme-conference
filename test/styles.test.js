@@ -53,6 +53,20 @@ test("full: theme Sass compiles with the site's Bootstrap variables", () => {
   assert.match(css, /\.program-table/);
 });
 
+test("full: talks in the program are cut straight from the grid", () => {
+  const { css } = compileString('@use "conference";', {
+    loadPaths: [join(FIXTURE_DIR, "_sass"), join(FIXTURE_DIR, "../../_sass")],
+    quietDeps: true,
+    silenceDeprecations: ["import", "global-builtin", "color-functions", "if-function"],
+  });
+  const talk = css.match(/td\.program-talk\[rowspan\] \{[^}]*\}/)[0];
+
+  assert.doesNotMatch(talk, /border-bottom/);
+  assert.match(css, /td\.program-talk\[rowspan\]::after/);
+  // Row line above the talk hidden
+  assert.match(css, /td\.program-talk\[rowspan\]::before \{[^}]*top: calc\(-1 \* var\(--bs-border-width\)\);/);
+});
+
 test("full: Jekyll compiles Bootstrap without deprecation warnings", () => {
   const css = readFileSync(join(sites.full, "assets/css/main.css"), "utf8");
 

@@ -45,14 +45,34 @@
     }
   }
 
-  // Talk: coloured bar on the left, gap to a directly following talk
+  // Talk: coloured bar on the left
   td.program-talk[rowspan] {
-    border-width: 0 0 2px 0.25rem !important;
-    border-bottom-color: var(--bs-body-bg) !important;
+    border-width: 0 0 0 0.25rem !important;
 
     // Above the line at the current time
     position: relative;
     z-index: 1;
+
+    // Cut straight across bar and box (borders would bevel the corner of
+    // the bar): the row line above the talk, the gap to a following talk
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      left: -0.25rem;
+      right: 0;
+      background-color: var(--bs-body-bg);
+    }
+
+    &::before {
+      top: calc(-1 * var(--bs-border-width));
+      height: var(--bs-border-width);
+    }
+
+    &::after {
+      bottom: 0;
+      height: 2px;
+    }
   }
 
   // Room: holds the arrows to rooms scrolled out of view
