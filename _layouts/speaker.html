@@ -73,7 +73,7 @@
 
   {%- include get_overview_url.html layout="speaker-overview" -%}
   {%- if overview_url %}
-  <p class="d-print-none d-pwa-none mt-5">
+  <p class="d-print-none d-pwa-none mt-4">
     <a href="{{ overview_url | prepend: site.baseurl }}" class="back-link btn btn-outline-secondary">
       {% include icon.html name="people" class="me-1" %}{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
