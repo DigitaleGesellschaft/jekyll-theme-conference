@@ -80,13 +80,13 @@
     {%- include get_overview_url.html layout="talk-overview" -%}
     {%- if overview_url %}
     <a href="{{ overview_url | prepend: site.baseurl }}" class="back-link btn btn-outline-secondary me-2">
-      {% include icon.html name="megaphone" %}&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
+      {% include icon.html name="megaphone" class="me-1" %}{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
     {%- endif %}
 
     {%- include get_program_config.html -%}
     <a href="{{ program_url | prepend: site.baseurl }}" class="back-link btn btn-outline-secondary">
-      {% include icon.html name="calendar4-week" %}&nbsp;{{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
+      {% include icon.html name="calendar4-week" class="me-1" %}{{ site.data.lang[site.conference.lang].program.title | default: "Program" }}
     </a>
   </p>
 

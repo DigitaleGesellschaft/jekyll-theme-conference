@@ -75,7 +75,7 @@
   {%- if overview_url %}
   <p class="d-print-none d-pwa-none mt-5">
     <a href="{{ overview_url | prepend: site.baseurl }}" class="back-link btn btn-outline-secondary">
-      {% include icon.html name="people" %}&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
+      {% include icon.html name="people" class="me-1" %}{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
   </p>
   {%- endif %}

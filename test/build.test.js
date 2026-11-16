@@ -285,6 +285,12 @@ describe("Styling hooks", () => {
     assert.ok(tagsWith("location/index.html", "consent-button").length > 0);
     assert.deepEqual(tagsWith("index.html", "home-header"), ["div"]);
   });
+
+  test("icons are spaced by a margin, so that hidden icons leave no space", () => {
+    for (const path of ["program/index.html", "talks/opening_welcome/index.html", "speakers/ada_lovelace/index.html"]) {
+      assert.doesNotMatch(read(path), /<\/svg>&nbsp;/, path);
+    }
+  });
 });
 
 describe("Program options", () => {
@@ -327,7 +333,7 @@ describe("Program options", () => {
 
   test("talk duration is exact, not rounded to program rows", () => {
     // Second Day: 09:00 - 09:40, i.e. three 15-minute rows
-    assert.match(read("talks/second_day/index.html"), /&nbsp;40min/);
+    assert.match(read("talks/second_day/index.html"), /<\/svg>40min/);
   });
 
   test("talk without track does not inherit the previous talk's colour", () => {
@@ -584,7 +590,7 @@ describe("Assets and privacy", () => {
   });
 
   test("icons are inline SVGs, not an icon font", () => {
-    assert.match(html(), /<svg [^>]*class="bi bi-clock" aria-hidden="true" focusable="false"/);
+    assert.match(html(), /<svg [^>]*class="bi bi-clock me-1" aria-hidden="true" focusable="false"/);
     assert.match(read("talks/talk_with_quotes/index.html"), /class="bi bi-camera-video-off-fill"/);
     for (const file of htmlFiles()) {
       assert.doesNotMatch(read(file), /<i class="bi /, file);
