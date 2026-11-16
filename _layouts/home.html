@@ -26,52 +26,7 @@
 
     {% if page.links %}
       <div class="lead d-print-none">
-      {% assign btn_default = 'btn btn-outline-primary btn-lg mt-2 ms-1' %}
-      {% for link in page.links %}
-
-        {% if link.menu %}
-          {% include get_menu.html %}
-          {% unless menu_empty %}
-          <div class="dropdown d-inline">
-            <a class="{{ btn_default }} dropdown-toggle" href="#" role="button" id="main-dropdown{{ forloop.index0 }}" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
-              {{ menu_name }}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="main-dropdown{{ forloop.index0 }}">
-              {% include show_menu_items.html %}
-            </div>
-          </div>
-          {% endunless %}
-
-        {% elsif link.live %}
-          {% if edition_live %}
-            {%- include get_live_timestamps.html -%}
-
-            <span class="live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-              {%- include get_link.html class=btn_default -%}
-              {{ link_tag }}
-                {%- if link.name -%}
-                  {{ link.name }}
-                {%- else -%}
-                  {% include get_live_icon.html %}
-                {%- endif -%}
-              </a>
-            </span>
-
-            {%- if link.name_inactive -%}
-              <span class="live-hide d-print-inline {{ btn_default }} disabled" aria-disabled="true" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-                {{ link.name_inactive }}
-              </span>
-            {%- endif -%}
-
-          {%- endif -%}
-
-        {% else %}
-          {% include get_link.html class=btn_default %}
-          {{ link_tag }}
-            {{ link.name }}
-          </a>
-        {% endif %}
-      {% endfor %}
+      {% include show_link_buttons.html links=page.links class="btn btn-outline-primary btn-lg mt-2 ms-1" id="main" %}
       </div>
     {% endif %}
 

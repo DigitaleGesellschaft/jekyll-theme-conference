@@ -1,0 +1,22 @@
+# Info bar and modal with link buttons
+conference:
+  info:
+    bars:
+      - title: Tickets
+        text: Get yours now.
+        color: warning
+        links:
+          - name: Buy
+            relative_url: /tickets/
+          - name: Sold out
+            disabled: true
+    modals:
+      - title: Welcome
+        text: Check out the program.
+        links:
+          - name: Program
+            relative_url: /program/
+          - name: More
+            menu:
+              - name: Talks
+                relative_url: /talks/

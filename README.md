@@ -468,6 +468,7 @@ One or multiple information banners can be shown at the top of the website just 
 - an additional text (`text`, markdown supported),
 - the option to show it on all pages, only the main landing page (`main_only: true`), or all pages except the main landing page (`pages_only: true`),
 - optionally, the number of days to keep the info bar dismissed after a user closes it (`dismissal_days`, default: `7`). Each info bar can have its own dismissal period. Setting `dismissal_days: 0` will disable dismissibility entirely (no close button will be shown, and the info bar cannot be dismissed).
+- optionally, a list of link buttons (`links`).
 
 Information modals appear as modal dialog popups that overlay the page content, dimming the background. They are useful for displaying important announcements that require user attention. Modals are activated through the `info.modals` property, which contains a list for each information modal to show. Each modal consists of
 
@@ -475,6 +476,7 @@ Information modals appear as modal dialog popups that overlay the page content, 
 - an additional text (`text`, markdown supported),
 - the option to show it on all pages, only the main landing page (`main_only: true`), or all pages except the main landing page (`pages_only: true`),
 - optionally, the number of days to keep the info modal dismissed after a user closes it (`dismissal_days`, default: `7`). Each modal can have its own dismissal period. Setting `dismissal_days: 0` will disable dismissibility entirely (cannot be closed).
+- optionally, a list of link buttons (`links`) in its footer instead of the close button. Following one dismisses the modal.
 
 Modals automatically appear when a page loads. The dismissal state is persisted in the browser's localStorage, so users won't see dismissed modals again until the dismissal period expires.
 
@@ -489,6 +491,9 @@ conference:
         main_only: true
         dismissal_days: 7
         text: This is an information modal that appears as a dialog.
+        links:
+          - name: Program
+            relative_url: /program/
 
     # Information bars (shown as alerts at the top of the page)
     bars:
@@ -502,6 +507,9 @@ conference:
           ---
 
           Try again next year.
+        links:
+          - name: Waiting List
+            absolute_url: https://example.com/waiting-list
       - title: Important Notice
         color: warning
         dismissal_days: 0
@@ -968,7 +976,7 @@ live:
 
 ### Links
 
-Links are used at different locations throughout the theme: They can either be used in the configuration file (for the landing page or the navigation bar), or in talks and for speakers. A link can thereby have the following properties:
+Links are used at different locations throughout the theme: They can either be used in the configuration file (for the landing page, the navigation bar, info bars or modals), or in talks and for speakers. A link can thereby have the following properties:
 
 - the text to show (`name`),
 - the link address:
@@ -1000,7 +1008,7 @@ Additionally, a _talk_ link can also have the following property:
 
 - `live: true` whereby the link is only shown below the live stream for the given talk in form of buttons.
 
-Additionally, a _navigation bar_ or _main landing page_ link can also have the following properties:
+Additionally, a _navigation bar_, _main landing page_, _info bar_ or _info modal_ link can also have the following properties:
 
 - `live: true` making the link only visible during the conference and adds a live indication.
   - The link is only shown if `name` is set. If `name` is an empty string, "Live Stream" is shown instead.

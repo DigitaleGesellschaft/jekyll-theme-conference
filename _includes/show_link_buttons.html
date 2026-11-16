@@ -1,0 +1,53 @@
+{%- comment -%}
+  Buttons of the links `include.links`, e.g. {% include show_link_buttons.html
+  links=page.links class="btn btn-outline-primary" id="main" %}. Menus become
+  dropdowns with the ids "<id>-dropdown<n>", unique per page. With
+  popper="fixed", they may exceed a container clipping its content (e.g. a
+  modal).
+{%- endcomment -%}
+{%- assign btn_default = include.class -%}
+{% for link in include.links %}
+
+  {% if link.menu %}
+    {% include get_menu.html %}
+    {% unless menu_empty %}
+    <div class="dropdown d-inline">
+      <a class="{{ btn_default }} dropdown-toggle" href="#" role="button" id="{{ include.id }}-dropdown{{ forloop.index0 }}" data-bs-toggle="dropdown"{% if include.popper %} data-bs-popper-config='{"strategy":"{{ include.popper }}"}'{% endif %} aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
+        {{ menu_name }}
+      </a>
+      <div class="dropdown-menu" aria-labelledby="{{ include.id }}-dropdown{{ forloop.index0 }}">
+        {% include show_menu_items.html %}
+      </div>
+    </div>
+    {% endunless %}
+
+  {% elsif link.live %}
+    {% if edition_live %}
+      {%- include get_live_timestamps.html -%}
+
+      <span class="live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+        {%- include get_link.html class=btn_default -%}
+        {{ link_tag }}
+          {%- if link.name -%}
+            {{ link.name }}
+          {%- else -%}
+            {% include get_live_icon.html %}
+          {%- endif -%}
+        </a>
+      </span>
+
+      {%- if link.name_inactive -%}
+        <span class="live-hide d-print-inline {{ btn_default }} disabled" aria-disabled="true" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
+          {{ link.name_inactive }}
+        </span>
+      {%- endif -%}
+
+    {%- endif -%}
+
+  {% else %}
+    {% include get_link.html class=btn_default %}
+    {{ link_tag }}
+      {{ link.name }}
+    </a>
+  {% endif %}
+{% endfor %}

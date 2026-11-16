@@ -60,6 +60,11 @@ export function createInfoboxModule() {
 
       new window.bootstrap.Modal(el).show();
       el.addEventListener('hidden.bs.modal', () => modalManager.saveDismiss(el), { once: true });
+
+      // Following a link leaves the page without closing the modal
+      el.querySelectorAll('.modal-footer a[href]:not([href="#"])').forEach(link => {
+        link.addEventListener('click', () => modalManager.saveDismiss(el));
+      });
     });
   };
 

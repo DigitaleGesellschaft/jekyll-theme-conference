@@ -26,6 +26,7 @@
     {%- endif -%}
 
     {%- if show_infobar %}
+      {%- assign infobar_dropdown_id = "infobar" | append: forloop.index -%}
       {%- assign dismissal_days = infobar.dismissal_days | default: 7 -%}
       {%- if dismissal_days > 0 -%}
         {%- assign infobar_id = infobar.title | default: '' | append: infobar.text | slugify -%}
@@ -39,6 +40,13 @@
       {%- endif %}
 
       {{ infobar.text | markdownify | replace: "<a href=", "<a class='alert-link' href=" }}
+
+      {%- if infobar.links %}
+        {%- assign infobar_btn = infobar.color | default: "primary" | prepend: "btn btn-" | append: " me-1" %}
+        <div class="mt-3 d-print-none">
+          {% include show_link_buttons.html links=infobar.links class=infobar_btn id=infobar_dropdown_id %}
+        </div>
+      {%- endif %}
 
       {%- if dismissal_days > 0 -%}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
@@ -100,11 +108,18 @@
 
             </div>
 
-            {%- if dismissal_days > 0 -%}
+            {%- if dismissal_days > 0 or infomodal.links -%}
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                  {{ site.data.lang[site.conference.lang].close | default: "Close" }}
-                </button>
+                {%- if infomodal.links -%}
+                  {%- assign infomodal_dropdown_id = "infomodal" | append: forloop.index -%}
+                  <div class="d-print-none">
+                    {% include show_link_buttons.html links=infomodal.links class="btn btn-outline-primary" id=infomodal_dropdown_id popper="fixed" %}
+                  </div>
+                {%- elsif dismissal_days > 0 -%}
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    {{ site.data.lang[site.conference.lang].close | default: "Close" }}
+                  </button>
+                {%- endif -%}
               </div>
             {%- endif -%}
 

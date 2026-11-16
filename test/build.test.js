@@ -337,6 +337,29 @@ describe("Hidden location page", () => {
   });
 });
 
+describe("Info bar and modal links", () => {
+  let html;
+
+  before(() => {
+    html = readFileSync(join(buildSite("_config.info-links.yml"), "index.html"), "utf8");
+  });
+
+  test("bar shows link buttons in its color", () => {
+    const bar = html.match(/<div class="alert alert-warning[\s\S]*?<\/div>\s*<\/div>/)[0];
+
+    assert.match(bar, new RegExp(`<a\\s+class="btn btn-warning[^"]*"\\s+href="${BASEURL}/tickets/"`));
+    assert.match(bar, /class="disabled btn btn-warning[^"]*"\s+href="#"\s+aria-disabled="true"/);
+  });
+
+  test("modal shows link buttons and menus in its footer instead of the close button", () => {
+    const footer = html.match(/<div class="modal-footer">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>\s*<\/div>/)[1];
+
+    assert.match(footer, new RegExp(`<a\\s+class="btn btn-outline-primary[^"]*"\\s+href="${BASEURL}/program/"`));
+    assert.match(footer, new RegExp(`id="infomodal1-dropdown1"[\\s\\S]*href="${BASEURL}/talks/"`));
+    assert.doesNotMatch(footer, /data-bs-dismiss="modal"/);
+  });
+});
+
 describe("Markup", () => {
   test("theme checks report no errors", () => {
     assert.doesNotMatch(read("index.html"), /There was an error when generating the site/);

@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { SITE_DIR } from "../support/build.js";
 import { ready, track } from "./helpers.js";
 
 test("dismissed info bar stays hidden after reload", async ({ page }) => {
@@ -12,6 +15,44 @@ test("dismissed info bar stays hidden after reload", async ({ page }) => {
   await page.reload();
   await ready(page);
   await expect(page.locator(".alert[data-infobar-id]")).toBeHidden();
+});
+
+test("following a link in an info modal dismisses it", async ({ page }) => {
+  // Landing page of the build with an info modal (_config.info-links.yml)
+  const home = readFileSync(join(`${SITE_DIR}-info-links`, "index.html"), "utf8");
+  await page.route((url) => url.pathname === "/conf/", (route) => route.fulfill({ contentType: "text/html", body: home }));
+
+  await page.goto("");
+  await ready(page);
+  const modal = page.locator(".modal.infomodal");
+  await modal.getByRole("link", { name: "Program" }).click();
+  await page.waitForURL(/\/program\/$/);
+
+  const dismissed = await page.evaluate(() => JSON.parse(localStorage.getItem("infomodal_dismissed")));
+  expect(Object.keys(dismissed ?? {})).toEqual(["welcomecheck-out-the-program"]);
+});
+
+test("dropdown in an info modal is not clipped by the modal", async ({ page }) => {
+  // Landing page of the build with an info modal (_config.info-links.yml)
+  const home = readFileSync(join(`${SITE_DIR}-info-links`, "index.html"), "utf8");
+  await page.route((url) => url.pathname === "/conf/", (route) => route.fulfill({ contentType: "text/html", body: home }));
+
+  await page.goto("");
+  await ready(page);
+  const modal = page.locator(".modal.infomodal");
+  await modal.getByRole("button", { name: "More" }).click();
+
+  // The menu reaches beyond the modal's edge, yet all its corners are visible
+  const item = modal.getByRole("link", { name: "Talks" });
+  const corners = await item.evaluate((el) => {
+    const { left, right, top, bottom } = el.getBoundingClientRect();
+    const points = [[left + 1, top + 1], [right - 1, top + 1], [left + 1, bottom - 1], [right - 1, bottom - 1]];
+    return points.map(([x, y]) => el.contains(document.elementFromPoint(x, y)));
+  });
+  const itemBox = await item.boundingBox();
+  const modalBox = await modal.locator(".modal-content").boundingBox();
+  expect(itemBox.x + itemBox.width).toBeGreaterThan(modalBox.x + modalBox.width);
+  expect(corners).toEqual([true, true, true, true]);
 });
 
 test("video link opens in a modal with the talk as title", async ({ page }) => {

@@ -4,6 +4,7 @@ import { EDITIONS_DIR, buildSite } from "../support/build.js";
 export default function globalSetup() {
   if (!process.env.SKIP_BUILD) {
     buildSite();
+    buildSite("_config.info-links.yml");
     buildSite(undefined, EDITIONS_DIR);
   }
 }
