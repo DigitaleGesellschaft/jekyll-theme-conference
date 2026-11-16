@@ -19,7 +19,7 @@
       {%- endif %}
 
     <div class="col-md mb-4">
-      <h2 class="h3" id="stream-heading-{{ forloop.index }}">{{ room.name | escape }}</h2>
+      <h2 class="room-name h3" id="stream-heading-{{ forloop.index }}">{{ room.name | escape }}</h2>
       <div class="ratio ratio-16x9">
         {%- include get_room_live_href.html %}
         {%- comment -%} Loaded by the embed module, after consent {%- endcomment %}

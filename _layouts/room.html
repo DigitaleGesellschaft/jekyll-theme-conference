@@ -6,7 +6,7 @@
   {%- include header.html -%}
 
   <!-- title for print: -->
-  <h1 class="display-5 mb-3 d-none d-print-inline">
+  <h1 class="room-name display-5 mb-3 d-none d-print-inline">
     {{ this_room.name | escape }}
   </h1>
 
@@ -35,7 +35,7 @@
           {{- day_name | escape -}}
         </h3>
 
-        <table class="mw-100">
+        <table class="talk-list mw-100">
         {%- for t in r.talks -%}
           {%- assign talk = edition_talks | where: 'name', t.name | first -%}
           {%- include show_talk_listed.html hide_day=true -%}

@@ -13,11 +13,11 @@
 {% if edition_tracks %}
   {% for track_prop in edition_tracks %}
     <h2 class="h3 mt-4 mb-3">
-      <span class="badge rounded-0 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-4 border-start border-{{ track_prop.color | default: 'light' }}-subtle d-block d-sm-inline text-wrap">
+      <span class="track-name badge rounded-0 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-4 border-start border-{{ track_prop.color | default: 'light' }}-subtle d-block d-sm-inline text-wrap">
         {{ track_prop.name | escape }}
       </span>
     </h2>
-    <ul class="list-unstyled">
+    <ul class="talk-list list-unstyled">
       {% for talk in edition_talks -%}
         {% if talk.track == track_prop.name %}
           {% include get_talk_overview_talk.html %}
@@ -26,7 +26,7 @@
     </ul>
   {% endfor %}
 {% else %}
-  <ul class="list-unstyled">
+  <ul class="talk-list list-unstyled">
     {% for talk in edition_talks -%}
       {% include get_talk_overview_talk.html %}
     {%- endfor %}

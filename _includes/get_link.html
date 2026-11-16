@@ -166,7 +166,7 @@
 {%- assign link_icon_name = link_icon | default: 'link-45deg' -%}
 {%- capture link_list_item -%}
   <li class="mb-1">
-    {{ link_tag | replace: ' class="', ' class="icon-link '}}
+    {{ link_tag | replace: ' class="', ' class="link-item icon-link '}}
       {% include icon.html name=link_icon_name %}
       {{- link.name | escape }}
     </a>

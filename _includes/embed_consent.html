@@ -13,7 +13,7 @@
       {{ embed_lang.privacy | default: "This content is loaded from an external provider, which receives your IP address:" }}
       <a href="{{ include.href | escape }}" rel="noopener" data-embed-host>{{ embed_host[2] | escape }}</a>
     </p>
-    <button type="button" class="btn btn-primary" data-embed-load>
+    <button type="button" class="consent-button btn btn-primary" data-embed-load>
       {% include icon.html name="play-fill" %}
       {{ embed_lang.load | default: "Load content" }}
     </button>

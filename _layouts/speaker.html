@@ -3,11 +3,11 @@
 {%- unless speaker.hide -%}
   {%- include header.html -%}
 
-  <p class="h6">
+  <p class="page-label h6">
     {{ site.data.lang[site.conference.lang].speaker.title | default: "Speaker" }}
   </p>
 
-  <h1 class="fw-light mb-3 text-break">
+  <h1 class="speaker-name fw-light mb-3 text-break">
     {{ speaker.first_name | escape }} {{ speaker.last_name | escape }}
   </h1>
 
@@ -16,7 +16,7 @@
   {% include get_link_types.html context="speaker" %}
 
   {% if has_icon_links > 0 %}
-    <ul class="list-unstyled">
+    <ul class="links-icon list-unstyled">
       {% for link in speaker.links %}
         {% include get_link.html type="icon" context="speaker" %}
         {% if link_valid %}
@@ -29,7 +29,7 @@
   {% if has_regular_links > 0 %}
     <h2 class="h5 mt-4 mb-1">{{ site.data.lang[site.conference.lang].more_information | default: "More Information" }}:</h2>
 
-    <ul class="list-unstyled">
+    <ul class="links-more list-unstyled">
       {% for link in speaker.links %}
         {% include get_link.html context="speaker" %}
         {% if link_valid %}
@@ -52,7 +52,7 @@
   {% if active_speaker %}
     <h2 class="h5 mt-4 mb-2">{{ site.data.lang[site.conference.lang].speaker.talks | default: "Talks at this conference" }}:</h2>
 
-    <table class="mw-100">
+    <table class="talk-list mw-100">
     {%- for d in edition_program.days -%}
       {%- include get_day_hash.html -%}
       {%- for r in d.rooms -%}
@@ -74,7 +74,7 @@
   {%- include get_overview_url.html layout="speaker-overview" -%}
   {%- if overview_url %}
   <p class="d-print-none d-pwa-none mt-5">
-    <a href="{{ overview_url | prepend: site.baseurl }}" class="btn btn-outline-secondary">
+    <a href="{{ overview_url | prepend: site.baseurl }}" class="back-link btn btn-outline-secondary">
       {% include icon.html name="people" %}&nbsp;{{ site.data.lang[site.conference.lang].overview | default: "Overview" }}
     </a>
   </p>

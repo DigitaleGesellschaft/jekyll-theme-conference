@@ -57,6 +57,7 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
   - [Pre-compiled Bundle (Default)](#pre-compiled-bundle-default)
   - [Split Bundle (Custom Bootstrap CSS)](#split-bundle-custom-bootstrap-css)
   - [Full Custom Build (Custom SCSS)](#full-custom-build-custom-scss)
+  - [Styling Hooks](#styling-hooks)
   - [Icons](#icons)
 - [Custom JavaScript](#custom-javascript)
 - [Development](#development)
@@ -1129,6 +1130,42 @@ While offering the most flexibility, this setup requires several steps:
     // Custom styles
     // ...
     ```
+
+### Styling Hooks
+
+Talks, speakers, rooms and the recurring parts of pages carry a class of their own wherever they are shown (program, overviews, talk, speaker and room pages, video and live stream modals). Use them to style these elements in `assets/css/main.scss` without depending on the Bootstrap classes of the markup:
+
+| Class | Element |
+|---|---|
+| **Talks** | |
+| `talk-list` | List of talks in the talk overview or on a speaker or room page (contains one `talk-item` per talk) |
+| `talk-item` | Talk in such a list |
+| `talk-title` | Title of a talk |
+| `talk-speakers` | Speakers of a talk (contains one `speaker-name` per speaker) |
+| `talk-info` | Time, room and duration of a talk (contains `talk-time`, `room-name` and `talk-duration`) |
+| `talk-time` | Start time of a talk |
+| `talk-duration` | Duration of a talk |
+| `track-name` | Name of a track |
+| `talk-tag` | Tag of a talk |
+| **Speakers and rooms** | |
+| `speaker-name` | Name of a speaker |
+| `room-name` | Name of a room |
+| **Pages** | |
+| `home-header` | Header box of the home page |
+| `page-label` | Label above the title of a speaker page (_Speaker_) |
+| `links-icon`, `links-more` | List of links at the end of a talk or speaker page: with an icon (files and videos), or further links (below _More information_) |
+| `link-item` | Link in such a list |
+| `back-link` | Link back to the overview or program at the end of a talk or speaker page |
+| `consent-button` | Button to load an external map or video |
+
+For example, to set speakers in italics:
+
+```scss
+.talk-speakers,
+.speaker-name {
+  font-style: italic;
+}
+```
 
 ### Icons
 

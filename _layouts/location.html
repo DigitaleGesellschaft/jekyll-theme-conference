@@ -47,7 +47,7 @@
             {{ map_lang.map_privacy | default: "The map is loaded from an external provider, which receives your IP address:" }}
             {{ page.map.map_provider | default: "OpenStreetMap.Mapnik" | split: "." | first | escape }}
           </p>
-          <button type="button" class="btn btn-primary" data-map-load>
+          <button type="button" class="consent-button btn btn-primary" data-map-load>
             {% include icon.html name="map" %}
             {{ map_lang.map_load | default: "Load map" }}
           </button>

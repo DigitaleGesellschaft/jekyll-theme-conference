@@ -200,6 +200,68 @@ describe("Escaping of user content", () => {
   });
 });
 
+describe("Styling hooks", () => {
+  // Elements of a page carrying a class, e.g. ["a", "span"]
+  const tagsWith = (path, cls) =>
+    [...read(path).matchAll(new RegExp(`<(\\w+)\\s[^>]*class="(?:[^"]* )?${cls}[ "]`, "g"))].map(([, tag]) => tag);
+
+  test("program marks talks, speakers, rooms and tracks", () => {
+    const path = "program/index.html";
+
+    assert.ok(tagsWith(path, "talk-title").includes("a"));
+    assert.ok(tagsWith(path, "talk-title").includes("span"), "hidden talk");
+    assert.ok(tagsWith(path, "talk-speakers").every((tag) => tag === "p"));
+    assert.ok(tagsWith(path, "speaker-name").includes("a"));
+    assert.ok(tagsWith(path, "speaker-name").includes("span"), "hidden speaker");
+    assert.ok(tagsWith(path, "room-name").length > 0);
+    assert.ok(tagsWith(path, "track-name").length > 0, "legend");
+    assert.ok(tagsWith(path, "talk-tag").length > 0);
+  });
+
+  test("talk page marks title, speakers, track, tags and info", () => {
+    assert.ok(tagsWith("talks/opening_welcome/index.html", "talk-title").includes("h1"));
+    assert.ok(tagsWith("talks/opening_welcome/index.html", "talk-title").includes("h2"), "video modal");
+    for (const cls of ["talk-speakers", "speaker-name", "track-name", "talk-info", "talk-time", "room-name", "talk-duration"]) {
+      assert.ok(tagsWith("talks/opening_welcome/index.html", cls).length > 0, cls);
+    }
+    assert.ok(tagsWith("talks/talk_with_quotes/index.html", "talk-tag").length > 0);
+  });
+
+  test("speaker, room and overview pages mark their names", () => {
+    assert.deepEqual(tagsWith("speakers/ada_lovelace/index.html", "speaker-name"), ["h1"]);
+    assert.ok(tagsWith("speakers/index.html", "speaker-name").every((tag) => tag === "li"));
+    assert.ok(tagsWith("talks/index.html", "track-name").length > 0);
+    assert.ok(tagsWith("talks/index.html", "talk-speakers").length > 0);
+    assert.ok(tagsWith("location/index.html", "room-name").length > 0);
+  });
+
+  test("talk and speaker pages mark their lists of links", () => {
+    const talk = read("talks/opening_welcome/index.html");
+
+    assert.match(talk, /<ul class="links-icon[ "]/);
+    assert.match(talk, /<ul class="links-more[ "]/);
+    assert.match(read("speakers/ada_lovelace/index.html"), /<ul class="links-icon[ "]/);
+    assert.ok(tagsWith("talks/opening_welcome/index.html", "link-item").every((tag) => tag === "a"));
+    assert.ok(tagsWith("talks/opening_welcome/index.html", "link-item").length >= 3);
+  });
+
+  test("pages mark listed talks, labels, back links, consent and header", () => {
+    assert.ok(tagsWith("talks/index.html", "talk-list").every((tag) => tag === "ul"));
+    assert.deepEqual(tagsWith("speakers/ada_lovelace/index.html", "talk-list"), ["table"]);
+    assert.ok(tagsWith("rooms/room_a/index.html", "talk-list").every((tag) => tag === "table"));
+    assert.ok(tagsWith("rooms/room_a/index.html", "talk-list").length > 0);
+    assert.ok(tagsWith("talks/index.html", "talk-item").every((tag) => tag === "li"));
+    assert.ok(tagsWith("talks/index.html", "talk-item").length > 0);
+    assert.ok(tagsWith("speakers/ada_lovelace/index.html", "talk-item").every((tag) => tag === "div"));
+    assert.deepEqual(tagsWith("speakers/ada_lovelace/index.html", "page-label"), ["p"]);
+    assert.deepEqual(tagsWith("talks/opening_welcome/index.html", "back-link"), ["a", "a"]);
+    assert.deepEqual(tagsWith("speakers/ada_lovelace/index.html", "back-link"), ["a"]);
+    assert.ok(tagsWith("location/index.html", "consent-button").every((tag) => tag === "button"));
+    assert.ok(tagsWith("location/index.html", "consent-button").length > 0);
+    assert.deepEqual(tagsWith("index.html", "home-header"), ["div"]);
+  });
+});
+
 describe("Program options", () => {
   // Time labels of a day (default: the first), e.g. ["09:00", ":30", "10:00", ...]
   const timeLabels = (path, day = 0) => {
@@ -376,8 +438,8 @@ describe("Markup", () => {
   });
 
   test("overview buttons link to the overview pages", () => {
-    assert.match(read("talks/opening_welcome/index.html"), /<a href="\/conf\/talks\/" class="btn/);
-    assert.match(read("speakers/ada_lovelace/index.html"), /<a href="\/conf\/speakers\/" class="btn/);
+    assert.match(read("talks/opening_welcome/index.html"), /<a href="\/conf\/talks\/" class="back-link btn/);
+    assert.match(read("speakers/ada_lovelace/index.html"), /<a href="\/conf\/speakers\/" class="back-link btn/);
   });
 
   test("home page has no block elements in heading and no nested paragraphs", () => {
