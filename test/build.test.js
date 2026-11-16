@@ -291,6 +291,11 @@ describe("Styling hooks", () => {
       assert.doesNotMatch(read(path), /<\/svg>&nbsp;/, path);
     }
   });
+
+  test("home header and video modal carry no classes of other elements", () => {
+    assert.doesNotMatch(read("index.html"), /text-body-primary/);
+    assert.doesNotMatch(read("talks/opening_welcome/index.html"), /class="[^"]*\bh5\b[^"]*" id="link-modal-description"/);
+  });
 });
 
 describe("Program options", () => {
