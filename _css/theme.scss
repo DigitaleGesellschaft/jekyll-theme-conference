@@ -45,6 +45,18 @@ h1.room-name,
   border-left-color: var(--#{$prefix}border-color);
 }
 
+// Talk in a list, with a bar on the left coloured by the track's utility
+// class; days of a room page apart
+.talk-item {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 0.25rem solid;
+}
+
+.talk-list + h3 {
+  margin-top: 1rem;
+}
+
 // Program Overview
 .program-table {
   // Gap between columns: spacer columns would be announced by screen readers

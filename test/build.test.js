@@ -260,6 +260,16 @@ describe("Styling hooks", () => {
     }
   });
 
+  test("listed talks leave their bar and spacing to the stylesheet", () => {
+    for (const path of ["talks/index.html", "speakers/ada_lovelace/index.html", "rooms/room_a/index.html"]) {
+      const items = [...read(path).matchAll(/class="talk-item([^"]*)"/g)].map(([, cls]) => cls);
+
+      assert.ok(items.length > 0, path);
+      assert.ok(items.every((cls) => !/\b(ps-2|mb-2|border-4|border-start)\b/.test(cls)), path);
+    }
+    assert.doesNotMatch(read("rooms/room_a/index.html"), /<h3 class="[^"]*\bmt-1\b/);
+  });
+
   test("pages mark listed talks, labels, back links, consent and header", () => {
     assert.ok(tagsWith("talks/index.html", "talk-list").every((tag) => tag === "ul"));
     assert.deepEqual(tagsWith("speakers/ada_lovelace/index.html", "talk-list"), ["table"]);
