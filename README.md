@@ -737,15 +737,17 @@ The map is based on the [Leaflet](https://leafletjs.com/) JavaScript library. To
 ```javascript
 // assets/js/maps/venue.js
 export default function (map) {
+    L.polygon([[47.3751, 8.5274], [47.3755, 8.5279], [47.3758, 8.5273]], {
+        className: 'map-area'
+    }).addTo(map);
+
     L.marker([47.37785, 8.54035], {
-        icon: L.divIcon({
-            className: '',
-            html: '<span class="bi bi-train-front" aria-hidden="true"></span> Main Station',
-            iconSize: [120, 56]
-        })
+        icon: L.divIcon({ className: 'map-label', html: 'Main Station', iconSize: null })
     }).addTo(map);
 }
 ```
+
+The class `map-label` centres a label on its point, sizes it to its text and keeps it dark on the light map tiles, also in dark mode. The class `map-area` draws a shape in the primary colour. Add classes of your own next to them to style labels and shapes further.
 
 With several [editions](#editions), each edition's location page names its own script. Alternatively, `assets/js/main.js` gets the map with `await window.conference.map.getMap()` after `await window.conference.awaitReady()` (resolves once the visitor loaded the map, with `null` on pages without map).
 

@@ -4,3 +4,22 @@
 @use "leaflet/dist/leaflet.css";
 @use "leaflet-easybutton/src/easy-button.css";
 @use "leaflet.locatecontrol/dist/L.Control.Locate.css";
+
+// Text label of a map script, e.g.
+// L.divIcon({ className: "map-label", html: "Main Station", iconSize: null }):
+// centred on its point, sized to its text, dark on the light map tiles (also
+// in dark mode). Without specificity, so that site styles override it
+:where(.map-label) {
+  translate: -50% -50%;
+  padding: 0.125rem 0.375rem;
+  color: var(--bs-black);
+  background-color: rgba(var(--bs-white-rgb), 0.8);
+  white-space: nowrap;
+}
+
+// Shape of a map script in the primary colour, e.g.
+// L.polygon(points, { className: "map-area" })
+:where(.map-area) {
+  stroke: var(--bs-primary);
+  fill: var(--bs-primary);
+}
