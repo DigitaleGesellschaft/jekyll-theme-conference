@@ -52,15 +52,7 @@
 
           {%- else %}
             <li class="nav-item">
-              {% assign link_url = nil -%}
-              {%- if link.relative_url -%}
-                {%- assign link_url = link.relative_url | prepend: edition_base -%}
-              {%- endif -%}
-              {% if page.url == link_url or link.relative_url != "/" and page.url contains link_url %}
-                {% assign is_active = true %}
-              {% else %}
-                {% assign is_active = false %}
-              {% endif %}
+              {%- include get_link_active.html -%}
               {%- include get_link.html class="nav-link" is_active=is_active -%}
               {{ link_tag }}
                 {{ link.name }}

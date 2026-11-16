@@ -485,6 +485,13 @@ describe("Markup", () => {
     assert.deepEqual([...new Set(activeLinks)], ["/conf/program/"]);
   });
 
+  test("navigation marks the location as active on room pages", () => {
+    const html = read("rooms/room_a/index.html");
+    const activeLinks = [...html.matchAll(/<a\s+class="nav-link active"\s+href="([^"]*)"/g)].map(([, href]) => href);
+
+    assert.deepEqual([...new Set(activeLinks)], ["/conf/location/"]);
+  });
+
   test("file links resolve by their context, not by variables left over on the page", () => {
     const flyerLinks = {};
     for (const file of ["index.html", "program/index.html", "talks/index.html", "talks/opening_welcome/index.html", "speakers/index.html", "speakers/ada_lovelace/index.html", "rooms/room_a/index.html", "location/index.html"]) {
