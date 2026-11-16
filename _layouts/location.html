@@ -3,6 +3,8 @@
 
   {% assign this_room = page %}
 
+  {% include navbar_rooms.html %}
+
   <h1 class="display-5 mb-3 text-break">
     {% if page.title %}
       {{ page.title }}
@@ -10,8 +12,6 @@
       {{ site.data.lang[site.conference.lang].location.name | default: "Location" }}
     {% endif %}
   </h1>
-
-  {% include navbar_rooms.html %}
 
   {% if page.postal_address %}
     <address>

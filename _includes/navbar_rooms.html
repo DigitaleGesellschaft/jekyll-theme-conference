@@ -11,7 +11,7 @@
 
 {% unless all_hidden %}
   <nav aria-label="{{ site.data.lang[site.conference.lang].location.navigation | default: 'Room navigation' }}">
-    <ul class="nav nav-pills d-print-none mb-3" role="list">
+    <ul class="nav nav-pills d-print-none mb-1" role="list">
       <li class="nav-item">
         <a class="nav-link {% if page.name contains 'index' %}active{% endif %}" href="{{ location_url | prepend: site.baseurl }}"{% if page.name contains 'index' %} aria-current="page"{% endif %}>
           {% if location_page.title -%}

@@ -468,6 +468,16 @@ describe("Markup", () => {
     assert.doesNotMatch(read("index.html"), /rel="preconnect"[^>]*stream\.example\.org/);
   });
 
+  test("location and room pages: room navigation above the title, rooms titled with their name", () => {
+    for (const [path, title] of [["location/index.html", "Venue"], ["rooms/room_a/index.html", "Room A"]]) {
+      const html = read(path).split("<main")[1];
+
+      assert.deepEqual([...html.matchAll(/<h1[^>]*>([^<]*)<\/h1>/g)].map(([, text]) => text.trim()), [title], path);
+      assert.ok(html.indexOf('aria-label="Room navigation"') < html.indexOf("<h1"), path);
+      assert.doesNotMatch(html, /page-label/, path);
+    }
+  });
+
   test("navigation marks only the current section as active", () => {
     const html = read("program/index.html");
     const activeLinks = [...html.matchAll(/<a\s+class="nav-link active"\s+href="([^"]*)"/g)].map(([, href]) => href);

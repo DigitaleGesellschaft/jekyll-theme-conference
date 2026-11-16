@@ -18,6 +18,7 @@
 // Talk titles and names in a light weight, apart from the text
 .talk-title:is(h1, h2),
 .speaker-name,
+h1.room-name,
 .talk-speakers,
 .talk-item .talk-info {
   font-weight: $font-weight-light;
