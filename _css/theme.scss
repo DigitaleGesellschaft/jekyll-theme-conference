@@ -15,6 +15,14 @@
   vertical-align: -0.125em;
 }
 
+// Talk titles and names in a light weight, apart from the text
+.talk-title:is(h1, h2),
+.speaker-name,
+.talk-speakers,
+.talk-item .talk-info {
+  font-weight: $font-weight-light;
+}
+
 // Program Overview
 .program-table {
   // Gap between columns: spacer columns would be announced by screen readers

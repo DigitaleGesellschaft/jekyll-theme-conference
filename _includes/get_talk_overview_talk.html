@@ -3,7 +3,7 @@
   <p class="mb-1">
     {% include show_talk.html %}
   </p>
-  <p class="talk-speakers fw-light mb-1">
+  <p class="talk-speakers mb-1">
     {% include list_speakers.html %}
   </p>
 
@@ -15,7 +15,7 @@
         {%- assign room = edition_rooms | where: 'name', r.name | first -%}
         {%- for t in r.talks -%}
           {%- if talk.name == t.name -%}
-            <p class="talk-info mb-1 fw-light">
+            <p class="talk-info mb-1">
               {%- include show_talk_info.html hide_duration=true -%}
             </p>
 

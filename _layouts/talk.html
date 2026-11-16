@@ -25,9 +25,9 @@
     </div>
   {% endif %}
 
-  <h1 {% if talk.lang %}lang="{{ talk.lang | escape }}" {% endif %}class="talk-title fw-light text-break">{{ talk.name | escape }}</h1>
+  <h1 {% if talk.lang %}lang="{{ talk.lang | escape }}" {% endif %}class="talk-title text-break">{{ talk.name | escape }}</h1>
 
-  <p class="talk-speakers mb-3 fw-light">
+  <p class="talk-speakers mb-3">
     {% include list_speakers.html %}
   </p>
 

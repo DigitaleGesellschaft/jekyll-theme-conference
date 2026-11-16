@@ -67,6 +67,16 @@ test("full: talks in the program are cut straight from the grid", () => {
   assert.match(css, /td\.program-talk\[rowspan\]::before \{[^}]*top: calc\(-1 \* var\(--bs-border-width\)\);/);
 });
 
+test("full: titles and names in a light weight", () => {
+  const { css } = compileString('@use "conference";', {
+    loadPaths: [join(FIXTURE_DIR, "_sass"), join(FIXTURE_DIR, "../../_sass")],
+    quietDeps: true,
+    silenceDeprecations: ["import", "global-builtin", "color-functions", "if-function"],
+  });
+
+  assert.match(css, /\.talk-speakers,[^{]*\{\s*font-weight: 300;/);
+});
+
 test("full: Jekyll compiles Bootstrap without deprecation warnings", () => {
   const css = readFileSync(join(sites.full, "assets/css/main.css"), "utf8");
 

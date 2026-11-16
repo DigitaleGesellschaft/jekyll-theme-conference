@@ -245,6 +245,12 @@ describe("Styling hooks", () => {
     assert.ok(tagsWith("talks/opening_welcome/index.html", "link-item").length >= 3);
   });
 
+  test("pages leave the font weight of titles and names to the stylesheet", () => {
+    for (const path of ["program/index.html", "talks/index.html", "talks/opening_welcome/index.html", "speakers/index.html", "speakers/ada_lovelace/index.html"]) {
+      assert.doesNotMatch(read(path), /fw-light/, path);
+    }
+  });
+
   test("pages mark listed talks, labels, back links, consent and header", () => {
     assert.ok(tagsWith("talks/index.html", "talk-list").every((tag) => tag === "ul"));
     assert.deepEqual(tagsWith("speakers/ada_lovelace/index.html", "talk-list"), ["table"]);
