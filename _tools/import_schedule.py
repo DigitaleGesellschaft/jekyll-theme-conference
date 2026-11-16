@@ -201,6 +201,27 @@ def parse_frab(data: str) -> Dict[str, List[Dict[str, str]]]:
     return content
 
 
+def apply_overrides(
+    content: Dict[str, List[Dict[str, Any]]], overrides: Dict[str, Any]
+) -> None:
+    """Merge properties into the imported entries of the same name, e.g.
+    {"rooms": [{"name": "Hall", "order": 1}]} adds "order: 1" to the room Hall."""
+    for category, entries in overrides.items():
+        if category not in ("rooms", "speakers", "talks"):
+            print(f'Warning: ignored unknown overrides category "{category}"')
+            continue
+
+        for entry in entries or []:
+            # Speakers appear once per talk, so update all entries of a name
+            matches = [c for c in content[category] if c["name"] == entry["name"]]
+            if not matches:
+                print(f'Warning: ignored overrides of unknown entry "{entry["name"]}"')
+                continue
+
+            for match in matches:
+                match.update(entry)
+
+
 def create_content_files(
     content: List[Dict[str, str]],
     output_dir: Path,
@@ -377,6 +398,13 @@ def main():
         help="Edition of a site with several editions (e.g., '2025'): writes to "
         "_talks/2025/, ..., _data/programs/2025.yml and creates its overview pages.",
     )
+    parser.add_argument(
+        "--overrides",
+        type=Path,
+        default=None,
+        help="YAML file with properties merged into the imported rooms, speakers "
+        "and talks of the same name, e.g. 'rooms: [{name: Hall, order: 1}]'.",
+    )
 
     args = parser.parse_args()
 
@@ -395,6 +423,11 @@ def main():
         return
 
     content = parse_frab(data)
+
+    # Add own properties, e.g. a room's order or live stream
+    if args.overrides:
+        with open(args.overrides, "r", encoding="utf-8") as overrides_file:
+            apply_overrides(content, yaml.safe_load(overrides_file) or {})
 
     # Define output directories, e.g. _talks/ or _talks/2025/
     edition_dir = Path(args.edition) if args.edition else Path()

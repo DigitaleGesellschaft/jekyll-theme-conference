@@ -10,6 +10,9 @@ on:
 env:
   # Several editions: id of the edition to import, e.g. "2026"
   EDITION: ""
+  # Optional: YAML file with own properties of rooms, speakers and talks kept
+  # across imports, e.g. "_tools/overrides.yml" (see import_schedule.py --help)
+  OVERRIDES: ""
 
 jobs:
   build:
@@ -33,7 +36,7 @@ jobs:
         run: |
           sudo locale-gen de_CH.UTF-8
           source .venv/bin/activate
-          python _tools/import_schedule.py --lc-time de_CH.UTF-8 ${EDITION:+--edition "$EDITION"} schedule.json
+          python _tools/import_schedule.py --lc-time de_CH.UTF-8 ${EDITION:+--edition "$EDITION"} ${OVERRIDES:+--overrides "$OVERRIDES"} schedule.json
 
       # With an edition, the program and the edition's pages, e.g.
       # _data/programs/2026.yml and 2026/program/index.md

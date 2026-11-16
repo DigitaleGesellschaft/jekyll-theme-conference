@@ -165,6 +165,19 @@ In this repository, you'll find the Python file `_tools/import_schedule.py`. Thi
 
    With several [editions](#editions), pass the edition's id, e.g. `--edition 2026`: the script then writes to `_talks/2026/`, …, `_data/programs/2026.yml` and creates the edition's overview pages.
 
+3. Optionally, keep own properties across imports, as the script rewrites all rooms, speakers and talks: list them in a YAML file and pass it with `--overrides`, e.g. `--overrides _tools/overrides.yml`. They are merged into the imported entries of the same `name` and replace imported values (e.g. `hide`). Unknown names are reported and skipped.
+
+   ```yaml
+   rooms:
+     - name: Main Hall
+       order: 1
+       live:
+         absolute_url: https://example.com/stream/main-hall
+   talks:
+     - name: Opening
+       tags: [Keynote]
+   ```
+
 Likewise, `_tools/import_resources.py` imports resources such as slides and other documents from [pretalx.com](https://pretalx.com/p/about/) via its API. It downloads all files, stores them and updates the links of the talks concerned (see [_Links_](#links)). Run it the same way, e.g., `uv run --no-project --with-requirements _tools/requirements.txt python _tools/import_resources.py --help`. With several [editions](#editions), pass the edition's folders, e.g. `--file-folder 2026/documents/slides/ --talk-folder _talks/2026/`.
 
 ### Automatic Build
@@ -173,7 +186,7 @@ If you prefer not to install the full Ruby/Jekyll toolchain locally, you can lev
 
 - `build.yml`: This workflow automatically builds and optimizes the website whenever a new tag starting with `v` (e.g., `v2020.01.01`) is added. It then attaches the generated website as an archive to a release for easy download.
 - `test.yml`: This workflow automatically attempts to build the website upon a new pull request, making it suitable for use as a status check before merging.
-- `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (see [_Import from pretalx_](#import-from-pretalx)). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports. With several [editions](#editions), set its `EDITION` variable to the id of the edition to import.
+- `schedule.yml`: This workflow automatically generates schedule and content files when a new pull request includes a `schedule.json` file (see [_Import from pretalx_](#import-from-pretalx)). This enables quick content updates from [pretalx.com](https://pretalx.com/p/about/) exports. With several [editions](#editions), set its `EDITION` variable to the id of the edition to import. Its `OVERRIDES` variable names the file passed to `--overrides`.
 
 To get started, simply copy the desired workflow file to your repository and adapt it to your needs:
 

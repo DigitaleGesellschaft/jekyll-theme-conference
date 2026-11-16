@@ -73,6 +73,35 @@ class TestImportSchedule(unittest.TestCase):
         self.assertIn("1 < 2", description)
 
 
+class TestImportScheduleOverrides(unittest.TestCase):
+    def setUp(self) -> None:
+        self.content = import_schedule.parse_frab(frab("Talk", "Ada", "Room", ""))
+
+    def test_merges_properties_by_name(self) -> None:
+        overrides = {
+            "rooms": [
+                {"name": "Room", "order": 2, "hide": False, "live": {"absolute_url": "https://example.org"}}
+            ],
+            "talks": [{"name": "Talk", "tags": ["Keynote"]}],
+        }
+        import_schedule.apply_overrides(self.content, overrides)
+
+        room = self.content["rooms"][0]
+        self.assertEqual(room["order"], 2)
+        self.assertFalse(room["hide"])
+        self.assertEqual(room["live"], {"absolute_url": "https://example.org"})
+        self.assertEqual(self.content["talks"][0]["tags"], ["Keynote"])
+
+    def test_warns_about_unknown_entries(self) -> None:
+        overrides = {"rooms": [{"name": "Unknown", "order": 1}], "places": []}
+        with redirect_stdout(io.StringIO()) as output:
+            import_schedule.apply_overrides(self.content, overrides)
+
+        self.assertIn('"Unknown"', output.getvalue())
+        self.assertIn('"places"', output.getvalue())
+        self.assertEqual(len(self.content["rooms"]), 1)
+
+
 class TestImportScheduleEdition(unittest.TestCase):
     # Import a schedule into a new site folder, e.g. with "--edition", "2025"
     def import_frab(self, *args: str) -> Path:
@@ -102,6 +131,15 @@ class TestImportScheduleEdition(unittest.TestCase):
         self.assertTrue((output_dir / "_rooms" / "2025" / "room.md").is_file())
         self.assertTrue((output_dir / "_data" / "programs" / "2025.yml").is_file())
         self.assertFalse((output_dir / "_data" / "program.yml").exists())
+
+    def test_writes_overrides_to_files(self) -> None:
+        output_dir = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        (output_dir / "schedule.json").write_text(json.dumps(frab("Talk", "Ada", "Room", "")))
+        overrides_file = output_dir / "overrides.yml"
+        overrides_file.write_text("rooms:\n  - name: Room\n    order: 1\n")
+
+        self.import_frab_into(output_dir, "--overrides", str(overrides_file))
+        self.assertIn("order: 1", (output_dir / "_rooms" / "room.md").read_text())
 
     def test_creates_missing_edition_pages(self) -> None:
         output_dir = self.import_frab("--edition", "2025")
