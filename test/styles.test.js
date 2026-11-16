@@ -77,6 +77,17 @@ test("full: titles and names in a light weight", () => {
   assert.match(css, /\.talk-speakers,[^{]*\{\s*font-weight: 300;/);
 });
 
+test("full: track and speaker labels as a box with a bar", () => {
+  const { css } = compileString('@use "conference";', {
+    loadPaths: [join(FIXTURE_DIR, "_sass"), join(FIXTURE_DIR, "../../_sass")],
+    quietDeps: true,
+    silenceDeprecations: ["import", "global-builtin", "color-functions", "if-function"],
+  });
+
+  assert.match(css, /\.track-name,\s*\.page-label \{[^}]*border-left: 0\.25rem solid;/);
+  assert.match(css, /\.page-label \{[^}]*background-color: var\(--bs-tertiary-bg\);/);
+});
+
 test("full: Jekyll compiles Bootstrap without deprecation warnings", () => {
   const css = readFileSync(join(sites.full, "assets/css/main.css"), "utf8");
 

@@ -23,6 +23,27 @@
   font-weight: $font-weight-light;
 }
 
+// Labels: a box with a bar on the left, coloured by the track's utility
+// classes or, above the title of a speaker page, neutral
+.track-name,
+.page-label {
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-left: 0.25rem solid;
+  font-weight: $font-weight-normal;
+
+  @include media-breakpoint-up(sm) {
+    display: inline;
+  }
+}
+
+// As wide as its text, on a line of its own
+.page-label {
+  display: table;
+  background-color: var(--#{$prefix}tertiary-bg);
+  border-left-color: var(--#{$prefix}border-color);
+}
+
 // Program Overview
 .program-table {
   // Gap between columns: spacer columns would be announced by screen readers

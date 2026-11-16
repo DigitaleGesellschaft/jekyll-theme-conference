@@ -251,6 +251,15 @@ describe("Styling hooks", () => {
     }
   });
 
+  test("track labels leave their box to the stylesheet", () => {
+    for (const path of ["program/index.html", "talks/index.html", "talks/opening_welcome/index.html"]) {
+      const labels = [...read(path).matchAll(/class="track-name([^"]*)"/g)].map(([, cls]) => cls);
+
+      assert.ok(labels.length > 0, path);
+      assert.ok(labels.every((cls) => !/\b(badge|border-4|border-start|p-1|fw-normal)\b/.test(cls)), path);
+    }
+  });
+
   test("pages mark listed talks, labels, back links, consent and header", () => {
     assert.ok(tagsWith("talks/index.html", "talk-list").every((tag) => tag === "ul"));
     assert.deepEqual(tagsWith("speakers/ada_lovelace/index.html", "talk-list"), ["table"]);

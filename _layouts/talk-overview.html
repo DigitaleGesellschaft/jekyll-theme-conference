@@ -12,8 +12,8 @@
 
 {% if edition_tracks %}
   {% for track_prop in edition_tracks %}
-    <h2 class="h3 mt-4 mb-3">
-      <span class="track-name badge rounded-0 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-4 border-start border-{{ track_prop.color | default: 'light' }}-subtle d-block d-sm-inline text-wrap">
+    <h2 class="h5 mt-4 mb-3">
+      <span class="track-name bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-{{ track_prop.color | default: 'light' }}-subtle">
         {{ track_prop.name | escape }}
       </span>
     </h2>
