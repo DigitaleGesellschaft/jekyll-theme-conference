@@ -5,7 +5,7 @@ const openStream = async (page, time, { consent = true } = {}) => {
   await page.goto("");
   await ready(page);
   await page.evaluate((t) => window.conference.live.setTime(t, 0), time);
-  await page.locator("nav .live-show a[data-bs-target='#stream-modal']").click();
+  await page.locator("nav.d-pwa-none .live-show a[data-bs-target='#stream-modal']").click();
   await expect(page.locator("#stream-modal")).toBeVisible();
   if (consent) {
     await page.locator("#stream-modal").getByRole("button", { name: "Load content" }).click();
@@ -61,7 +61,7 @@ test.describe(() => {
     offline = false;
     await expect(page.locator("#stream-modal")).toBeHidden();
 
-    await page.locator("nav .live-show a[data-bs-target='#stream-modal']").click();
+    await page.locator("nav.d-pwa-none .live-show a[data-bs-target='#stream-modal']").click();
     await expect(page.locator("#stream-modal [data-embed-host]")).toHaveText("stream.example.org");
   });
 });

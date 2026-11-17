@@ -1,7 +1,10 @@
 {%- comment -%}
   Tab bar of the installed app (PWA), at most five tabs: beyond, the first
   four and "More" with the others, e.g. "Program · Talks · Speakers ·
-  Location · More". Menus open as sheets from the bottom, captured in
+  Location · More". A link with `live: true` adds a tab before "More" while
+  live, outside live its `name_inactive` if given (disabled). Without, the
+  tab takes no slot outside live: while live, the last tabs give way to it
+  and move into "More". Menus open as sheets from the bottom, captured in
   pwa_sheets: footer.html places them outside the bar, whose stacking
   context would keep them below the backdrop.
 {%- endcomment -%}
@@ -10,10 +13,18 @@
   {%- assign lang = site.data.lang[site.conference.lang] -%}
   {%- assign pwa_max_tabs = 5 -%}
 
-  {%- comment -%} Entries: links and non-empty menus, except hidden and live ones (keeping the bar static) {%- endcomment -%}
+  {%- comment -%} Entries: links and non-empty menus, except hidden ones and the live one (shown separately) {%- endcomment -%}
   {%- assign pwa_entries = "" | split: "" -%}
+  {%- assign pwa_live = nil -%}
   {%- for link in edition_nav_links -%}
-    {%- if link.pwa_hide or link.live -%}
+    {%- if link.pwa_hide -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if link.live -%}
+      {%- if edition_live and pwa_live == nil -%}
+        {%- assign pwa_live = link -%}
+      {%- endif -%}
       {%- continue -%}
     {%- endif -%}
 
@@ -26,9 +37,31 @@
     {%- assign pwa_entries = pwa_entries | push: link -%}
   {%- endfor -%}
 
+  {%- comment -%}
+    Tabs besides Live and More, outside live (pwa_tab_count) and while live
+    (pwa_tab_count_live), e.g. five entries and Live without name_inactive:
+    5 and 3 (+ Live + More)
+  {%- endcomment -%}
+  {%- assign pwa_slots = pwa_max_tabs -%}
+  {%- if pwa_live.name_inactive -%}
+    {%- assign pwa_slots = pwa_max_tabs | minus: 1 -%}
+  {%- endif -%}
   {%- assign pwa_tab_count = pwa_entries.size -%}
-  {%- if pwa_tab_count > pwa_max_tabs -%}
-    {%- assign pwa_tab_count = pwa_max_tabs | minus: 1 -%}
+  {%- if pwa_tab_count > pwa_slots -%}
+    {%- assign pwa_tab_count = pwa_slots | minus: 1 -%}
+  {%- endif -%}
+
+  {%- assign pwa_tab_count_live = pwa_tab_count -%}
+  {%- assign pwa_live_slots = pwa_max_tabs | minus: 1 -%}
+  {%- if pwa_live and pwa_live.name_inactive == nil and pwa_entries.size > pwa_live_slots -%}
+    {%- assign pwa_tab_count_live = pwa_max_tabs | minus: 2 -%}
+  {%- endif -%}
+  {%- assign pwa_live_only_count = pwa_tab_count | minus: pwa_tab_count_live -%}
+
+  {%- comment -%} Times when live, for .live-show and .live-hide {%- endcomment -%}
+  {%- if pwa_live -%}
+    {%- include get_live_timestamps.html -%}
+    {%- capture pwa_live_range %}data-start="{{ live_starts }}" data-end="{{ live_ends }}"{% endcapture -%}
   {%- endif %}
 <nav class="navbar navbar-expand-sm navbar-pwa d-pwa-block bg-body-secondary" aria-label="{{ lang.navigation.main | default: 'Main navigation' }}">
   <div class="container">
@@ -37,7 +70,7 @@
         {%- if link.menu -%}
           {%- include get_menu.html -%}
           {%- assign sheet_id = "navbar-pwa-sheet" | append: forloop.index0 %}
-          <div class="px-2">
+          <div class="px-2{% if forloop.index0 >= pwa_tab_count_live %} live-hide" {{ pwa_live_range }}{% else %}"{% endif %}>
             <button type="button" class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" data-bs-toggle="offcanvas" data-bs-target="#{{ sheet_id }}" aria-controls="{{ sheet_id }}"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
               {% assign link_icon_name = link.icon | default: 'list' %}{% include icon.html name=link_icon_name %}
               <span>{{ menu_name }}</span>
@@ -60,7 +93,7 @@
           {%- assign pwa_sheets = pwa_sheets | append: pwa_sheet -%}
 
         {%- else %}
-          <div class="px-2">
+          <div class="px-2{% if forloop.index0 >= pwa_tab_count_live %} live-hide" {{ pwa_live_range }}{% else %}"{% endif %}>
             {%- include get_link_active.html -%}
             {%- include get_link.html class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" is_active=is_active -%}
             {{ link_tag }}
@@ -71,8 +104,29 @@
         {%- endif -%}
       {%- endfor %}
 
-      {%- if pwa_tab_count < pwa_entries.size %}
-          <div class="px-2">
+      {%- comment -%} Live while live, otherwise name_inactive if given (as in navbar.html) {%- endcomment -%}
+      {%- if pwa_live -%}
+        {%- assign link = pwa_live %}
+          <div class="px-2 live-show d-none" {{ pwa_live_range }}>
+            {%- include get_link.html class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" -%}
+            {{ link_tag }}
+              {% include get_live_icon.html icon_only=true %}
+              <span>{{ link.name | default: lang.live.live | default: "Live" }}</span>
+            </a>
+          </div>
+
+        {%- if link.name_inactive %}
+          <div class="px-2 live-hide" {{ pwa_live_range }}>
+            <a class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center disabled" href="#" tabindex="-1" aria-disabled="true">
+              {% include get_live_icon.html icon_only=true %}
+              <span>{{ link.name_inactive }}</span>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endif %}
+
+      {%- if pwa_tab_count_live < pwa_entries.size %}
+          <div class="px-2{% if pwa_tab_count >= pwa_entries.size %} live-show d-none" {{ pwa_live_range }}{% else %}"{% endif %}>
             <button type="button" class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" data-bs-toggle="offcanvas" data-bs-target="#navbar-pwa-more" aria-controls="navbar-pwa-more">
               {% include icon.html name="three-dots" %}
               <span>{{ lang.navigation.more | default: "More" }}</span>
@@ -83,8 +137,11 @@
   </div>
 </nav>
 
-  {%- comment -%} More: the remaining links, then the remaining menus under their name {%- endcomment -%}
-  {%- if pwa_tab_count < pwa_entries.size -%}
+  {%- comment -%}
+    More: the remaining links, then the remaining menus under their name;
+    those giving way to Live only while live
+  {%- endcomment -%}
+  {%- if pwa_tab_count_live < pwa_entries.size -%}
     {%- capture pwa_sheet %}
   <div class="offcanvas offcanvas-bottom h-auto rounded-top-4 d-print-none navbar-pwa-sheet" tabindex="-1" id="navbar-pwa-more" aria-labelledby="navbar-pwa-more-label">
     <div class="offcanvas-header">
@@ -92,32 +149,55 @@
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{{ lang.close | default: 'Close' }}"></button>
     </div>
     <div class="offcanvas-body pt-0">
-      {%- capture pwa_more_links -%}
-        {%- for link in pwa_entries offset: pwa_tab_count -%}
-          {%- unless link.menu -%}
-            {%- include get_link_active.html -%}
-            {%- include get_link.html class="list-group-item list-group-item-action icon-link" is_active=is_active %}
+      {%- assign pwa_more_links_live = "" -%}
+      {%- assign pwa_more_links = "" -%}
+      {%- for link in pwa_entries offset: pwa_tab_count_live -%}
+        {%- if link.menu -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- include get_link_active.html -%}
+        {%- include get_link.html class="list-group-item list-group-item-action icon-link" is_active=is_active -%}
+        {%- capture pwa_more_link %}
         {{ link_tag }}
           {% assign link_icon_name = link_icon | default: 'link-45deg' %}{% include icon.html name=link_icon_name %}
           {{ link.name }}
         </a>
-          {%- endunless -%}
-        {%- endfor -%}
-      {%- endcapture -%}
+        {%- endcapture -%}
+        {%- if forloop.index0 < pwa_live_only_count -%}
+          {%- assign pwa_more_links_live = pwa_more_links_live | append: pwa_more_link -%}
+        {%- else -%}
+          {%- assign pwa_more_links = pwa_more_links | append: pwa_more_link -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- unless pwa_more_links_live == "" %}
+      <div class="list-group list-group-flush live-show d-none" {{ pwa_live_range }}>
+        {{- pwa_more_links_live }}
+      </div>
+      {%- endunless -%}
       {%- unless pwa_more_links == "" %}
       <div class="list-group list-group-flush">
         {{- pwa_more_links }}
       </div>
       {%- endunless -%}
 
-      {%- for link in pwa_entries offset: pwa_tab_count -%}
-        {%- if link.menu -%}
-          {%- include get_menu.html %}
-      <h3 class="h6 mt-3 mb-1 px-3 text-body-secondary">{{ menu_name }}</h3>
-      <div class="list-group list-group-flush">
-        {%- include show_menu_items.html item_class="list-group-item list-group-item-action" %}
+      {%- for link in pwa_entries offset: pwa_tab_count_live -%}
+        {%- unless link.menu -%}
+          {%- continue -%}
+        {%- endunless -%}
+
+        {%- include get_menu.html -%}
+        {%- if forloop.index0 < pwa_live_only_count %}
+      <div class="live-show d-none" {{ pwa_live_range }}>
+        {%- else %}
+      <div>
+        {%- endif %}
+        <h3 class="h6 mt-3 mb-1 px-3 text-body-secondary">{{ menu_name }}</h3>
+        <div class="list-group list-group-flush">
+          {%- include show_menu_items.html item_class="list-group-item list-group-item-action" %}
+        </div>
       </div>
-        {%- endif -%}
       {%- endfor %}
     </div>
   </div>

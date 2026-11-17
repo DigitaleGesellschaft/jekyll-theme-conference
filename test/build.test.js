@@ -112,6 +112,18 @@ describe("Structured data", () => {
   });
 });
 
+// Tabs of the app's tab bar, marked if shown only during or outside live,
+// e.g. ["Program", "Live (live)", "More"]
+const pwaTabs = (html) => {
+  const tabBar = html.match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
+  return [...tabBar.matchAll(/<div class="px-2([^"]*)"[\s\S]*?<span>([^<]*)<\/span>/g)].map(([, cls, name]) => {
+    if (/live-show/.test(cls)) {
+      return `${name} (live)`;
+    }
+    return /live-hide/.test(cls) ? `${name} (not live)` : name;
+  });
+};
+
 describe("PWA", () => {
   test(".htaccess keeps its content and forwards nothing without editions", () => {
     const htaccess = read(".htaccess");
@@ -148,15 +160,15 @@ describe("PWA", () => {
     assert.match(html, /<meta name="theme-color" content="#1f4a19" media="\(prefers-color-scheme: dark\)" \/>/);
   });
 
-  test("app's tab bar holds four tabs and More beyond five entries", () => {
+  test("app's tab bar holds five tabs at most, one kept for Live", () => {
     const html = read("index.html");
     const tabBar = html.match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
     const more = html.match(/id="navbar-pwa-more"[\s\S]*?<\/nav>|id="navbar-pwa-more"[\s\S]*$/)[0];
 
-    assert.deepEqual([...tabBar.matchAll(/<span>([^<]*)<\/span>/g)].map(([, name]) => name), ["Program", "Talks", "Speakers", "Location", "More"]);
+    assert.deepEqual(pwaTabs(html), ["Program", "Talks", "Speakers", "Live (live)", "Offline (not live)", "More"]);
     assert.match(tabBar, /<button[^>]*data-bs-target="#navbar-pwa-more"/);
     assert.doesNotMatch(tabBar, /dropup|dropdown/);
-    assert.match(more, /href="\/conf\/documents\/flyer\.pdf"[\s\S]*Flyer/);
+    assert.match(more, /href="\/conf\/location\/"[\s\S]*Location[\s\S]*href="\/conf\/documents\/flyer\.pdf"[\s\S]*Flyer/);
     assert.match(more, /<h3[^>]*>Info<\/h3>[\s\S]*href="\/conf\/variants\/alltimes\/"/);
   });
 
@@ -165,6 +177,24 @@ describe("PWA", () => {
 
     assert.doesNotMatch(footer, /class="offcanvas /);
     assert.match(read("index.html"), /<\/footer>\s*<div class="offcanvas [^"]*" tabindex="-1" id="navbar-pwa-more"/);
+  });
+
+  test("app's tab bar shows Live before More while live, opening the stream", () => {
+    const tabBar = read("index.html").match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
+    const live = tabBar.match(/<div class="px-2 live-show d-none[^"]*" data-start="\d[^"]*" data-end="\d[^"]*">[\s\S]*?<\/div>/)?.[0];
+
+    assert.ok(live, "live tab");
+    assert.match(live, /data-bs-target="#stream-modal"[\s\S]*class="live-icon[^"]*"[\s\S]*<span>Live<\/span>/);
+    assert.doesNotMatch(live, /live-button/);
+    assert.ok(tabBar.indexOf("live-show") < tabBar.indexOf('data-bs-target="#navbar-pwa-more"'));
+  });
+
+  test("app's tab bar shows name_inactive as a disabled tab outside live", () => {
+    const tabBar = read("index.html").match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
+    const inactive = tabBar.match(/<div class="px-2 live-hide[^"]*" data-start="\d[^"]*" data-end="\d[^"]*">[\s\S]*?<\/div>/)?.[0];
+
+    assert.ok(inactive, "inactive tab");
+    assert.match(inactive, /<a class="[^"]*\bdisabled\b[^"]*" href="#" tabindex="-1" aria-disabled="true">[\s\S]*class="live-icon[^"]*"[\s\S]*<span>Offline<\/span>/);
   });
 
   test("app's active tab shows the filled icon where there is one", () => {
@@ -464,6 +494,25 @@ describe("Room order", () => {
     const rooms = [...location.matchAll(/href="[^"]*\/rooms\/(\w+)\/"/g)].map(([, room]) => room);
 
     assert.deepEqual([...new Set(rooms)], ["room_a", "room_b", "room_c"]);
+  });
+});
+
+describe("App's tab bar with Live but without name_inactive", () => {
+  let html;
+
+  before(() => {
+    html = readFileSync(join(buildSite("_config.pwa-live.yml"), "index.html"), "utf8");
+  });
+
+  test("keeps no tab free for Live, making room once live", () => {
+    assert.deepEqual(pwaTabs(html), ["Program", "Talks", "Speakers", "Location (not live)", "Info (not live)", "Live (live)", "More (live)"]);
+  });
+
+  test("More lists the entries making room only while live", () => {
+    const more = html.match(/id="navbar-pwa-more"[\s\S]*$/)[0];
+
+    assert.match(more, /<div class="list-group list-group-flush live-show d-none" data-start="\d[^"]*" data-end="\d[^"]*">\s*<a[^>]*href="\/conf\/location\/"/);
+    assert.match(more, /<div class="live-show d-none" data-start="\d[^"]*" data-end="\d[^"]*">\s*<h3[^>]*>Info<\/h3>/);
   });
 });
 

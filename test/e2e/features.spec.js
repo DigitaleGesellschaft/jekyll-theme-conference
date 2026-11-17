@@ -136,7 +136,7 @@ test("installed app shows the bottom navigation instead of the top one", async (
   const bottomNav = page.locator("nav.navbar-pwa");
   await expect(page.locator("header nav.navbar")).toBeHidden();
   await expect(bottomNav).toBeVisible();
-  await expect(bottomNav.getByRole("link")).toHaveText(["Program", "Talks", "Speakers", "Location"]);
+  await expect(bottomNav.getByRole("link")).toHaveText(["Program", "Talks", "Speakers", "Offline"]);
   await expect(bottomNav.getByRole("button")).toHaveText(["More"]);
 
   // Content is not hidden behind the navigation at the bottom
@@ -170,7 +170,7 @@ test("next talk shows a relative time and enables live links once started", asyn
 
   // Open the stream while the talk is still upcoming (live link in the navigation)
   await setTime("08:58");
-  await page.locator("nav .live-show a[data-bs-target='#stream-modal']").click();
+  await page.locator("nav.d-pwa-none .live-show a[data-bs-target='#stream-modal']").click();
   await expect(time).toHaveText("in 2 minutes");
   await expect(link).toHaveClass(/disabled/);
 

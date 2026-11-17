@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { ready } from "./helpers.js";
+import { ready, track } from "./helpers.js";
 
 const OFFLINE_PAGES = ["program/", "talks/opening_welcome/", "speakers/ada_lovelace/", "rooms/room_a/"];
 
@@ -180,10 +180,35 @@ test.describe("installed app", () => {
     await page.goto("talks/");
     await ready(page);
 
-    for (const tab of await page.locator("nav.navbar-pwa .nav-link").all()) {
+    for (const tab of await page.locator("nav.navbar-pwa .nav-link:visible").all()) {
       const [icon, label] = [await tab.locator(".bi").boundingBox(), await tab.locator("span").boundingBox()];
       expect(icon.y + icon.height).toBeLessThanOrEqual(label.y);
     }
+  });
+
+  test("Live replaces name_inactive in the tab bar while live and opens the stream", async ({ page }) => {
+    await track(page);
+    await page.goto("speakers/");
+    await ready(page);
+
+    const live = page.locator("nav.navbar-pwa").getByRole("link", { name: "Live" });
+    const setTime = (time) => page.evaluate((t) => window.conference.live.setTime(t, 0), time);
+
+    // Outside live: name_inactive in its place, disabled
+    await setTime("06:00");
+    await expect(live).toBeHidden();
+    const inactive = page.locator("nav.navbar-pwa .nav-link.disabled", { hasText: "Offline" });
+    await expect(inactive).toBeVisible();
+    await expect(inactive).toHaveAttribute("aria-disabled", "true");
+
+    await setTime("09:10");
+    await expect(live).toBeVisible();
+    await expect(inactive).toBeHidden();
+    const [icon, label] = [await live.locator(".live-icon").boundingBox(), await live.locator("span").boundingBox()];
+    expect(icon.y + icon.height).toBeLessThanOrEqual(label.y);
+
+    await live.click();
+    await expect(page.locator("#stream-modal")).toBeVisible();
   });
 
   test("More opens a sheet with the remaining entries", async ({ page }) => {
@@ -193,7 +218,7 @@ test.describe("installed app", () => {
     await page.locator("nav.navbar-pwa").getByRole("button", { name: "More" }).click();
     const sheet = page.getByRole("dialog", { name: "More" });
     await expect(sheet).toBeVisible();
-    await expect(sheet.getByRole("link")).toHaveText(["Flyer", "All Times"]);
+    await expect(sheet.getByRole("link")).toHaveText(["Location", "Flyer", "All Times"]);
 
     await sheet.getByRole("link", { name: "All Times" }).click();
     await expect(page).toHaveURL(/\/conf\/variants\/alltimes\/$/);

@@ -333,6 +333,11 @@ h1.room-name,
   --#{$prefix}navbar-active-color: var(--#{$prefix}primary-text-emphasis);
 }
 
+// Disabled live tab (name_inactive): the icon without its pulse
+.navbar-pwa .disabled .live-icon path {
+  animation: none;
+}
+
 // Sheets of the app's tab bar (_includes/navbar_pwa.html): items across
 // the full width, above the home indicator
 .navbar-pwa-sheet .offcanvas-body {

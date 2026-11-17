@@ -1,0 +1,23 @@
+# App's tab bar with five entries and a live link without name_inactive:
+# Live takes a tab only while live, pushing others into "More"
+conference:
+  navigation:
+    links:
+      - name: Program
+        icon: calendar4-week
+        relative_url: /program/
+      - name: Talks
+        icon: megaphone
+        relative_url: /talks/
+      - name: Speakers
+        icon: people
+        relative_url: /speakers/
+      - name: Location
+        icon: geo-alt
+        relative_url: /location/
+      - name: Info
+        icon: info-circle
+        menu:
+          - name: All Times
+            relative_url: /variants/alltimes/
+      - live: true
