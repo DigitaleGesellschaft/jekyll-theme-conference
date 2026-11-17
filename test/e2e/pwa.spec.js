@@ -211,6 +211,26 @@ test.describe("installed app", () => {
     await expect(page.locator("#stream-modal")).toBeVisible();
   });
 
+  test("tab bar holds four tabs on narrow phones, five from 390 px", async ({ page }) => {
+    const setTime = (time) => page.evaluate((t) => window.conference.live.setTime(t, 0), time);
+    const tabs = page.locator("nav.navbar-pwa .nav-link:visible span");
+
+    // iPhone mini: Speakers moves into More, outside live and during
+    await page.setViewportSize({ width: 375, height: 600 });
+    await page.goto("");
+    await ready(page);
+    await setTime("06:00");
+    await expect(tabs).toHaveText(["Program", "Talks", "Offline", "More"]);
+    await setTime("09:10");
+    await expect(tabs).toHaveText(["Program", "Talks", "Live", "More"]);
+
+    await page.locator("nav.navbar-pwa").getByRole("button", { name: "More" }).click();
+    await expect(page.getByRole("dialog", { name: "More" }).getByRole("link")).toHaveText(["Speakers", "Location", "Flyer", "All Times"]);
+
+    await page.setViewportSize({ width: 390, height: 600 });
+    await expect(tabs).toHaveText(["Program", "Talks", "Speakers", "Live", "More"]);
+  });
+
   test("More opens a sheet with the remaining entries", async ({ page }) => {
     await page.goto("");
     await ready(page);

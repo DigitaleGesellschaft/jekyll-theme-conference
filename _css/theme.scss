@@ -333,6 +333,30 @@ h1.room-name,
   --#{$prefix}navbar-active-color: var(--#{$prefix}primary-text-emphasis);
 }
 
+// States of the app's tab bar (_includes/navbar_pwa.html): four tabs on
+// narrow phones (e.g. iPhone mini, 375 px), five from 390 px, "-live"
+// while the Live tab shows. Tabs and "More" entries with data-pwa-in show
+// only in the states listed, e.g. data-pwa-in="5 5-live"
+$pwa-five-tabs: 390px;
+
+$pwa-live: ".navbar-pwa-live:not(.d-none)";
+
+@each $suffix, $state in ("": ":not(:has(#{$pwa-live}))", "-live": ":has(#{$pwa-live})") {
+  :root#{$state} {
+    @media (max-width: #{$pwa-five-tabs - 0.02px}) {
+      [data-pwa-in]:not([data-pwa-in~="4#{$suffix}"]) {
+        display: none;
+      }
+    }
+
+    @media (min-width: $pwa-five-tabs) {
+      [data-pwa-in]:not([data-pwa-in~="5#{$suffix}"]) {
+        display: none;
+      }
+    }
+  }
+}
+
 // Disabled live tab (name_inactive): the icon without its pulse
 .navbar-pwa .disabled .live-icon path {
   animation: none;

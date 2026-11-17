@@ -113,10 +113,15 @@ describe("Structured data", () => {
 });
 
 // Tabs of the app's tab bar, marked if shown only during or outside live,
-// e.g. ["Program", "Live (live)", "More"]
+// or only in some of its states (four or five tabs, during live or not),
+// e.g. ["Program", "Speakers [5 5-live]", "Live (live)", "More"]
 const pwaTabs = (html) => {
   const tabBar = html.match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
-  return [...tabBar.matchAll(/<div class="px-2([^"]*)"[\s\S]*?<span>([^<]*)<\/span>/g)].map(([, cls, name]) => {
+  return [...tabBar.matchAll(/<div class="px-2([^"]*)"([^>]*)>[\s\S]*?<span>([^<]*)<\/span>/g)].map(([, cls, attrs, name]) => {
+    const states = attrs.match(/data-pwa-in="([^"]*)"/)?.[1];
+    if (states) {
+      return `${name} [${states}]`;
+    }
     if (/live-show/.test(cls)) {
       return `${name} (live)`;
     }
@@ -160,15 +165,15 @@ describe("PWA", () => {
     assert.match(html, /<meta name="theme-color" content="#1f4a19" media="\(prefers-color-scheme: dark\)" \/>/);
   });
 
-  test("app's tab bar holds five tabs at most, one kept for Live", () => {
+  test("app's tab bar holds four or five tabs by width, one kept for Live", () => {
     const html = read("index.html");
     const tabBar = html.match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
-    const more = html.match(/id="navbar-pwa-more"[\s\S]*?<\/nav>|id="navbar-pwa-more"[\s\S]*$/)[0];
+    const more = html.match(/id="navbar-pwa-more"[\s\S]*$/)[0];
 
-    assert.deepEqual(pwaTabs(html), ["Program", "Talks", "Speakers", "Live (live)", "Offline (not live)", "More"]);
+    assert.deepEqual(pwaTabs(html), ["Program", "Talks", "Speakers [5 5-live]", "Live (live)", "Offline (not live)", "More"]);
     assert.match(tabBar, /<button[^>]*data-bs-target="#navbar-pwa-more"/);
     assert.doesNotMatch(tabBar, /dropup|dropdown/);
-    assert.match(more, /href="\/conf\/location\/"[\s\S]*Location[\s\S]*href="\/conf\/documents\/flyer\.pdf"[\s\S]*Flyer/);
+    assert.match(more, /<a data-pwa-in="4 4-live"[^>]*href="\/conf\/speakers\/"[\s\S]*<a\s+class[^>]*href="\/conf\/location\/"[\s\S]*Location[\s\S]*href="\/conf\/documents\/flyer\.pdf"[\s\S]*Flyer/);
     assert.match(more, /<h3[^>]*>Info<\/h3>[\s\S]*href="\/conf\/variants\/alltimes\/"/);
   });
 
@@ -181,7 +186,7 @@ describe("PWA", () => {
 
   test("app's tab bar shows Live before More while live, opening the stream", () => {
     const tabBar = read("index.html").match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
-    const live = tabBar.match(/<div class="px-2 live-show d-none[^"]*" data-start="\d[^"]*" data-end="\d[^"]*">[\s\S]*?<\/div>/)?.[0];
+    const live = tabBar.match(/<div class="px-2 navbar-pwa-live live-show d-none" data-start="\d[^"]*" data-end="\d[^"]*">[\s\S]*?<\/div>/)?.[0];
 
     assert.ok(live, "live tab");
     assert.match(live, /data-bs-target="#stream-modal"[\s\S]*class="live-icon[^"]*"[\s\S]*<span>Live<\/span>/);
@@ -505,14 +510,15 @@ describe("App's tab bar with Live but without name_inactive", () => {
   });
 
   test("keeps no tab free for Live, making room once live", () => {
-    assert.deepEqual(pwaTabs(html), ["Program", "Talks", "Speakers", "Location (not live)", "Info (not live)", "Live (live)", "More (live)"]);
+    assert.deepEqual(pwaTabs(html), ["Program", "Talks", "Speakers [4 5 5-live]", "Location [5]", "Info [5]", "Live (live)", "More [4 4-live 5-live]"]);
   });
 
-  test("More lists the entries making room only while live", () => {
+  test("More lists the entries making room", () => {
     const more = html.match(/id="navbar-pwa-more"[\s\S]*$/)[0];
 
-    assert.match(more, /<div class="list-group list-group-flush live-show d-none" data-start="\d[^"]*" data-end="\d[^"]*">\s*<a[^>]*href="\/conf\/location\/"/);
-    assert.match(more, /<div class="live-show d-none" data-start="\d[^"]*" data-end="\d[^"]*">\s*<h3[^>]*>Info<\/h3>/);
+    assert.match(more, /<a data-pwa-in="4-live"[^>]*href="\/conf\/speakers\/"/);
+    assert.match(more, /<a data-pwa-in="4 4-live 5-live"[^>]*href="\/conf\/location\/"/);
+    assert.match(more, /<div data-pwa-in="4 4-live 5-live">\s*<h3[^>]*>Info<\/h3>/);
   });
 });
 

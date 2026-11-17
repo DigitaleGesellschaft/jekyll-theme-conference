@@ -1,0 +1,26 @@
+{%- comment -%}
+  States of the app's tab bar (pwa_states, e.g. "4-live": four tabs, during
+  live) in which the entry at pwa_index is a tab or in "More", given the
+  tabs per state (pwa_counts), as attributes: pwa_tab_attr and
+  pwa_more_attr, e.g. ' data-pwa-in="5 5-live"' and ' data-pwa-in="4
+  4-live"'; empty where it is in all states.
+{%- endcomment -%}
+{%- assign pwa_tab_in = "" | split: "" -%}
+{%- assign pwa_more_in = "" | split: "" -%}
+{%- for pwa_count in pwa_counts -%}
+  {%- if pwa_index < pwa_count -%}
+    {%- assign pwa_tab_in = pwa_tab_in | push: pwa_states[forloop.index0] -%}
+  {%- else -%}
+    {%- assign pwa_more_in = pwa_more_in | push: pwa_states[forloop.index0] -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign pwa_tab_attr = "" -%}
+{%- if pwa_more_in.size > 0 -%}
+  {%- assign pwa_tab_attr = pwa_tab_in | join: " " | prepend: ' data-pwa-in="' | append: '"' -%}
+{%- endif -%}
+
+{%- assign pwa_more_attr = "" -%}
+{%- if pwa_tab_in.size > 0 -%}
+  {%- assign pwa_more_attr = pwa_more_in | join: " " | prepend: ' data-pwa-in="' | append: '"' -%}
+{%- endif -%}
