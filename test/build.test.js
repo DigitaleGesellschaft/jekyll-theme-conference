@@ -134,6 +134,54 @@ describe("PWA", () => {
     assert.ok(["default", "black", "black-translucent"].includes(match[1]));
   });
 
+  test("page extends below the system bars, the app pads its bars by their size", () => {
+    const html = read("index.html");
+
+    assert.match(html, /<meta name="viewport" content="[^"]*viewport-fit=cover"/);
+    assert.doesNotMatch(html.match(/<nav class="navbar[^"]*navbar-pwa[^"]*"/)[0], /\bpb-\d/);
+  });
+
+  test("theme colour follows the colour scheme if a dark one is set", () => {
+    const html = read("index.html");
+
+    assert.match(html, /<meta name="theme-color" content="#4ea93f" media="\(prefers-color-scheme: light\)" \/>/);
+    assert.match(html, /<meta name="theme-color" content="#1f4a19" media="\(prefers-color-scheme: dark\)" \/>/);
+  });
+
+  test("app's tab bar holds four tabs and More beyond five entries", () => {
+    const html = read("index.html");
+    const tabBar = html.match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
+    const more = html.match(/id="navbar-pwa-more"[\s\S]*?<\/nav>|id="navbar-pwa-more"[\s\S]*$/)[0];
+
+    assert.deepEqual([...tabBar.matchAll(/<span>([^<]*)<\/span>/g)].map(([, name]) => name), ["Program", "Talks", "Speakers", "Location", "More"]);
+    assert.match(tabBar, /<button[^>]*data-bs-target="#navbar-pwa-more"/);
+    assert.doesNotMatch(tabBar, /dropup|dropdown/);
+    assert.match(more, /href="\/conf\/documents\/flyer\.pdf"[\s\S]*Flyer/);
+    assert.match(more, /<h3[^>]*>Info<\/h3>[\s\S]*href="\/conf\/variants\/alltimes\/"/);
+  });
+
+  test("app's sheets are outside the tab bar, above its stacking context", () => {
+    const footer = read("index.html").match(/<footer class="footer-pwa">[\s\S]*?<\/footer>/)[0];
+
+    assert.doesNotMatch(footer, /class="offcanvas /);
+    assert.match(read("index.html"), /<\/footer>\s*<div class="offcanvas [^"]*" tabindex="-1" id="navbar-pwa-more"/);
+  });
+
+  test("app's active tab shows the filled icon where there is one", () => {
+    const tab = (path, name) => read(path).match(new RegExp(`<a[^>]*aria-current="page"[^>]*>[\\s\\S]*?<span>${name}</span>`))[0];
+
+    assert.match(tab("talks/index.html", "Talks"), /bi-megaphone-fill/);
+    assert.match(tab("program/index.html", "Program"), /bi-calendar4-week"/);
+    assert.doesNotMatch(read("talks/index.html").match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0], /bi-people-fill/);
+  });
+
+  test("app animates page changes unless reduced motion is preferred, keeping its tab bar", () => {
+    const css = read("assets/css/conference.bundle.css");
+
+    assert.match(css, /@media \(display-mode: ?standalone\) and \(prefers-reduced-motion: ?no-preference\) ?\{ ?@view-transition ?\{ ?navigation: ?auto;? ?\}/);
+    assert.match(css, /\.navbar-pwa ?\{[^}]*view-transition-name: ?pwa-tabs/);
+  });
+
   test("site.json lists all visible pages", () => {
     const { pages } = readJson("assets/js/site.json");
 

@@ -176,8 +176,9 @@ describe("editions", () => {
   test("installed app shows the switcher only where a link places it", () => {
     const pwaNavbar = (path) => read(sites.main, path).match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
 
-    assert.doesNotMatch(pwaNavbar("2026/index.html"), /dropup/);
-    assert.match(pwaNavbar("2025/index.html"), /id="navbar-dropup0"[^>]*>\s*Years\s*<\/a>/);
+    assert.doesNotMatch(pwaNavbar("2026/index.html"), /data-bs-toggle="offcanvas"/);
+    assert.match(pwaNavbar("2025/index.html"), /data-bs-target="#navbar-pwa-sheet0"[\s\S]*?<span>Years<\/span>/);
+    assert.match(read(sites.main, "2025/index.html"), /id="navbar-pwa-sheet0"[\s\S]*?href="\/conf\/2026\/"/);
   });
 
   test("switcher can be hidden", () => {

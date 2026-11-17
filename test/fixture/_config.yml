@@ -58,6 +58,7 @@ conference:
   pwa:
     enable: true
     theme_color: "#4ea93f"
+    theme_color_dark: "#1f4a19"
     icons:
       - img: icon.png
         sizes: 192x192
@@ -86,6 +87,11 @@ conference:
       - name: Flyer
         icon: file-earmark-text
         file: flyer.pdf
+      - name: Info
+        icon: info-circle
+        menu:
+          - name: All Times
+            relative_url: /variants/alltimes/
       - live: true
         name_inactive: Offline
 

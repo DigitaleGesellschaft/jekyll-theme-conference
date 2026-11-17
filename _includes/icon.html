@@ -1,17 +1,26 @@
 {%- comment -%}
   Inline Bootstrap Icon as SVG, rendered at build time (no icon font), e.g.
   {% include icon.html name="clock" class="me-1" %}. Unknown names render nothing.
+  With fill=true, its filled variant where there is one (e.g. clock-fill).
 {%- endcomment -%}
 {%- unless icon_names -%}
   {%- capture icon_names -%}{%- include icons/_names.txt -%}{%- endcapture -%}
 {%- endunless -%}
 
-{%- assign icon_key = include.name | prepend: "," | append: "," -%}
-{%- if include.name and icon_names contains icon_key -%}
+{%- assign icon_name = include.name -%}
+{%- if include.fill -%}
+  {%- assign icon_key = include.name | append: "-fill" | prepend: "," | append: "," -%}
+  {%- if icon_names contains icon_key -%}
+    {%- assign icon_name = include.name | append: "-fill" -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign icon_key = icon_name | prepend: "," | append: "," -%}
+{%- if icon_name and icon_names contains icon_key -%}
   {%- if include.class -%}
     {%- assign icon_class = include.class | prepend: " " -%}
   {%- else -%}
     {%- assign icon_class = "" -%}
   {%- endif -%}
-  {%- include icons/{{ include.name }}.svg -%}
+  {%- include icons/{{ icon_name }}.svg -%}
 {%- endif -%}

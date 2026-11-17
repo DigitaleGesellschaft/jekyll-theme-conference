@@ -1,4 +1,4 @@
-version: 14
+version: 15
 
 en:
   pronoun:
@@ -15,6 +15,7 @@ en:
     main: Main navigation
     toggle: Toggle navigation menu
     skip_to_content: Skip to content
+    more: More
   live:
     live: Live
     stream: Live Stream
@@ -93,6 +94,7 @@ de:
     main: Hauptnavigation
     toggle: Navigationsmenü umschalten
     skip_to_content: Zum Inhalt springen
+    more: Mehr
   live:
     live: Live
     stream: Live Stream
@@ -171,6 +173,7 @@ fr:
     main: Navigation principale
     toggle: Basculer le menu de navigation
     skip_to_content: Aller au contenu
+    more: Plus
   live:
     live: En direct
     stream: Diffusion en direct
@@ -249,6 +252,7 @@ pt:
     main: Navegação principal
     toggle: Alternar menu de navegação
     skip_to_content: Ir para o conteúdo
+    more: Mais
   live:
     live: Ao vivo
     stream: Transmissão ao vivo

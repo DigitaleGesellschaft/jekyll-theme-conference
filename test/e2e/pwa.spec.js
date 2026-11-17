@@ -149,9 +149,67 @@ test.describe("install banner on android with an install prompt", () => {
   });
 });
 
+test("website overscrolls as usual", async ({ page }) => {
+  await page.goto("talks/");
+  await ready(page);
+
+  await expect(page.locator("html")).toHaveCSS("overscroll-behavior-y", "auto");
+});
+
 test("install banner is not shown on desktops", async ({ page }) => {
   await page.goto("");
   await ready(page);
 
   await expect(page.locator("#pwa-banner")).toBeHidden();
+});
+
+test.describe("installed app", () => {
+  test.use({ viewport: { width: 390, height: 600 }, hasTouch: true });
+
+  // iOS flag for "added to home screen", read by the theme's standalone detection
+  test.beforeEach(({ page }) => page.addInitScript(() => Object.defineProperty(navigator, "standalone", { value: true })));
+
+  test("page does not overscroll, keeping the tab bar in place", async ({ page }) => {
+    await page.goto("talks/");
+    await ready(page);
+
+    await expect(page.locator("html")).toHaveCSS("overscroll-behavior-y", "none");
+  });
+
+  test("tabs show their icon above the label", async ({ page }) => {
+    await page.goto("talks/");
+    await ready(page);
+
+    for (const tab of await page.locator("nav.navbar-pwa .nav-link").all()) {
+      const [icon, label] = [await tab.locator(".bi").boundingBox(), await tab.locator("span").boundingBox()];
+      expect(icon.y + icon.height).toBeLessThanOrEqual(label.y);
+    }
+  });
+
+  test("More opens a sheet with the remaining entries", async ({ page }) => {
+    await page.goto("");
+    await ready(page);
+
+    await page.locator("nav.navbar-pwa").getByRole("button", { name: "More" }).click();
+    const sheet = page.getByRole("dialog", { name: "More" });
+    await expect(sheet).toBeVisible();
+    await expect(sheet.getByRole("link")).toHaveText(["Flyer", "All Times"]);
+
+    await sheet.getByRole("link", { name: "All Times" }).click();
+    await expect(page).toHaveURL(/\/conf\/variants\/alltimes\/$/);
+  });
+
+  for (const colorScheme of ["light", "dark"]) {
+    test(`tab bar and sheet have no axe violations in ${colorScheme} mode`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme });
+      await page.goto("talks/");
+      await ready(page);
+
+      await page.locator("nav.navbar-pwa").getByRole("button", { name: "More" }).click();
+      await expect(page.locator("#navbar-pwa-more")).toBeVisible();
+
+      const { violations } = await new AxeBuilder({ page }).include(".navbar-pwa").include("#navbar-pwa-more").analyze();
+      expect(violations.map(({ id, nodes }) => `${id}: ${nodes.map((node) => node.target.join(" ")).join(", ")}`)).toEqual([]);
+    });
+  }
 });

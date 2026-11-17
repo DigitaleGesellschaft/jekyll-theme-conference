@@ -1,39 +1,127 @@
+{%- comment -%}
+  Tab bar of the installed app (PWA), at most five tabs: beyond, the first
+  four and "More" with the others, e.g. "Program · Talks · Speakers ·
+  Location · More". Menus open as sheets from the bottom, captured in
+  pwa_sheets: footer.html places them outside the bar, whose stacking
+  context would keep them below the backdrop.
+{%- endcomment -%}
+{%- assign pwa_sheets = "" -%}
 {%- if site.conference.pwa and site.conference.pwa.enable -%}
-<nav class="navbar navbar-expand-sm navbar-pwa d-pwa-block bg-body-secondary pb-4" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
+  {%- assign lang = site.data.lang[site.conference.lang] -%}
+  {%- assign pwa_max_tabs = 5 -%}
+
+  {%- comment -%} Entries: links and non-empty menus, except hidden and live ones (keeping the bar static) {%- endcomment -%}
+  {%- assign pwa_entries = "" | split: "" -%}
+  {%- for link in edition_nav_links -%}
+    {%- if link.pwa_hide or link.live -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if link.menu -%}
+      {%- include get_menu.html -%}
+      {%- if menu_empty -%}
+        {%- continue -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- assign pwa_entries = pwa_entries | push: link -%}
+  {%- endfor -%}
+
+  {%- assign pwa_tab_count = pwa_entries.size -%}
+  {%- if pwa_tab_count > pwa_max_tabs -%}
+    {%- assign pwa_tab_count = pwa_max_tabs | minus: 1 -%}
+  {%- endif %}
+<nav class="navbar navbar-expand-sm navbar-pwa d-pwa-block bg-body-secondary" aria-label="{{ lang.navigation.main | default: 'Main navigation' }}">
   <div class="container">
     <div class="navbar-nav flex-row w-100 align-items-end justify-content-around">
-      {%- for link in edition_nav_links -%}
-        {%- if link.pwa_hide %}
-          {% comment %} Skip hidden entries {% endcomment %}
-
-        {%- elsif link.live -%}
-          {% comment %} Live links are not shown in app like menu to keep it static {% endcomment %}
-
-        {%- elsif link.menu -%}
+      {%- for link in pwa_entries limit: pwa_tab_count -%}
+        {%- if link.menu -%}
           {%- include get_menu.html -%}
-          {%- unless menu_empty %}
-          <div class="dropup px-2">
-            <a class="nav-link dropdown-toggle" href="#" id="navbar-dropup{{ forloop.index0 }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
-              {{ menu_name }}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbar-dropup{{ forloop.index0 }}">
-              {%- include show_menu_items.html %}
-            </div>
+          {%- assign sheet_id = "navbar-pwa-sheet" | append: forloop.index0 %}
+          <div class="px-2">
+            <button type="button" class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" data-bs-toggle="offcanvas" data-bs-target="#{{ sheet_id }}" aria-controls="{{ sheet_id }}"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
+              {% assign link_icon_name = link.icon | default: 'list' %}{% include icon.html name=link_icon_name %}
+              <span>{{ menu_name }}</span>
+            </button>
           </div>
-          {%- endunless -%}
+
+          {%- capture pwa_sheet %}
+  <div class="offcanvas offcanvas-bottom h-auto rounded-top-4 d-print-none navbar-pwa-sheet" tabindex="-1" id="{{ sheet_id }}" aria-labelledby="{{ sheet_id }}-label">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title h5" id="{{ sheet_id }}-label">{{ menu_name }}</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{{ lang.close | default: 'Close' }}"></button>
+    </div>
+    <div class="offcanvas-body pt-0">
+      <div class="list-group list-group-flush">
+        {%- include show_menu_items.html item_class="list-group-item list-group-item-action" %}
+      </div>
+    </div>
+  </div>
+          {%- endcapture -%}
+          {%- assign pwa_sheets = pwa_sheets | append: pwa_sheet -%}
 
         {%- else %}
           <div class="px-2">
             {%- include get_link_active.html -%}
-            {%- include get_link.html class="nav-link icon-link flex-column flex-md-row text-center" is_active=is_active -%}
+            {%- include get_link.html class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" is_active=is_active -%}
             {{ link_tag }}
-              {% assign link_icon_name = link_icon | default: 'link-45deg' %}{% include icon.html name=link_icon_name %}
+              {% assign link_icon_name = link_icon | default: 'link-45deg' %}{% include icon.html name=link_icon_name fill=is_active %}
               <span>{{ link.name }}</span>
             </a>
           </div>
         {%- endif -%}
       {%- endfor %}
+
+      {%- if pwa_tab_count < pwa_entries.size %}
+          <div class="px-2">
+            <button type="button" class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" data-bs-toggle="offcanvas" data-bs-target="#navbar-pwa-more" aria-controls="navbar-pwa-more">
+              {% include icon.html name="three-dots" %}
+              <span>{{ lang.navigation.more | default: "More" }}</span>
+            </button>
+          </div>
+      {%- endif %}
     </div>
   </div>
 </nav>
+
+  {%- comment -%} More: the remaining links, then the remaining menus under their name {%- endcomment -%}
+  {%- if pwa_tab_count < pwa_entries.size -%}
+    {%- capture pwa_sheet %}
+  <div class="offcanvas offcanvas-bottom h-auto rounded-top-4 d-print-none navbar-pwa-sheet" tabindex="-1" id="navbar-pwa-more" aria-labelledby="navbar-pwa-more-label">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title h5" id="navbar-pwa-more-label">{{ lang.navigation.more | default: "More" }}</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{{ lang.close | default: 'Close' }}"></button>
+    </div>
+    <div class="offcanvas-body pt-0">
+      {%- capture pwa_more_links -%}
+        {%- for link in pwa_entries offset: pwa_tab_count -%}
+          {%- unless link.menu -%}
+            {%- include get_link_active.html -%}
+            {%- include get_link.html class="list-group-item list-group-item-action icon-link" is_active=is_active %}
+        {{ link_tag }}
+          {% assign link_icon_name = link_icon | default: 'link-45deg' %}{% include icon.html name=link_icon_name %}
+          {{ link.name }}
+        </a>
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endcapture -%}
+      {%- unless pwa_more_links == "" %}
+      <div class="list-group list-group-flush">
+        {{- pwa_more_links }}
+      </div>
+      {%- endunless -%}
+
+      {%- for link in pwa_entries offset: pwa_tab_count -%}
+        {%- if link.menu -%}
+          {%- include get_menu.html %}
+      <h3 class="h6 mt-3 mb-1 px-3 text-body-secondary">{{ menu_name }}</h3>
+      <div class="list-group list-group-flush">
+        {%- include show_menu_items.html item_class="list-group-item list-group-item-action" %}
+      </div>
+        {%- endif -%}
+      {%- endfor %}
+    </div>
+  </div>
+    {%- endcapture -%}
+    {%- assign pwa_sheets = pwa_sheets | append: pwa_sheet -%}
+  {%- endif -%}
 {%- endif -%}

@@ -284,6 +284,16 @@ h1.room-name,
     z-index: $zindex-fixed;
     margin-top: auto;
   }
+
+  // Clear the system's areas (viewport-fit=cover), e.g. the home indicator
+  // below and the notch beside in landscape; 0 where there are none. The
+  // bar stays in place while pages change (see @view-transition below)
+  .navbar-pwa {
+    view-transition-name: pwa-tabs;
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: calc(var(--#{$prefix}navbar-padding-y) + env(safe-area-inset-bottom));
+    padding-left: env(safe-area-inset-left);
+  }
 }
 
 .d-pwa-block {
@@ -296,6 +306,37 @@ h1.room-name,
 
 [data-pwa="true"] {
   @include pwa-mode;
+}
+
+// No bounce beyond the page's ends (iOS) or stretch (Android) in the app:
+// it would move the sticky tab bar along. On the root, outside the mixin,
+// as data-pwa is set on it
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  :root {
+    overscroll-behavior-y: none;
+  }
+}
+
+[data-pwa="true"] {
+  overscroll-behavior-y: none;
+}
+
+// Pages of the app cross-fade like native screens instead of flashing
+@media (display-mode: standalone) and (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+// Tab bar of the app: the current tab in the primary colour
+.navbar-pwa {
+  --#{$prefix}navbar-active-color: var(--#{$prefix}primary-text-emphasis);
+}
+
+// Sheets of the app's tab bar (_includes/navbar_pwa.html): items across
+// the full width, above the home indicator
+.navbar-pwa-sheet .offcanvas-body {
+  padding: 0 0 calc(var(--#{$prefix}offcanvas-padding-y) + env(safe-area-inset-bottom));
 }
 
 // PWA install banner (_includes/pwa_banner.html): above the page, styled

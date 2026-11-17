@@ -347,7 +347,7 @@ conference:
 
 The navigation bar automatically collapses when the available space is too small (e.g., on a smaller screen). The breakpoints are given by [Bootstrap](https://getbootstrap.com/docs/5.3/layout/breakpoints/). The default breakpoint is `md` (collapsing if the screen width is smaller than 768px). It can be adapted by setting the `breakpoint` property under the `navigation` property to either `sm`, `md`, `lg`, or `xl`.
 
-When installed as a progressive web application (see the [_Progressive Web App (PWA)_](#progressive-web-app-pwa) section below), the navigation bar moves to the bottom. In PWA mode, it displays link icons and ignores links with `live: true`. Please note that the navigation bar has a limited width and no vertical scrolling. To hide an entry in this mode, set `pwa_hide: true` on its link.
+When installed as a progressive web application (see the [_Progressive Web App (PWA)_](#progressive-web-app-pwa) section below), the navigation bar moves to the bottom. In PWA mode, it displays link icons and ignores links with `live: true`. The bar holds up to five entries; with more, it shows the first four and a "More" button opening the others in a sheet from the bottom. Menus open as such sheets too. The current page's entry is coloured and its icon switches to the filled variant if there is one (e.g. `people-fill` for `people`). To hide an entry in this mode, set `pwa_hide: true` on its link.
 
 ```yaml
 conference:
@@ -566,6 +566,9 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
 
        # Theme color for the PWA (default: Bootstrap primary color, #0d6efd)
        theme_color: "#0d6efd"
+
+       # Theme color in dark mode (default: theme_color)
+       theme_color_dark: "#0a58ca"
 
        # Background color for the PWA (default: white, #ffffff)
        background_color: "#ffffff"
