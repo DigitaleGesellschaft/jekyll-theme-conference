@@ -1,0 +1,10 @@
+{%- comment -%}
+  Address of an icon of the app (`pwa.icons`: a file name or an object with
+  `img`, below /assets/images/), else of the first one: pwa_icon_url, e.g.
+  "/assets/images/icon.png"; nil without icons. Input: include.icon
+{%- endcomment -%}
+{%- assign pwa_icon = include.icon | default: site.conference.pwa.icons.first -%}
+{%- assign pwa_icon_url = nil -%}
+{%- if pwa_icon -%}
+  {%- assign pwa_icon_url = pwa_icon.img | default: pwa_icon | prepend: "/assets/images/" | prepend: site.baseurl -%}
+{%- endif -%}

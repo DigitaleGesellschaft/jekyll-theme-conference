@@ -20,12 +20,8 @@
   "icons": [
   {%- for icon in site.conference.pwa.icons %}
     {
-      {%- if icon.first == nil -%}
-        {%- assign icon_src = icon -%}
-      {%- else -%}
-        {%- assign icon_src = icon.img -%}
-      {%- endif %}
-      "src": {{ icon_src | prepend: '/assets/images/' | prepend: site.baseurl | jsonify }},
+      {%- include get_pwa_icon.html icon=icon %}
+      "src": {{ pwa_icon_url | jsonify }},
       {%- if icon.sizes %}
       "sizes": {{ icon.sizes | jsonify }},
       {%- endif -%}

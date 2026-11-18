@@ -9,16 +9,11 @@
   {%- assign lang = site.data.lang[site.conference.lang] %}
   <div class="toast-container pwa-toasts d-print-none" role="status">
     {%- if site.conference.pwa.install_toast != false and edition_current -%}
-      {%- assign pwa_icon = site.conference.pwa.icons | first -%}
-      {%- if pwa_icon.first == nil -%}
-        {%- assign pwa_icon_src = pwa_icon -%}
-      {%- else -%}
-        {%- assign pwa_icon_src = pwa_icon.img -%}
-      {%- endif %}
+      {%- include get_pwa_icon.html %}
     <div class="toast pwa-toast" id="pwa-install-toast">
       <div class="d-flex align-items-center gap-2 p-2">
-        {%- if pwa_icon_src %}
-        <img class="rounded-3 flex-shrink-0" src="{{ pwa_icon_src | prepend: '/assets/images/' | prepend: site.baseurl }}" alt="" width="40" height="40" />
+        {%- if pwa_icon_url %}
+        <img class="rounded-3 flex-shrink-0" src="{{ pwa_icon_url }}" alt="" width="40" height="40" />
         {%- endif %}
         <div class="flex-grow-1 small">
           <strong class="d-block">{{ site.title | escape }}</strong>

@@ -1,6 +1,5 @@
 {%- if site.conference.pwa and site.conference.pwa.enable -%}
   {%- assign pwa_theme_color = site.conference.pwa.theme_color | default: "#0d6efd" -%}
-  {%- assign pwa_icon = site.conference.pwa.icons | first -%}
 
   {%- if site.conference.pwa.theme_color_dark %}
   <meta name="theme-color" content="{{ pwa_theme_color }}" media="(prefers-color-scheme: light)" />
@@ -19,13 +18,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="{{ site.title }}" />
 
-  {% if site.conference.pwa.icons -%}
-    {%- assign icon = site.conference.pwa.icons | first -%}
-    {%- if icon.first == nil -%}
-      {%- assign icon_src = icon -%}
-    {%- else -%}
-      {%- assign icon_src = icon.img -%}
-    {%- endif -%}
-    <link rel="apple-touch-icon" href="{{ icon_src | prepend: '/assets/images/' | prepend: site.baseurl }}" />
+  {% include get_pwa_icon.html -%}
+  {%- if pwa_icon_url -%}
+    <link rel="apple-touch-icon" href="{{ pwa_icon_url }}" />
   {%- endif -%}
 {%- endif -%}
