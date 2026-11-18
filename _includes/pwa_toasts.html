@@ -1,0 +1,44 @@
+{%- comment -%}
+  Toasts of the app (PWA) at the bottom, in the app above its tab bar, shown
+  one at a time by _js/modules/pwa.js:
+  - install: on phones and tablets of the current edition, opens
+    _includes/pwa_install.html
+  - update: the service worker found a newer version of the page shown
+{%- endcomment -%}
+{%- if site.conference.pwa.enable -%}
+  {%- assign lang = site.data.lang[site.conference.lang] %}
+  <div class="toast-container pwa-toasts d-print-none" role="status">
+    {%- if site.conference.pwa.install_toast != false and edition_current -%}
+      {%- assign pwa_icon = site.conference.pwa.icons | first -%}
+      {%- if pwa_icon.first == nil -%}
+        {%- assign pwa_icon_src = pwa_icon -%}
+      {%- else -%}
+        {%- assign pwa_icon_src = pwa_icon.img -%}
+      {%- endif %}
+    <div class="toast pwa-toast" id="pwa-install-toast">
+      <div class="d-flex align-items-center gap-2 p-2">
+        {%- if pwa_icon_src %}
+        <img class="rounded-3 flex-shrink-0" src="{{ pwa_icon_src | prepend: '/assets/images/' | prepend: site.baseurl }}" alt="" width="40" height="40" />
+        {%- endif %}
+        <div class="flex-grow-1 small">
+          <strong class="d-block">{{ site.title | escape }}</strong>
+          {{ lang.pwa.subtitle | default: "Program offline on your home screen" }}
+        </div>
+        <button type="button" class="pwa-toast-button btn btn-primary btn-sm flex-shrink-0" data-bs-toggle="offcanvas" data-bs-target="#pwa-install" aria-controls="pwa-install">
+          {{- lang.pwa.install | default: "Install" -}}
+        </button>
+        <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="{{ lang.close | default: 'Close' }}"></button>
+      </div>
+    </div>
+    {%- endif %}
+    <div class="toast pwa-toast" id="pwa-update-toast">
+      <div class="d-flex align-items-center gap-2 p-2">
+        <div class="flex-grow-1 small ps-1">{{ lang.pwa.updated | default: "New content is available." }}</div>
+        <button type="button" class="pwa-toast-button btn btn-primary btn-sm flex-shrink-0" data-pwa-reload>
+          {{- lang.pwa.reload | default: "Update" -}}
+        </button>
+        <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="{{ lang.close | default: 'Close' }}"></button>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

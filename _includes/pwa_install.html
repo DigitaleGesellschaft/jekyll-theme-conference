@@ -1,8 +1,8 @@
 {%- comment -%}
-  Steps to install the app (PWA), opened by _includes/pwa_banner.html.
+  Steps to install the app (PWA), opened by _includes/pwa_toasts.html.
   _js/modules/pwa.js shows the steps of the visitor's platform.
 {%- endcomment -%}
-{%- if site.conference.pwa.enable and site.conference.pwa.install_banner != false and edition_current -%}
+{%- if site.conference.pwa.enable and site.conference.pwa.install_toast != false and edition_current -%}
   {%- assign lang = site.data.lang[site.conference.lang] %}
   <div class="offcanvas offcanvas-bottom h-auto rounded-top-4 d-print-none" tabindex="-1" id="pwa-install" aria-labelledby="pwa-install-label">
     <div class="offcanvas-header">

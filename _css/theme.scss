@@ -285,6 +285,11 @@ h1.room-name,
     margin-top: auto;
   }
 
+  .footer-pwa .pwa-toasts {
+    position: absolute;
+    bottom: 100%;
+  }
+
   // Clear the system's areas (viewport-fit=cover), e.g. the home indicator
   // below and the notch beside in landscape; 0 where there are none. The
   // bar stays in place while pages change (see @view-transition below)
@@ -368,102 +373,30 @@ $pwa-live: ".navbar-pwa-live:not(.d-none)";
   padding: 0 0 calc(var(--#{$prefix}offcanvas-padding-y) + env(safe-area-inset-bottom));
 }
 
-// PWA install banner (_includes/pwa_banner.html): above the page, styled
-// like the platform's own banners rather than the site, e.g. iOS: light
-// grey with a pill button (App Store), Android: Material surface and button
-.pwa-banner {
-  --pwa-banner-bg: #f2f2f7;
-  --pwa-banner-color: #000;
-  --pwa-banner-muted: #6c6c70;
-  --pwa-banner-border: #c6c6c8;
-  --pwa-banner-button-bg: #e3e3e8;
-  --pwa-banner-button-color: #005ecb; // iOS blue, darkened for contrast
+// Toasts of the app (_includes/pwa_toasts.html): at the bottom, across the
+// width of phones. The home indicator's area takes the place of the
+// spacing instead of adding to it (e.g. iOS Safari: 34 px, not 34 + 16)
+.pwa-toasts {
+  position: fixed;
+  right: 0;
+  bottom: max(0px, env(safe-area-inset-bottom) - #{$spacer});
+  z-index: $zindex-toast;
+  padding: $spacer;
 
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem 0.75rem 0.5rem;
-  border-bottom: 1px solid var(--pwa-banner-border);
-  background: var(--pwa-banner-bg);
-  color: var(--pwa-banner-color);
-  font-family: -apple-system, system-ui, sans-serif;
-  line-height: 1.25;
-
-  [data-bs-theme="dark"] & {
-    --pwa-banner-bg: #1c1c1e;
-    --pwa-banner-color: #fff;
-    --pwa-banner-muted: #98989f;
-    --pwa-banner-border: #38383a;
-    --pwa-banner-button-bg: #2c2c2e;
-    --pwa-banner-button-color: #409cff;
+  // Opaque, so the page does not show through; one at a time, so without
+  // Bootstrap's spacing between toasts
+  .toast {
+    --#{$prefix}toast-bg: var(--#{$prefix}body-bg);
+    margin-bottom: 0;
   }
 
-  &[data-platform="android"] {
-    --pwa-banner-bg: #fff;
-    --pwa-banner-color: #1f1f1f;
-    --pwa-banner-muted: #444746;
-    --pwa-banner-border: transparent;
-    --pwa-banner-button-bg: #0b57d0;
-    --pwa-banner-button-color: #fff;
+  @include media-breakpoint-down(sm) {
+    left: 0;
+    width: auto;
 
-    font-family: Roboto, "Noto Sans", system-ui, sans-serif;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-
-  [data-bs-theme="dark"] &[data-platform="android"] {
-    --pwa-banner-bg: #1e1f20;
-    --pwa-banner-color: #e3e3e3;
-    --pwa-banner-muted: #c4c7c5;
-    --pwa-banner-button-bg: #a8c7fa;
-    --pwa-banner-button-color: #062e6f;
-  }
-}
-
-.pwa-banner-close {
-  flex-shrink: 0;
-  padding: 0.5rem;
-  border: 0;
-  background: none;
-  color: var(--pwa-banner-muted);
-  line-height: 1;
-}
-
-.pwa-banner-icon {
-  flex-shrink: 0;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.75rem;
-}
-
-.pwa-banner-text {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  min-width: 0;
-
-  strong {
-    font-size: 0.9375rem;
-  }
-
-  span {
-    color: var(--pwa-banner-muted);
-    font-size: 0.8125rem;
-  }
-}
-
-.pwa-banner-install {
-  flex-shrink: 0;
-  padding: 0.375rem 1rem;
-  border: 0;
-  border-radius: 1rem;
-  background: var(--pwa-banner-button-bg);
-  color: var(--pwa-banner-button-color);
-  font-weight: 600;
-
-  [data-platform="android"] & {
-    padding: 0.5rem 1.25rem;
-    border-radius: 1.25rem;
-    font-weight: 500;
+    .toast {
+      width: 100%;
+    }
   }
 }
 

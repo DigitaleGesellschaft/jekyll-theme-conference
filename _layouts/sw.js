@@ -6,6 +6,13 @@ const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
 const HTTP_NOT_MODIFIED = 304;
 
+// Message to a page with a newer version than shown (_js/modules/pwa.js)
+const PAGE_UPDATED = "page-updated";
+
+// Pages of each build link the site's files with its build time (e.g.
+// main.css?t=1793258390): ignored, so a rebuild alone is no update
+const BUILD_TIME = /\?t=\d+/g;
+
 // Copy of the previous build (cache), or nothing on the first install
 const previousCache = async () => {
   const names = (await caches.keys()).filter((name) => name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME);
@@ -104,12 +111,37 @@ const fromNetwork = (event) => {
   return network;
 };
 
+// Tell the page shown from the cache once the network has another version
+const notifyUpdate = async (event, cached, network) => {
+  const response = await network;
+  if (!response.ok) {
+    return;
+  }
+
+  const [shown, latest] = await Promise.all([cached.text(), response.clone().text()]);
+  if (shown.replace(BUILD_TIME, "") === latest.replace(BUILD_TIME, "")) {
+    return;
+  }
+
+  const client = await self.clients.get(event.resultingClientId);
+  client?.postMessage({ type: PAGE_UPDATED });
+};
+
 // Stale while revalidate: the cached copy right away, also on a crowded
-// conference Wi-Fi, updated in the background for the next visit (ignoring
-// the query, e.g. /program/?day=2); the network only without a copy
+// conference Wi-Fi, updated in the background (ignoring the query, e.g.
+// /program/?day=2); the network only without a copy. Pages shown from the
+// cache learn about a newer version.
 const staleWhileRevalidate = async (event) => {
   const network = fromNetwork(event);
-  return (await caches.match(event.request, { ignoreSearch: true })) || network;
+  const cached = await caches.match(event.request, { ignoreSearch: true });
+  if (!cached) {
+    return network;
+  }
+
+  if (event.request.mode === "navigate") {
+    event.waitUntil(notifyUpdate(event, cached.clone(), network).catch(() => {}));
+  }
+  return cached;
 };
 
 // Network first: assets not in the cache; when offline, the cached copy

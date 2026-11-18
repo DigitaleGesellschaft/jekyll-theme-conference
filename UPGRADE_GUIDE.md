@@ -37,6 +37,13 @@ A location page with `hide: true` only redirects to the home page, like hidden t
 **Action:**
 - None, unless the page should stay visible: then remove `hide` and its room links show again.
 
+### App Install Toast
+
+The banner inviting visitors to install the app (PWA) became a toast at the bottom of the page.
+
+**Action:**
+- Rename `pwa.install_banner` to `pwa.install_toast` in `_config.yml`, if set.
+
 ### Editions (optional)
 
 Merge the sites of several editions (e.g. one repository per year) into one site, see [Editions](README.md#editions). Per edition:

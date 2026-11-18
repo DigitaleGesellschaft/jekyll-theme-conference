@@ -78,6 +78,8 @@ en:
       add: "Tap “Install app” or “Add to Home screen”."
       confirm: "Tap “Install”."
     done: Then open the app from its icon, also offline.
+    updated: New content is available.
+    reload: Update
 
 de:
   pronoun:
@@ -157,6 +159,8 @@ de:
       add: "Tippen Sie auf „App installieren“ oder „Zum Startbildschirm hinzufügen“."
       confirm: "Tippen Sie auf „Installieren“."
     done: Öffnen Sie die App danach über ihr Symbol, auch offline.
+    updated: Neue Inhalte sind verfügbar.
+    reload: Aktualisieren
 
 fr:
   pronoun:
@@ -236,6 +240,8 @@ fr:
       add: "Touchez « Installer l'application » ou « Ajouter à l'écran d'accueil »."
       confirm: "Touchez « Installer »."
     done: Ouvrez ensuite l'application depuis son icône, même hors ligne.
+    updated: Du nouveau contenu est disponible.
+    reload: Mettre à jour
 
 pt:
   pronoun:
@@ -315,3 +321,5 @@ pt:
       add: "Toque em “Instalar app” ou “Adicionar à tela inicial”."
       confirm: "Toque em “Instalar”."
     done: Depois, abra o app pelo ícone, também offline.
+    updated: Há novo conteúdo disponível.
+    reload: Atualizar

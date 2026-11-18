@@ -556,7 +556,7 @@ conference:
 
 ### Progressive Web App (PWA)
 
-The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. Once a visitor opened the site, all pages (program, talks, speakers, rooms, …) and all files below `assets/` (stylesheets, scripts, images, fonts) are available offline. Documents (`documents/`, with [editions](#editions) `<id>/documents/`) and map tiles are not. Pages and data show the stored copy right away and are updated in the background. When the site is rebuilt, installed apps only download what changed: the theme's bundles are versioned by their content, all other files are revalidated. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
+The theme includes built-in support for Progressive Web App (PWA) functionality, allowing your conference website to be installed on users' devices and work offline. Once a visitor opened the site, all pages (program, talks, speakers, rooms, …) and all files below `assets/` (stylesheets, scripts, images, fonts) are available offline. Documents (`documents/`, with [editions](#editions) `<id>/documents/`) and map tiles are not. Pages and data show the stored copy right away and are updated in the background. A prompt informs the user that new content is available. PWA functionality is disabled by default. To enable it, multiple manual steps are necessary to add the necessary files:
 
 1. Enable and optionally customize the functionality in your `_config.yml`:
    ```yaml
@@ -573,8 +573,8 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
        # Background color for the PWA (default: white, #ffffff)
        background_color: "#ffffff"
 
-       # Banner asking visitors on phones and tablets to install the app (default: true)
-       install_banner: true
+       # Toast asking visitors on phones and tablets to install the app (default: true)
+       install_toast: true
 
        # PWA icons configuration
        icons:
@@ -616,7 +616,10 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
    These icons will be used when users install the app on their devices. You can generate these from a single high-resolution logo using a tool like:
    - [PWA Asset Generator](https://github.com/onderceylan/pwa-asset-generator)
 
-On phones and tablets (iOS and Android), a banner above the page invites visitors to install the app. It looks like the platform's own install banners. Its button opens the browser's install prompt where available (Chrome on Android), otherwise a panel at the bottom explaining in three steps how to add the app to the home screen. Closing the banner hides it for 30 days. It is not shown on desktops, within the installed app or on past [editions](#editions). Set `install_banner: false` to turn it off.
+Short notices of the app appear as a toast at the bottom of the page (in the app above its navigation bar), one at a time:
+
+- On phones and tablets (iOS and Android), a toast invites visitors to install the app. Its button opens the browser's install prompt where available (Chrome on Android), otherwise a panel at the bottom explaining in three steps how to add the app to the home screen. Closing the toast hides it for 30 days. It is not shown on desktops, within the installed app or on past [editions](#editions). Set `install_toast: false` to turn it off.
+- When a page shown from the stored copy has changed meanwhile (e.g. a schedule change), a toast offers to reload it. Rebuilding the site alone does not count as a change.
 
 > [!NOTE]
 > Please note that when installed as a PWA, the navigation bar moves to the bottom and includes icons. See the [_Navigation Bar_](#navigation-bar) section above for more information.
@@ -1197,6 +1200,9 @@ Talks, speakers, rooms and the recurring parts of pages carry a class of their o
 | `link-item` | Link in such a list |
 | `back-link` | Link back to the overview or program at the end of a talk or speaker page |
 | `consent-button` | Button to load an external map or video |
+| **App** (see [_Progressive Web App (PWA)_](#progressive-web-app-pwa)) | |
+| `pwa-toast` | Notice at the bottom of the page, inviting to install the app or offering an update |
+| `pwa-toast-button` | Button of such a notice (_Install_, _Update_) |
 
 For example, to set speakers in italics:
 
@@ -1242,10 +1248,10 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
   - `conference.stream`: Live stream modal
   - `conference.infobox`: Dismissal of information boxes and modals
   - `conference.darkmode`: Dark mode according to the system preference
-  - `conference.pwa`: Service worker registration and install banner (if PWA is enabled)
+  - `conference.pwa`: Service worker registration and toasts to install and update (if PWA is enabled)
   - `conference.config`: Settings of the modules, e.g. `conference.config.baseurl`, `conference.config.edition` (the page's edition id, `null` without editions) and `conference.config.edition_current`
   - `conference.awaitReady()`: Promise-based initialization helper
-- `window.bootstrap`: Bootstrap components (Alert, Collapse, Dropdown, Modal, Offcanvas, Tab)
+- `window.bootstrap`: Bootstrap components (Alert, Collapse, Dropdown, Modal, Offcanvas, Tab, Toast)
 - `window.L`: Leaflet map library (once the map is loaded)
 
 **Example Usage:**
@@ -1301,7 +1307,7 @@ _js/
     ├── modal.js       # Links in a modal
     ├── nowline.js     # Line at the current time in the program
     ├── program.js     # Program days as tabs
-    ├── pwa.js         # Service worker registration, install banner
+    ├── pwa.js         # Service worker registration, install and update toasts
     └── stream.js      # Live stream modal
 ```
 

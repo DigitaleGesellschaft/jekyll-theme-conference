@@ -11,8 +11,9 @@ import Dropdown from "bootstrap/js/dist/dropdown";
 import Modal from "bootstrap/js/dist/modal";
 import Offcanvas from "bootstrap/js/dist/offcanvas";
 import Tab from "bootstrap/js/dist/tab";
+import Toast from "bootstrap/js/dist/toast";
 
-window.bootstrap = { Alert, Collapse, Dropdown, Modal, Offcanvas, Tab };
+window.bootstrap = { Alert, Collapse, Dropdown, Modal, Offcanvas, Tab, Toast };
 
 // Import core
 import { createClock } from "./core/clock.js";

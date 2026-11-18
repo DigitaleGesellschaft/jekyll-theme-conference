@@ -196,9 +196,10 @@ describe("editions", () => {
     assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /id="stream-modal"|live-show|program-now|"nowline"/);
   });
 
-  test("install banner is limited to the current edition", () => {
-    assert.match(read(sites.main, "2026/program/index.html"), /id="pwa-banner"[\s\S]*id="pwa-install"/);
-    assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /pwa-banner|pwa-install/);
+  test("install toast is limited to the current edition", () => {
+    assert.match(read(sites.main, "2026/program/index.html"), /id="pwa-install-toast"[\s\S]*id="pwa-install"/);
+    assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /pwa-install/);
+    assert.match(read(sites.main, "2025/program/index.html"), /id="pwa-update-toast"/);
   });
 
   // iOS adds any page to the home screen: archives link the manifest too,

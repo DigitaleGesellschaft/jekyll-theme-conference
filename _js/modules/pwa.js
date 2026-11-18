@@ -1,12 +1,15 @@
 /**
- * PWA Module - Service worker registration and install banner
+ * PWA Module - Service worker registration and toasts (install, update)
  *
  * The installed app (standalone) is detected before the first paint by the
  * header's inline script (data-pwa), which switches the navigation via CSS.
  */
 export function createPWAModule(conferenceConfig) {
-  const BANNER_DISMISSED_KEY = "pwa_banner_dismissed";
-  const BANNER_DISMISS_MS = 30 * 86400 * 1000; // 30 days
+  const INSTALL_DISMISSED_KEY = "pwa_install_dismissed";
+  const INSTALL_DISMISS_MS = 30 * 86400 * 1000; // 30 days
+
+  // Message of the service worker (_layouts/sw.js) on a newer version of the page
+  const PAGE_UPDATED = "page-updated";
 
   const isStandalone = () => document.documentElement.dataset.pwa === "true";
 
@@ -23,10 +26,10 @@ export function createPWAModule(conferenceConfig) {
     return null;
   };
 
-  // Storage may be unavailable (e.g. blocked cookies): the banner then shows again
+  // Storage may be unavailable (e.g. blocked cookies): the toast then shows again
   const isDismissed = () => {
     try {
-      return Date.now() < Number(localStorage.getItem(BANNER_DISMISSED_KEY));
+      return Date.now() < Number(localStorage.getItem(INSTALL_DISMISSED_KEY));
     } catch {
       return false;
     }
@@ -34,33 +37,41 @@ export function createPWAModule(conferenceConfig) {
 
   const saveDismiss = () => {
     try {
-      localStorage.setItem(BANNER_DISMISSED_KEY, String(Date.now() + BANNER_DISMISS_MS));
+      localStorage.setItem(INSTALL_DISMISSED_KEY, String(Date.now() + INSTALL_DISMISS_MS));
     } catch {
       // Dismissal is then not remembered
     }
   };
 
-  // Banner (_includes/pwa_banner.html) styled and with steps for the platform
-  const initBanner = () => {
-    const banner = document.getElementById("pwa-banner");
+  // Bootstrap toast, staying until closed (_includes/pwa_toasts.html)
+  const toastOf = (element) => window.bootstrap.Toast.getOrCreateInstance(element, { autohide: false });
+
+  // One toast at a time, e.g. the update replaces the install toast
+  const showToast = (element) => {
+    document.querySelectorAll(".pwa-toasts .toast.show").forEach((shown) => toastOf(shown).hide());
+    toastOf(element).show();
+  };
+
+  // Install toast with the steps of the platform
+  const initInstall = () => {
+    const toast = document.getElementById("pwa-install-toast");
     const platform = detectPlatform();
-    if (!banner || !platform || isStandalone() || isDismissed()) {
+    if (!toast || !platform || isStandalone() || isDismissed()) {
       return;
     }
 
-    banner.dataset.platform = platform;
     document.querySelectorAll("[data-pwa-steps]").forEach((steps) => {
       steps.hidden = steps.dataset.pwaSteps !== platform;
     });
-    banner.hidden = false;
+    showToast(toast);
 
-    banner.querySelector(".pwa-banner-close").addEventListener("click", () => {
-      banner.hidden = true;
-      saveDismiss();
-    });
+    toast.querySelector(".btn-close").addEventListener("click", saveDismiss);
+
+    // Not on top of the steps (or the prompt); shows again on the next page
+    toast.querySelector("[data-bs-target='#pwa-install']").addEventListener("click", () => toastOf(toast).hide());
 
     // Chrome (Android) offers its own install prompt once the app is
-    // installable: the banner replaces its mini-infobar and opens the prompt
+    // installable: the toast replaces its mini-infobar and opens the prompt
     // instead of the steps (each prompt shows only once).
     let installPrompt = null;
     window.addEventListener("beforeinstallprompt", (event) => {
@@ -76,9 +87,26 @@ export function createPWAModule(conferenceConfig) {
       installPrompt.prompt();
       installPrompt = null;
     });
-    window.addEventListener("appinstalled", () => {
-      banner.hidden = true;
+    window.addEventListener("appinstalled", () => toastOf(toast).hide());
+  };
+
+  // Update toast once the service worker loaded a newer version of the page
+  // than the stored one shown
+  const initUpdate = () => {
+    const toast = document.getElementById("pwa-update-toast");
+    if (!toast) {
+      return;
+    }
+
+    toast.querySelector("[data-pwa-reload]").addEventListener("click", () => location.reload());
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      if (event.data?.type === PAGE_UPDATED) {
+        showToast(toast);
+      }
     });
+
+    // Deliver messages sent while the page loaded
+    navigator.serviceWorker.startMessages();
   };
 
   const init = (config) => {
@@ -86,12 +114,14 @@ export function createPWAModule(conferenceConfig) {
       return;
     }
 
-    initBanner();
+    initInstall();
 
     if (!("serviceWorker" in navigator)) {
       console.warn("Service workers are not supported in this browser.");
       return;
     }
+
+    initUpdate();
 
     // Once the page loaded: precaching all pages must not delay it
     const register = () =>

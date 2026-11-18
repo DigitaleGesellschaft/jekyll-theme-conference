@@ -23,13 +23,9 @@ test("pages and stylesheets are available offline", async ({ page, context }) =>
   }
 });
 
-// Without waiting for the network (e.g. a crowded conference Wi-Fi), updated
-// for the next visit
-test("pages show the stored copy at once and update in the background", async ({ page }) => {
-  await page.goto("talks/opening_welcome/");
-
-  // Mark the stored program, once precached
-  await page.evaluate(async () => {
+// Mark the stored program (as by a previous build), once precached
+const markStoredProgram = (page, replace) =>
+  page.evaluate(async ([pattern, replacement]) => {
     await navigator.serviceWorker.ready;
     while (!navigator.serviceWorker.controller) {
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -38,19 +34,43 @@ test("pages show the stored copy at once and update in the background", async ({
     for (let i = 0; i < 100 && !(await caches.match(url)); i++) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    const html = (await (await caches.match(url)).text()).replace("</main>", '<p id="stored">Stored</p></main>');
+    const html = (await (await caches.match(url)).text()).replace(new RegExp(pattern, "g"), replacement);
     for (const name of await caches.keys()) {
       await (await caches.open(name)).put(url, new Response(html, { headers: { "Content-Type": "text/html" } }));
     }
-  });
+  }, replace);
+
+// Without waiting for the network (e.g. a crowded conference Wi-Fi); a toast
+// offers the version updated in the background
+test("pages show the stored copy at once and offer the update", async ({ page }) => {
+  await page.goto("talks/opening_welcome/");
+  await markStoredProgram(page, ["</main>", '<p id="stored">Stored</p></main>']);
 
   await page.goto("program/");
   await expect(page.locator("#stored")).toHaveCount(1);
 
-  await expect(async () => {
-    await page.goto("program/");
-    await expect(page.locator("#stored")).toHaveCount(0, { timeout: 100 });
-  }).toPass();
+  const toast = page.locator("#pwa-update-toast");
+  await expect(toast).toBeVisible();
+  await toast.getByRole("button", { name: "Update" }).click();
+  await expect(page.locator("#stored")).toHaveCount(0);
+  await expect(toast).toBeHidden();
+});
+
+// Pages of each build link the site's files with its build time
+test("a rebuild alone offers no update", async ({ page }) => {
+  await page.goto("talks/opening_welcome/");
+  await markStoredProgram(page, ["\\?t=\\d+", "?t=1"]);
+
+  await page.goto("program/");
+  await expect(page.locator('link[href*="main.css?t=1"]')).toHaveCount(1);
+
+  // Wait for the background update to replace the stored copy
+  await page.evaluate(async () => {
+    while (/\?t=1"/.test(await (await caches.match(location.href)).text())) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  });
+  await expect(page.locator("#pwa-update-toast")).toBeHidden();
 });
 
 // The page's request starts while the service worker boots
@@ -98,7 +118,7 @@ test("a new build's versioned assets are not served from an old cache", async ({
   expect(body).not.toContain("stale");
 });
 
-// Install banner on phones and tablets (Chrome's desktop UA otherwise)
+// Install toast on phones and tablets (Chrome's desktop UA otherwise)
 const PHONES = {
   ios: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
   android: "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36",
@@ -106,53 +126,78 @@ const PHONES = {
 const OTHER_PLATFORM = { ios: "android", android: "ios" };
 
 for (const [platform, userAgent] of Object.entries(PHONES)) {
-  test.describe(`install banner on ${platform}`, () => {
+  test.describe(`install toast on ${platform}`, () => {
     test.use({ userAgent, viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+    // Spaced like the sides (Bootstrap's spacing between toasts would add
+    // to it, though only one shows at a time)
+    test("sits at the bottom of the screen", async ({ page }) => {
+      await page.goto("");
+      await ready(page);
+
+      const toast = page.locator("#pwa-install-toast");
+      await expect(toast).toBeVisible();
+      const box = await toast.boundingBox();
+      expect(844 - (box.y + box.height)).toBeCloseTo(box.x, 0);
+    });
 
     test("opens the platform's steps", async ({ page }) => {
       await page.goto("");
       await ready(page);
 
-      const banner = page.locator("#pwa-banner");
-      await expect(banner).toBeVisible();
-      await expect(banner).toHaveAttribute("data-platform", platform);
+      const toast = page.locator("#pwa-install-toast");
+      await expect(toast).toBeVisible();
 
-      await banner.getByRole("button", { name: "Install" }).click();
+      await toast.getByRole("button", { name: "Install" }).click();
       const steps = page.getByRole("dialog", { name: "Install the app" });
       await expect(steps).toBeVisible();
       await expect(steps.locator(`[data-pwa-steps="${platform}"]`)).toBeVisible();
       await expect(steps.locator(`[data-pwa-steps="${OTHER_PLATFORM[platform]}"]`)).toBeHidden();
+
+      // Not on top of the steps; not dismissed, so it shows again on the next page
+      await expect(toast).toBeHidden();
+      await page.reload();
+      await ready(page);
+      await expect(toast).toBeVisible();
     });
 
     test("stays closed once dismissed", async ({ page }) => {
       await page.goto("");
       await ready(page);
 
-      await page.locator("#pwa-banner").getByRole("button", { name: "Close" }).click();
-      await expect(page.locator("#pwa-banner")).toBeHidden();
+      await page.locator("#pwa-install-toast").getByRole("button", { name: "Close" }).click();
+      await expect(page.locator("#pwa-install-toast")).toBeHidden();
 
       await page.reload();
       await ready(page);
-      await expect(page.locator("#pwa-banner")).toBeHidden();
+      await expect(page.locator("#pwa-install-toast")).toBeHidden();
     });
 
     for (const colorScheme of ["light", "dark"]) {
-      test(`banner and steps have no axe violations in ${colorScheme} mode`, async ({ page }) => {
+      test(`toast and steps have no axe violations in ${colorScheme} mode`, async ({ page }) => {
         await page.emulateMedia({ colorScheme });
         await page.goto("");
         await ready(page);
 
-        await page.locator("#pwa-banner").getByRole("button", { name: "Install" }).click();
-        await expect(page.locator("#pwa-install")).toBeVisible();
+        const scan = async (selector) => {
+          const { violations } = await new AxeBuilder({ page }).include(selector).analyze();
+          return violations.map(({ id, nodes }) => `${id}: ${nodes.map((node) => node.target.join(" ")).join(", ")}`);
+        };
 
-        const { violations } = await new AxeBuilder({ page }).include("#pwa-banner").include("#pwa-install").analyze();
-        expect(violations.map(({ id, nodes }) => `${id}: ${nodes.map((node) => node.target.join(" ")).join(", ")}`)).toEqual([]);
+        // Once faded in: half transparent, its colours would not count
+        await expect(page.locator("#pwa-install-toast")).toHaveCSS("opacity", "1");
+        expect(await scan("#pwa-install-toast")).toEqual([]);
+
+        // The steps replace the toast
+        await page.locator("#pwa-install-toast").getByRole("button", { name: "Install" }).click();
+        await expect(page.locator("#pwa-install")).toBeVisible();
+        expect(await scan("#pwa-install")).toEqual([]);
       });
     }
   });
 }
 
-test.describe("install banner on android with an install prompt", () => {
+test.describe("install toast on android with an install prompt", () => {
   test.use({ userAgent: PHONES.android, viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
   // Chrome offers the prompt once the app is installable
@@ -171,12 +216,12 @@ test.describe("install banner on android with an install prompt", () => {
     await ready(page);
     await offerPrompt(page);
 
-    await page.locator("#pwa-banner").getByRole("button", { name: "Install" }).click();
+    await page.locator("#pwa-install-toast").getByRole("button", { name: "Install" }).click();
     expect(await page.evaluate(() => window.prompted)).toBe(true);
     await expect(page.locator("#pwa-install")).toBeHidden();
 
     await page.evaluate(() => window.dispatchEvent(new Event("appinstalled")));
-    await expect(page.locator("#pwa-banner")).toBeHidden();
+    await expect(page.locator("#pwa-install-toast")).toBeHidden();
   });
 
   test("falls back to the steps once the prompt was used", async ({ page }) => {
@@ -184,7 +229,7 @@ test.describe("install banner on android with an install prompt", () => {
     await ready(page);
     await offerPrompt(page);
 
-    const install = page.locator("#pwa-banner").getByRole("button", { name: "Install" });
+    const install = page.locator("#pwa-install-toast").getByRole("button", { name: "Install" });
     await install.click();
     expect(await page.evaluate(() => window.prompted)).toBe(true);
     await expect(page.locator("#pwa-install")).toBeHidden();
@@ -201,11 +246,11 @@ test("website overscrolls as usual", async ({ page }) => {
   await expect(page.locator("html")).toHaveCSS("overscroll-behavior-y", "auto");
 });
 
-test("install banner is not shown on desktops", async ({ page }) => {
+test("install toast is not shown on desktops", async ({ page }) => {
   await page.goto("");
   await ready(page);
 
-  await expect(page.locator("#pwa-banner")).toBeHidden();
+  await expect(page.locator("#pwa-install-toast")).toBeHidden();
 });
 
 test.describe("installed app", () => {
@@ -219,6 +264,16 @@ test.describe("installed app", () => {
     await ready(page);
 
     await expect(page.locator("html")).toHaveCSS("overscroll-behavior-y", "none");
+  });
+
+  test("toasts show above the tab bar", async ({ page }) => {
+    await page.goto("talks/");
+    await ready(page);
+    await page.locator("#pwa-update-toast").evaluate((toast) => window.bootstrap.Toast.getOrCreateInstance(toast).show());
+    await expect(page.locator("#pwa-update-toast")).toBeVisible();
+
+    const [toast, tabs] = [await page.locator("#pwa-update-toast").boundingBox(), await page.locator("nav.navbar-pwa").boundingBox()];
+    expect(toast.y + toast.height).toBeLessThanOrEqual(tabs.y);
   });
 
   test("tabs show their icon above the label", async ({ page }) => {

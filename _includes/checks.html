@@ -116,6 +116,10 @@ For more details, refer to the [Tracks & Tags](https://github.com/DigitaleGesell
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. The property `conference.speakers.show_firstname` is no longer supported." -%}
 {%- endif -%}
 
+{%- if site.conference.pwa.install_banner != nil -%}
+  {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please rename `conference.pwa.install_banner` to `conference.pwa.install_toast`." -%}
+{%- endif -%}
+
 {%- assign program_file = "_data/program.yml" -%}
 {%- assign edition_dir = "" -%}
 {%- if edition -%}
