@@ -28,6 +28,8 @@ npx playwright test test/e2e/map.spec.js                          # single spec;
 uv run --no-project --with-requirements _tools/requirements.txt python -m unittest discover test/tools
 ```
 
+Chromium cannot launch inside the Claude Code sandbox: run Playwright (and builds it triggers) with the sandbox disabled.
+
 Env: `BUNDLE` overrides the bundler command (e.g. `"bundle _2.7.1_"`), `SITE_DIR` the build output dir. Builds run with `TZ=UTC` to prove timestamps depend only on the site's `timezone`.
 
 Releases: push a `v*` tag → `.github/workflows/publish.yml` builds and pushes the gem to RubyGems and creates a GitHub release. Bump the version in both `package.json` and `jekyll-theme-conference.gemspec`.
@@ -67,6 +69,18 @@ Liquid has no functions, so `_includes/get_*.html` act as such: they read variab
 Escape content-derived strings (talk/speaker/room/track/tag names) with `| escape` in HTML and `| jsonify` in JSON; in JSON-LD additionally `| replace: "<", "\u003c"` so content cannot close the `<script>`. In JS, build DOM with `textContent`, never `innerHTML` with data from `data.json`.
 
 Settings are read from both `site.conference.*` (`_config.yml`) and page Front Matter (v4 moved main/program settings to Front Matter); `get_*_config.html` includes resolve these.
+
+### Editions
+
+`conference.editions` hosts several years of a conference in one site, each edition in its own folder (e.g. `/2025/`), the root forwarding to the current one (`_layouts/editions.html`). Pages call `get_edition.html` and read `edition_*` variables (talks, program, navigation, …) instead of `site.*`; without editions they fall back to the site's own. Past editions drop live features (`edition_live` is nil).
+
+### PWA (`conference.pwa`)
+
+One app for all editions: `_layouts/manifest.html` uses `site.title` and `baseurl/` as `id`/`start_url`, and only the current edition links the manifest and shows the install toast, so archives cannot be installed.
+
+- `_layouts/sw.js`: precaches the URLs in `site.json` (bundles by `?v=` hash, other build assets by `?t=` build time), serves pages and `.json` stale-while-revalidate with navigation preload, and posts `page-updated` to the page when the network copy differs (ignoring `?t=`). It forwards the root to the current edition without loading it. Documents/slides are not precached.
+- `_js/modules/pwa.js`: registers the worker after `load`; install and update notices are Bootstrap toasts (`_includes/pwa_toasts.html`).
+- App mode: an inline script in `header.html` sets `data-pwa="true"` on `<html>` before first paint when installed (standalone display and `data-pwa-enable`); CSS keys app styling (tab bar `navbar_pwa.html`, `.d-pwa-none`) on that attribute only, never on `display-mode`.
 
 ### Translations
 

@@ -262,9 +262,19 @@ h1.room-name,
   display: initial;
 }
 
-// PWA: in the installed app, the bottom navigation replaces the top one. It
-// sticks to the bottom (part of the page, so it never covers the content).
-@mixin pwa-mode {
+// PWA: in the installed app (data-pwa, set by header.html before the first
+// paint), the bottom navigation replaces the top one. It sticks to the
+// bottom (part of the page, so it never covers the content). Not by
+// display-mode: a site without the app opened standalone keeps its top one.
+.d-pwa-block {
+  display: none;
+}
+
+[data-pwa="true"] {
+  // No bounce beyond the page's ends (iOS) or stretch (Android): it would
+  // move the sticky tab bar along
+  overscroll-behavior-y: none;
+
   .d-pwa-none {
     display: none;
   }
@@ -299,31 +309,6 @@ h1.room-name,
     padding-bottom: calc(var(--#{$prefix}navbar-padding-y) + env(safe-area-inset-bottom));
     padding-left: env(safe-area-inset-left);
   }
-}
-
-.d-pwa-block {
-  display: none;
-}
-
-@media (display-mode: standalone), (display-mode: fullscreen) {
-  @include pwa-mode;
-}
-
-[data-pwa="true"] {
-  @include pwa-mode;
-}
-
-// No bounce beyond the page's ends (iOS) or stretch (Android) in the app:
-// it would move the sticky tab bar along. On the root, outside the mixin,
-// as data-pwa is set on it
-@media (display-mode: standalone), (display-mode: fullscreen) {
-  :root {
-    overscroll-behavior-y: none;
-  }
-}
-
-[data-pwa="true"] {
-  overscroll-behavior-y: none;
 }
 
 // Pages of the app cross-fade like native screens instead of flashing

@@ -246,6 +246,22 @@ test("website overscrolls as usual", async ({ page }) => {
   await expect(page.locator("html")).toHaveCSS("overscroll-behavior-y", "auto");
 });
 
+// Opened standalone without the app (e.g. iOS opens every site added to the
+// home screen so) there is no tab bar: only the app (data-pwa) hides the
+// navigation bar, no display-mode media query
+test("standalone display alone keeps the navigation bar", async ({ page }) => {
+  await page.goto("talks/");
+
+  const hiding = await page.evaluate(() =>
+    [...document.styleSheets]
+      .flatMap((sheet) => [...sheet.cssRules])
+      .filter((rule) => rule instanceof CSSMediaRule && rule.conditionText.includes("display-mode"))
+      .flatMap((rule) => [...rule.cssRules].map((inner) => inner.selectorText ?? ""))
+      .filter((selector) => selector.includes("d-pwa-none")),
+  );
+  expect(hiding).toEqual([]);
+});
+
 test("install toast is not shown on desktops", async ({ page }) => {
   await page.goto("");
   await ready(page);

@@ -8,5 +8,8 @@ module.exports = {
   fontFace: true,
   safelist: {
     deep: [/^leaflet/, /^bi-/],
+    // Set by a script when the page loads (e.g. data-pwa="true" in the
+    // installed app), so missing from the generated HTML
+    greedy: [/data-pwa/],
   },
 };
