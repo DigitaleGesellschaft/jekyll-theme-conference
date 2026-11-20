@@ -23,6 +23,51 @@ test("pages and stylesheets are available offline", async ({ page, context }) =>
   }
 });
 
+// Without waiting for the network (e.g. a crowded conference Wi-Fi), updated
+// for the next visit
+test("pages show the stored copy at once and update in the background", async ({ page }) => {
+  await page.goto("talks/opening_welcome/");
+
+  // Mark the stored program, once precached
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+    while (!navigator.serviceWorker.controller) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const url = new URL("../../program/", location.href).href;
+    for (let i = 0; i < 100 && !(await caches.match(url)); i++) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const html = (await (await caches.match(url)).text()).replace("</main>", '<p id="stored">Stored</p></main>');
+    for (const name of await caches.keys()) {
+      await (await caches.open(name)).put(url, new Response(html, { headers: { "Content-Type": "text/html" } }));
+    }
+  });
+
+  await page.goto("program/");
+  await expect(page.locator("#stored")).toHaveCount(1);
+
+  await expect(async () => {
+    await page.goto("program/");
+    await expect(page.locator("#stored")).toHaveCount(0, { timeout: 100 });
+  }).toPass();
+});
+
+// The page's request starts while the service worker boots
+test("service worker preloads navigations", async ({ page }) => {
+  await page.goto("");
+
+  const enabled = await page.evaluate(async () => {
+    const registration = await navigator.serviceWorker.ready;
+    for (let i = 0; i < 100 && !(await registration.navigationPreload.getState()).enabled; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    return (await registration.navigationPreload.getState()).enabled;
+  });
+
+  expect(enabled).toBe(true);
+});
+
 test("theme bundles are precached with their content hash", async ({ page }) => {
   await page.goto("");
 

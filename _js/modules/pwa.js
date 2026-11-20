@@ -93,9 +93,16 @@ export function createPWAModule(conferenceConfig) {
       return;
     }
 
-    navigator.serviceWorker.register(`${conferenceConfig.baseurl}/sw.js`).catch((error) => {
-      console.error("Service worker registration failed: ", error);
-    });
+    // Once the page loaded: precaching all pages must not delay it
+    const register = () =>
+      navigator.serviceWorker.register(`${conferenceConfig.baseurl}/sw.js`).catch((error) => {
+        console.error("Service worker registration failed: ", error);
+      });
+    if (document.readyState === "complete") {
+      register();
+    } else {
+      window.addEventListener("load", register, { once: true });
+    }
   };
 
   return { init, isStandalone };

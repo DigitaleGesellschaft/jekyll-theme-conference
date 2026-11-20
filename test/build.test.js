@@ -246,6 +246,15 @@ describe("PWA", () => {
     assert.ok(assets.some((url) => /\/assets\/js\/conference\.bundle\.js\?v=[0-9a-f]{10}$/.test(url)));
   });
 
+  // Else the service worker misses its copy and loads them from the network
+  test("site.json lists stylesheets and scripts under the URLs pages link", () => {
+    const { assets } = readJson("assets/js/site.json");
+    const linked = [...read("program/index.html").matchAll(/<(?:link rel="stylesheet" href|script type="module" src)="([^"]*)"/g)].map(([, url]) => url);
+
+    assert.ok(linked.length);
+    assert.deepEqual(linked.filter((url) => !assets.includes(url)), []);
+  });
+
   test("site.json lists chunks under the URLs the bundle imports", () => {
     const { assets } = readJson("assets/js/site.json");
     const chunks = [...read("assets/js/conference.bundle.js").matchAll(/"\.\/([\w-]+\.bundle\.js)"/g)]

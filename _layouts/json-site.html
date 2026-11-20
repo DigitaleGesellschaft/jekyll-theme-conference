@@ -11,6 +11,13 @@
 {%- assign assets = "" | split: "" -%}
 {%- assign asset_versions = site.data.conference_assets -%}
 
+{%- comment -%}
+  The site's own stylesheet and script carry the build time, as linked by
+  _includes/header.html and footer.html, so the service worker finds them
+{%- endcomment -%}
+{%- assign site_version = site.time | date: '%s' -%}
+{%- assign build_versioned = "/assets/css/main.css,/assets/js/main.js" | split: "," -%}
+
 {%- comment -%} Skip unused stylesheet bundles and the map, which needs the network anyway {%- endcomment -%}
 {%- assign skip_assets = "/assets/css/map.bundle.css" | split: "," -%}
 {%- unless site.conference.custom_style == "bootstrap" -%}
@@ -31,6 +38,9 @@
   {%- endif -%}
   {%- assign url = page.url | prepend: site.baseurl -%}
   {%- if page.url contains "/assets/" -%}
+    {%- if build_versioned contains page.url -%}
+      {%- assign url = url | append: "?t=" | append: site_version -%}
+    {%- endif -%}
     {%- assign assets = assets | push: url -%}
   {%- else -%}
     {%- assign pages = pages | push: url -%}
@@ -70,6 +80,8 @@
   {%- assign asset_key = file.path | remove_first: "/assets/" -%}
   {%- if asset_versions[asset_key] -%}
     {%- assign url = url | append: "?v=" | append: asset_versions[asset_key] -%}
+  {%- elsif build_versioned contains file.path -%}
+    {%- assign url = url | append: "?t=" | append: site_version -%}
   {%- endif -%}
   {%- assign assets = assets | push: url -%}
 {%- endfor -%}

@@ -4,9 +4,6 @@ const VERSION = "{{ site.time | date: '%Y%m%d%H%M%S' }}";
 const CACHE_PREFIX = "jekyll-conference-theme-";
 const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
-// Fall back to the cached page when the network is this slow, e.g. on a
-// crowded conference Wi-Fi (the response still updates the cache)
-const NETWORK_TIMEOUT_MS = 3000;
 const HTTP_NOT_MODIFIED = 304;
 
 // Copy of the previous build (cache), or nothing on the first install
@@ -32,7 +29,8 @@ const precache = async (cache, previous, url) => {
     headers["If-Modified-Since"] = cached.headers.get("Last-Modified");
   }
 
-  const response = await fetch(url, { cache: "no-store", headers });
+  // Low priority: the visitor's own requests go first
+  const response = await fetch(url, { cache: "no-store", headers, priority: "low" });
   if (response.status === HTTP_NOT_MODIFIED && cached) {
     return cache.put(url, cached);
   }
@@ -76,6 +74,9 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
+      // Request pages while the service worker boots (see fromNetwork)
+      await self.registration.navigationPreload?.enable();
+
       const cacheNames = await caches.keys();
       await Promise.all(
         cacheNames
@@ -87,12 +88,12 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Network first: latest page, data or asset version; when offline or the
-// network is too slow, the cached copy (ignoring the version query, e.g.
-// main.css?t=1793258390)
-const networkFirst = async (event) => {
+// Latest version from the network (stored for later), e.g. the page's
+// navigation preload
+const fromNetwork = (event) => {
   const { request } = event;
-  const network = fetch(request).then(async (response) => {
+  const preload = event.preloadResponse ?? Promise.resolve();
+  const network = preload.then((preloaded) => preloaded || fetch(request)).then(async (response) => {
     if (response.ok) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(request, response.clone());
@@ -100,19 +101,26 @@ const networkFirst = async (event) => {
     return response;
   });
   event.waitUntil(network.catch(() => {}));
+  return network;
+};
 
-  const timeout = new Promise((resolve) => setTimeout(resolve, NETWORK_TIMEOUT_MS));
+// Stale while revalidate: the cached copy right away, also on a crowded
+// conference Wi-Fi, updated in the background for the next visit (ignoring
+// the query, e.g. /program/?day=2); the network only without a copy
+const staleWhileRevalidate = async (event) => {
+  const network = fromNetwork(event);
+  return (await caches.match(event.request, { ignoreSearch: true })) || network;
+};
+
+// Network first: assets not in the cache; when offline, the cached copy
+// ignoring the version query (e.g. main.css?t=1793258390)
+const networkFirst = async (event) => {
+  const network = fromNetwork(event);
   try {
-    const response = await Promise.race([network, timeout]);
-    if (response) {
-      return response;
-    }
+    return await network;
   } catch {
-    // Offline: answer from the cache below
+    return (await caches.match(event.request, { ignoreSearch: true })) || network;
   }
-
-  const cached = await caches.match(request, { ignoreSearch: true });
-  return cached || network;
 };
 
 // Cache first: versioned assets do not change once cached
@@ -156,7 +164,7 @@ self.addEventListener("fetch", (event) => {
 
   // Example: /program/ (navigation) and /assets/js/data.json change during the conference
   if (request.mode === "navigate" || url.pathname.endsWith(".json")) {
-    event.respondWith(networkFirst(event));
+    event.respondWith(staleWhileRevalidate(event));
     return;
   }
 
