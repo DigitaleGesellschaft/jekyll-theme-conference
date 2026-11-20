@@ -18,7 +18,8 @@ export function createModalModule() {
     setContent(titleEl, title, titleFormat);
     setContent(modal.querySelector("#link-modal-description"), title && subtitle, titleFormat);
     setContent(modal.querySelector(".modal-footer p"), footer, footerFormat);
-    modal.querySelector(".modal-footer").classList.toggle("d-none", !footer);
+    // On phones, the footer also holds a second close button, within reach
+    modal.querySelector(".modal-footer").classList.toggle("d-sm-none", !footer);
 
     // Name the frame after its content, e.g. the talk
     iframe.dataset.defaultTitle ??= iframe.title;

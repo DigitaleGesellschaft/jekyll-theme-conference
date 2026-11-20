@@ -1,9 +1,9 @@
 <div class="modal fade" id="link-modal" tabindex="-1" aria-labelledby="link-modal-label" aria-describedby="link-modal-description" aria-hidden="true" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title">
-          <h2 class="talk-title h3 mb-2" id="link-modal-label"></h2>
+          <h2 class="talk-title h3 mb-2 text-break" id="link-modal-label"></h2>
           <p class="talk-speakers mb-0 d-none" id="link-modal-description"></p>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
@@ -14,6 +14,7 @@
       </div>
       <div class="modal-footer justify-content-start">
         <p></p>
+        <button type="button" class="btn btn-secondary w-100 d-sm-none" data-bs-dismiss="modal">{{ site.data.lang[site.conference.lang].close | default: 'Close' }}</button>
       </div>
     </div>
   </div>

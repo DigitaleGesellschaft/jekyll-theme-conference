@@ -245,6 +245,32 @@ h1.room-name,
   }
 }
 
+// Video and stream modals (_includes/modal_link.html, modal_live.html): on
+// phones the whole screen, clear of the system's areas (e.g. the notch),
+// the video in 16:9 below the title and the last footer (e.g. the rooms)
+// at the bottom; on tablets wider than Bootstrap's 500 px
+@include media-breakpoint-down(sm) {
+  .modal-fullscreen-sm-down {
+    .modal-content {
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .modal-body.ratio {
+      flex-grow: 0;
+    }
+
+    .modal-footer:last-of-type {
+      margin-top: auto;
+    }
+  }
+}
+
+@include media-breakpoint-only(md) {
+  .modal-lg {
+    --#{$prefix}modal-width: #{map-get($container-max-widths, md)};
+  }
+}
+
 // Dark mode
 .mode-light {
   display: initial;

@@ -90,6 +90,81 @@ test("video link with click_to_load: false loads right away", async ({ page }) =
   await expect(modal.locator("[data-embed-consent]")).toBeHidden();
 });
 
+test("video and stream modals fill phones and are wide on tablets", async ({ page }) => {
+  await track(page);
+  // Without the fade, so the dialogs are measured in place
+  await page.emulateMedia({ reducedMotion: "reduce" });
+
+  const open = async (width, path, trigger, modalId) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto(path);
+    await ready(page);
+    await page.evaluate(() => window.conference.live.setTime("09:32", 0));
+    await page.locator(trigger).first().evaluate((link) => link.click());
+    const modal = page.locator(modalId);
+    await expect(modal).toBeVisible();
+    return {
+      content: await modal.locator(".modal-content").boundingBox(),
+      body: await modal.locator(".modal-body").boundingBox(),
+      // Bottom of the last footer shown, e.g. the rooms (null if none)
+      footerBottom: await modal.evaluate((el) => {
+        const footers = [...el.querySelectorAll(".modal-footer")].filter((footer) => footer.checkVisibility());
+        return footers.at(-1)?.getBoundingClientRect().bottom ?? null;
+      }),
+    };
+  };
+  const modals = [
+    ["talks/opening_welcome/", "a[data-bs-target='#link-modal']", "#link-modal"],
+    ["", "a[data-bs-target='#stream-modal']", "#stream-modal"],
+  ];
+
+  for (const [path, trigger, modalId] of modals) {
+    // Phone: the whole screen, the video in 16:9 (not stretched to it), the last footer (e.g. rooms) at the bottom
+    const phone = await open(375, path, trigger, modalId);
+    expect(phone.content).toEqual({ x: 0, y: 0, width: 375, height: 800 });
+    expect(phone.body.height).toBeLessThan(phone.body.width * 0.6);
+    if (phone.footerBottom !== null) {
+      expect(phone.footerBottom).toBeCloseTo(800, 0);
+    }
+
+    // Tablet: wider than Bootstrap's 500 px below lg
+    const tablet = await open(800, path, trigger, modalId);
+    expect(tablet.content.width).toBeGreaterThanOrEqual(700);
+  }
+});
+
+test("video modal on phones keeps its close buttons in view, also with a long title", async ({ page }) => {
+  await track(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const modal = page.locator("#link-modal");
+  const footerClose = modal.locator(".modal-footer [data-bs-dismiss='modal']");
+
+  const open = async (width) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("talks/opening_welcome/");
+    await ready(page);
+    // A title without spaces to wrap at
+    await page.getByRole("link", { name: "Recording" }).evaluate((link) => {
+      link.dataset.title = 'All Sorted by Machines of Loving Grace?"AI",Cybernetics&Fascism&how to Intervene';
+    });
+    await page.getByRole("link", { name: "Recording" }).click();
+    await expect(modal).toBeVisible();
+  };
+
+  // Phone: the title wraps, the close buttons at the top and bottom
+  await open(375);
+  const close = await modal.locator(".modal-header .btn-close").boundingBox();
+  expect(close.x + close.width).toBeLessThanOrEqual(375);
+  expect(await modal.locator(".modal-content").evaluate((el) => el.scrollWidth)).toBeLessThanOrEqual(375);
+  await expect(footerClose).toBeVisible();
+  await footerClose.click();
+  await expect(modal).toBeHidden();
+
+  // Tablet: the dialog's close button only
+  await open(800);
+  await expect(footerClose).toBeHidden();
+});
+
 test("live indication follows the schedule", async ({ page }) => {
   await page.goto("program/");
   await ready(page);
