@@ -36,3 +36,35 @@ for (const colorScheme of ["light", "dark"]) {
     expect(summary).toEqual([]);
   });
 }
+
+test("installed app keeps its tab bar on a past edition", async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, "standalone", { value: true }));
+  await page.setViewportSize({ width: 390, height: 600 });
+  await page.goto("2025/program/");
+
+  await expect(page.locator("html")).toHaveAttribute("data-pwa", "true");
+});
+
+test("service worker forwards the root without loading it", async ({ page, context }) => {
+  await page.goto("2026/");
+
+  // Once the service worker controls the page and precached the edition,
+  // drop the root's copy and go offline: only the worker can forward it
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+    while (!navigator.serviceWorker.controller) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    for (let i = 0; i < 100 && !(await caches.match(location.href)); i++) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    for (const name of await caches.keys()) {
+      await (await caches.open(name)).delete(new URL("../", location.href).href);
+    }
+  });
+  await context.setOffline(true);
+
+  await page.goto("");
+  await expect(page).toHaveURL(`${EDITIONS_URL}2026/`);
+  await expect(page.locator("nav.navbar").first()).toBeVisible();
+});

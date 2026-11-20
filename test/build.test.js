@@ -140,6 +140,7 @@ describe("PWA", () => {
   test("manifest has icons and shortcuts and does not lock orientation", () => {
     const manifest = readJson("manifest.json");
 
+    assert.equal(manifest.id, manifest.start_url);
     assert.equal(manifest.icons.length, 1);
     assert.ok(manifest.shortcuts.length > 0);
     assert.equal(manifest.orientation, undefined);

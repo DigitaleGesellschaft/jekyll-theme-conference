@@ -1,6 +1,6 @@
 {%- include get_edition.html -%}
 <!DOCTYPE html>
-<html lang="{{ site.conference.lang | default: 'en' }}">
+<html lang="{{ site.conference.lang | default: 'en' }}"{% if site.conference.pwa.enable %} data-pwa-enable{% endif %}>
 
 <head>
   <meta charset="utf-8" />
@@ -36,7 +36,7 @@
     Before the first paint (no flash): colour mode and installed app (PWA).
     Static content, i.e. one hash for a Content Security Policy (see README).
   {%- endcomment %}
-  <script>{ const root = document.documentElement; root.dataset.bsTheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; root.dataset.pwa = !!document.querySelector('link[rel="manifest"]') && (navigator.standalone === true || matchMedia("(display-mode: standalone)").matches); }</script>
+  <script>{ const root = document.documentElement; root.dataset.bsTheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; root.dataset.pwa = "pwaEnable" in root.dataset && (navigator.standalone === true || matchMedia("(display-mode: standalone)").matches); }</script>
 </head>
 
 <body class="min-vh-100">

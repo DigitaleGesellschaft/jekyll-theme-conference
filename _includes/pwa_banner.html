@@ -19,7 +19,7 @@
     <img class="pwa-banner-icon" src="{{ pwa_icon_src | prepend: '/assets/images/' | prepend: site.baseurl }}" alt="" width="48" height="48" />
     {%- endif %}
     <div class="pwa-banner-text">
-      <strong>{{ edition_title }}</strong>
+      <strong>{{ site.title }}</strong>
       <span>{{ lang.pwa.subtitle | default: "Program offline on your home screen" }}</span>
     </div>
     <button type="button" class="pwa-banner-install" data-bs-toggle="offcanvas" data-bs-target="#pwa-install" aria-controls="pwa-install">

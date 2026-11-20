@@ -777,24 +777,11 @@ show_alltimes: true
 
 ### Editions
 
-One site can hold several editions of a conference, e.g. the current one and past ones as archive. Every edition lives below its own folder (`/2026/`, `/2025/`, …), the site's root forwards to the current edition. Without `editions`, the site holds a single edition as described in the rest of this document.
+One site can hold several editions of a conference, e.g. the current one and past ones as an archive. Every edition lives below its own folder (`/2026/`, `/2025/`, …) and the site's root forwards to the current edition. Without `editions`, the site holds a single edition as described in the rest of this document.
 
-List the editions in `_config.yml` under `conference.editions`. The current edition is the first one with `current: true`, else the first one of the list. Its `id` names the edition's folders, its `name` labels it in the menu to switch between editions (default: its id).
+#### Settings
 
-An edition inherits the site's settings and can override some of them. An override replaces the site's setting as a whole, all others are kept; e.g. an edition with its own `navigation.links` keeps the site's `navigation.logo`.
-
-| Setting | In `_config.yml` | Per edition |
-|---|---|---|
-| `title`, `description` | Jekyll, top level | yes |
-| `url`, `baseurl`, `timezone` | Jekyll, top level | no |
-| `meta.link_preview`, `meta.schema_org` | `conference` | yes |
-| `navigation.logo`, `navigation.links`, `navigation.breakpoint`, `navigation.editions` | `conference` | yes |
-| `info.bars`, `info.modals` | `conference` | yes |
-| `talks.tracks`, `talks.tags` | `conference` | yes |
-| `lang`, `custom_style`, `show_errors`, `pwa` | `conference` | no |
-| `live` | `conference` | no, current edition only |
-
-Settings in a page's Front Matter (e.g. of the [_Landing Page_](#landing-page) or the [_Program Page_](#program-page)) belong to its edition anyway, as every edition has its own pages.
+List the editions in `_config.yml` under `conference.editions`. Each edition's `id` names its folders and its `name` labels it in the menu to switch between editions (default: its `id`). The current edition is the first one with `current: true`, or else the first one of the list.
 
 ```yaml
 conference:
@@ -811,7 +798,35 @@ conference:
             color: warning
 ```
 
-Mark each page and entry with its edition by folder, with one pair of `defaults` per edition (in addition to the layouts of the collections, see [_Collection URLs_](#collection-urls)):
+An edition inherits the site's settings and can override some of them. An override replaces that one setting as a whole and keeps all others, e.g. an edition with its own `navigation.links` keeps the site's `navigation.logo`.
+
+| Setting | In `_config.yml` | Per edition |
+|---|---|---|
+| `title`, `description` | Jekyll, top level | yes |
+| `url`, `baseurl`, `timezone` | Jekyll, top level | no |
+| `meta.link_preview`, `meta.schema_org` | `conference` | yes |
+| `navigation.logo`, `navigation.links`, `navigation.breakpoint`, `navigation.editions` | `conference` | yes |
+| `info.bars`, `info.modals` | `conference` | yes |
+| `talks.tracks`, `talks.tags` | `conference` | yes |
+| `lang`, `custom_style`, `show_errors`, `pwa` | `conference` | no |
+| `live` | `conference` | no, current edition only |
+
+#### Files
+
+Each edition has its own pages, talks, speakers, rooms and schedule, placed in folders named after its `id`:
+
+```
+index.md                  layout: editions (forwards to the current edition)
+2026/index.md             layout: home
+2026/program/index.md     layout: program (likewise talks/, speakers/, location/, …)
+2026/documents/           files linked from talks and speakers (slides/, bio/, …)
+_talks/2026/              talks (likewise _speakers/2026/, _rooms/2026/)
+_data/programs/2026.yml   schedule
+```
+
+As every edition has its own pages, the settings in a page's Front Matter (e.g. of the [_Landing Page_](#landing-page) or the [_Program Page_](#program-page)) apply to that edition only.
+
+Every file must also know which edition it belongs to. Instead of setting `edition` in each file's Front Matter, set it once per folder with [`defaults`](https://jekyllrb.com/docs/configuration/front-matter-defaults/) in `_config.yml`. Each edition needs two entries, one for its pages and one for its talks, speakers and rooms, the latter also setting their permalink. Add them next to the `defaults` that set the layouts of the collections (see [_Collection URLs_](#collection-urls)), don't replace those:
 
 ```yaml
 defaults:
@@ -826,22 +841,15 @@ defaults:
       permalink: /2026/:collection/:title/
 ```
 
-With `show_errors`, pages report a page or entry whose `edition` doesn't match its folder, e.g. due to a forgotten `defaults` entry.
+#### Behavior
 
-The content of each edition is then placed as follows:
+- **Per edition:** Talks, speakers and rooms are looked up within their edition only, so names may repeat across editions (e.g. a speaker attending every year). Links with `relative_url` point into the page's edition, e.g. `/talks/` on a page of the 2025 edition leads to `/2025/talks/`.
+- **Current edition only:** Live indications, live streams and the offline app (PWA). There is one app for all editions: it is named after the site's `title` and starts at the site's root, i.e. at the current edition.
+- **Shared by all editions:** Files below `assets/` (styles, scripts, images) and `_sass/`.
 
-```
-index.md                  layout: editions (forwards to the current edition)
-2026/index.md             layout: home
-2026/program/index.md     layout: program (likewise talks/, speakers/, location/, …)
-2026/documents/           files of links (slides/, bio/, …)
-_talks/2026/              talks (likewise _speakers/2026/, _rooms/2026/)
-_data/programs/2026.yml   schedule
-```
+#### Redirects
 
-Talks, speakers and rooms are looked up within their edition only, so names may repeat across editions (e.g. a speaker attending every year). Links with `relative_url` point into the page's edition, e.g. `/program/` to `/2026/program/`. Live indications, live streams and the offline app (PWA) cover the current edition only. To point visitors of a past edition to the current one, give it an info bar (see [_Information Bars & Modals_](#information-bars--modals)), e.g. `info: {bars: [{title: Archive, color: secondary, text: "Go to the [current edition](/2026/)."}]}` in its `editions` entry. Files below `assets/` (styles, scripts, images) and `_sass/` are shared by all editions.
-
-Other addresses, e.g. a former `/program/`, show the site's 404 page. To forward them to the current edition on an Apache web server, create a `.htaccess` file in the root of your project:
+Addresses outside of the editions' folders, e.g. a former `/program/`, show the site's 404 page. To forward them to the current edition on an Apache web server, create a `.htaccess` file in the root of your project:
 
 ```yaml
 ---
@@ -849,7 +857,32 @@ layout: htaccess
 ---
 ```
 
-It forwards addresses that don't exist but do exist in the current edition, e.g. `/program/` to `/2026/program/`, and follows the current edition on its own. Below the Front Matter, you can add your own rules. It assumes the site lies at `baseurl` below the web server's document root. Other hosts (e.g. GitHub Pages, Netlify, nginx) ignore the file and need their own redirects.
+It forwards every address that doesn't exist on its own but does exist in the current edition, e.g. `/program/` to `/2026/program/`, and adapts by itself once the current edition changes. Below the Front Matter, you can add your own rules. It assumes the site lies at `baseurl` below the web server's document root. Other hosts (e.g. GitHub Pages) ignore the file and need their own redirects.
+
+#### Setup
+
+**First edition.** To turn a site with a single edition into the first of several editions (here `2026`):
+
+1. In `_config.yml`, list the edition under `conference.editions` with `current: true` and add its two entries to `defaults` (see [_Settings_](#settings) and [_Files_](#files)). Settings that differ per edition, e.g. `title`, can move into the edition.
+2. Move the pages and their files into the edition's folder: `index.md`, `program/`, `talks/`, `speakers/`, `location/`, … and `documents/` to `2026/`.
+3. Move the talks, speakers and rooms into the edition's subfolders: `_talks/*.md` to `_talks/2026/`, likewise for `_speakers/` and `_rooms/`.
+4. Move the schedule `_data/program.yml` to `_data/programs/2026.yml`.
+5. Create a new `index.md` in the root with `layout: editions` as its only Front Matter.
+6. Optionally, add a `.htaccess` file so old addresses keep working (see [_Redirects_](#redirects)).
+
+```bash
+mkdir -p 2026 _talks/2026 _speakers/2026 _rooms/2026 _data/programs
+git mv index.md program talks speakers location documents 2026/
+git mv _talks/*.md _talks/2026/
+git mv _speakers/*.md _speakers/2026/
+git mv _rooms/*.md _rooms/2026/
+git mv _data/program.yml _data/programs/2026.yml
+printf -- '---\nlayout: editions\n---\n' > index.md
+```
+
+Everything else stays where it is: `assets/`, `_sass/`, the PWA's `manifest.json` and `sw.js`, as well as the declaration of the collections and the `defaults` setting their layouts. Links with `relative_url` need no change, as they point into the page's edition.
+
+**Each further edition.** Add it to `conference.editions` and move `current: true` to it, add its two entries to `defaults`, and create its folders as in steps 2 to 4 above: pages below `<id>/`, talks, speakers and rooms below `_talks/<id>/`, `_speakers/<id>/` and `_rooms/<id>/`, and its schedule as `_data/programs/<id>.yml`.
 
 
 ## Content

@@ -1,11 +1,17 @@
 {%- include get_edition.html -%}
 {%- if site.conference.pwa and site.conference.pwa.enable -%}
+{%- comment -%}
+  One app for all editions: name, identity and start do not depend on the
+  edition, so installed apps keep following the current one (the root
+  forwards to it, see _layouts/editions.html)
+{%- endcomment -%}
 {
-  "name": {{ edition_title | jsonify }},
-  "short_name": {{ edition_title | jsonify }},
-  "description": {{ edition_description | jsonify }},
+  "id": {{ site.baseurl | append: '/' | jsonify }},
+  "name": {{ site.title | jsonify }},
+  "short_name": {{ site.title | jsonify }},
+  "description": {{ site.description | jsonify }},
   "lang": {{ site.conference.lang | default: 'en' | jsonify }},
-  "start_url": {{ site.baseurl | append: edition_base | append: '/' | jsonify }},
+  "start_url": {{ site.baseurl | append: '/' | jsonify }},
   "scope": {{ site.baseurl | append: '/' | jsonify }},
   "display": "standalone",
   "background_color": {{ site.conference.pwa.background_color | default: '#ffffff' | jsonify }},

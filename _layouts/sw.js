@@ -1,3 +1,4 @@
+{%- include get_edition.html -%}
 const BASE_URL = "{{ site.baseurl }}";
 const VERSION = "{{ site.time | date: '%Y%m%d%H%M%S' }}";
 const CACHE_PREFIX = "jekyll-conference-theme-";
@@ -129,6 +130,10 @@ const cacheFirst = async (event) => (await caches.match(event.request)) || netwo
 {%- endif %}
 const DOCUMENT_PATHS = {{ document_paths | jsonify }};
 
+// Start of the current edition, e.g. /2026/, to which the root forwards
+// (without editions: the root itself)
+const EDITION_URL = `${BASE_URL}{{ edition_base }}/`;
+
 // Fetch event - only handle same-origin GET requests within the site,
 // except the service worker itself and documents
 self.addEventListener("fetch", (event) => {
@@ -139,6 +144,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   if (url.pathname === `${BASE_URL}/sw.js` || DOCUMENT_PATHS.some((path) => url.pathname.startsWith(`${BASE_URL}${path}`))) {
+    return;
+  }
+
+  // Forward the root (e.g. the app's start) right away, also offline, instead
+  // of loading its forwarding page (_layouts/editions.html)
+  if (request.mode === "navigate" && url.pathname === `${BASE_URL}/` && url.pathname !== EDITION_URL) {
+    event.respondWith(Response.redirect(`${EDITION_URL}${url.search}`));
     return;
   }
 

@@ -201,6 +201,14 @@ describe("editions", () => {
     assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /pwa-banner|pwa-install/);
   });
 
+  // iOS adds any page to the home screen: archives link the manifest too,
+  // so the app starts at the current edition, not at the archive
+  test("app is the same from every edition", () => {
+    for (const path of ["2026/program/index.html", "2025/program/index.html"]) {
+      assert.match(read(sites.main, path), /rel="manifest"[\s\S]*apple-mobile-web-app-capable/);
+    }
+  });
+
   test("data.json, site.json and manifest serve the current edition", () => {
     const data = readJson(sites.main, "assets/js/data.json");
     const { pages } = readJson(sites.main, "assets/js/site.json");
@@ -210,8 +218,21 @@ describe("editions", () => {
     assert.equal(data.speakers["Ada Lovelace"].href, `${BASEURL}/2026/speakers/ada_lovelace/`);
     assert.deepEqual(pages.filter((url) => url.startsWith(`${BASEURL}/2025/`)), []);
     assert.ok(pages.includes(`${BASEURL}/2026/talks/keynote/`));
-    assert.equal(manifest.start_url, `${BASEURL}/2026/`);
     assert.equal(manifest.shortcuts[0].url, `${BASEURL}/2026/program/`);
+  });
+
+  // Installed apps follow the current edition: same identity and start
+  // (the root, forwarding to the current edition) and a name without year
+  test("app is the same for every edition", () => {
+    const manifest = readJson(sites.main, "manifest.json");
+    const manifest2025 = readJson(sites.current2025, "manifest.json");
+
+    for (const m of [manifest, manifest2025]) {
+      assert.equal(m.id, `${BASEURL}/`);
+      assert.equal(m.start_url, `${BASEURL}/`);
+      assert.equal(m.name, "Edition Conference");
+    }
+    assert.match(read(sites.main, "2026/index.html"), /apple-mobile-web-app-title" content="Edition Conference"/);
   });
 
   test(".htaccess forwards other addresses to the current edition", () => {
