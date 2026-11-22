@@ -165,6 +165,41 @@ test("video modal on phones keeps its close buttons in view, also with a long ti
   await expect(footerClose).toBeHidden();
 });
 
+test("stream modal on phones shows the rooms above the stream and a close button at the bottom", async ({ page }) => {
+  await track(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const modal = page.locator("#stream-modal");
+  const footerClose = modal.locator(".modal-footer [data-bs-dismiss='modal']");
+
+  const open = async (width) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("");
+    await ready(page);
+    await page.evaluate(() => window.conference.live.setTime("09:32", 0));
+    await page.locator("a[data-bs-target='#stream-modal']").first().evaluate((link) => link.click());
+    await expect(modal).toBeVisible();
+  };
+
+  // Phone: title, rooms, stream; the close button at the bottom
+  await open(375);
+  const [header, rooms, player] = [
+    await modal.locator(".modal-header").boundingBox(),
+    await modal.locator(".stream-rooms").boundingBox(),
+    await modal.locator(".stream-player").boundingBox(),
+  ];
+  expect(rooms.y).toBeGreaterThanOrEqual(header.y + header.height);
+  expect(player.y).toBeGreaterThanOrEqual(rooms.y + rooms.height);
+  const close = await footerClose.boundingBox();
+  expect(close.y + close.height).toBeGreaterThan(800 - 2 * close.height);
+  await footerClose.click();
+  await expect(modal).toBeHidden();
+
+  // Tablet: rooms below the stream, the dialog's close button only
+  await open(800);
+  expect((await modal.locator(".stream-rooms").boundingBox()).y).toBeGreaterThan((await modal.locator(".stream-player").boundingBox()).y);
+  await expect(footerClose).toBeHidden();
+});
+
 test("live indication follows the schedule", async ({ page }) => {
   await page.goto("program/");
   await ready(page);
@@ -183,23 +218,6 @@ test("program shows the current day and switches days via the URL", async ({ pag
 
   await expect(page.locator("#tab-sa")).toHaveClass(/active/);
   await expect(page.locator(".tab-pane.active")).toContainText("Second Day");
-});
-
-test("stream overview embeds every live room after consent", async ({ page }) => {
-  const log = await track(page);
-  await page.goto("live/");
-  await ready(page);
-
-  const streams = page.locator("iframe[src^='https://stream.example.org']");
-  await expect(streams).toHaveCount(0);
-  expect(log.external).toEqual([]);
-
-  // Consent counts for the host, i.e. both rooms here
-  await page.getByRole("button", { name: "Load content" }).first().click();
-  await expect(streams).toHaveCount(1);
-  await page.reload();
-  await ready(page);
-  await expect(streams).toHaveCount(2);
 });
 
 test("installed app shows the bottom navigation instead of the top one", async ({ page }) => {

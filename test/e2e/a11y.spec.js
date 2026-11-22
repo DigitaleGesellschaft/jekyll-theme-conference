@@ -8,7 +8,8 @@ const MIN_TARGET_PX = 24;
 
 for (const colorScheme of ["light", "dark"]) {
   test.describe(`${colorScheme} mode`, () => {
-    test.use({ colorScheme });
+    // Without transitions, which axe may catch half-way, e.g. a room button turning active
+    test.use({ colorScheme, reducedMotion: "reduce" });
 
     for (const path of PAGES) {
       test(`/${path} has no axe violations`, async ({ page }) => {

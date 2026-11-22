@@ -1,7 +1,7 @@
 {%- comment -%}
   Whether the navigation link `link` leads to the current page or its
   section, e.g. /talks/ on /talks/x/; room pages belong to the location
-  page. Sets is_active.
+  page, live links to the live page. Sets is_active.
 {%- endcomment -%}
 {%- assign link_url = nil -%}
 {%- if link.relative_url -%}
@@ -11,6 +11,8 @@
 {%- if page.url == link_url or link.relative_url != "/" and page.url contains link_url -%}
   {%- assign is_active = true -%}
 {%- elsif page.layout == "room" and location_url and link_url == location_url -%}
+  {%- assign is_active = true -%}
+{%- elsif link.live and page.layout == "live" -%}
   {%- assign is_active = true -%}
 {%- else -%}
   {%- assign is_active = false -%}

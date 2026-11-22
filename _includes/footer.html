@@ -10,7 +10,7 @@
   {%- include modal_link.html -%}
   {%- include pwa_install.html -%}
 
-  {%- if edition_live.streaming.enable -%}
+  {%- if edition_live.streaming.enable and page.layout != "live" -%}
     {%- include modal_live.html -%}
   {%- endif -%}
 

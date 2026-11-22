@@ -532,6 +532,34 @@ describe("App's tab bar with Live but without name_inactive", () => {
   });
 });
 
+describe("Live page", () => {
+  test("shows the stream modal's design as a page, without the modal", () => {
+    const live = read("live/index.html");
+
+    assert.match(live, /<title>Live Stream/);
+    assert.match(live, /<h1[^>]*>\s*Live Stream\s*<\/h1>/);
+    assert.match(live, /class="stream-page" id="stream"[\s\S]*class="stream-rooms "[\s\S]*id="stream-select"[\s\S]*id="stream-placeholder"[\s\S]*id="stream-info"[\s\S]*<footer class="footer-pwa">/);
+    assert.doesNotMatch(live, /id="stream-modal"/);
+  });
+
+  test("links to the stream lead to the live page with their room", () => {
+    const program = read("program/index.html");
+
+    assert.match(program, /href="\/conf\/live\/\?room=Room\+%3CB%3E"[^>]*data-bs-target="#stream-modal"[^>]*data-room="Room &lt;B&gt;"/);
+    assert.match(read("index.html"), /<li class="nav-item live-show[^"]*"[^>]*>\s*<a\s+class="nav-link"\s+href="\/conf\/live\/"/);
+  });
+
+  test("on the live page, links to the stream open no modal and Live is current", () => {
+    const live = read("live/index.html");
+    const navLive = live.match(/<li class="nav-item live-show[\s\S]*?<\/li>/)[0];
+    const tabLive = live.match(/<div class="px-2 navbar-pwa-live[\s\S]*?<\/div>/)[0];
+
+    assert.doesNotMatch(live, /data-bs-target="#stream-modal"/);
+    assert.match(navLive, /class="nav-link active"[^>]*aria-current="page"/);
+    assert.match(tabLive, /class="nav-link [^"]* active"[^>]*aria-current="page"/);
+  });
+});
+
 describe("Hidden location page", () => {
   let siteHidden;
 
@@ -738,8 +766,6 @@ describe("Assets and privacy", () => {
     for (const file of ["talks/opening_welcome/index.html", "live/index.html"]) {
       assert.doesNotMatch(read(file), /<iframe[^>]* src="http/, file);
     }
-    assert.match(read("live/index.html"), /data-embed-src="https:\/\/stream\.example\.org\/a"/);
-    assert.match(read("live/index.html"), /<a href="https:\/\/stream\.example\.org\/a" rel="noopener" data-embed-host>stream\.example\.org<\/a>/);
     assert.match(read("talks/opening_welcome/index.html"), /data-href="https:\/\/media\.example\.org\/embed\/interview"\s+data-click-to-load="false"/);
   });
 });

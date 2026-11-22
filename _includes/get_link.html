@@ -141,7 +141,7 @@
 
   {%- elsif link.live -%}
     {%- if edition_live and edition_live.streaming.enable -%}
-      {% include get_link_tag_streaming.html class=link_class %}
+      {% include get_link_tag_streaming.html class=link_class is_active=include.is_active %}
     {%- else-%}
       <a
         class="{{ link_class }}"

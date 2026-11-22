@@ -1,3 +1,3 @@
 ---
-layout: stream-overview
+layout: live
 ---

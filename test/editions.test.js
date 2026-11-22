@@ -196,6 +196,18 @@ describe("editions", () => {
     assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /id="stream-modal"|live-show|program-now|"nowline"/);
   });
 
+  test("live links lead to the current edition's live page", () => {
+    assert.match(read(sites.main, "2026/program/index.html"), /<a\s+class="nav-link"\s+href="\/conf\/2026\/live\/"/);
+    assert.match(read(sites.current2025, "2025/program/index.html"), /<a\s+class="nav-link"\s+href="\/conf\/2025\/live\/"/);
+  });
+
+  test("past editions' live page shows no stream", () => {
+    const live = read(sites.main, "2025/live/index.html");
+
+    assert.doesNotMatch(live, /id="stream"/);
+    assert.match(live, /Live stream has ended\./);
+  });
+
   test("install toast is limited to the current edition", () => {
     assert.match(read(sites.main, "2026/program/index.html"), /id="pwa-install-toast"[\s\S]*id="pwa-install"/);
     assert.doesNotMatch(read(sites.main, "2025/program/index.html"), /pwa-install/);

@@ -17,6 +17,8 @@
     edition_info_bars, edition_info_modals, edition_tracks, edition_tags:
     the edition's setting, else the site's
   - edition_live: `conference.live` on the current edition, else nil
+  - edition_live_page: with streaming, the edition's page with `layout:
+    live`, else nil
 {%- endcomment -%}
 {%- assign edition = nil -%}
 {%- assign edition_config = nil -%}
@@ -82,4 +84,17 @@
 {%- assign edition_live = nil -%}
 {%- if edition_current -%}
   {%- assign edition_live = site.conference.live -%}
+{%- endif -%}
+
+{%- assign edition_live_page = nil -%}
+{%- if edition_live.streaming.enable -%}
+  {%- assign edition_key = edition | append: "" -%}
+  {%- assign live_pages = site.pages | where: "layout", "live" -%}
+  {%- for live_page in live_pages -%}
+    {%- assign live_page_edition = live_page.edition | append: "" -%}
+    {%- if live_page_edition == edition_key -%}
+      {%- assign edition_live_page = live_page -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
 {%- endif -%}

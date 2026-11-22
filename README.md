@@ -524,6 +524,8 @@ To help users navigate the program during the conference, a _Live_ indication ca
 
 This can be further extended if some talks have an associated live stream: When clicking one of the live indications, a modal will open containing the corresponding embedded live stream. The URL to the live stream has to be set via `live` property in each room (see the [_Content_](#content) > [_Rooms_](#rooms) section below). Instead of opening the modal an external link can also be used.
 
+The stream modal can also be shown as a page: create `live/index.md` with `layout: live` (with [editions](#editions), in the edition's folder). Its address names the room shown, e.g. `/live/?room=Room+A`. If the page exists, the installed app (see [_Progressive Web App (PWA)_](#progressive-web-app-pwa)) opens it instead of the modal for live indications and the _Live_ tab.
+
 To activate these functionalities, each day in the `program.yml` file must contain a `date` property (see section [_Content_](#content) > [Schedule / Program](#schedule--program) below) and the `live` property has to be set in the configuration file containing
 
 - optionally, how long a pause between two consecutive talks has to be for the live indication to pause (`stop`, default: `240`),
@@ -615,6 +617,12 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
 
    These icons will be used when users install the app on their devices. You can generate these from a single high-resolution logo using a tool like:
    - [PWA Asset Generator](https://github.com/onderceylan/pwa-asset-generator)
+5. With [streaming](#live-indications--streaming), create the live page `live/index.md` (with [editions](#editions), in the edition's folder) with the following content, else the app opens the stream as a modal covering its navigation bar:
+   ```yaml
+   ---
+   layout: live
+   ---
+   ```
 
 Short notices of the app appear as a toast at the bottom of the page (in the app above its navigation bar), one at a time:
 
@@ -1057,7 +1065,7 @@ Additionally, a _navigation bar_, _main landing page_, _info bar_ or _info modal
 - `live: true` making the link only visible during the conference and adds a live indication.
   - The link is only shown if `name` is set. If `name` is an empty string, "Live Stream" is shown instead.
   - If `name_inactive` is set, its value is used as a placeholder text while the conference is **not** live. If `name_inactive` is an empty string, "Live Stream" is shown instead.
-  - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal (see section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above).
+  - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal, in the installed app the live page if there is one (see section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above).
 - `menu` containing another list of links. This creates a dropdown menu of multiple sublinks, while the URL of the parent link is ignored. The sublinks have the same properties as regular links.
   - With `menu: editions`, the dropdown menu lists the [editions](#editions) instead. Without `name`, it is labelled with `navigation.editions.name`, else the page's edition. It is not shown with a single edition.
 
@@ -1069,6 +1077,7 @@ The overviews of talks and speakers, the location with its rooms, and the progra
 - `speakers/index.md` with `layout: speaker-overview`
 - `location/index.md` with `layout: location`
 - `program/index.md` with `layout: program`
+- `live/index.md` with `layout: live` (optional, the live stream as a page, see [_Live Indications & Streaming_](#live-indications--streaming))
 
 They can be empty but should contain the `layout` property in the Front Matter header.
 
@@ -1242,10 +1251,9 @@ To add custom JavaScript, edit the `assets/js/main.js` file in your project. Thi
   - `conference.program`: Program days as tabs
   - `conference.map`: Map functionality (`getMap()` resolves once the map is loaded, or with `null` without map)
   - `conference.modal`: Links (e.g. videos) in a modal
-  - `conference.embed`: Embedded streams on the stream overview page
   - `conference.live`: Live indications following the program (incl. `setTime("09:30", "2026-02-20")`, `getTime()`, `pauseTime()`, `continueTime()`, `resetTime()` for testing)
   - `conference.nowline`: Line at the current time in the program
-  - `conference.stream`: Live stream modal
+  - `conference.stream`: Live stream modal and page
   - `conference.infobox`: Dismissal of information boxes and modals
   - `conference.darkmode`: Dark mode according to the system preference
   - `conference.pwa`: Service worker registration and toasts to install and update (if PWA is enabled)
@@ -1300,7 +1308,6 @@ _js/
 │   └── time.js        # Timezone helpers
 └── modules/
     ├── darkmode.js    # Colour mode following the system
-    ├── embed.js       # Embedded streams (stream overview)
     ├── infobox.js     # Dismissal of information boxes
     ├── live.js        # Live indications
     ├── map.js         # Map functionality
@@ -1308,7 +1315,7 @@ _js/
     ├── nowline.js     # Line at the current time in the program
     ├── program.js     # Program days as tabs
     ├── pwa.js         # Service worker registration, install and update toasts
-    └── stream.js      # Live stream modal
+    └── stream.js      # Live stream modal and page
 ```
 
 **CSS/SCSS** (`_css/` directory):

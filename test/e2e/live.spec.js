@@ -94,6 +94,85 @@ test("stream iframe is not reloaded on periodic updates", async ({ page }) => {
   expect(reloads).toBe(0);
 });
 
+test("live page shows the room of its address and keeps the chosen one in it", async ({ page }) => {
+  const log = await track(page);
+  await page.goto("live/?room=Room+%3CB%3E");
+  await ready(page);
+  await page.evaluate(() => window.conference.live.setTime("09:32", 0));
+
+  // Loaded only after consent, as in the modal
+  const iframe = page.locator("#stream iframe");
+  await expect(page.locator("#stream [data-embed-host]")).toHaveText("stream.example.org");
+  expect(log.external).toEqual([]);
+  await page.locator("#stream").getByRole("button", { name: "Load content" }).click();
+  await expect(iframe).toHaveAttribute("src", "https://stream.example.org");
+  await expect(page.locator("#stream .btn[data-room='Room <B>']")).toHaveAttribute("aria-pressed", "true");
+
+  await page.locator("#stream .btn[data-room='Room A']").click();
+  await expect(iframe).toHaveAttribute("src", "https://stream.example.org/a");
+  await expect(page).toHaveURL(/\?room=Room\+A$/);
+
+  await page.reload();
+  await ready(page);
+  await expect(page.locator("#stream .btn[data-room='Room A']")).toHaveAttribute("aria-pressed", "true");
+});
+
+test("live page shows the rooms beside the stream and the next talk below it on large screens", async ({ page }) => {
+  await track(page);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("live/");
+  await ready(page);
+  await page.evaluate(() => window.conference.live.setTime("09:10", 0));
+  await expect(page.locator("#stream-info")).toBeVisible();
+
+  const box = (selector) => page.locator(selector).boundingBox();
+  const [player, info, rooms] = [await box("#stream .stream-player"), await box("#stream-info"), await box("#stream .stream-rooms")];
+  expect(rooms.x).toBeGreaterThanOrEqual(player.x + player.width);
+  expect(rooms.y).toBeCloseTo(player.y, 0);
+  expect(info.x).toBeCloseTo(player.x, 0);
+  expect(info.y).toBeGreaterThanOrEqual(player.y + player.height);
+  // The stream fits the screen's height
+  expect(player.y + player.height).toBeLessThanOrEqual(800);
+  await expect(page.locator("#stream .btn[data-room='Room A']")).toBeVisible();
+});
+
+test("live page shows the rooms above the stream on phones, as the modal", async ({ page }) => {
+  await track(page);
+  await page.setViewportSize({ width: 375, height: 800 });
+  await page.goto("live/");
+  await ready(page);
+  await page.evaluate(() => window.conference.live.setTime("09:10", 0));
+
+  const box = (selector) => page.locator(selector).boundingBox();
+  const [rooms, player, info] = [await box("#stream-select"), await box("#stream .stream-player"), await box("#stream-info")];
+  expect(player.y).toBeGreaterThanOrEqual(rooms.y + rooms.height);
+  expect(info.y).toBeGreaterThanOrEqual(player.y + player.height);
+
+  await page.locator("#stream-select").selectOption({ label: "Room <B>" });
+  await expect(page).toHaveURL(/\?room=Room\+%3CB%3E$/);
+});
+
+test("live page keeps the rooms at the bottom of the screen on tablets", async ({ page }) => {
+  await track(page);
+  const rooms = page.locator("#stream .stream-rooms");
+
+  for (const [width, height] of [[800, 1000], [800, 450]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("live/");
+    await ready(page);
+    await page.evaluate(() => window.conference.live.setTime("09:10", 0));
+
+    // Pinned to the bottom, also while the page scrolls (e.g. a short screen), below the next talk
+    await expect(page.locator("#stream .btn[data-room='Room A']")).toBeVisible();
+    const bar = await rooms.boundingBox();
+    expect(bar.y + bar.height).toBeCloseTo(height, 0);
+    if (height > 450) {
+      const info = await page.locator("#stream-info").boundingBox();
+      expect(bar.y).toBeGreaterThanOrEqual(info.y + info.height);
+    }
+  }
+});
+
 test("debug time uses the conference timezone", async ({ page }) => {
   await page.goto("");
   await ready(page);

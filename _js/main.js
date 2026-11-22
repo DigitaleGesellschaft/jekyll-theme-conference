@@ -22,7 +22,6 @@ import { init } from "./init.js";
 
 // Import modules
 import { createDarkModeModule } from "./modules/darkmode.js";
-import { createEmbedModule } from "./modules/embed.js";
 import { createInfoboxModule } from "./modules/infobox.js";
 import { createLiveModule } from "./modules/live.js";
 import { createMapModule } from "./modules/map.js";
@@ -43,7 +42,6 @@ const modules = {
   darkmode: createDarkModeModule(),
   infobox: createInfoboxModule(),
   modal: createModalModule(),
-  embed: createEmbedModule(),
   program: createProgramModule(),
   live,
   nowline: createNowLineModule(clock),

@@ -1,0 +1,63 @@
+{%- comment -%}
+  Live stream of a room, filled by _js/modules/stream.js: the rooms
+  (buttons, on phones a select), the stream, its consent box or why there
+  is none (e.g. "Live stream has ended.") and the room's next talk. Shared
+  by the stream modal (modal_live.html) and the live page (layout `live`):
+  in this order on phones, larger screens move the rooms (see
+  _css/theme.scss). Input: include.class_body and include.class_footer,
+  classes of the stream and of the other parts, e.g. "modal-body" and
+  "modal-footer"
+{%- endcomment -%}
+{%- assign live_lang = site.data.lang[site.conference.lang].live -%}
+<div class="stream-rooms {{ include.class_footer }}">
+  {%- for room in edition_rooms -%}
+    <button type="button" id="stream-button{{ forloop.index }}" class="btn btn-outline-primary d-none d-sm-inline" data-room="{{ room.name | escape }}" aria-pressed="false"{% unless room.live %} disabled{% endunless %}>
+      {{ room.name | escape }}
+    </button>
+  {%- endfor %}
+  <div class="w-100 d-block d-sm-none">
+    <select class="form-select" id="stream-select" aria-label="{{ site.data.lang[site.conference.lang].location.rooms | default: 'Rooms' }}">
+      {%- for room in edition_rooms -%}
+        <option value="{{ forloop.index }}"{% unless room.live %} disabled{% endunless %}>{{ room.name | escape }}</option>
+      {%- endfor %}
+    </select>
+  </div>
+</div>
+
+<div class="stream-player ratio ratio-16x9 {{ include.class_body }}">
+  <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ live_lang.stream | default: 'Live Stream' }}"></iframe>
+  {%- include embed_consent.html hidden=true click_to_load=edition_live.streaming.click_to_load %}
+  <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
+    <div id="stream-modal-desc"></div>
+    <div id="stream-offline" class="d-none">
+      {% include icon.html name="wifi-off" %} {{ live_lang.offline | default: "offline" }}
+    </div>
+  </div>
+</div>
+
+<div class="stream-info flex-column justify-content-start d-none {{ include.class_footer }}" id="stream-info">
+  <div class="align-self-start live-time my-0 small" id="stream-info-time" data-time=""></div>
+  <div class="align-self-start ps-2 border-start border-4" id="stream-info-color">
+    <p class="mb-0">
+      <a class="talk-title text-reset link-underline-opacity-0 link-underline-opacity-100-hover" href="#" id="stream-info-talk"></a>
+    </p>
+    <p class="talk-speakers mb-0" id="stream-info-speakers"></p>
+  </div>
+  <div class="stream-info-links m-0 mt-1 d-none" id="stream-info-links"></div>
+</div>
+
+{%- comment -%} Icons of the talks' live links, e.g. for a "Q&A" button {%- endcomment -%}
+{%- assign live_icons = "" | split: "" -%}
+{%- for talk in edition_talks -%}
+  {%- for link in talk.links -%}
+    {%- if link.live and link.icon -%}
+      {%- assign live_icons = live_icons | push: link.icon -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}
+{%- assign live_icons = live_icons | uniq %}
+<template id="stream-icons">
+  {%- for icon in live_icons -%}
+    <span data-icon="{{ icon | escape }}">{% include icon.html name=icon %}</span>
+  {%- endfor -%}
+</template>

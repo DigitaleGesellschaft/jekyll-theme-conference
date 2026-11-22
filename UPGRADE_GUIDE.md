@@ -44,6 +44,14 @@ The banner inviting visitors to install the app (PWA) became a toast at the bott
 **Action:**
 - Rename `pwa.install_banner` to `pwa.install_toast` in `_config.yml`, if set.
 
+### Live Page
+
+The stream overview (`layout: stream-overview`, all rooms' streams at once) became the live page (`layout: live`): one room at a time like the stream modal, which the installed app opens instead of the modal.
+
+**Action:**
+- Rename `layout: stream-overview` to `layout: live`, see [Live Indications & Streaming](README.md#live-indications--streaming).
+- Without a stream overview, but with streaming and the PWA: create `live/index.md` with `layout: live`, else the app opens the stream as a modal covering its navigation bar.
+
 ### Editions (optional)
 
 Merge the sites of several editions (e.g. one repository per year) into one site, see [Editions](README.md#editions). Per edition:

@@ -1,0 +1,26 @@
+{% include header.html %}
+  {%- assign live_lang = site.data.lang[site.conference.lang].live %}
+
+  <h1 class="display-5 mb-4 text-break">
+    {% if page.title %}
+      {{ page.title }}
+    {% else %}
+      {{ live_lang.stream | default: "Live Stream" }}
+    {% endif %}
+  </h1>
+
+  {{ content }}
+
+  {%- comment -%}
+    The stream modal as a page, e.g. for the app's Live tab: the room of
+    the address (?room=Room+A, else the first), arranged in _css/theme.scss
+  {%- endcomment -%}
+  {%- if edition_live.streaming.enable %}
+  <div class="stream-page" id="stream">
+    {%- include show_stream.html %}
+  </div>
+  {%- else %}
+  <p>{{ live_lang.post_stream | default: "Live stream has ended." }}</p>
+  {%- endif %}
+
+{% include footer.html %}

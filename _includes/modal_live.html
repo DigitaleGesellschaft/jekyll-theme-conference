@@ -10,58 +10,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ site.data.lang[site.conference.lang].close | default: 'Close' }}"></button>
       </div>
 
-      <div class="modal-body ratio ratio-16x9">
-        <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ live_lang.stream | default: 'Live Stream' }}"></iframe>
-        {%- include embed_consent.html hidden=true click_to_load=edition_live.streaming.click_to_load %}
-        <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
-          <div id="stream-modal-desc"></div>
-          <div id="stream-offline" class="d-none">
-            {% include icon.html name="wifi-off" %} {{ live_lang.offline | default: "offline" }}
-          </div>
-        </div>
-      </div>
+      {%- include show_stream.html class_body="modal-body" class_footer="modal-footer" %}
 
-      <div class="modal-footer flex-column justify-content-start d-none" id="stream-info">
-        <div class="align-self-start live-time my-0 small" id="stream-info-time" data-time=""></div>
-        <div class="align-self-start ps-2 border-start border-4" id="stream-info-color">
-          <p class="mb-0">
-            <a class="talk-title text-reset link-underline-opacity-0 link-underline-opacity-100-hover" href="#" id="stream-info-talk"></a>
-          </p>
-          <p class="talk-speakers mb-0" id="stream-info-speakers"></p>
-        </div>
-        <div class="align-self-center m-0 mt-1 d-none" id="stream-info-links"></div>
+      <div class="modal-footer d-sm-none">
+        <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">{{ site.data.lang[site.conference.lang].close | default: 'Close' }}</button>
       </div>
-
-      <div class="modal-footer justify-content-around">
-        {%- for room in edition_rooms -%}
-          <button type="button" id="stream-button{{ forloop.index }}" class="btn btn-outline-primary d-none d-sm-inline" data-room="{{ room.name | escape }}" aria-pressed="false"{% unless room.live %} disabled{% endunless %}>
-            {{ room.name | escape }}
-          </button>
-        {%- endfor %}
-        <div class="w-100 d-block d-sm-none">
-          <select class="form-select" id="stream-select" aria-label="{{ site.data.lang[site.conference.lang].location.rooms | default: 'Rooms' }}">
-            {%- for room in edition_rooms -%}
-              <option value="{{ forloop.index }}"{% unless room.live %} disabled{% endunless %}>{{ room.name | escape }}</option>
-            {%- endfor %}
-          </select>
-        </div>
-      </div>
-
-      {%- comment -%} Icons of the talks' live links, e.g. for a "Q&A" button {%- endcomment -%}
-      {%- assign live_icons = "" | split: "" -%}
-      {%- for talk in edition_talks -%}
-        {%- for link in talk.links -%}
-          {%- if link.live and link.icon -%}
-            {%- assign live_icons = live_icons | push: link.icon -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endfor -%}
-      {%- assign live_icons = live_icons | uniq %}
-      <template id="stream-icons">
-        {%- for icon in live_icons -%}
-          <span data-icon="{{ icon | escape }}">{% include icon.html name=icon %}</span>
-        {%- endfor -%}
-      </template>
 
     </div>
   </div>

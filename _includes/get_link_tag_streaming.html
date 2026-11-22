@@ -12,13 +12,31 @@
   {%- else -%}
     {% assign data_room = edition_rooms | first %}
   {%- endif -%}
+
+  {%- comment -%}
+    The live page with the room, e.g. /live/?room=Room+A (the app opens it
+    instead of the modal, see _js/modules/stream.js); on it, no modal
+  {%- endcomment -%}
+  {%- assign stream_href = "#" -%}
+  {%- if edition_live_page -%}
+    {%- assign stream_href = edition_live_page.url | prepend: site.baseurl -%}
+    {%- if r -%}
+      {%- assign room_param = r.name | url_encode -%}
+      {%- assign stream_href = stream_href | append: "?room=" | append: room_param -%}
+    {%- endif -%}
+  {%- endif -%}
   <a
-    class="{{ include.class }}"
-    href="#"
+    class="{{ include.class }}{% if include.is_active %} active{% endif %}"
+    href="{{ stream_href | escape }}"
     title="{{ stream_label }}"
+    {%- if include.is_active %}
+    aria-current="page"
+    {%- endif %}
+    {%- unless page.layout == "live" %}
     data-bs-toggle="modal"
     data-bs-target="#stream-modal"
-    data-room="{{ data_room.name | escape }}"
     aria-haspopup="dialog"
+    {%- endunless %}
+    data-room="{{ data_room.name | escape }}"
   >
 {%- endif -%}

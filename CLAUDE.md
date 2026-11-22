@@ -80,6 +80,7 @@ One app for all editions: `_layouts/manifest.html` uses `site.title` and `baseur
 
 - `_layouts/sw.js`: precaches the URLs in `site.json` (bundles by `?v=` hash, other build assets by `?t=` build time), serves pages and `.json` stale-while-revalidate with navigation preload, and posts `page-updated` to the page when the network copy differs (ignoring `?t=`). It forwards the root to the current edition without loading it. Documents/slides are not precached.
 - `_js/modules/pwa.js`: registers the worker after `load`; install and update notices are Bootstrap toasts (`_includes/pwa_toasts.html`).
+- Live stream: the website opens the stream modal (`modal_live.html`), the app the live page (`layout: live`, found via `edition_live_page`) so the tab bar stays; both include `show_stream.html` (arranged per context in `_css/theme.scss`) and use `_js/modules/stream.js`.
 - App mode: an inline script in `header.html` sets `data-pwa="true"` on `<html>` before first paint when installed (standalone display and `data-pwa-enable`); CSS keys app styling (tab bar `navbar_pwa.html`, `.d-pwa-none`) on that attribute only, never on `display-mode`.
 
 ### Translations

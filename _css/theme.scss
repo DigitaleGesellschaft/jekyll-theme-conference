@@ -263,11 +263,121 @@ h1.room-name,
       margin-top: auto;
     }
   }
+
+  // Stream modal: the rooms between the title and the stream (see
+  // _includes/show_stream.html), the last footer a close button within reach
+  #stream-modal .stream-rooms {
+    border-top: 0;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  #stream-modal .stream-rooms {
+    order: 1;
+  }
 }
 
 @include media-breakpoint-only(md) {
   .modal-lg {
     --#{$prefix}modal-width: #{map-get($container-max-widths, md)};
+  }
+}
+
+// Live stream (_includes/show_stream.html), in the modal: rooms spread
+// across, the next talk's links centred
+.stream-rooms {
+  justify-content: space-around;
+}
+
+.stream-info-links {
+  align-self: center;
+}
+
+// Live page (_layouts/live.html), as the modal: on phones the rooms above
+// the stream, on tablets at the bottom of the screen, also while the page
+// scrolls; on large screens the rooms beside the stream:
+//
+//   ┌──────────────────┬───────┐
+//   │ stream           │ rooms │
+//   ├──────────────────┤       │
+//   │ next talk, links │       │
+//   └──────────────────┴───────┘
+.stream-page {
+  display: grid;
+  grid-template: "rooms" "player" "info" / minmax(0, 1fr);
+  gap: $spacer;
+
+  .stream-player {
+    grid-area: player;
+    overflow: hidden;
+    background-color: var(--#{$prefix}tertiary-bg);
+    @include border-radius();
+  }
+
+  .stream-info {
+    grid-area: info;
+    display: flex;
+  }
+
+  .stream-info-links {
+    align-self: flex-start;
+  }
+
+  .stream-rooms {
+    grid-area: rooms;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $spacer * 0.5;
+  }
+
+  // Across the container, clear of the home indicator unless the app's tab
+  // bar below does so
+  @include media-breakpoint-between(sm, lg) {
+    grid-template: "player" auto "info" auto "rooms" 1fr / minmax(0, 1fr);
+    flex-grow: 1;
+
+    .stream-rooms {
+      position: sticky;
+      bottom: 0;
+      align-self: end;
+      margin: 0 calc(var(--#{$prefix}gutter-x) * -0.5);
+      padding: ($spacer * 0.5) calc(var(--#{$prefix}gutter-x) * 0.5) calc(#{$spacer * 0.5} + env(safe-area-inset-bottom));
+      background-color: var(--#{$prefix}body-bg);
+      border-top: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color);
+
+      [data-pwa="true"] & {
+        padding-bottom: $spacer * 0.5;
+      }
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-template: "player rooms" auto "info ." auto / 2fr 1fr;
+    align-items: start;
+
+    .stream-rooms {
+      flex-direction: column;
+    }
+  }
+}
+
+// On tablets, the page scrolls within <main>, which fills the screen above
+// the footer: the rooms then stay above the app's tab bar
+@include media-breakpoint-between(sm, lg) {
+  body:has(.stream-page) {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+
+    main {
+      display: flex;
+      flex: 1 1 0;
+      flex-direction: column;
+      min-height: 0;
+      margin-bottom: 0 !important; // over .my-3
+      overflow-y: auto;
+    }
   }
 }
 

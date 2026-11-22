@@ -302,7 +302,7 @@ test.describe("installed app", () => {
     }
   });
 
-  test("Live replaces name_inactive in the tab bar while live and opens the stream", async ({ page }) => {
+  test("Live replaces name_inactive in the tab bar while live and opens the live page", async ({ page }) => {
     await track(page);
     await page.goto("speakers/");
     await ready(page);
@@ -323,8 +323,43 @@ test.describe("installed app", () => {
     const [icon, label] = [await live.locator(".live-icon").boundingBox(), await live.locator("span").boundingBox()];
     expect(icon.y + icon.height).toBeLessThanOrEqual(label.y);
 
+    // A page, not the modal: the tab bar stays, with Live as the current tab
     await live.click();
-    await expect(page.locator("#stream-modal")).toBeVisible();
+    await expect(page).toHaveURL(/\/live\/$/);
+    await expect(page.locator("#stream")).toBeVisible();
+    await expect(page.locator("nav.navbar-pwa")).toBeVisible();
+    await expect(page.locator("nav.navbar-pwa .navbar-pwa-live a")).toHaveAttribute("aria-current", "page");
+
+    // Phone: the rooms above the stream, as in the modal
+    const box = (selector) => page.locator(selector).boundingBox();
+    const [rooms, player] = [await box("#stream .stream-rooms"), await box("#stream .stream-player")];
+    expect(player.y).toBeGreaterThanOrEqual(rooms.y + rooms.height);
+
+    // Tablet: the rooms right above the tab bar
+    await page.setViewportSize({ width: 800, height: 1000 });
+    const [bar, tabs] = [await box("#stream .stream-rooms"), await box("nav.navbar-pwa")];
+    expect(bar.y + bar.height).toBeCloseTo(tabs.y, 0);
+  });
+
+  test("live indications open the live page with their room", async ({ page }) => {
+    await track(page);
+    await page.goto("program/");
+    await ready(page);
+    await page.evaluate(() => window.conference.live.setTime("09:40", 0));
+
+    await page.locator(".tab-pane.active td", { hasText: "Talk with" }).locator(".live-show a").click();
+    await expect(page).toHaveURL(/\/live\/\?room=Room\+%3CB%3E$/);
+    await ready(page);
+    await expect(page.locator("#stream-select")).toHaveValue("2");
+
+    // The Live tab on the live page keeps the room, without reloading
+    await page.evaluate(() => {
+      window.conference.live.setTime("09:40", 0);
+      window.notReloaded = true;
+    });
+    await page.locator("nav.navbar-pwa .navbar-pwa-live a").click();
+    await expect(page).toHaveURL(/\?room=Room\+%3CB%3E$/);
+    expect(await page.evaluate(() => window.notReloaded)).toBe(true);
   });
 
   test("tab bar holds four tabs on narrow phones, five from 390 px", async ({ page }) => {

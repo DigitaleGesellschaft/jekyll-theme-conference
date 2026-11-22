@@ -127,7 +127,8 @@
       {%- if pwa_live -%}
         {%- assign link = pwa_live %}
           <div class="px-2 navbar-pwa-live live-show d-none" {{ pwa_live_range }}>
-            {%- include get_link.html class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" -%}
+            {%- include get_link_active.html -%}
+            {%- include get_link.html class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" is_active=is_active -%}
             {{ link_tag }}
               {% include get_live_icon.html icon_only=true %}
               <span>{{ link.name | default: lang.live.live | default: "Live" }}</span>

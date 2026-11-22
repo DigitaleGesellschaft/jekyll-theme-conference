@@ -63,6 +63,10 @@ For more details, refer to the [Tracks & Tags](https://github.com/DigitaleGesell
 {%- if site.conference.location -%}
   {%- assign errors = errors | push: "Your `_config.yml` file contains an outdated property name. Please move any location configuration from `conference.location` to your location file (with `layout: location`). For more details, refer to the [Location Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#location-page) section in the theme's README." -%}
 {%- endif -%}
+{%- assign stream_overviews = site.pages | where: "layout", "stream-overview" -%}
+{%- if stream_overviews.size > 0 -%}
+  {%- assign errors = errors | push: "The layout `stream-overview` was renamed. Please change `layout: stream-overview` to `layout: live` in the Front Matter of your page. For more details, refer to the [Live Indications & Streaming](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#live-indications--streaming) section in the theme's README." -%}
+{%- endif -%}
 {%- if page.map and page.layout != "location" -%}
   {%- assign errors = errors | push: "Your page's FrontMatter contains an outdated property name. Maps are no longer supported on individual pages and can only be included on pages with `layout: location`. For more details, refer to the [Location Page](https://github.com/DigitaleGesellschaft/jekyll-theme-conference/#location-page) section in the theme's README." -%}
 {%- endif -%}

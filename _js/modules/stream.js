@@ -1,9 +1,11 @@
 /**
- * Stream Module - Live stream modal with room switching
+ * Stream Module - Live stream modal and page with room switching
  *
- * Loads the talks (data.json) only once the modal is opened, shows the
- * room's stream (after consent, see core/consent.js) or why there is none
- * (not started, paused, ended, offline) and the room's next talk.
+ * Loads the talks (data.json) only once the modal is opened or the live
+ * page (layout `live`) shown, shows the room's stream (after consent, see
+ * core/consent.js) or why there is none (not started, paused, ended,
+ * offline) and the room's next talk. The installed app opens the live page
+ * instead of the modal, so its tab bar stays.
  */
 import { clearEmbed, loadEmbed } from "../core/consent.js";
 
@@ -20,7 +22,7 @@ export function createStreamModule(clock, live, conferenceConfig) {
   // Data Access
   // ==========================================================================
 
-  // A failed load (e.g. offline) is retried when the modal opens again
+  // A failed load (e.g. offline) is retried when the stream opens again
   const loadData = () => {
     dataPromise ??= fetch(`${baseurl}/assets/js/data.json`)
       .then((response) => {
@@ -110,12 +112,12 @@ export function createStreamModule(clock, live, conferenceConfig) {
   // Player: stream, consent box or message (e.g. "Live stream has ended.")
   // ==========================================================================
 
-  const createPlayer = (modalEl) => {
-    const iframe = modalEl.querySelector("iframe");
-    const placeholder = modalEl.querySelector("#stream-placeholder");
+  const createPlayer = (streamEl) => {
+    const iframe = streamEl.querySelector("iframe");
+    const placeholder = streamEl.querySelector("#stream-placeholder");
     const message = placeholder.querySelector("#stream-modal-desc");
     const offline = placeholder.querySelector("#stream-offline");
-    const consent = modalEl.querySelector("[data-embed-consent]");
+    const consent = streamEl.querySelector("[data-embed-consent]");
     let url = null;
 
     const showPlaceholder = (content) => {
@@ -165,14 +167,14 @@ export function createStreamModule(clock, live, conferenceConfig) {
   // Next Talk: time, title, speakers and live links of the room's next talk
   // ==========================================================================
 
-  const createInfo = (modalEl) => {
-    const container = modalEl.querySelector("#stream-info");
-    const timeEl = modalEl.querySelector("#stream-info-time");
-    const colorEl = modalEl.querySelector("#stream-info-color");
-    const talkEl = modalEl.querySelector("#stream-info-talk");
-    const speakersEl = modalEl.querySelector("#stream-info-speakers");
-    const linksEl = modalEl.querySelector("#stream-info-links");
-    const icons = modalEl.querySelector("#stream-icons");
+  const createInfo = (streamEl) => {
+    const container = streamEl.querySelector("#stream-info");
+    const timeEl = streamEl.querySelector("#stream-info-time");
+    const colorEl = streamEl.querySelector("#stream-info-color");
+    const talkEl = streamEl.querySelector("#stream-info-talk");
+    const speakersEl = streamEl.querySelector("#stream-info-speakers");
+    const linksEl = streamEl.querySelector("#stream-info-links");
+    const icons = streamEl.querySelector("#stream-icons");
 
     // Track colour classes, e.g. "border-info-subtle" or "link-underline-info"
     const setColor = (el, pattern, colorClass) => {
@@ -245,9 +247,9 @@ export function createStreamModule(clock, live, conferenceConfig) {
   // Room Selector: buttons (wide screens) or select (narrow screens)
   // ==========================================================================
 
-  const createRoomSelector = (modalEl, onChange) => {
-    const buttons = modalEl.querySelectorAll(".modal-footer .btn[data-room]");
-    const select = modalEl.querySelector("#stream-select");
+  const createRoomSelector = (streamEl, onChange) => {
+    const buttons = streamEl.querySelectorAll(".stream-rooms .btn[data-room]");
+    const select = streamEl.querySelector("#stream-select");
     let current = null;
 
     const setActive = (room) => {
@@ -273,16 +275,16 @@ export function createStreamModule(clock, live, conferenceConfig) {
     buttons.forEach((btn) => btn.addEventListener("click", () => choose(btn.dataset.room)));
     select?.addEventListener("change", () => choose(select.options[select.selectedIndex].text));
 
-    return { setActive, getCurrent: () => current };
+    return { setActive, choose, getCurrent: () => current };
   };
 
   // ==========================================================================
-  // Modal
+  // Stream: player, next talk and rooms, in the modal or on the live page
   // ==========================================================================
 
-  const setupModal = (modalEl) => {
-    const player = createPlayer(modalEl);
-    const info = createInfo(modalEl);
+  const setupStream = (streamEl, onRoomChange) => {
+    const player = createPlayer(streamEl);
+    const info = createInfo(streamEl);
     let timer = null;
 
     const updateRoom = (room) => {
@@ -297,7 +299,10 @@ export function createStreamModule(clock, live, conferenceConfig) {
       live.update();
     };
 
-    const roomSelector = createRoomSelector(modalEl, updateRoom);
+    const roomSelector = createRoomSelector(streamEl, (room) => {
+      updateRoom(room);
+      onRoomChange?.(room);
+    });
 
     // Own flag: Bootstrap marks the modal as shown only after its transition
     let isOpen = false;
@@ -316,9 +321,8 @@ export function createStreamModule(clock, live, conferenceConfig) {
 
     clock.onChange(() => isOpen && tick());
 
-    modalEl.addEventListener("show.bs.modal", async (event) => {
+    const open = async (roomName) => {
       isOpen = true;
-      const roomName = event.relatedTarget?.dataset.room;
       await loadData();
       const room = getRoom(roomName);
       if (!room || !isOpen) {
@@ -326,27 +330,79 @@ export function createStreamModule(clock, live, conferenceConfig) {
       }
       roomSelector.setActive(room);
       tick();
-    });
+    };
 
-    modalEl.addEventListener("hide.bs.modal", () => {
+    const close = () => {
       isOpen = false;
       clearTimeout(timer);
       player.clear();
       info.hide();
       roomSelector.setActive(null);
       live.update();
+    };
+
+    return { open, close, choose: roomSelector.choose };
+  };
+
+  const setupModal = (modalEl) => {
+    const stream = setupStream(modalEl);
+    modalEl.addEventListener("show.bs.modal", (event) => stream.open(event.relatedTarget?.dataset.room));
+    modalEl.addEventListener("hide.bs.modal", stream.close);
+  };
+
+  // Room from and in the address, e.g. /live/?room=Room+A, so reloading and
+  // going back keep it. Links to the stream switch to their room in place,
+  // e.g. a talk's live indication; without one (e.g. the Live tab) they
+  // keep the room
+  const setupPage = (pageEl) => {
+    const setUrlRoom = (room) => {
+      const url = new URL(location.href);
+      url.searchParams.set("room", room.name);
+      history.replaceState(history.state, "", url);
+    };
+    const stream = setupStream(pageEl, setUrlRoom);
+
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest("a[data-room]");
+      if (!link || link.pathname !== location.pathname) {
+        return;
+      }
+      event.preventDefault();
+      const roomName = new URL(link.href).searchParams.get("room");
+      if (roomName) {
+        stream.choose(roomName);
+      }
+    });
+
+    stream.open(new URLSearchParams(location.search).get("room"));
+  };
+
+  // App: links to the stream open the live page instead of the modal
+  const linkToPage = () => {
+    document.querySelectorAll("a[data-bs-target='#stream-modal']:not([href='#'])").forEach((link) => {
+      link.removeAttribute("data-bs-toggle");
+      link.removeAttribute("aria-haspopup");
     });
   };
 
   const init = (config, langStrings) => {
     const modalEl = document.getElementById("stream-modal");
-    if (!config || !modalEl) {
+    const pageEl = document.getElementById("stream");
+    if (!config || !(modalEl || pageEl)) {
       return;
     }
 
     Object.assign(settings, config);
     lang = langStrings || {};
     baseurl = conferenceConfig.baseurl || "";
+
+    if (pageEl) {
+      setupPage(pageEl);
+      return;
+    }
+    if (document.documentElement.dataset.pwa === "true") {
+      linkToPage();
+    }
     setupModal(modalEl);
   };
 

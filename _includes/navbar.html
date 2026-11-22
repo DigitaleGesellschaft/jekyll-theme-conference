@@ -30,7 +30,8 @@
               {%- include get_live_timestamps.html -%}
 
               <li class="nav-item live-show d-none d-print-none" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-                {%- include get_link.html class="nav-link" -%}
+                {%- include get_link_active.html -%}
+                {%- include get_link.html class="nav-link" is_active=is_active -%}
                 {{ link_tag }}
                   {%- if link.name -%}
                     {{ link.name }}
