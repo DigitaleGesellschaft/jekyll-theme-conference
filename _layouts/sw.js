@@ -6,12 +6,22 @@ const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
 const HTTP_NOT_MODIFIED = 304;
 
-// Message to a page with a newer version than shown (_js/modules/pwa.js)
-const PAGE_UPDATED = "page-updated";
+// Message to the pages once a build changed the site (_js/modules/pwa.js)
+const SITE_UPDATED = "site-updated";
 
 // Pages of each build link the site's files with its build time (e.g.
 // main.css?t=1793258390): ignored, so a rebuild alone is no update
 const BUILD_TIME = /\?t=\d+/g;
+
+// Whether this build changed the site: set on install, told the pages on
+// activation
+let siteUpdated = false;
+
+// Whether the latest version differs from the stored one, ignoring the build time
+const isChanged = async (stored, latest) => {
+  const [before, after] = await Promise.all([stored.text(), latest.text()]);
+  return before.replace(BUILD_TIME, "") !== after.replace(BUILD_TIME, "");
+};
 
 // Copy of the previous build (cache), or nothing on the first install
 const previousCache = async () => {
@@ -21,11 +31,13 @@ const previousCache = async () => {
 
 // Store a resource in the new cache, downloading only what changed since the
 // previous build: theme bundles carry their content hash (e.g.
-// conference.bundle.css?v=1a2b3c), all other resources are revalidated (304)
+// conference.bundle.css?v=1a2b3c), all other resources are revalidated (304).
+// Resolves whether it changed.
 const precache = async (cache, previous, url) => {
   const cached = previous && (await previous.match(url));
   if (cached && new URL(url, self.location.href).searchParams.has("v")) {
-    return cache.put(url, cached);
+    await cache.put(url, cached);
+    return false;
   }
 
   const headers = {};
@@ -39,12 +51,18 @@ const precache = async (cache, previous, url) => {
   // Low priority: the visitor's own requests go first
   const response = await fetch(url, { cache: "no-store", headers, priority: "low" });
   if (response.status === HTTP_NOT_MODIFIED && cached) {
-    return cache.put(url, cached);
+    await cache.put(url, cached);
+    return false;
   }
   if (!response.ok) {
     throw new Error(`${response.status} ${url}`);
   }
-  return cache.put(url, response);
+  await cache.put(url, response.clone());
+
+  // Example: main.css?t=1793258390 of the previous build. New resources
+  // change the pages linking them.
+  const stored = previous && (await previous.match(url, { ignoreSearch: true }));
+  return stored ? isChanged(stored, response) : false;
 };
 
 // Install event - precache all pages and assets listed in site.json
@@ -67,6 +85,7 @@ self.addEventListener("install", (event) => {
         if (failed.length) {
           console.warn(`Service worker could not cache ${failed.length} resource(s)`);
         }
+        siteUpdated = results.some((result) => result.value === true);
       } catch (error) {
         console.error("Service worker install failed:", error);
       }
@@ -91,55 +110,65 @@ self.addEventListener("activate", (event) => {
           .map((name) => caches.delete(name)),
       );
       await self.clients.claim();
+
+      // Once for all pages of the build, e.g. not again on the next page
+      if (siteUpdated) {
+        const clients = await self.clients.matchAll({ type: "window" });
+        clients.forEach((client) => client.postMessage({ type: SITE_UPDATED }));
+      }
     })(),
   );
 });
 
-// Latest version from the network (stored for later), e.g. the page's
-// navigation preload
+// Latest version from the network, e.g. the page's navigation preload
+const fetchLatest = (event) =>
+  (event.preloadResponse ?? Promise.resolve()).then((preloaded) => preloaded || fetch(event.request));
+
+// Store a response for later
+const store = async (request, response) => {
+  if (response.ok) {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(request, response.clone());
+  }
+  return response;
+};
+
+// Latest version from the network, stored for later
 const fromNetwork = (event) => {
-  const { request } = event;
-  const preload = event.preloadResponse ?? Promise.resolve();
-  const network = preload.then((preloaded) => preloaded || fetch(request)).then(async (response) => {
-    if (response.ok) {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.put(request, response.clone());
-    }
-    return response;
-  });
+  const network = fetchLatest(event).then((response) => store(event.request, response));
   event.waitUntil(network.catch(() => {}));
   return network;
 };
 
-// Tell the page shown from the cache once the network has another version
-const notifyUpdate = async (event, cached, network) => {
-  const response = await network;
+// Store the latest version of a page shown from the cache, unless it
+// changed: the next build's service worker stores all its pages at once and
+// tells the pages once (see install), instead of each page on its own
+const revalidatePage = async (event, cached) => {
+  const response = await fetchLatest(event);
   if (!response.ok) {
     return;
   }
 
-  const [shown, latest] = await Promise.all([cached.text(), response.clone().text()]);
-  if (shown.replace(BUILD_TIME, "") === latest.replace(BUILD_TIME, "")) {
+  if (await isChanged(cached, response.clone())) {
+    await self.registration.update();
     return;
   }
-
-  const client = await self.clients.get(event.resultingClientId);
-  client?.postMessage({ type: PAGE_UPDATED });
+  await store(event.request, response);
 };
 
 // Stale while revalidate: the cached copy right away, also on a crowded
 // conference Wi-Fi, updated in the background (ignoring the query, e.g.
-// /program/?day=2); the network only without a copy. Pages shown from the
-// cache learn about a newer version.
+// /program/?day=2); the network only without a copy
 const staleWhileRevalidate = async (event) => {
-  const network = fromNetwork(event);
   const cached = await caches.match(event.request, { ignoreSearch: true });
   if (!cached) {
-    return network;
+    return fromNetwork(event);
   }
 
   if (event.request.mode === "navigate") {
-    event.waitUntil(notifyUpdate(event, cached.clone(), network).catch(() => {}));
+    event.waitUntil(revalidatePage(event, cached.clone()).catch(() => {}));
+  } else {
+    fromNetwork(event);
   }
   return cached;
 };

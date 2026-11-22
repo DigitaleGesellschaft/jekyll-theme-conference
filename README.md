@@ -627,7 +627,7 @@ The theme includes built-in support for Progressive Web App (PWA) functionality,
 Short notices of the app appear as a toast at the bottom of the page (in the app above its navigation bar), one at a time:
 
 - On phones and tablets (iOS and Android), a toast invites visitors to install the app. Its button opens the browser's install prompt where available (Chrome on Android), otherwise a panel at the bottom explaining in three steps how to add the app to the home screen. Closing the toast hides it for 30 days. It is not shown on desktops, within the installed app or on past [editions](#editions). Set `install_toast: false` to turn it off.
-- When a page shown from the stored copy has changed meanwhile (e.g. a schedule change), a toast offers to reload it. Rebuilding the site alone does not count as a change.
+- Within the app, once a new build of the site changed (e.g. a schedule change), a toast offers to reload all modified pages. Rebuilding the site alone does not count as a change.
 
 > [!NOTE]
 > Please note that when installed as a PWA, the navigation bar moves to the bottom and includes icons. See the [_Navigation Bar_](#navigation-bar) section above for more information.

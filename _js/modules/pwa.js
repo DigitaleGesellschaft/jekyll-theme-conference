@@ -8,8 +8,8 @@ export function createPWAModule(conferenceConfig) {
   const INSTALL_DISMISSED_KEY = "pwa_install_dismissed";
   const INSTALL_DISMISS_MS = 30 * 86400 * 1000; // 30 days
 
-  // Message of the service worker (_layouts/sw.js) on a newer version of the page
-  const PAGE_UPDATED = "page-updated";
+  // Message of the service worker (_layouts/sw.js) once a build changed the site
+  const SITE_UPDATED = "site-updated";
 
   const isStandalone = () => document.documentElement.dataset.pwa === "true";
 
@@ -90,17 +90,17 @@ export function createPWAModule(conferenceConfig) {
     window.addEventListener("appinstalled", () => toastOf(toast).hide());
   };
 
-  // Update toast once the service worker loaded a newer version of the page
-  // than the stored one shown
+  // Update toast in the app once the service worker stored a build changing
+  // the site (websites show it from the next page on)
   const initUpdate = () => {
     const toast = document.getElementById("pwa-update-toast");
-    if (!toast) {
+    if (!toast || !isStandalone()) {
       return;
     }
 
     toast.querySelector("[data-pwa-reload]").addEventListener("click", () => location.reload());
     navigator.serviceWorker.addEventListener("message", (event) => {
-      if (event.data?.type === PAGE_UPDATED) {
+      if (event.data?.type === SITE_UPDATED) {
         showToast(toast);
       }
     });

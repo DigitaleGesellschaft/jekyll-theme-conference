@@ -1,5 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { SITE_DIR } from "../support/build.js";
 import { ready, track } from "./helpers.js";
 
 const OFFLINE_PAGES = ["program/", "talks/opening_welcome/", "speakers/ada_lovelace/", "rooms/room_a/"];
@@ -40,37 +43,78 @@ const markStoredProgram = (page, replace) =>
     }
   }, replace);
 
-// Without waiting for the network (e.g. a crowded conference Wi-Fi); a toast
-// offers the version updated in the background
-test("pages show the stored copy at once and offer the update", async ({ page }) => {
+// Register the service worker of the next build (its build time differs)
+// in place of the site's: the browser checks for a new one on navigations,
+// which Playwright cannot route
+const NEXT_BUILD_SW = "sw-next.js";
+const nextBuild = async (page) => {
+  const sw = readFileSync(join(SITE_DIR, "sw.js"), "utf8").replace(/const VERSION = "(\d+)"/, 'const VERSION = "$11"');
+  writeFileSync(join(SITE_DIR, NEXT_BUILD_SW), sw);
+
+  await page.evaluate(async (script) => {
+    const [first] = await caches.keys();
+    const { active } = await navigator.serviceWorker.ready;
+    await navigator.serviceWorker.register(new URL(script, active.scriptURL));
+    while ((await caches.keys()).includes(first)) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    // Its messages follow right after
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }, NEXT_BUILD_SW);
+};
+
+// Without waiting for the network (e.g. a crowded conference Wi-Fi); the
+// next build stores all pages at once
+test("pages show the stored copy at once and update with the next build", async ({ page }) => {
   await page.goto("talks/opening_welcome/");
   await markStoredProgram(page, ["</main>", '<p id="stored">Stored</p></main>']);
 
   await page.goto("program/");
   await expect(page.locator("#stored")).toHaveCount(1);
 
-  const toast = page.locator("#pwa-update-toast");
-  await expect(toast).toBeVisible();
-  await toast.getByRole("button", { name: "Update" }).click();
+  // Websites show no toast
+  await nextBuild(page);
+  await expect(page.locator("#pwa-update-toast")).toBeHidden();
+  await page.reload();
   await expect(page.locator("#stored")).toHaveCount(0);
-  await expect(toast).toBeHidden();
 });
 
-// Pages of each build link the site's files with its build time
-test("a rebuild alone offers no update", async ({ page }) => {
-  await page.goto("talks/opening_welcome/");
-  await markStoredProgram(page, ["\\?t=\\d+", "?t=1"]);
+test.describe("installed app update", () => {
+  test.beforeEach(({ page }) => page.addInitScript(() => Object.defineProperty(navigator, "standalone", { value: true })));
 
-  await page.goto("program/");
-  await expect(page.locator('link[href*="main.css?t=1"]')).toHaveCount(1);
+  test("offers the next build once", async ({ page }) => {
+    await page.goto("talks/opening_welcome/");
+    await markStoredProgram(page, ["</main>", '<p id="stored">Stored</p></main>']);
 
-  // Wait for the background update to replace the stored copy
-  await page.evaluate(async () => {
-    while (/\?t=1"/.test(await (await caches.match(location.href)).text())) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
+    // The stored copy stays until the next build
+    await page.goto("program/");
+    await ready(page);
+    await expect(page.locator("#stored")).toHaveCount(1);
+    const toast = page.locator("#pwa-update-toast");
+    await expect(toast).toBeHidden();
+
+    await nextBuild(page);
+    await expect(toast).toBeVisible();
+    await toast.getByRole("button", { name: "Update" }).click();
+    await expect(page.locator("#stored")).toHaveCount(0);
+    await expect(toast).toBeHidden();
+
+    // Other pages are up to date already
+    await page.goto("talks/");
+    await ready(page);
+    await expect(toast).toBeHidden();
   });
-  await expect(page.locator("#pwa-update-toast")).toBeHidden();
+
+  // Pages of each build link the site's files with its build time
+  test("a rebuild alone offers no update", async ({ page }) => {
+    await page.goto("talks/opening_welcome/");
+    await markStoredProgram(page, ["\\?t=\\d+", "?t=1"]);
+
+    await nextBuild(page);
+    await ready(page);
+    await expect(page.locator("#pwa-update-toast")).toBeHidden();
+  });
 });
 
 // The page's request starts while the service worker boots
