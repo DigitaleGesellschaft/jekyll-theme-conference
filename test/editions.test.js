@@ -38,8 +38,9 @@ before(() => {
 });
 
 describe("editions", () => {
-  test("every page lives under its edition", () => {
-    const outside = htmlFiles(sites.main).filter((file) => file !== "index.html" && !EDITIONS.some((id) => file.startsWith(`${id}/`)));
+  test("every page lives under its edition, but the root and the page not found", () => {
+    const shared = ["index.html", "404.html"];
+    const outside = htmlFiles(sites.main).filter((file) => !shared.includes(file) && !EDITIONS.some((id) => file.startsWith(`${id}/`)));
 
     assert.deepEqual(outside, []);
   });
@@ -251,9 +252,13 @@ describe("editions", () => {
   test(".htaccess forwards other addresses to the current edition", () => {
     const htaccess = read(sites.main, ".htaccess");
 
-    assert.match(htaccess, new RegExp(`RewriteCond %\\{DOCUMENT_ROOT\\}${BASEURL}/2026/\\$1 -f \\[OR\\]`));
-    assert.match(htaccess, new RegExp(`RewriteRule \\^\\(\\.\\*\\)\\$ ${BASEURL}/2026/\\$1 \\[R=302,L\\]`));
-    assert.match(htaccess, /ErrorDocument 404/);
+    // Files as they are, pages with their trailing slash
+    assert.match(htaccess, new RegExp(`^RewriteCond %\\{DOCUMENT_ROOT\\}${BASEURL}/2026/\\$1 -f$`, "m"));
+    assert.match(htaccess, new RegExp(`^RewriteRule \\^\\(\\.\\*\\)\\$ ${BASEURL}/2026/\\$1 \\[R=302,L\\]$`, "m"));
+    assert.match(htaccess, new RegExp(`^RewriteCond %\\{DOCUMENT_ROOT\\}${BASEURL}/2026/\\$1/index\\.html -f$`, "m"));
+    assert.match(htaccess, new RegExp(`^RewriteRule \\^\\(\\.\\*\\?\\)/\\?\\$ ${BASEURL}/2026/\\$1/ \\[R=302,L\\]$`, "m"));
+    assert.doesNotMatch(htaccess, / -d$/m);
+    assert.match(htaccess, new RegExp(`^ErrorDocument 404 ${BASEURL}/404.html$`, "m"));
     assert.match(read(sites.current2025, ".htaccess"), new RegExp(`RewriteRule .* ${BASEURL}/2025/\\$1 `));
   });
 

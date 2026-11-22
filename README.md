@@ -868,7 +868,7 @@ layout: htaccess
 ---
 ```
 
-It forwards every address that doesn't exist on its own but does exist in the current edition, e.g. `/program/` to `/2026/program/`, and adapts by itself once the current edition changes. Below the Front Matter, you can add your own rules. It assumes the site lies at `baseurl` below the web server's document root. Other hosts (e.g. GitHub Pages) ignore the file and need their own redirects.
+It forwards every address that doesn't exist on its own but does exist in the current edition, e.g. `/program/` to `/2026/program/`, and adapts by itself once the current edition changes. With a page for missing addresses (`404.md`, see [_Pages_](#pages)), Apache shows it for addresses that exist nowhere. Below the Front Matter, you can add your own rules. It assumes the site lies at `baseurl` below the web server's document root. Other hosts (e.g. GitHub Pages) ignore the file and need their own redirects.
 
 #### Setup
 
@@ -879,7 +879,7 @@ It forwards every address that doesn't exist on its own but does exist in the cu
 3. Move the talks, speakers and rooms into the edition's subfolders: `_talks/*.md` to `_talks/2026/`, likewise for `_speakers/` and `_rooms/`.
 4. Move the schedule `_data/program.yml` to `_data/programs/2026.yml`.
 5. Create a new `index.md` in the root with `layout: editions` as its only Front Matter.
-6. Optionally, add a `.htaccess` file so old addresses keep working (see [_Redirects_](#redirects)).
+6. Optionally, add a `.htaccess` file forwarding addresses outside the editions' folders to the current edition (see [_Redirects_](#redirects)).
 
 ```bash
 mkdir -p 2026 _talks/2026 _speakers/2026 _rooms/2026 _data/programs

@@ -54,7 +54,7 @@ jobs:
       - name: Package generated website
         run: |
           cd _site/
-          zip -r ../website.zip *
+          zip -r ../website.zip .   # . instead of *, to include .htaccess
           cd ../
 
       - name: Create Release

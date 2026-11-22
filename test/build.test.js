@@ -130,10 +130,11 @@ const pwaTabs = (html) => {
 };
 
 describe("PWA", () => {
-  test(".htaccess keeps its content and forwards nothing without editions", () => {
+  test(".htaccess shows the page not found, keeps its content and forwards nothing without editions", () => {
     const htaccess = read(".htaccess");
 
-    assert.match(htaccess, /ErrorDocument 404/);
+    assert.match(htaccess, new RegExp(`^ErrorDocument 404 ${BASEURL}/404.html$`, "m"));
+    assert.match(htaccess, /^Options -Indexes$/m);
     assert.doesNotMatch(htaccess, /Rewrite/);
   });
 
@@ -224,7 +225,7 @@ describe("PWA", () => {
     for (const path of ["/", "/program/", "/talks/", "/talks/opening_welcome/", "/speakers/ada_lovelace/", "/rooms/room_a/"]) {
       assert.ok(pages.includes(BASEURL + path), `missing ${path}`);
     }
-    for (const path of ["/talks/hidden_talk/", "/speakers/hidden_person/", "/sw.js"]) {
+    for (const path of ["/talks/hidden_talk/", "/speakers/hidden_person/", "/sw.js", "/.htaccess"]) {
       assert.ok(!pages.includes(BASEURL + path), `unexpected ${path}`);
     }
   });

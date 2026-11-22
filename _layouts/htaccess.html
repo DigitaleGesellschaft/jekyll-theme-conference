@@ -1,19 +1,32 @@
 {%- comment -%}
-  Apache configuration (.htaccess) of a site with several editions: forwards
-  addresses outside the editions to the current one, if it has them (e.g.
-  /program/ -> /2026/program/), followed by the page's own content. Without
-  editions, only the content.
+  Apache configuration (.htaccess) of the site: with several editions,
+  forwards addresses outside the editions to the current one, if it has them
+  (e.g. /program/ -> /2026/program/). Shows the page for missing addresses
+  (layout: not-found, e.g. 404.md), if any. Followed by the page's own
+  content, which can override both.
 {%- endcomment -%}
 {%- include get_edition.html -%}
 {%- if edition_current_id -%}
 {%- assign edition_url = site.baseurl | append: "/" | append: edition_current_id -%}
-# Forward to the current edition, e.g. /program/ -> {{ edition_url }}/program/
+# Forward to the current edition: files, e.g. /documents/slides/x.pdf ->
+# {{ edition_url }}/documents/slides/x.pdf, and pages with their trailing slash, e.g.
+# /program -> {{ edition_url }}/program/ (folders without a page are not forwarded)
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}{{ edition_url }}/$1 -f [OR]
-RewriteCond %{DOCUMENT_ROOT}{{ edition_url }}/$1 -d
+RewriteCond %{DOCUMENT_ROOT}{{ edition_url }}/$1 -f
 RewriteRule ^(.*)$ {{ edition_url }}/$1 [R=302,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}{{ edition_url }}/$1/index.html -f
+RewriteRule ^(.*?)/?$ {{ edition_url }}/$1/ [R=302,L]
+
+{% endif -%}
+{%- assign not_found_page = site.pages | where: "layout", "not-found" | where_exp: "p", "p.edition == nil" | first -%}
+{%- if not_found_page -%}
+# Page for missing addresses
+ErrorDocument 404 {{ not_found_page.url | prepend: site.baseurl }}
 
 {% endif -%}
 {{ content }}

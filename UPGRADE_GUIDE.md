@@ -60,7 +60,7 @@ Merge the sites of several editions (e.g. one repository per year) into one site
 3. Move `_data/program.yml` to `_data/programs/<id>.yml`.
 4. Move its pages (`index.md`, `program/`, `talks/`, …) and `documents/` to `<id>/`.
 
-Finally add an `index.md` with `layout: editions` and forward the former sites' addresses to `/<id>/`. On Apache, a `.htaccess` with `layout: htaccess` forwards former addresses of the current edition, e.g. `/program/` (see [Editions](README.md#editions)). Sites with a single edition need no change.
+Finally add an `index.md` with `layout: editions` and forward the former sites' addresses to `/<id>/`. On Apache, a `.htaccess` with `layout: htaccess` forwards addresses outside the editions' folders to the current edition, e.g. `/program/` (see [Editions](README.md#editions)). Sites with a single edition need no change.
 
 When merging, mind that:
 - The site's `baseurl` drops the edition (e.g. `/2026` → `""`). Relative paths in content, such as `../assets/images/logo.svg`, then point into the edition's folder: use `{{ site.baseurl }}/assets/…` instead.

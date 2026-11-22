@@ -29,7 +29,9 @@
 
 {%- for page in site.pages -%}
   {%- assign page_ext = page.url | split: "." | last -%}
-  {%- if page.output == false or page.url == nil or page.url == "" or page.url == "/sw.js" or page_ext == "map" -%}
+  {%- comment -%} Skip hidden files, e.g. .htaccess: web servers refuse them {%- endcomment -%}
+  {%- assign page_initial = page.name | slice: 0 -%}
+  {%- if page.output == false or page.url == nil or page.url == "" or page.url == "/sw.js" or page_ext == "map" or page_initial == "." -%}
     {%- continue -%}
   {%- endif -%}
   {%- assign page_edition = page.edition | append: "" -%}
