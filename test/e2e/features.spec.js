@@ -200,6 +200,18 @@ test("stream modal on phones shows the rooms above the stream and a close button
   await expect(footerClose).toBeHidden();
 });
 
+test("missing pages show the site's page not found", async ({ page }) => {
+  const response = await page.goto("talks/missing/page/");
+  await ready(page);
+
+  expect(response.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Page not found");
+  await expect(page.locator("header nav.navbar")).toHaveCSS("display", "flex");
+
+  await page.getByRole("link", { name: "Go to the home page" }).click();
+  await page.waitForURL(/\/conf\/$/);
+});
+
 test("live indication follows the schedule", async ({ page }) => {
   await page.goto("program/");
   await ready(page);

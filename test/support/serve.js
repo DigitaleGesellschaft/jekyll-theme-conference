@@ -4,7 +4,7 @@
  * Serves SITE_DIR under BASEURL, e.g. /conf/talks/x/ -> SITE_DIR/talks/x/index.html.
  * Usage: `node test/support/serve.js [port]`
  */
-import { createReadStream, statSync } from "node:fs";
+import { createReadStream, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";
 import { BASEURL, SITE_DIR } from "./build.js";
@@ -43,12 +43,20 @@ const resolveFile = (urlPath) => {
   }
 };
 
+// Page for missing addresses, as served by e.g. GitHub Pages (layout: not-found)
+const NOT_FOUND_PAGE = join(SITE_DIR, "404.html");
+
 const port = Number(process.argv[2]) || DEFAULT_PORT;
 
 createServer((req, res) => {
   const file = resolveFile(new URL(req.url, "http://localhost").pathname);
   if (!file) {
-    res.writeHead(HTTP_NOT_FOUND).end("Not found");
+    try {
+      const page = readFileSync(NOT_FOUND_PAGE);
+      res.writeHead(HTTP_NOT_FOUND, { "Content-Type": MIME_TYPES[".html"] }).end(page);
+    } catch {
+      res.writeHead(HTTP_NOT_FOUND).end("Not found");
+    }
     return;
   }
 

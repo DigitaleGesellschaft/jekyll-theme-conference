@@ -1078,8 +1078,9 @@ The overviews of talks and speakers, the location with its rooms, and the progra
 - `location/index.md` with `layout: location`
 - `program/index.md` with `layout: program`
 - `live/index.md` with `layout: live` (optional, the live stream as a page, see [_Live Indications & Streaming_](#live-indications--streaming))
+- `404.md` with `layout: not-found` (optional, shown for missing addresses by most hosts)
 
-They can be empty but should contain the `layout` property in the Front Matter header.
+Their content can be empty but should contain the `layout` property in the Front Matter header.
 
 Additional static pages can easily be added as files and linked to via navigation bar or main landing page.
 

@@ -343,6 +343,29 @@ test.describe("installed app", () => {
     await expect(page).toHaveURL(/talks\/opening_welcome\/$/);
   });
 
+  test("missing pages show the site's page not found, also offline or with the server's own", async ({ page, context }) => {
+    await page.goto("talks/");
+    await ready(page);
+    await page.evaluate(async () => {
+      await navigator.serviceWorker.ready;
+      const url = new URL("../404.html", location.href).href;
+      for (let i = 0; i < 100 && !(await caches.match(url)); i++) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+    });
+    const heading = page.getByRole("heading", { level: 1 });
+
+    // A server without a page of its own (e.g. plain text)
+    await context.route("**/talks/missing/", (route) => route.fulfill({ status: 404, body: "Not found" }));
+    expect((await page.goto("talks/missing/")).status()).toBe(404);
+    await expect(heading).toHaveText("Page not found");
+    await expect(page.locator("nav.navbar-pwa")).toBeVisible();
+
+    await context.setOffline(true);
+    await page.goto("talks/offline/");
+    await expect(heading).toHaveText("Page not found");
+  });
+
   test("page does not overscroll, keeping the tab bar in place", async ({ page }) => {
     await page.goto("talks/");
     await ready(page);

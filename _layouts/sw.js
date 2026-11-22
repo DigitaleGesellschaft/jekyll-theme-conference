@@ -5,6 +5,7 @@ const CACHE_PREFIX = "jekyll-conference-theme-";
 const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
 const HTTP_NOT_MODIFIED = 304;
+const HTTP_NOT_FOUND = 404;
 
 // Message to the pages once a build changed the site (_js/modules/pwa.js)
 const SITE_UPDATED = "site-updated";
@@ -156,16 +157,46 @@ const revalidatePage = async (event, cached) => {
   await store(event.request, response);
 };
 
+// Page for missing addresses (layout: not-found, e.g. /404.html), if any
+{%- assign not_found_page = site.pages | where: "layout", "not-found" | where_exp: "p", "p.edition == nil" | first -%}
+{%- assign not_found_url = nil -%}
+{%- if not_found_page -%}
+  {%- assign not_found_url = not_found_page.url | prepend: site.baseurl -%}
+{%- endif %}
+const NOT_FOUND_URL = {{ not_found_url | jsonify }};
+
+// The site's page not found in place of the server's (e.g. plain text), and
+// offline for pages not stored
+const notFound = async (response) => {
+  const page = NOT_FOUND_URL && (await caches.match(NOT_FOUND_URL));
+  if (!page) {
+    return response ?? Response.error();
+  }
+  return new Response(page.body, { status: HTTP_NOT_FOUND, headers: page.headers });
+};
+
+// Page not stored (e.g. a missing one): the network, else the page not found
+const pageFromNetwork = async (event) => {
+  let response;
+  try {
+    response = await fromNetwork(event);
+  } catch {
+    return notFound();
+  }
+  return response.status === HTTP_NOT_FOUND ? notFound(response) : response;
+};
+
 // Stale while revalidate: the cached copy right away, also on a crowded
 // conference Wi-Fi, updated in the background (ignoring the query, e.g.
 // /program/?day=2); the network only without a copy
 const staleWhileRevalidate = async (event) => {
   const cached = await caches.match(event.request, { ignoreSearch: true });
+  const isPage = event.request.mode === "navigate";
   if (!cached) {
-    return fromNetwork(event);
+    return isPage ? pageFromNetwork(event) : fromNetwork(event);
   }
 
-  if (event.request.mode === "navigate") {
+  if (isPage) {
     event.waitUntil(revalidatePage(event, cached.clone()).catch(() => {}));
   } else {
     fromNetwork(event);

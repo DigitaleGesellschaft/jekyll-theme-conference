@@ -1,0 +1,21 @@
+{% include header.html %}
+  {%- comment -%}
+    Page for missing addresses (e.g. 404.md), also shown by the app's
+    service worker in place of the server's or when offline: links are
+    absolute, as it shows at any address
+  {%- endcomment -%}
+  {%- assign not_found_lang = site.data.lang[site.conference.lang].not_found %}
+
+  <h1 class="display-5 mb-3 text-break">
+    {{ page.title | default: not_found_lang.title | default: "Page not found" }}
+  </h1>
+
+  {% if content != "" -%}
+    {{ content }}
+  {%- else -%}
+    <p class="lead">{{ not_found_lang.text | default: "This page does not exist (anymore)." }}</p>
+  {%- endif %}
+
+  <a class="btn btn-primary" href="{{ site.baseurl }}{{ edition_base }}/">{{ not_found_lang.home | default: "Go to the home page" }}</a>
+
+{% include footer.html %}

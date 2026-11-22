@@ -11,6 +11,10 @@ en:
   overview: Overview
   more_information: More Information
   close: Close
+  not_found:
+    title: "Page not found"
+    text: "This page does not exist (anymore)."
+    home: "Go to the home page"
   navigation:
     main: Main navigation
     toggle: Toggle navigation menu
@@ -92,6 +96,10 @@ de:
   overview: Übersicht
   more_information: Weitere Informationen
   close: Schließen
+  not_found:
+    title: "Seite nicht gefunden"
+    text: "Diese Seite gibt es nicht (mehr)."
+    home: "Zur Startseite"
   navigation:
     main: Hauptnavigation
     toggle: Navigationsmenü umschalten
@@ -173,6 +181,10 @@ fr:
   overview: Aperçu
   more_information: Plus d'informations
   close: Fermer
+  not_found:
+    title: "Page introuvable"
+    text: "Cette page n'existe pas (ou plus)."
+    home: "Aller à la page d'accueil"
   navigation:
     main: Navigation principale
     toggle: Basculer le menu de navigation
@@ -254,6 +266,10 @@ pt:
   overview: Visão geral
   more_information: Mais informações
   close: Fechar
+  not_found:
+    title: "Página não encontrada"
+    text: "Esta página não existe (mais)."
+    home: "Ir para a página inicial"
   navigation:
     main: Navegação principal
     toggle: Alternar menu de navegação
