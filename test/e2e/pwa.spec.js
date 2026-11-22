@@ -5,6 +5,9 @@ import { join } from "node:path";
 import { SITE_DIR } from "../support/build.js";
 import { ready, track } from "./helpers.js";
 
+// Link of a talk to another site (test/fixture/_talks/opening_welcome.md)
+const EXTERNAL_LINK = "https://example.org/";
+
 const OFFLINE_PAGES = ["program/", "talks/opening_welcome/", "speakers/ada_lovelace/", "rooms/room_a/"];
 
 test("pages and stylesheets are available offline", async ({ page, context }) => {
@@ -283,6 +286,16 @@ test.describe("install toast on android with an install prompt", () => {
   });
 });
 
+test("website opens links to other sites in the same tab", async ({ page, context }) => {
+  await context.route(EXTERNAL_LINK, (route) => route.fulfill({ body: "" }));
+  await page.goto("talks/opening_welcome/");
+  await ready(page);
+
+  const request = page.waitForRequest(EXTERNAL_LINK);
+  await page.getByRole("link", { name: "Website" }).click();
+  expect((await request).frame()).toBe(page.mainFrame());
+});
+
 test("website overscrolls as usual", async ({ page }) => {
   await page.goto("talks/");
   await ready(page);
@@ -318,6 +331,17 @@ test.describe("installed app", () => {
 
   // iOS flag for "added to home screen", read by the theme's standalone detection
   test.beforeEach(({ page }) => page.addInitScript(() => Object.defineProperty(navigator, "standalone", { value: true })));
+
+  test("links to other sites open outside the app", async ({ page, context }) => {
+    await context.route(EXTERNAL_LINK, (route) => route.fulfill({ body: "" }));
+    await page.goto("talks/opening_welcome/");
+    await ready(page);
+
+    const popup = page.waitForEvent("popup");
+    await page.getByRole("link", { name: "Website" }).click();
+    expect((await popup).url()).toBe(EXTERNAL_LINK);
+    await expect(page).toHaveURL(/talks\/opening_welcome\/$/);
+  });
 
   test("page does not overscroll, keeping the tab bar in place", async ({ page }) => {
     await page.goto("talks/");

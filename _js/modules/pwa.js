@@ -109,12 +109,31 @@ export function createPWAModule(conferenceConfig) {
     navigator.serviceWorker.startMessages();
   };
 
+  // Links to other sites open in the browser instead of within the app
+  // (e.g. a talk's slides on another host), which offers no way back
+  const initLinks = () => {
+    if (!isStandalone()) {
+      return;
+    }
+
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest?.("a[href]");
+      if (!link || link.origin === location.origin || !link.protocol.startsWith("http")) {
+        return;
+      }
+
+      link.target = "_blank";
+      link.rel = "noopener";
+    });
+  };
+
   const init = (config) => {
     if (!config?.enable) {
       return;
     }
 
     initInstall();
+    initLinks();
 
     if (!("serviceWorker" in navigator)) {
       console.warn("Service workers are not supported in this browser.");
