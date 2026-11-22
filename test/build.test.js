@@ -734,6 +734,36 @@ describe("Accessibility", () => {
     }
   });
 
+  test("info bar and error titles are no headings, which would precede the page's h1", () => {
+    assert.match(read("index.html"), /<p class="alert-heading h4">Notice<\/p>/);
+    assert.match(read("outdated/index.html"), /<p class="alert-heading h5">There was an error/);
+    assert.doesNotMatch(read("outdated/index.html"), /<h\d class="alert-heading/);
+  });
+
+  test("info bars and error alerts present on load are no alerts, which interrupt screen readers", () => {
+    for (const file of ["index.html", "outdated/index.html"]) {
+      assert.match(read(file), /class="alert /, file);
+      assert.doesNotMatch(read(file), /role="alert"/, file);
+    }
+  });
+
+  test("elements carry no ARIA their element already implies or ignores", () => {
+    for (const file of htmlFiles()) {
+      const html = read(file);
+
+      assert.doesNotMatch(html, /<main[^>]* role="main"/, file);
+      assert.doesNotMatch(html, /class="dropdown-menu[^"]*" aria-labelledby=/, file);
+    }
+  });
+
+  test("sites without editions show no edition switcher", () => {
+    assert.doesNotMatch(read("index.html"), /navbar-editions/);
+  });
+
+  test("map is a region named by its label", () => {
+    assert.match(read("location/index.html"), /<div id="map" role="region" [^>]*aria-label="[^"]+"/);
+  });
+
   test("talks in another language are marked as such", () => {
     assert.match(read("talks/late_night/index.html"), /<h1 lang="de"[^>]*>Late Night<\/h1>/);
     assert.match(programCell("Late Night"), /<a lang="de"[^>]*>Late Night<\/a>/);

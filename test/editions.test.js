@@ -145,7 +145,7 @@ describe("editions", () => {
 
   test("switcher lists all editions, by name if given", () => {
     const html = read(sites.main, "2025/index.html");
-    const menu = html.match(/aria-labelledby="navbar-dropdown0">([\s\S]*?)<\/div>/)[1];
+    const menu = html.match(/id="navbar-dropdown0"[\s\S]*?<div class="dropdown-menu">([\s\S]*?)<\/div>/)[1];
 
     assert.deepEqual(hrefs(menu), [`${BASEURL}/2026/`, `${BASEURL}/2025/`]);
     assert.match(menu, /aria-current="true">\s*Archive 2025/);
@@ -155,7 +155,7 @@ describe("editions", () => {
     const html = read(sites.main, "2026/index.html");
 
     assert.match(html, /<\/ul>\s*<ul class="navbar-nav">\s*<li class="nav-item dropdown">\s*<a [^>]*id="navbar-editions"[^>]*aria-label="Edition: 2026">\s*2026\s*<\/a>/);
-    assert.match(html, /dropdown-menu-end" aria-labelledby="navbar-editions"/);
+    assert.match(html, /id="navbar-editions"[\s\S]*?<div class="dropdown-menu dropdown-menu-end">/);
   });
 
   test("a link with menu: editions places the switcher, named by navigation.editions.name", () => {
@@ -167,7 +167,7 @@ describe("editions", () => {
 
   test("the link's name wins over navigation.editions.name", () => {
     const html = read(sites.main, "2025/index.html");
-    const menu = html.match(/aria-labelledby="main-dropdown0">([\s\S]*?)<\/div>/)[1];
+    const menu = html.match(/id="main-dropdown0"[\s\S]*?<div class="dropdown-menu">([\s\S]*?)<\/div>/)[1];
 
     assert.match(html, /id="main-dropdown0"[^>]*>\s*Other Editions\s*<\/a>/);
     assert.deepEqual(hrefs(menu), [`${BASEURL}/2026/`, `${BASEURL}/2025/`]);

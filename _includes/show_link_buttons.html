@@ -15,7 +15,7 @@
       <a class="{{ btn_default }} dropdown-toggle" href="#" role="button" id="{{ include.id }}-dropdown{{ forloop.index0 }}" data-bs-toggle="dropdown"{% if include.popper %} data-bs-popper-config='{"strategy":"{{ include.popper }}"}'{% endif %} aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
         {{ menu_name }}
       </a>
-      <div class="dropdown-menu" aria-labelledby="{{ include.id }}-dropdown{{ forloop.index0 }}">
+      <div class="dropdown-menu">
         {% include show_menu_items.html %}
       </div>
     </div>

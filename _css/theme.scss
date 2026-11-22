@@ -236,6 +236,11 @@ h1.room-name,
   margin-bottom: 0;
 }
 
+// Code in alerts in the alert's colour: the code colour is unreadable on its background
+.alert code {
+  color: inherit;
+}
+
 // Home header image: full width on small screens
 .home-header-img {
   width: 100%;

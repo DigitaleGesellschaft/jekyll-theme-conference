@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { ready, track } from "./helpers.js";
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
-const PAGES = ["", "program/", "variants/alltimes/", "talks/", "talks/opening_welcome/", "speakers/", "speakers/ada_lovelace/", "rooms/room_a/", "location/"];
+const PAGES = ["", "program/", "variants/alltimes/", "talks/", "talks/opening_welcome/", "speakers/", "speakers/ada_lovelace/", "rooms/room_a/", "location/", "live/", "outdated/"];
 const MIN_TARGET_PX = 24;
 
 for (const colorScheme of ["light", "dark"]) {
@@ -57,6 +57,10 @@ test("video modal names its frame after the talk and releases focus on close", a
 
   // Escape works once the modal holds the focus (after its transition)
   await expect.poll(() => modal.evaluate((el) => el.contains(document.activeElement))).toBe(true);
+
+  // Consent box readable, e.g. its link to the provider
+  const { violations } = await new AxeBuilder({ page }).include("#link-modal").withTags(WCAG_TAGS).analyze();
+  expect(violations.map(({ id, nodes }) => `${id}: ${nodes.map((node) => node.target.join(" ")).join(", ")}`)).toEqual([]);
 
   await page.keyboard.press("Escape");
   await expect(modal).toBeHidden();

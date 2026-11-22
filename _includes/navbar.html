@@ -19,7 +19,7 @@
               <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown{{ forloop.index0 }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
                 {{ menu_name }}
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbar-dropdown{{ forloop.index0 }}">
+              <div class="dropdown-menu">
                 {%- include show_menu_items.html %}
               </div>
             </li>
@@ -73,7 +73,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbar-editions" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
             {{ menu_name }}
           </a>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar-editions">
+          <div class="dropdown-menu dropdown-menu-end">
             {%- include show_menu_items.html %}
           </div>
         </li>

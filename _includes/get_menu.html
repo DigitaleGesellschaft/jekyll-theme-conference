@@ -19,9 +19,9 @@
 {%- assign menu_empty = false -%}
 
 {%- if menu_links == "editions" -%}
-  {%- if site.conference.editions.size < 2 -%}
+  {%- unless site.conference.editions.size > 1 -%}
     {%- assign menu_empty = true -%}
-  {%- endif -%}
+  {%- endunless -%}
   {%- assign menu_name = menu_name | default: edition_nav_editions.name -%}
   {%- unless menu_name -%}
     {%- assign menu_name = edition -%}

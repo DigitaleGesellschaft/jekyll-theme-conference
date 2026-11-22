@@ -2,10 +2,10 @@
   {%- include checks.html -%}
   {%- if errors.size > 0 -%}
     {%- for error in errors %}
-      <div class="alert alert-danger fade show" role="alert">
-        <h5 class="alert-heading">There was an error when generating the site!</h5>
+      <div class="alert alert-danger fade show">
+        <p class="alert-heading h5">There was an error when generating the site!</p>
 
-        {{ error | markdownify }}
+        {{ error | markdownify | replace: "<a href=", "<a class='alert-link' href=" }}
       </div>
     {%- endfor -%}
   {%- endif -%}
@@ -30,13 +30,13 @@
       {%- assign dismissal_days = infobar.dismissal_days | default: 7 -%}
       {%- if dismissal_days > 0 -%}
         {%- assign infobar_id = infobar.title | default: '' | append: infobar.text | slugify -%}
-        <div class="alert alert-{{ infobar.color }} alert-dismissible fade show" role="alert" data-infobar-id="{{ infobar_id }}" data-infobar-dismiss="{{ dismissal_days | times: 86400 }}">
+        <div class="alert alert-{{ infobar.color }} alert-dismissible fade show" data-infobar-id="{{ infobar_id }}" data-infobar-dismiss="{{ dismissal_days | times: 86400 }}">
       {%- else -%}
-        <div class="alert alert-{{ infobar.color }} fade show" role="alert">
+        <div class="alert alert-{{ infobar.color }} fade show">
       {%- endif -%}
 
       {%- if infobar.title %}
-        <h4 class="alert-heading">{{ infobar.title }}</h4>
+        <p class="alert-heading h4">{{ infobar.title }}</p>
       {%- endif %}
 
       {{ infobar.text | markdownify | replace: "<a href=", "<a class='alert-link' href=" }}
