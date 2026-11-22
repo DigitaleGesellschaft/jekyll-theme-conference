@@ -279,7 +279,7 @@
 
   {%- if edition_tracks %}
     {%- unless page.hide_legend -%}
-      <h2 class="h5 mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Caption" }}</h2>
+      <h2 class="h5 mt-4">{{ site.data.lang[site.conference.lang].program.legend | default: "Legend" }}</h2>
       {%- for track_prop in edition_tracks %}
         <div class="track-name d-sm-inline-block m-1 bg-{{ track_prop.color | default: 'light' }}-subtle text-{{ track_prop.color | default: 'light' }}-emphasis border-{{ track_prop.color | default: 'light' }}-subtle">
           {%- if track_prop.icon -%}

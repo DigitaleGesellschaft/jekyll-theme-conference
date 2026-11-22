@@ -196,7 +196,7 @@ for (const [platform, userAgent] of Object.entries(PHONES)) {
       await expect(toast).toBeVisible();
 
       await toast.getByRole("button", { name: "Install" }).click();
-      const steps = page.getByRole("dialog", { name: "Install the app" });
+      const steps = page.getByRole("dialog", { name: "Install as an app" });
       await expect(steps).toBeVisible();
       await expect(steps.locator(`[data-pwa-steps="${platform}"]`)).toBeVisible();
       await expect(steps.locator(`[data-pwa-steps="${OTHER_PLATFORM[platform]}"]`)).toBeHidden();

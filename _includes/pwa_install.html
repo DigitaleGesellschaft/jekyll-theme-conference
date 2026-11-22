@@ -6,7 +6,7 @@
   {%- assign lang = site.data.lang[site.conference.lang] %}
   <div class="offcanvas offcanvas-bottom h-auto rounded-top-4 d-print-none" tabindex="-1" id="pwa-install" aria-labelledby="pwa-install-label">
     <div class="offcanvas-header">
-      <h2 class="offcanvas-title h5" id="pwa-install-label">{{ lang.pwa.title | default: "Install the app" }}</h2>
+      <h2 class="offcanvas-title h5" id="pwa-install-label">{{ lang.pwa.title | default: "Install as an app" }}</h2>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{{ lang.close | default: 'Close' }}"></button>
     </div>
     <div class="offcanvas-body pt-0">
@@ -20,7 +20,7 @@
         <li><span>{{ lang.pwa.android.add | default: "Tap “Install app” or “Add to Home screen”." }}</span>{% include icon.html name="download" %}</li>
         <li><span>{{ lang.pwa.android.confirm | default: "Tap “Install”." }}</span>{% include icon.html name="check2" %}</li>
       </ol>
-      <p class="text-body-secondary mb-0">{{ lang.pwa.done | default: "Then open the app from its icon, also offline." }}</p>
+      <p class="text-body-secondary mb-0">{{ lang.pwa.done | default: "Then open the app from its icon. It works offline too." }}</p>
     </div>
   </div>
 {%- endif -%}

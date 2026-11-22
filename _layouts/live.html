@@ -5,7 +5,7 @@
     {% if page.title %}
       {{ page.title }}
     {% else %}
-      {{ live_lang.stream | default: "Live Stream" }}
+      {{ live_lang.stream | default: "Live stream" }}
     {% endif %}
   </h1>
 
@@ -20,7 +20,7 @@
     {%- include show_stream.html %}
   </div>
   {%- else %}
-  <p>{{ live_lang.post_stream | default: "Live stream has ended." }}</p>
+  <p>{{ live_lang.post_stream | default: "The live stream has ended." }}</p>
   {%- endif %}
 
 {% include footer.html %}

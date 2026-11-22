@@ -1,4 +1,4 @@
-version: 15
+version: 16
 
 en:
   pronoun:
@@ -9,7 +9,7 @@ en:
     in: in
     on_: "on"
   overview: Overview
-  more_information: More Information
+  more_information: More information
   close: Close
   not_found:
     title: "Page not found"
@@ -22,15 +22,15 @@ en:
     more: More
   live:
     live: Live
-    stream: Live Stream
-    streams: Live Streams
-    pre_stream: Live stream has not started yet.
-    pause_stream: Live stream is currently paused.
-    post_stream: Live stream has ended.
+    stream: Live stream
+    streams: Live streams
+    pre_stream: The live stream hasn't started yet.
+    pause_stream: The live stream is paused.
+    post_stream: The live stream has ended.
     offline: offline
     time:
       in: in
-      since: since
+      since: for
       weeks: weeks
       week: week
       days: days
@@ -56,7 +56,7 @@ en:
     privacy: "This content is loaded from an external provider, which receives your IP address:"
   program:
     title: Program
-    legend: Caption
+    legend: Legend
     schedule: Conference schedule
     days: Days
     time: Time
@@ -70,9 +70,9 @@ en:
   editions:
     title: Edition
   pwa:
-    subtitle: Program offline on your home screen
+    subtitle: Works offline, right from your home screen
     install: Install
-    title: Install the app
+    title: Install as an app
     ios:
       share: "Tap the Share button in the browser's toolbar (if hidden, behind “⋯”)."
       add: "Scroll down and tap “Add to Home Screen”."
@@ -81,7 +81,7 @@ en:
       menu: "Tap the menu button “⋮” in the browser's toolbar."
       add: "Tap “Install app” or “Add to Home screen”."
       confirm: "Tap “Install”."
-    done: Then open the app from its icon, also offline.
+    done: Then open the app from its icon. It works offline too.
     updated: New content is available.
     reload: Update
 
@@ -95,7 +95,7 @@ de:
     on_: am
   overview: Übersicht
   more_information: Weitere Informationen
-  close: Schließen
+  close: Schliessen
   not_found:
     title: "Seite nicht gefunden"
     text: "Diese Seite gibt es nicht (mehr)."
@@ -107,11 +107,11 @@ de:
     more: Mehr
   live:
     live: Live
-    stream: Live Stream
-    streams: Live Streams
-    pre_stream: Der Live Stream hat noch nicht begonnen.
-    pause_stream: Der Live Stream ist derzeit pausiert.
-    post_stream: Der Live Stream ist beendet.
+    stream: Livestream
+    streams: Livestreams
+    pre_stream: Der Livestream hat noch nicht begonnen.
+    pause_stream: Der Livestream ist derzeit pausiert.
+    post_stream: Der Livestream ist beendet.
     offline: offline
     time:
       in: in
@@ -132,7 +132,7 @@ de:
     map_label: Interaktive Karte des Konferenzortes
     rooms: Räume
     talks: Vorträge in diesem Raum
-    focus_conf: Karte auf den Konferenz-Ort zentrieren
+    focus_conf: Karte auf den Konferenzort zentrieren
     focus_me: Meinen aktuellen Standort anzeigen
     map_load: Karte laden
     map_privacy: "Die Karte wird von einem externen Anbieter geladen, der dabei Ihre IP-Adresse erhält:"
@@ -155,18 +155,18 @@ de:
   editions:
     title: Ausgabe
   pwa:
-    subtitle: Programm offline als App
+    subtitle: Funktioniert offline, direkt vom Startbildschirm
     install: Installieren
-    title: App installieren
+    title: Als App installieren
     ios:
-      share: "Tippen Sie in der Symbolleiste des Browsers auf „Teilen“ (falls nicht sichtbar, hinter „⋯“)."
-      add: "Scrollen Sie nach unten und tippen Sie auf „Zum Home-Bildschirm“."
-      confirm: "Tippen Sie auf „Hinzufügen“."
+      share: "Tippen Sie in der Symbolleiste des Browsers auf «Teilen» (falls nicht sichtbar, hinter «⋯»)."
+      add: "Scrollen Sie nach unten und tippen Sie auf «Zum Home-Bildschirm»."
+      confirm: "Tippen Sie auf «Hinzufügen»."
     android:
-      menu: "Tippen Sie in der Symbolleiste des Browsers auf das Menü „⋮“."
-      add: "Tippen Sie auf „App installieren“ oder „Zum Startbildschirm hinzufügen“."
-      confirm: "Tippen Sie auf „Installieren“."
-    done: Öffnen Sie die App danach über ihr Symbol, auch offline.
+      menu: "Tippen Sie in der Symbolleiste des Browsers auf das Menü «⋮»."
+      add: "Tippen Sie auf «App installieren» oder «Zum Startbildschirm hinzufügen»."
+      confirm: "Tippen Sie auf «Installieren»."
+    done: Öffnen Sie die App danach über ihr Symbol. Sie funktioniert auch offline.
     updated: Neue Inhalte sind verfügbar.
     reload: Aktualisieren
 
@@ -175,7 +175,7 @@ fr:
     and: et
     at: à
     by: de
-    for: pour
+    for: pendant
     in: dans
     on_: le
   overview: Aperçu
@@ -209,7 +209,7 @@ fr:
       hour: heure
       minutes: minutes
       minute: minute
-      soon: à venir
+      soon: bientôt
       now: maintenant
   location:
     name: Lieu
@@ -240,9 +240,9 @@ fr:
   editions:
     title: Édition
   pwa:
-    subtitle: Programme hors ligne sur l'écran d'accueil
+    subtitle: Fonctionne hors ligne, depuis l'écran d'accueil
     install: Installer
-    title: Installer l'application
+    title: Installer comme application
     ios:
       share: "Touchez le bouton « Partager » dans la barre d'outils du navigateur (s'il est masqué, sous « ⋯ »)."
       add: "Faites défiler vers le bas et touchez « Sur l'écran d'accueil »."
@@ -278,14 +278,14 @@ pt:
   live:
     live: Ao vivo
     stream: Transmissão ao vivo
-    streams: Transmissãos ao vivo
+    streams: Transmissões ao vivo
     pre_stream: A transmissão ao vivo ainda não começou.
     pause_stream: A transmissão está atualmente em pausa.
     post_stream: A transmissão ao vivo terminou.
     offline: offline
     time:
       in: em
-      since: hà
+      since: há
       weeks: semanas
       week: semana
       days: dias
@@ -302,13 +302,13 @@ pt:
     map_label: Mapa interativo do local da conferência
     rooms: Salas
     talks: Apresentações nesta sala
-    focus_conf: Centralizar o mapa para o local da conferência
+    focus_conf: Centralizar o mapa no local da conferência
     focus_me: Mostrar minha localização atual
     map_load: Carregar mapa
-    map_privacy: "O mapa é carregado a partir de um fornecedor externo, que recebe o seu endereço IP:"
+    map_privacy: "O mapa é carregado a partir de um provedor externo, que recebe o seu endereço IP:"
   embed:
     load: Carregar conteúdo
-    privacy: "Este conteúdo é carregado a partir de um fornecedor externo, que recebe o seu endereço IP:"
+    privacy: "Este conteúdo é carregado a partir de um provedor externo, que recebe o seu endereço IP:"
   program:
     title: Programa
     legend: Legenda
@@ -325,9 +325,9 @@ pt:
   editions:
     title: Edição
   pwa:
-    subtitle: Programação offline na tela inicial
+    subtitle: Funciona offline, direto da tela inicial
     install: Instalar
-    title: Instalar o app
+    title: Instalar como app
     ios:
       share: "Toque no botão “Compartilhar” na barra de ferramentas do navegador (se não estiver visível, em “⋯”)."
       add: "Role para baixo e toque em “Adicionar à Tela de Início”."

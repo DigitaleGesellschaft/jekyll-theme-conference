@@ -63,7 +63,7 @@
                 "soon": {{ lang.live.time.soon | default: "soon" | jsonify }},
                 "now": {{ lang.live.time.now | default: "now" | jsonify }},
                 "in": {{ lang.live.time.in | default: "in" | append: " " | jsonify }},
-                "since": {{ lang.live.time.since | default: "since" | append: " " | jsonify }},
+                "since": {{ lang.live.time.since | default: "for" | append: " " | jsonify }},
                 "weeks": {{ lang.live.time.weeks | default: "weeks" | jsonify }},
                 "week": {{ lang.live.time.week | default: "week" | jsonify }},
                 "days": {{ lang.live.time.days | default: "days" | jsonify }},
@@ -75,9 +75,9 @@
             }
         },
         "stream": {
-            "pre_stream": {{ lang.live.pre_stream | default: "Live stream has not started yet." | jsonify }},
-            "post_stream": {{ lang.live.post_stream | default: "Live stream has ended." | jsonify }},
-            "pause_stream": {{ lang.live.pause_stream | default: "Live stream is currently paused." | jsonify }}
+            "pre_stream": {{ lang.live.pre_stream | default: "The live stream hasn't started yet." | jsonify }},
+            "post_stream": {{ lang.live.post_stream | default: "The live stream has ended." | jsonify }},
+            "pause_stream": {{ lang.live.pause_stream | default: "The live stream is paused." | jsonify }}
         }
     }
 }

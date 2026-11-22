@@ -205,7 +205,7 @@ describe("editions", () => {
     const live = read(sites.main, "2025/live/index.html");
 
     assert.doesNotMatch(live, /id="stream"/);
-    assert.match(live, /Live stream has ended\./);
+    assert.match(live, /The live stream has ended\./);
   });
 
   test("install toast is limited to the current edition", () => {

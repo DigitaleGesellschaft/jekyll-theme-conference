@@ -1,7 +1,7 @@
 {%- comment -%}
   Live stream of a room, filled by _js/modules/stream.js: the rooms
   (buttons, on phones a select), the stream, its consent box or why there
-  is none (e.g. "Live stream has ended.") and the room's next talk. Shared
+  is none (e.g. "The live stream has ended.") and the room's next talk. Shared
   by the stream modal (modal_live.html) and the live page (layout `live`):
   in this order on phones, larger screens move the rooms (see
   _css/theme.scss). Input: include.class_body and include.class_footer,
@@ -25,7 +25,7 @@
 </div>
 
 <div class="stream-player ratio ratio-16x9 {{ include.class_body }}">
-  <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ live_lang.stream | default: 'Live Stream' }}"></iframe>
+  <iframe referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="{{ live_lang.stream | default: 'Live stream' }}"></iframe>
   {%- include embed_consent.html hidden=true click_to_load=edition_live.streaming.click_to_load %}
   <div id="stream-placeholder" class="d-none justify-content-center align-items-center" role="status" aria-live="polite" aria-atomic="true">
     <div id="stream-modal-desc"></div>

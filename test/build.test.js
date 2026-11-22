@@ -405,7 +405,7 @@ describe("Program options", () => {
     // 09:00 - 01:00 (+1 day) in steps of 15 minutes
     assert.equal(labels.length, 64);
     assert.deepEqual(labels.filter(Boolean).slice(0, 3), ["9:00", "10:00", "11:00"]);
-    assert.match(read("program/index.html"), /<h2[^>]*>Caption<\/h2>/);
+    assert.match(read("program/index.html"), /<h2[^>]*>Legend<\/h2>/);
   });
 
   test("rooms without talks do not extend the day", () => {
@@ -420,7 +420,7 @@ describe("Program options", () => {
     const html = read("variants/start/index.html");
 
     assert.deepEqual(timeLabels("variants/start/index.html"), ["9:00", "9:30", "22:00"]);
-    assert.doesNotMatch(html, /<h2[^>]*>Caption<\/h2>/);
+    assert.doesNotMatch(html, /<h2[^>]*>Legend<\/h2>/);
   });
 
   test("show_alltimes: labels for all rows", () => {
@@ -536,8 +536,8 @@ describe("Live page", () => {
   test("shows the stream modal's design as a page, without the modal", () => {
     const live = read("live/index.html");
 
-    assert.match(live, /<title>Live Stream/);
-    assert.match(live, /<h1[^>]*>\s*Live Stream\s*<\/h1>/);
+    assert.match(live, /<title>Live stream/);
+    assert.match(live, /<h1[^>]*>\s*Live stream\s*<\/h1>/);
     assert.match(live, /class="stream-page" id="stream"[\s\S]*class="stream-rooms "[\s\S]*id="stream-select"[\s\S]*id="stream-placeholder"[\s\S]*id="stream-info"[\s\S]*<footer class="footer-pwa">/);
     assert.doesNotMatch(live, /id="stream-modal"/);
   });
@@ -689,7 +689,7 @@ describe("Accessibility", () => {
   });
 
   test("program cells and legend show the track icon", () => {
-    const legend = read("program/index.html").split("Caption</h2>")[1];
+    const legend = read("program/index.html").split("Legend</h2>")[1];
 
     assert.match(programCell("Opening &amp; Welcome"), /program-talk-icon[\s\S]*class="bi bi-star-fill program-track-icon"/);
     assert.match(legend, /class="bi bi-star-fill me-1"[^]*?Main/);

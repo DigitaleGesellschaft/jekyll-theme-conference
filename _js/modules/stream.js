@@ -109,7 +109,7 @@ export function createStreamModule(clock, live, conferenceConfig) {
   };
 
   // ==========================================================================
-  // Player: stream, consent box or message (e.g. "Live stream has ended.")
+  // Player: stream, consent box or message (e.g. "The live stream has ended.")
   // ==========================================================================
 
   const createPlayer = (streamEl) => {

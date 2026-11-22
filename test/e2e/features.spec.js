@@ -283,6 +283,6 @@ test("next talk shows a relative time and enables live links once started", asyn
   await expect(time).toHaveText("now");
 
   await setTime("09:10");
-  await expect(time).toHaveText("since 10 minutes");
+  await expect(time).toHaveText("for 10 minutes");
   await expect(link).not.toHaveClass(/disabled/);
 });

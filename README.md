@@ -1063,8 +1063,8 @@ Additionally, a _talk_ link can also have the following property:
 Additionally, a _navigation bar_, _main landing page_, _info bar_ or _info modal_ link can also have the following properties:
 
 - `live: true` making the link only visible during the conference and adds a live indication.
-  - The link is only shown if `name` is set. If `name` is an empty string, "Live Stream" is shown instead.
-  - If `name_inactive` is set, its value is used as a placeholder text while the conference is **not** live. If `name_inactive` is an empty string, "Live Stream" is shown instead.
+  - The link is only shown if `name` is set. If `name` is an empty string, "Live stream" is shown instead.
+  - If `name_inactive` is set, its value is used as a placeholder text while the conference is **not** live. If `name_inactive` is an empty string, "Live stream" is shown instead.
   - If streaming is enabled and any URL property is omitted, a click on the link will open the streaming modal, in the installed app the live page if there is one (see section [_Configuration_](#configuration) > [_Live Indications & Streaming_](#live-indications--streaming) above).
 - `menu` containing another list of links. This creates a dropdown menu of multiple sublinks, while the URL of the parent link is ignored. The sublinks have the same properties as regular links.
   - With `menu: editions`, the dropdown menu lists the [editions](#editions) instead. Without `name`, it is labelled with `navigation.editions.name`, else the page's edition. It is not shown with a single edition.
