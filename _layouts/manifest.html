@@ -37,14 +37,32 @@
   "shortcuts": [
   {%- assign first_shortcut = true -%}
   {%- for link in edition_nav_links -%}
-    {%- unless link.pwa_hide or link.live or link.menu -%}
+    {%- unless link.pwa_hide or link.live or link.menu or link.video -%}
       {%- include get_link.html %}
+      {%- comment -%}
+        Only pages of the site: a shortcut needs a URL within the app's scope
+        (not another site's, e.g. tickets, nor a link without URL)
+      {%- endcomment -%}
+      {%- assign link_first = link_href | slice: 0, 1 -%}
+      {%- assign link_start = link_href | slice: 0, 2 -%}
+      {%- assign site_prefix = site.url | append: site.baseurl | append: "/" -%}
+      {%- assign link_own = false -%}
+      {%- if link_first == "/" and link_start != "//" -%}
+        {%- assign link_own = true -%}
+      {%- elsif site.url and link_href and link_href contains site_prefix -%}
+        {%- assign link_prefix = link_href | slice: 0, site_prefix.size -%}
+        {%- if link_prefix == site_prefix -%}
+          {%- assign link_own = true -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if link_own -%}
       {%- unless first_shortcut -%},{%- endunless -%}
       {%- assign first_shortcut = false %}
     {
       "name": {{ link.name | jsonify }},
       "url": {{ link_href | jsonify }}
     }
+      {%- endif -%}
     {%- endunless -%}
   {%- endfor %}
   ]
