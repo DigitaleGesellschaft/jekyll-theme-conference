@@ -20,12 +20,16 @@
       {%- include get_talk_timestamp.html -%}
 
       {%- assign last_pause = timestamp_start | minus: last_end -%}
+      {%- assign starts_block = false -%}
+      {%- if forloop.index0 == 0 or last_pause >= min_pause -%}
+        {%- assign starts_block = true -%}
+      {%- endif -%}
 
-      {%- if forloop.last == true or last_pause >= min_pause and forloop.index0 > 0 -%}
-        {%- if forloop.last -%}
-          {%- assign last_end = timestamp_end -%}
-        {%- endif -%}
-
+      {%- comment -%}
+        A long pause ends the previous block, before the talk starts a new
+        one (also the room's last talk): one end per start, in order
+      {%- endcomment -%}
+      {%- if starts_block and forloop.index0 > 0 -%}
         {%- assign live_end = offset_end | times: 60 | plus: last_end %}
         {%- if live_ends == "" -%}
           {%- assign live_ends = live_end -%}
@@ -34,12 +38,21 @@
         {%- endif -%}
       {%- endif -%}
 
-      {%- if forloop.index0 == 0 or last_pause >= min_pause -%}
+      {%- if starts_block -%}
         {%- assign live_start = offset_start | times: -60 | plus: timestamp_start -%}
         {%- if live_starts == "" -%}
           {%- assign live_starts = live_start -%}
         {%- else -%}
           {%- assign live_starts = live_starts | append: "," | append: live_start -%}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if forloop.last -%}
+        {%- assign live_end = offset_end | times: 60 | plus: timestamp_end %}
+        {%- if live_ends == "" -%}
+          {%- assign live_ends = live_end -%}
+        {%- else -%}
+          {%- assign live_ends = live_ends | append: "," | append: live_end -%}
         {%- endif -%}
       {%- endif -%}
 

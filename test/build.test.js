@@ -196,6 +196,15 @@ describe("PWA", () => {
     assert.ok(tabBar.indexOf("live-show") < tabBar.indexOf('data-bs-target="#navbar-pwa-more"'));
   });
 
+  test("live ranges pair each start with its end, also after a long pause before a room's last talk", () => {
+    const [, starts, ends] = read("index.html").match(/navbar-pwa-live live-show d-none" data-start="([^"]*)" data-end="([^"]*)"/).map((list) => list.split(",").map(Number));
+
+    assert.equal(starts.length, ends.length);
+    starts.forEach((start, i) => assert.ok(start < ends[i], `range ${i}`));
+    // Room A on Friday: 09:00-09:30 ends before the pause until its last talk at 22:00
+    assert.ok(ends.some((end) => end > utc(2026, 2, 20, 8, 30) && end <= utc(2026, 2, 20, 9, 0)));
+  });
+
   test("app's tab bar shows name_inactive as a disabled tab outside live", () => {
     const tabBar = read("index.html").match(/<nav class="navbar[^"]*navbar-pwa[\s\S]*?<\/nav>/)[0];
     const inactive = tabBar.match(/<div class="px-2 live-hide[^"]*" data-start="\d[^"]*" data-end="\d[^"]*">[\s\S]*?<\/div>/)?.[0];
