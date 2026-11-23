@@ -3,7 +3,7 @@
 
   <h1 class="display-5 mb-4 text-break">
     {% if page.title %}
-      {{ page.title }}
+      {{ page.title | escape }}
     {% else %}
       {{ live_lang.stream | default: "Live stream" }}
     {% endif %}

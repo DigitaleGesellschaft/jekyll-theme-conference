@@ -8,12 +8,12 @@
           {%- if page.header.img_dark %}
           <source srcset="{{ page.header.img_dark | prepend: '/assets/images/' | prepend: site.baseurl }}" media="(prefers-color-scheme: dark)" />
           {%- endif %}
-          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="home-header-img" alt="{{ edition_title }}" />
+          <img src="{{ page.header.img | prepend: '/assets/images/' | prepend: site.baseurl }}" class="home-header-img" alt="{{ edition_title | escape }}" />
         </picture>
       {% elsif page.title %}
-        {{ page.title }}
+        {{ page.title | escape }}
       {% else %}
-        {{ edition_title }}
+        {{ edition_title | escape }}
       {% endif %}
     </h1>
     {% if edition_description != none %}

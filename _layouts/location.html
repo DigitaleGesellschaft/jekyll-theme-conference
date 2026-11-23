@@ -7,7 +7,7 @@
 
   <h1 class="display-5 mb-3 text-break">
     {% if page.title %}
-      {{ page.title }}
+      {{ page.title | escape }}
     {% else %}
       {{ site.data.lang[site.conference.lang].location.name | default: "Location" }}
     {% endif %}

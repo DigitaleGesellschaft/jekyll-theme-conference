@@ -92,14 +92,14 @@
           <div class="px-2"{{ pwa_tab_attr }}>
             <button type="button" class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" data-bs-toggle="offcanvas" data-bs-target="#{{ sheet_id }}" aria-controls="{{ sheet_id }}"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
               {% assign link_icon_name = link.icon | default: 'list' %}{% include icon.html name=link_icon_name %}
-              <span>{{ menu_name }}</span>
+              <span>{{ menu_name | escape }}</span>
             </button>
           </div>
 
           {%- capture pwa_sheet %}
   <div class="offcanvas offcanvas-bottom h-auto rounded-top-4 d-print-none navbar-pwa-sheet" tabindex="-1" id="{{ sheet_id }}" aria-labelledby="{{ sheet_id }}-label">
     <div class="offcanvas-header">
-      <h2 class="offcanvas-title h5" id="{{ sheet_id }}-label">{{ menu_name }}</h2>
+      <h2 class="offcanvas-title h5" id="{{ sheet_id }}-label">{{ menu_name | escape }}</h2>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{{ lang.close | default: 'Close' }}"></button>
     </div>
     <div class="offcanvas-body pt-0">
@@ -117,7 +117,7 @@
             {%- include get_link.html class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" is_active=is_active -%}
             {{ link_tag }}
               {% assign link_icon_name = link_icon | default: 'link-45deg' %}{% include icon.html name=link_icon_name fill=is_active %}
-              <span>{{ link.name }}</span>
+              <span>{{ link.name | escape }}</span>
             </a>
           </div>
         {%- endif -%}
@@ -131,7 +131,7 @@
             {%- include get_link.html class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center" is_active=is_active -%}
             {{ link_tag }}
               {% include get_live_icon.html icon_only=true %}
-              <span>{{ link.name | default: lang.live.live | default: "Live" }}</span>
+              <span>{{ link.name | default: lang.live.live | default: "Live" | escape }}</span>
             </a>
           </div>
 
@@ -139,7 +139,7 @@
           <div class="px-2 live-hide" {{ pwa_live_range }}>
             <a class="nav-link icon-link d-flex flex-column flex-md-row align-items-center text-center disabled" href="#" tabindex="-1" aria-disabled="true">
               {% include get_live_icon.html icon_only=true %}
-              <span>{{ link.name_inactive }}</span>
+              <span>{{ link.name_inactive | escape }}</span>
             </a>
           </div>
         {%- endif -%}
@@ -185,7 +185,7 @@
           {%- include get_link.html class="list-group-item list-group-item-action icon-link" is_active=is_active %}
         {{ link_tag | replace_first: "<a", pwa_link_open }}
           {% assign link_icon_name = link_icon | default: 'link-45deg' %}{% include icon.html name=link_icon_name %}
-          {{ link.name }}
+          {{ link.name | escape }}
         </a>
         {%- endfor -%}
       {%- endcapture -%}
@@ -204,7 +204,7 @@
         {%- include get_pwa_in.html -%}
         {%- include get_menu.html %}
       <div{{ pwa_more_attr }}>
-        <h3 class="h6 mt-3 mb-1 px-3 text-body-secondary">{{ menu_name }}</h3>
+        <h3 class="h6 mt-3 mb-1 px-3 text-body-secondary">{{ menu_name | escape }}</h3>
         <div class="list-group list-group-flush">
           {%- include show_menu_items.html item_class="list-group-item list-group-item-action" %}
         </div>

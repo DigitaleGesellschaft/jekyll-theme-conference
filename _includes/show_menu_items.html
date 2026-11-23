@@ -15,7 +15,7 @@
   {%- for link in menu_links -%}
     {%- include get_link.html class=menu_item_class %}
     {{ link_tag }}
-      {{ link.name }}
+      {{ link.name | escape }}
     </a>
   {%- endfor -%}
 {%- endif -%}

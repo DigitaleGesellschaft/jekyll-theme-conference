@@ -4,7 +4,7 @@
   <a
     class="{{ include.class }}"
     href="{{ edition_live.streaming.external }}"
-    title="{{ stream_label }}"
+    title="{{ stream_label | escape }}"
   >
 {%- else -%}
   {%- if r -%}
@@ -28,7 +28,7 @@
   <a
     class="{{ include.class }}{% if include.is_active %} active{% endif %}"
     href="{{ stream_href | escape }}"
-    title="{{ stream_label }}"
+    title="{{ stream_label | escape }}"
     {%- if include.is_active %}
     aria-current="page"
     {%- endif %}

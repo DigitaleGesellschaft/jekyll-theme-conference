@@ -13,7 +13,7 @@
     {% unless menu_empty %}
     <div class="dropdown d-inline">
       <a class="{{ btn_default }} dropdown-toggle" href="#" role="button" id="{{ include.id }}-dropdown{{ forloop.index0 }}" data-bs-toggle="dropdown"{% if include.popper %} data-bs-popper-config='{"strategy":"{{ include.popper }}"}'{% endif %} aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
-        {{ menu_name }}
+        {{ menu_name | escape }}
       </a>
       <div class="dropdown-menu">
         {% include show_menu_items.html %}
@@ -29,7 +29,7 @@
         {%- include get_link.html class=btn_default -%}
         {{ link_tag }}
           {%- if link.name -%}
-            {{ link.name }}
+            {{ link.name | escape }}
           {%- else -%}
             {% include get_live_icon.html %}
           {%- endif -%}
@@ -38,7 +38,7 @@
 
       {%- if link.name_inactive -%}
         <span class="live-hide d-print-inline {{ btn_default }} disabled" aria-disabled="true" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
-          {{ link.name_inactive }}
+          {{ link.name_inactive | escape }}
         </span>
       {%- endif -%}
 
@@ -47,7 +47,7 @@
   {% else %}
     {% include get_link.html class=btn_default %}
     {{ link_tag }}
-      {{ link.name }}
+      {{ link.name | escape }}
     </a>
   {% endif %}
 {% endfor %}

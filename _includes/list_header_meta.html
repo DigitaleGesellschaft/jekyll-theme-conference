@@ -18,7 +18,7 @@
   <meta name="twitter:description" content="{{ page_description | escape }}" />
 
   {%- comment -%} Open Graph tags {%- endcomment -%}
-  <meta property="og:site_name" content="{{ edition_title }}" />
+  <meta property="og:site_name" content="{{ edition_title | escape }}" />
   {%- if edition_link_preview.img and edition_link_preview.img.open_graph %}
   {%- assign og_image_url = edition_link_preview.img.open_graph | prepend: '/assets/images/' | prepend: site.baseurl | prepend: site.url -%}
   <meta property="og:image" content="{{ og_image_url }}" />

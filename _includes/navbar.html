@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-{{ breakpoint }} d-pwa-none bg-body-tertiary mb-3" aria-label="{{ site.data.lang[site.conference.lang].navigation.main | default: 'Main navigation' }}">
   <div class="container">
 
-    <a class="navbar-brand order-0" href="{{ site.baseurl }}{{ edition_base }}/">{{ edition_title }}</a>
+    <a class="navbar-brand order-0" href="{{ site.baseurl }}{{ edition_base }}/">{{ edition_title | escape }}</a>
 
     <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ site.data.lang[site.conference.lang].navigation.toggle | default: 'Toggle navigation menu' }}">
       <span class="navbar-toggler-icon" aria-hidden="true"></span>
@@ -17,7 +17,7 @@
             {%- unless menu_empty %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown{{ forloop.index0 }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
-                {{ menu_name }}
+                {{ menu_name | escape }}
               </a>
               <div class="dropdown-menu">
                 {%- include show_menu_items.html %}
@@ -34,7 +34,7 @@
                 {%- include get_link.html class="nav-link" is_active=is_active -%}
                 {{ link_tag }}
                   {%- if link.name -%}
-                    {{ link.name }}
+                    {{ link.name | escape }}
                   {%- else -%}
                     {% include get_live_icon.html %}
                   {%- endif -%}
@@ -44,7 +44,7 @@
               {%- if link.name_inactive -%}
                 <li class="nav-item live-hide d-print-inline-block" data-start="{{ live_starts }}" data-end="{{ live_ends }}">
                   <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
-                    {{ link.name_inactive }}
+                    {{ link.name_inactive | escape }}
                   </a>
                 </li>
               {%- endif -%}
@@ -56,7 +56,7 @@
               {%- include get_link_active.html -%}
               {%- include get_link.html class="nav-link" is_active=is_active -%}
               {{ link_tag }}
-                {{ link.name }}
+                {{ link.name | escape }}
               </a>
             </li>
           {%- endif -%}
@@ -71,7 +71,7 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbar-editions" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% if menu_label %} aria-label="{{ menu_label }}"{% endif %}>
-            {{ menu_name }}
+            {{ menu_name | escape }}
           </a>
           <div class="dropdown-menu dropdown-menu-end">
             {%- include show_menu_items.html %}

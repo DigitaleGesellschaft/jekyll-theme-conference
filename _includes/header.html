@@ -10,7 +10,7 @@
   <title>
     {{- page_title | escape -}}
     {%- unless page_title == empty %} - {% endunless -%}
-    {{- edition_title -}}
+    {{- edition_title | escape -}}
   </title>
   {% include list_header_meta.html %}
 
