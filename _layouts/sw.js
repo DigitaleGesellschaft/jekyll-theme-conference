@@ -14,9 +14,10 @@ const SITE_UPDATED = "site-updated";
 // main.css?t=1793258390): ignored, so a rebuild alone is no update
 const BUILD_TIME = /\?t=\d+/g;
 
-// Whether this build changed the site: set on install, told the pages on
-// activation
-let siteUpdated = false;
+// Whether this build changed the site: noted in its cache on install (the
+// browser may stop the worker before activation, losing variables), told the
+// pages on activation
+const SITE_UPDATED_KEY = `${BASE_URL}/__site-updated__`;
 
 // Whether the latest version differs from the stored one, ignoring the build time
 const isChanged = async (stored, latest) => {
@@ -49,16 +50,25 @@ const precache = async (cache, previous, url) => {
     headers["If-Modified-Since"] = cached.headers.get("Last-Modified");
   }
 
-  // Low priority: the visitor's own requests go first
-  const response = await fetch(url, { cache: "no-store", headers, priority: "low" });
-  if (response.status === HTTP_NOT_MODIFIED && cached) {
-    await cache.put(url, cached);
-    return false;
+  // Low priority: the visitor's own requests go first. On failure (e.g. a
+  // flaky network) the previous copy stays, as the old cache is deleted.
+  let response;
+  try {
+    response = await fetch(url, { cache: "no-store", headers, priority: "low" });
+    if (response.status === HTTP_NOT_MODIFIED && cached) {
+      await cache.put(url, cached);
+      return false;
+    }
+    if (!response.ok) {
+      throw new Error(`${response.status} ${url}`);
+    }
+    await cache.put(url, response.clone());
+  } catch (error) {
+    if (cached) {
+      await cache.put(url, cached);
+    }
+    throw error;
   }
-  if (!response.ok) {
-    throw new Error(`${response.status} ${url}`);
-  }
-  await cache.put(url, response.clone());
 
   // Example: main.css?t=1793258390 of the previous build. New resources
   // change the pages linking them.
@@ -70,25 +80,25 @@ const precache = async (cache, previous, url) => {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/assets/js/site.json`, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error(`Failed to load site.json: ${response.status}`);
-        }
-        const { pages = [], assets = [] } = await response.json();
+      // Without the list (e.g. offline during the update) the install fails:
+      // the previous worker and its cache stay, the browser retries later
+      const response = await fetch(`${BASE_URL}/assets/js/site.json`, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Failed to load site.json: ${response.status}`);
+      }
+      const { pages = [], assets = [] } = await response.json();
 
-        // Cache each resource on its own, so one missing file does not
-        // leave the whole cache empty
-        const cache = await caches.open(CACHE_NAME);
-        const previous = await previousCache();
-        const results = await Promise.allSettled([...pages, ...assets].map((url) => precache(cache, previous, url)));
-        const failed = results.filter((result) => result.status === "rejected");
-        if (failed.length) {
-          console.warn(`Service worker could not cache ${failed.length} resource(s)`);
-        }
-        siteUpdated = results.some((result) => result.value === true);
-      } catch (error) {
-        console.error("Service worker install failed:", error);
+      // Cache each resource on its own, so one missing file does not
+      // leave the whole cache empty
+      const cache = await caches.open(CACHE_NAME);
+      const previous = await previousCache();
+      const results = await Promise.allSettled([...pages, ...assets].map((url) => precache(cache, previous, url)));
+      const failed = results.filter((result) => result.status === "rejected");
+      if (failed.length) {
+        console.warn(`Service worker could not cache ${failed.length} resource(s)`);
+      }
+      if (results.some((result) => result.value === true)) {
+        await cache.put(SITE_UPDATED_KEY, new Response(""));
       }
 
       // Activate new versions right away (schedule updates)
@@ -113,7 +123,8 @@ self.addEventListener("activate", (event) => {
       await self.clients.claim();
 
       // Once for all pages of the build, e.g. not again on the next page
-      if (siteUpdated) {
+      const cache = await caches.open(CACHE_NAME);
+      if (await cache.delete(SITE_UPDATED_KEY)) {
         const clients = await self.clients.matchAll({ type: "window" });
         clients.forEach((client) => client.postMessage({ type: SITE_UPDATED }));
       }
@@ -125,19 +136,34 @@ self.addEventListener("activate", (event) => {
 const fetchLatest = (event) =>
   (event.preloadResponse ?? Promise.resolve()).then((preloaded) => preloaded || fetch(event.request));
 
-// Store a response for later
-const store = async (request, response) => {
-  if (response.ok) {
-    const cache = await caches.open(CACHE_NAME);
-    await cache.put(request, response.clone());
+// Pages and data are looked up ignoring the query (staleWhileRevalidate):
+// stored without it, so variants (e.g. /live/?room=A) do not pile up
+const storeKey = (request) => {
+  const url = new URL(request.url);
+  if (request.mode !== "navigate" && !url.pathname.endsWith(".json")) {
+    return request;
   }
-  return response;
+  url.search = "";
+  return url.href;
 };
 
-// Latest version from the network, stored for later
+// Store a complete response for later (not e.g. partial content, 206, which
+// the cache refuses), copied before the page reads it; resolves once stored
+const store = (request, response) => {
+  if (response.status !== 200 || response.headers.get("Vary") === "*") {
+    return Promise.resolve();
+  }
+  const copy = response.clone();
+  return caches
+    .open(CACHE_NAME)
+    .then((cache) => cache.put(storeKey(request), copy))
+    .catch(() => {});
+};
+
+// Latest version from the network, stored for later without delaying it
 const fromNetwork = (event) => {
-  const network = fetchLatest(event).then((response) => store(event.request, response));
-  event.waitUntil(network.catch(() => {}));
+  const network = fetchLatest(event);
+  event.waitUntil(network.then((response) => store(event.request, response)).catch(() => {}));
   return network;
 };
 
@@ -241,6 +267,11 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
 
   if (request.method !== "GET" || url.origin !== self.location.origin || !url.pathname.startsWith(`${BASE_URL}/`)) {
+    return;
+  }
+  // Parts of a file (e.g. seeking in audio or video) stay the browser's: the
+  // cache holds whole files only
+  if (request.headers.has("Range")) {
     return;
   }
   if (url.pathname === `${BASE_URL}/sw.js` || DOCUMENT_PATHS.some((path) => url.pathname.startsWith(`${BASE_URL}${path}`))) {
