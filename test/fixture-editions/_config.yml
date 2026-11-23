@@ -64,6 +64,11 @@ conference:
 
   pwa:
     enable: true
+    # Browsers install the app (and the theme offers it) only with icons
+    icons:
+      - img: logo.png
+        sizes: 192x192
+        type: image/png
 
   navigation:
     logo:

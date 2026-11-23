@@ -8,7 +8,8 @@
 {%- if site.conference.pwa.enable -%}
   {%- assign lang = site.data.lang[site.conference.lang] %}
   <div class="toast-container pwa-toasts d-print-none" role="status">
-    {%- if site.conference.pwa.install_toast != false and edition_current -%}
+    {%- comment -%} Not without icons: browsers do not install the app then {%- endcomment -%}
+    {%- if site.conference.pwa.install_toast != false and edition_current and site.conference.pwa.icons -%}
       {%- include get_pwa_icon.html %}
     <div class="toast pwa-toast" id="pwa-install-toast">
       <div class="d-flex align-items-center gap-2 p-2">

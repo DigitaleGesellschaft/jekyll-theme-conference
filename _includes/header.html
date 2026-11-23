@@ -34,9 +34,11 @@
 
   {%- comment -%}
     Before the first paint (no flash): colour mode and installed app (PWA).
+    Also keeps Chrome's install prompt, which may come before the deferred
+    scripts run (_js/modules/pwa.js shows it from its install toast).
     Static content, i.e. one hash for a Content Security Policy (see README).
   {%- endcomment %}
-  <script>{ const root = document.documentElement; root.dataset.bsTheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; root.dataset.pwa = "pwaEnable" in root.dataset && (navigator.standalone === true || matchMedia("(display-mode: standalone)").matches); }</script>
+  <script>{ const root = document.documentElement; root.dataset.bsTheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; root.dataset.pwa = "pwaEnable" in root.dataset && (navigator.standalone === true || matchMedia("(display-mode: standalone)").matches); if ("pwaEnable" in root.dataset) addEventListener("beforeinstallprompt", (event) => { event.preventDefault(); window.conferenceInstallPrompt = event; }); }</script>
 </head>
 
 <body class="min-vh-100">

@@ -67,13 +67,18 @@ export function createPWAModule(conferenceConfig) {
 
     toast.querySelector(".btn-close").addEventListener("click", saveDismiss);
 
-    // Not on top of the steps (or the prompt); shows again on the next page
-    toast.querySelector("[data-bs-target='#pwa-install']").addEventListener("click", () => toastOf(toast).hide());
+    // Not on top of the steps (or the prompt), nor again on the next pages:
+    // whoever followed the steps installed the app (iOS reports no install)
+    toast.querySelector("[data-bs-target='#pwa-install']").addEventListener("click", () => {
+      saveDismiss();
+      toastOf(toast).hide();
+    });
 
     // Chrome (Android) offers its own install prompt once the app is
     // installable: the toast replaces its mini-infobar and opens the prompt
-    // instead of the steps (each prompt shows only once).
-    let installPrompt = null;
+    // instead of the steps (each prompt shows only once). The header's
+    // inline script keeps a prompt offered before this module ran.
+    let installPrompt = window.conferenceInstallPrompt ?? null;
     window.addEventListener("beforeinstallprompt", (event) => {
       event.preventDefault();
       installPrompt = event;
@@ -87,7 +92,10 @@ export function createPWAModule(conferenceConfig) {
       installPrompt.prompt();
       installPrompt = null;
     });
-    window.addEventListener("appinstalled", () => toastOf(toast).hide());
+    window.addEventListener("appinstalled", () => {
+      saveDismiss();
+      toastOf(toast).hide();
+    });
   };
 
   // Update toast in the app once the service worker stored a build changing

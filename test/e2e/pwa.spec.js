@@ -201,11 +201,12 @@ for (const [platform, userAgent] of Object.entries(PHONES)) {
       await expect(steps.locator(`[data-pwa-steps="${platform}"]`)).toBeVisible();
       await expect(steps.locator(`[data-pwa-steps="${OTHER_PLATFORM[platform]}"]`)).toBeHidden();
 
-      // Not on top of the steps; not dismissed, so it shows again on the next page
+      // Not on top of the steps, nor again on the next page: whoever followed
+      // the steps installed the app (iOS reports no install)
       await expect(toast).toBeHidden();
       await page.reload();
       await ready(page);
-      await expect(toast).toBeVisible();
+      await expect(page.locator("#pwa-install-toast.show")).toHaveCount(0);
     });
 
     test("stays closed once dismissed", async ({ page }) => {
@@ -269,6 +270,7 @@ test.describe("install toast on android with an install prompt", () => {
 
     await page.evaluate(() => window.dispatchEvent(new Event("appinstalled")));
     await expect(page.locator("#pwa-install-toast")).toBeHidden();
+    expect(await page.evaluate(() => Number(localStorage.getItem("pwa_install_dismissed")) > Date.now())).toBe(true);
   });
 
   test("falls back to the steps once the prompt was used", async ({ page }) => {
@@ -281,6 +283,8 @@ test.describe("install toast on android with an install prompt", () => {
     expect(await page.evaluate(() => window.prompted)).toBe(true);
     await expect(page.locator("#pwa-install")).toBeHidden();
 
+    // The toast hides once used (e.g. the prompt dismissed): shown again here
+    await page.evaluate(() => window.bootstrap.Toast.getOrCreateInstance(document.getElementById("pwa-install-toast")).show());
     await install.click();
     await expect(page.locator("#pwa-install")).toBeVisible();
   });
