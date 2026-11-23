@@ -92,7 +92,16 @@ export function createLiveModule(clock) {
       }
       const isPast = current >= timestamp;
       if (el.nodeName === "A" || el.nodeName === "BUTTON") {
+        // Also out of reach of the keyboard and announced as disabled:
+        // Bootstrap's class only blocks the pointer
         el.classList.toggle("disabled", !isPast);
+        if (isPast) {
+          el.removeAttribute("aria-disabled");
+          el.removeAttribute("tabindex");
+        } else {
+          el.setAttribute("aria-disabled", "true");
+          el.setAttribute("tabindex", "-1");
+        }
       } else {
         el.classList.toggle("text-secondary", !isPast);
       }

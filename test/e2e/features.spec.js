@@ -278,6 +278,9 @@ test("next talk shows a relative time and enables live links once started", asyn
   await page.locator("nav.d-pwa-none .live-show a[data-bs-target='#stream-modal']").click();
   await expect(time).toHaveText("in 2 minutes");
   await expect(link).toHaveClass(/disabled/);
+  // Also out of reach of the keyboard and announced as disabled
+  await expect(link).toHaveAttribute("aria-disabled", "true");
+  await expect(link).toHaveAttribute("tabindex", "-1");
 
   await setTime("09:00");
   await expect(time).toHaveText("now");
@@ -285,4 +288,6 @@ test("next talk shows a relative time and enables live links once started", asyn
   await setTime("09:10");
   await expect(time).toHaveText("for 10 minutes");
   await expect(link).not.toHaveClass(/disabled/);
+  await expect(link).not.toHaveAttribute("aria-disabled");
+  await expect(link).not.toHaveAttribute("tabindex");
 });

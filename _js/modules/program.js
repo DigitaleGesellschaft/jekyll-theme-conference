@@ -6,7 +6,7 @@ const SECONDS_PER_DAY = 86400;
 // Tolerance for fractional pixels when comparing positions
 const EPSILON = 1;
 
-export function createProgramModule() {
+export function createProgramModule(clock) {
   // Replace the hash without scrolling or adding a history entry
   const updateHash = (hash) => {
     history.replaceState(null, '', hash);
@@ -78,13 +78,10 @@ export function createProgramModule() {
     const tabLinks = [...document.querySelectorAll('a[data-bs-toggle="tab"]')];
     const hash = window.location.hash;
 
-    if (hash) {
-      // Compare instead of building a selector from the (untrusted) URL hash
-      const tabTrigger = tabLinks.find(link => link.hash === hash);
-      if (tabTrigger) new bootstrap.Tab(tabTrigger).show();
-    } else {
-      // Show the current conference day
-      const now = Math.floor(Date.now() / 1000);
+    // Show the current conference day (by the conference clock, e.g. also
+    // after conference.live.setTime())
+    const showCurrentDay = () => {
+      const now = clock ? clock.now() : Math.floor(Date.now() / 1000);
       for (const link of tabLinks) {
         const ts = Number(link.dataset.ts);
         if (ts && ts <= now && now < ts + SECONDS_PER_DAY) {
@@ -93,7 +90,16 @@ export function createProgramModule() {
           break;
         }
       }
+    };
+
+    if (hash) {
+      // Compare instead of building a selector from the (untrusted) URL hash
+      const tabTrigger = tabLinks.find(link => link.hash === hash);
+      if (tabTrigger) new bootstrap.Tab(tabTrigger).show();
+    } else {
+      showCurrentDay();
     }
+    clock?.onChange(showCurrentDay);
 
     tabLinks.forEach(link => {
       link.addEventListener('shown.bs.tab', () => updateHash(link.hash));
@@ -152,7 +158,8 @@ export function createProgramModule() {
       const scrollToRoom = (index) => {
         const room = rooms[Math.min(Math.max(index, 0), rooms.length - 1)];
         const left = room.getBoundingClientRect().left - timeCell.getBoundingClientRect().right;
-        container.scrollBy({ left, behavior: 'smooth' });
+        const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        container.scrollBy({ left, behavior: reduceMotion ? 'auto' : 'smooth' });
       };
 
       headers.forEach(header => {

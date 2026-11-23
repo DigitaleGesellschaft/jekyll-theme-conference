@@ -51,11 +51,11 @@
 
     {%- assign home_url = edition_base | append: "/" -%}
     {%- unless page.url == home_url -%}
-      <!-- site title (print only): -->
+      <!-- site title (print only, not a heading: the page has its own h1): -->
       <div class="container d-none d-print-block mt-4 mb-4">
-        <h1 class="display-4">
-          {{ edition_title }}
-        </h1>
+        <p class="display-4">
+          {{ edition_title | escape }}
+        </p>
       </div>
     {%- endunless -%}
 

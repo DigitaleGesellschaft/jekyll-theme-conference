@@ -42,7 +42,7 @@ const modules = {
   darkmode: createDarkModeModule(),
   infobox: createInfoboxModule(),
   modal: createModalModule(),
-  program: createProgramModule(),
+  program: createProgramModule(clock),
   live,
   nowline: createNowLineModule(clock),
   stream: createStreamModule(clock, live, conference.config),
