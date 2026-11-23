@@ -76,7 +76,7 @@ Settings are read from both `site.conference.*` (`_config.yml`) and page Front M
 
 ### PWA (`conference.pwa`)
 
-One app for all editions: `_layouts/manifest.html` uses `site.title` and `baseurl/` as `id`/`start_url`, and only the current edition links the manifest and shows the install toast, so archives cannot be installed.
+One app for all editions: `_layouts/manifest.html` uses `site.title` and `baseurl/` as `id`/`start_url`, and every edition links the manifest (iOS adds any page to the home screen; the app still starts at the current edition), but only the current edition shows the install toast.
 
 - `_layouts/sw.js`: precaches the URLs in `site.json` (bundles by `?v=` hash, other build assets by `?t=` build time), serves pages and `.json` stale-while-revalidate with navigation preload. Changed pages are left to the next build's worker, which stores them all at once and posts `site-updated` to the pages if anything differs (ignoring `?t=`); only the app shows the toast. Missing pages (server 404 or offline) get the cached `layout: not-found` page. It forwards the root to the current edition without loading it. Documents/slides are not precached.
 - `_js/modules/pwa.js`: registers the worker after `load`; install and update notices are Bootstrap toasts (`_includes/pwa_toasts.html`); in the app, links to other origins open in the browser (`target="_blank"` on click).
