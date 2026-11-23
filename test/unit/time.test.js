@@ -27,6 +27,16 @@ describe("toTimestamp", () => {
     assert.equal(toTimestamp("2026-07-01", "12:00", "America/New_York"), utc(2026, 7, 1, 16));
   });
 
+  test("uses the offset at the result near a change to daylight saving time", () => {
+    // 01:30 is still winter time on 29 March (clocks go forward at 02:00)
+    assert.equal(toTimestamp("2026-03-29", "01:30", ZURICH), utc(2026, 3, 29, 0, 30));
+    assert.equal(toTimestamp("2026-03-29", "03:30", ZURICH), utc(2026, 3, 29, 1, 30));
+  });
+
+  test("accepts hours without a leading zero", () => {
+    assert.equal(toTimestamp("2026-02-20", "9:30", ZURICH), utc(2026, 2, 20, 8, 30));
+  });
+
   test("round-trips with formatTime", () => {
     const ts = toTimestamp("2026-10-25", "18:15", ZURICH);
 
