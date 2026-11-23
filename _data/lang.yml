@@ -15,6 +15,8 @@ en:
     title: "Page not found"
     text: "This page does not exist (anymore)."
     home: "Go to the home page"
+    offline_title: "Not available offline"
+    offline_text: "This page has not been stored on this device. Open it again once you are online."
   navigation:
     main: Main navigation
     toggle: Toggle navigation menu
@@ -100,6 +102,8 @@ de:
     title: "Seite nicht gefunden"
     text: "Diese Seite gibt es nicht (mehr)."
     home: "Zur Startseite"
+    offline_title: "Offline nicht verfügbar"
+    offline_text: "Diese Seite ist auf diesem Gerät nicht gespeichert. Öffnen Sie sie wieder, sobald Sie online sind."
   navigation:
     main: Hauptnavigation
     toggle: Navigationsmenü umschalten
@@ -185,6 +189,8 @@ fr:
     title: "Page introuvable"
     text: "Cette page n'existe pas (ou plus)."
     home: "Aller à la page d'accueil"
+    offline_title: "Non disponible hors ligne"
+    offline_text: "Cette page n'est pas enregistrée sur cet appareil. Ouvrez-la à nouveau une fois en ligne."
   navigation:
     main: Navigation principale
     toggle: Basculer le menu de navigation
@@ -270,6 +276,8 @@ pt:
     title: "Página não encontrada"
     text: "Esta página não existe (mais)."
     home: "Ir para a página inicial"
+    offline_title: "Indisponível offline"
+    offline_text: "Esta página não está guardada neste dispositivo. Abra-a novamente quando estiver online."
   navigation:
     main: Navegação principal
     toggle: Alternar menu de navegação

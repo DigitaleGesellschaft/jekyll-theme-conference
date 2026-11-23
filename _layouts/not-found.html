@@ -6,10 +6,11 @@
   {%- endcomment -%}
   {%- assign not_found_lang = site.data.lang[site.conference.lang].not_found %}
 
-  <h1 class="display-5 mb-3 text-break">
-    {{ page.title | default: not_found_lang.title | default: "Page not found" }}
+  <h1 class="display-5 mb-3 text-break" id="not-found-title">
+    {{ page.title | default: not_found_lang.title | default: "Page not found" | escape }}
   </h1>
 
+  <div id="not-found-text">
   {%- comment -%} An empty Markdown page still holds a line break {%- endcomment -%}
   {%- assign not_found_content = content | strip %}
   {% if not_found_content != "" -%}
@@ -17,6 +18,15 @@
   {%- else -%}
     <p class="lead">{{ not_found_lang.text | default: "This page does not exist (anymore)." }}</p>
   {%- endif %}
+  </div>
+
+  {%- comment -%}
+    Shown offline by the service worker for pages not stored (data-offline,
+    _layouts/sw.js): the page may well exist, it is only not on the device
+  {%- endcomment -%}
+  {%- assign offline_title = not_found_lang.offline_title | default: "Not available offline" -%}
+  {%- assign offline_text = not_found_lang.offline_text | default: "This page has not been stored on this device. Open it again once you are online." %}
+  <script>{ if (document.documentElement.hasAttribute("data-offline")) { const title = {{ offline_title | jsonify | replace: "<", "\u003c" }}; const text = document.createElement("p"); text.className = "lead"; text.textContent = {{ offline_text | jsonify | replace: "<", "\u003c" }}; document.getElementById("not-found-title").textContent = title; document.getElementById("not-found-text").replaceChildren(text); document.title = `${title} - ${ {{ edition_title | jsonify | replace: "<", "\u003c" }} }`; } }</script>
 
   <a class="btn btn-primary" href="{{ site.baseurl }}{{ edition_base }}/">{{ not_found_lang.home | default: "Go to the home page" }}</a>
 

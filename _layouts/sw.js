@@ -192,13 +192,18 @@ const revalidatePage = async (event, cached) => {
 const NOT_FOUND_URL = {{ not_found_url | jsonify }};
 
 // The site's page not found in place of the server's (e.g. plain text), and
-// offline for pages not stored
+// offline for pages not stored: then marked (data-offline), so it says the
+// page is not available offline instead of missing (_layouts/not-found.html)
 const notFound = async (response) => {
   const page = NOT_FOUND_URL && (await caches.match(NOT_FOUND_URL));
   if (!page) {
     return response ?? Response.error();
   }
-  return new Response(page.body, { status: HTTP_NOT_FOUND, headers: page.headers });
+  if (response) {
+    return new Response(page.body, { status: HTTP_NOT_FOUND, headers: page.headers });
+  }
+  const html = (await page.text()).replace("<html", "<html data-offline");
+  return new Response(html, { status: HTTP_NOT_FOUND, headers: page.headers });
 };
 
 // Page not stored (e.g. a missing one): the network, else the page not found

@@ -361,9 +361,11 @@ test.describe("installed app", () => {
     await expect(heading).toHaveText("Page not found");
     await expect(page.locator("nav.navbar-pwa")).toBeVisible();
 
+    // Offline, a page not stored may well exist: not called missing
     await context.setOffline(true);
     await page.goto("talks/offline/");
-    await expect(heading).toHaveText("Page not found");
+    await expect(heading).toHaveText("Not available offline");
+    await expect(page).toHaveTitle(/^Not available offline - /);
   });
 
   test("page does not overscroll, keeping the tab bar in place", async ({ page }) => {
