@@ -66,6 +66,12 @@
 {%- endfor -%}
 
 {%- assign static_paths = site.static_files | map: "path" -%}
+
+{%- comment -%}
+  Not media and archives below /assets/ (e.g. a video): too large to store on
+  every visitor's device, loaded from the network when opened
+{%- endcomment -%}
+{%- assign large_exts = ".mp4,.m4v,.webm,.mov,.avi,.mkv,.mp3,.m4a,.ogg,.oga,.wav,.flac,.pdf,.zip,.gz,.tgz,.7z,.rar,.psd,.ai" | split: "," -%}
 {%- for file in site.static_files -%}
   {%- assign ext = file.extname | downcase -%}
   {%- assign woff2_path = file.path | append: "2" -%}
@@ -75,7 +81,7 @@
   {%- if ext == ".woff" and static_paths contains woff2_path -%}
     {%- continue -%}
   {%- endif -%}
-  {%- if ext == ".map" or skip_assets contains file.path or file.path contains "/assets/js/leaflet-" or file.path contains "/assets/webfonts/bootstrap-icons." -%}
+  {%- if ext == ".map" or large_exts contains ext or skip_assets contains file.path or file.path contains "/assets/js/leaflet-" or file.path contains "/assets/webfonts/bootstrap-icons." -%}
     {%- continue -%}
   {%- endif -%}
   {%- assign url = file.path | prepend: site.baseurl -%}
