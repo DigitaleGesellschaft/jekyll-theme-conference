@@ -41,11 +41,21 @@ export function createStreamModule(clock, live, conferenceConfig) {
     return dataPromise;
   };
 
-  // Room by name, falling back to the first room with a stream
+  // Room by name (also ignoring case, e.g. ?room=room+a from a typed
+  // address), falling back to the first room with a stream
   const getRoom = (roomName) => {
     const rooms = data.rooms || {};
-    return rooms[roomName] || Object.values(rooms)[0] || null;
+    const name = String(roomName ?? "").toLowerCase();
+    return (
+      rooms[roomName] ||
+      Object.values(rooms).find((room) => room.name.toLowerCase() === name) ||
+      Object.values(rooms)[0] ||
+      null
+    );
   };
+
+  // Room by its id (value of the select's options)
+  const getRoomById = (id) => Object.values(data.rooms || {}).find((room) => String(room.id) === id) || null;
 
   // Talks of a room, ending later if they have live links (e.g. Q&A)
   const getTalks = (roomName) =>
@@ -155,6 +165,12 @@ export function createStreamModule(clock, live, conferenceConfig) {
         clearEmbed(iframe);
         message.textContent = text;
         showPlaceholder(message);
+      },
+      // Without the talks (data.json not loaded, e.g. offline)
+      showOffline: () => {
+        url = null;
+        clearEmbed(iframe);
+        showPlaceholder(offline);
       },
       clear: () => {
         url = null;
@@ -273,7 +289,13 @@ export function createStreamModule(clock, live, conferenceConfig) {
     };
 
     buttons.forEach((btn) => btn.addEventListener("click", () => choose(btn.dataset.room)));
-    select?.addEventListener("change", () => choose(select.options[select.selectedIndex].text));
+    // By id: the option's text is trimmed and its spaces collapsed
+    select?.addEventListener("change", () => {
+      const room = getRoomById(select.value);
+      if (room) {
+        choose(room.name);
+      }
+    });
 
     return { setActive, choose, getCurrent: () => current };
   };
@@ -324,8 +346,15 @@ export function createStreamModule(clock, live, conferenceConfig) {
     const open = async (roomName) => {
       isOpen = true;
       await loadData();
+      if (!isOpen) {
+        return;
+      }
       const room = getRoom(roomName);
-      if (!room || !isOpen) {
+      if (!room) {
+        // Talks not loaded: say so instead of an empty player, and try again
+        // once back online
+        player.showOffline();
+        window.addEventListener("online", () => isOpen && open(roomName), { once: true });
         return;
       }
       roomSelector.setActive(room);
@@ -365,6 +394,10 @@ export function createStreamModule(clock, live, conferenceConfig) {
     document.addEventListener("click", (event) => {
       const link = event.target.closest("a[data-room]");
       if (!link || link.pathname !== location.pathname) {
+        return;
+      }
+      // Opening in a new tab or window stays the browser's
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
         return;
       }
       event.preventDefault();
