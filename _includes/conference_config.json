@@ -10,10 +10,15 @@
 
     {%- include get_location_config.html -%}
     {%- if location_map %}
+    {%- comment -%}
+      Numbers as numbers, also from a YAML list (e.g. [47.37, 8.54]) or a
+      quoted value: a malformed value must not break the JSON (all modules)
+    {%- endcomment -%}
+    {%- assign home_coord = location_map.home_coord | default: '47.3744489, 8.5410422' | join: "," | split: "," -%}
     "map": {
         "map_provider": {{ location_map.map_provider | default: 'OpenStreetMap.Mapnik' | jsonify }},
-        "home_coord": [{{ location_map.home_coord | default: '47.3744489, 8.5410422' }}],
-        "default_zoom": {{ location_map.default_zoom | default: 17 }}
+        "home_coord": [{{ home_coord[0] | strip | plus: 0 | jsonify }}, {{ home_coord[1] | strip | plus: 0 | jsonify }}],
+        "default_zoom": {{ location_map.default_zoom | default: 17 | plus: 0 | jsonify }}
         {%- if location_map.script %},
         "script": {{ location_map.script | prepend: '/assets/js/' | prepend: site.baseurl | jsonify }}
         {%- endif %}
@@ -41,15 +46,15 @@
 
     {% if edition_live.streaming.enable -%}
     "stream": {
-        "pause": {{ edition_live.streaming.pause | default: 60 }},
-        "prepend": {{ edition_live.streaming.prepend | default: 5 }},
-        "extend": {{ edition_live.streaming.extend | default: 5 }}
+        "pause": {{ edition_live.streaming.pause | default: 60 | plus: 0 | jsonify }},
+        "prepend": {{ edition_live.streaming.prepend | default: 5 | plus: 0 | jsonify }},
+        "extend": {{ edition_live.streaming.extend | default: 5 | plus: 0 | jsonify }}
     },
     {%- endif %}
 
     {% if site.conference.pwa -%}
     "pwa": {
-        "enable": {{ site.conference.pwa.enable | default: false }}
+        "enable": {{ site.conference.pwa.enable | default: false | jsonify }}
     },
     {%- endif %}
 
