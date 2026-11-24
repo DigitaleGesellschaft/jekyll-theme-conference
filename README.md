@@ -868,7 +868,7 @@ layout: htaccess
 ---
 ```
 
-It forwards every address that doesn't exist on its own but does exist in the current edition, e.g. `/program/` to `/2026/program/`, and adapts by itself once the current edition changes. With a page for missing addresses (`404.md`, see [_Pages_](#pages)), Apache shows it for addresses that exist nowhere. Below the Front Matter, you can add your own rules. It assumes the site lies at `baseurl` below the web server's document root. Other hosts (e.g. GitHub Pages) ignore the file and need their own redirects.
+It forwards the root (`/` and `/index.html`) to the current edition, as well as every address that doesn't exist on its own but does exist in the current edition, e.g. `/program/` to `/2026/program/`, and adapts by itself once the current edition changes. With a page for missing addresses (`404.md`, see [_Pages_](#pages)), Apache shows it for addresses that exist nowhere. Below the Front Matter, you can add your own rules. It assumes the site lies at `baseurl` below the web server's document root. Other hosts (e.g. GitHub Pages) ignore the file and need their own redirects.
 
 #### Setup
 

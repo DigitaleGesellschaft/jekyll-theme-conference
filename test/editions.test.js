@@ -252,6 +252,9 @@ describe("editions", () => {
   test(".htaccess forwards other addresses to the current edition", () => {
     const htaccess = read(sites.main, ".htaccess");
 
+    // Root page, e.g. / and /index.html -> /2026/
+    assert.ok(htaccess.includes(`\nRewriteRule ^(index\\.html)?$ ${BASEURL}/2026/ [R=302,L]\n`));
+
     // Files as they are, pages with their trailing slash
     assert.match(htaccess, new RegExp(`^RewriteCond %\\{DOCUMENT_ROOT\\}${BASEURL}/2026/\\$1 -f$`, "m"));
     assert.match(htaccess, new RegExp(`^RewriteRule \\^\\(\\.\\*\\)\\$ ${BASEURL}/2026/\\$1 \\[R=302,L\\]$`, "m"));
@@ -259,7 +262,9 @@ describe("editions", () => {
     assert.match(htaccess, new RegExp(`^RewriteRule \\^\\(\\.\\*\\?\\)/\\?\\$ ${BASEURL}/2026/\\$1/ \\[R=302,L\\]$`, "m"));
     assert.doesNotMatch(htaccess, / -d$/m);
     assert.match(htaccess, new RegExp(`^ErrorDocument 404 ${BASEURL}/404.html$`, "m"));
-    assert.match(read(sites.current2025, ".htaccess"), new RegExp(`RewriteRule .* ${BASEURL}/2025/\\$1 `));
+    const htaccess2025 = read(sites.current2025, ".htaccess");
+    assert.match(htaccess2025, new RegExp(`RewriteRule .* ${BASEURL}/2025/\\$1 `));
+    assert.ok(htaccess2025.includes(`\nRewriteRule ^(index\\.html)?$ ${BASEURL}/2025/ [R=302,L]\n`));
   });
 
   test("warns about entries without edition", () => {

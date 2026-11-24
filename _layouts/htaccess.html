@@ -1,17 +1,22 @@
 {%- comment -%}
   Apache configuration (.htaccess) of the site: with several editions,
-  forwards addresses outside the editions to the current one, if it has them
-  (e.g. /program/ -> /2026/program/). Shows the page for missing addresses
-  (layout: not-found, e.g. 404.md), if any. Followed by the page's own
-  content, which can override both.
+  forwards the root (e.g. / -> /2026/) and addresses outside the editions to
+  the current one, if it has them (e.g. /program/ -> /2026/program/). Shows
+  the page for missing addresses (layout: not-found, e.g. 404.md), if any.
+  Followed by the page's own content, which can override both.
 {%- endcomment -%}
 {%- include get_edition.html -%}
 {%- if edition_current_id -%}
 {%- assign edition_url = site.baseurl | append: "/" | append: edition_current_id -%}
+RewriteEngine On
+
+# Forward the root page to the current edition, e.g. / and /index.html ->
+# {{ edition_url }}/ (a server redirect instead of the root page's meta refresh)
+RewriteRule ^(index\.html)?$ {{ edition_url }}/ [R=302,L]
+
 # Forward to the current edition: files, e.g. /documents/slides/x.pdf ->
 # {{ edition_url }}/documents/slides/x.pdf, and pages with their trailing slash, e.g.
 # /program -> {{ edition_url }}/program/ (folders without a page are not forwarded)
-RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}{{ edition_url }}/$1 -f
