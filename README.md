@@ -19,12 +19,15 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
 
 - [Demo: Winterkongress](https://winterkongress.ch/)
 
-> [!WARNING]
-> If you upgrade from an earlier major version, please note the necessary changes in the [upgrade guide](UPGRADE_GUIDE.md).
+
+## Quick Start
+
+Create your conference website from the [template repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference-template): click **Use this template** there. Its `demo` branch shows the theme with a fictional conference.
 
 
 ## Table of Contents
 
+- [Quick Start](#quick-start)
 - [Installation](#installation)
   - [Gem-based Method](#gem-based-method)
   - [Remote Theme Method](#remote-theme-method)
@@ -69,6 +72,9 @@ The theme was created for the yearly Winterkongress conference of the [Digital S
 
 ## Installation
 
+> [!WARNING]
+> If you upgrade from an earlier major version, please note the necessary changes in the [upgrade guide](UPGRADE_GUIDE.md).
+
 There are three ways to install this theme:
 
 1. **Gem-based method**: Install as a [Gem-based theme](https://jekyllrb.com/docs/themes/#understanding-gem-based-themes) (recommended for most users)
@@ -101,7 +107,7 @@ This allows for easier installation and updating as you don't have to manage any
 
 4. Continue with the [_Setup_](#setup) section below to customize the theme and add content for your conference.
 
-To update the theme, run `bundle update jekyll-theme-conference`.
+To update the theme, run `bundle update jekyll-theme-conference` (see the [upgrade guide](UPGRADE_GUIDE.md) for major versions).
 
 ### Remote Theme Method
 
@@ -139,7 +145,7 @@ To install:
 
 5. Continue with the [_Setup_](#setup) section below to customize the theme and add content for your conference.
 
-To update the theme, change the version tag in the `remote_theme` value (e.g., `@v5.4.0` to `@v5.4.1`).
+To update the theme, change the version tag in the `remote_theme` value (e.g., `@v5.4.0` to `@v5.4.1`; see the [upgrade guide](UPGRADE_GUIDE.md) for major versions).
 
 
 ## Setup
@@ -147,7 +153,7 @@ To update the theme, change the version tag in the `remote_theme` value (e.g., `
 Add the talks, speakers, rooms and the schedule of your conference as described in the section [_Content_](#content), and adapt the theme as described in the section [_Configuration_](#configuration). The tools below import them or build the site for you.
 
 > [!TIP]
-> To get started quickly, use the [template repository](https://github.com/DigitaleGesellschaft/jekyll-theme-conference-template): its `main` branch is an empty site ready to be filled, its `demo` branch showcases the theme with a fictional conference.
+> Starting from scratch? Use the [template](#quick-start).
 
 > [!TIP]
 > Please note that the generated website can be large containing many unnecessary whitespaces. It is recommended to minimize the generated output files before uploading them to a server (e.g., with [minify](https://github.com/tdewolff/minify)).
